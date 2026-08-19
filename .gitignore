@@ -1,0 +1,23 @@
+# Local Robot Brain - Dependency Files
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg/
+
+# Ollama Installer (large binary)
+OllamaSetup.exe
+
+# Test audio artifacts
+test_voice.mp3
+*.wav
+*.mp3
+
+# Python cache
+.pytest_cache/
+*.log
+
+# Environment
+.env

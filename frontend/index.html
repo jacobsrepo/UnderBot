@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Sensory Cortex // Local Robot Brain</title>
+    <meta name="description" content="Local Multimodal Live Vision and Voice Brain for Robotics with Qwen-VL and Camo Camera.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="dark-theme">
+    <div class="hud-scanlines"></div>
+    <div class="hud-vignette"></div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Header Bar -->
+        <header class="hud-header">
+            <div class="header-left">
+                <div class="brand-badge">
+                    <span class="pulsing-core"></span>
+                    <span class="brand-title">NEURAL CORTEX</span>
+                    <span class="brand-version">v2.5.0-LOCAL</span>
+                </div>
+                <div class="system-status-chip online" id="system-status-chip">
+                    <span class="status-dot"></span>
+                    <span id="system-status-text">SYSTEM OPERATIONAL</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="hardware-pill">
+                    <span class="hw-icon">⚡</span>
+                    <span class="hw-name">NVIDIA RTX 3050 (8GB)</span>
+                    <span class="hw-sep">|</span>
+                    <span class="hw-val" id="model-pill">QWEN2.5-VL 7B</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="voice-badge">
+                    <span class="voice-icon">🎙️</span>
+                    <span class="voice-label">VOICE:</span>
+                    <span class="voice-val" id="active-voice-pill">Guy (Male)</span>
+                </div>
+                <button class="hud-btn scan-btn" id="btn-scene-scan" title="Trigger instant autonomous environmental scan">
+                    <span class="btn-icon">👁️</span> SCAN SCENE
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Cockpit Grid -->
+        <main class="cockpit-grid">
+            
+            <!-- Left Panel: Live Visual Cortex -->
+            <section class="panel visual-cortex-panel">
+                <div class="panel-header">
+                    <div class="panel-title-wrap">
+                        <span class="panel-tag">CAM.01</span>
+                        <h2 class="panel-title">LIVE OPTICAL SENSORY FEED</h2>
+                    </div>
+                    <div class="cam-controls">
+                        <select id="camera-select" class="hud-select" title="Select Video Device">
+                            <option value="0">Camera 0 (Camo Studio)</option>
+                        </select>
+                        <button id="btn-refresh-cams" class="icon-btn" title="Refresh Camera Devices">🔄</button>
+                    </div>
+                </div>
+
+                <!-- Video Viewport Canvas Container -->
+                <div class="viewport-wrapper">
+                    <div class="hud-corner top-left"></div>
+                    <div class="hud-corner top-right"></div>
+                    <div class="hud-corner bottom-left"></div>
+                    <div class="hud-corner bottom-right"></div>
+                    
+                    <div class="hud-crosshair"></div>
+                    <div class="hud-grid-overlay"></div>
+                    
+                    <div class="hud-telemetry-overlay">
+                        <span class="telemetry-badge" id="cam-fps-badge">FPS: 30.0</span>
+                        <span class="telemetry-badge" id="cam-res-badge">1280x720</span>
+                        <span class="telemetry-badge status-live">LIVE CAMO STREAM</span>
+                    </div>
+
+                    <!-- Live MJPEG Stream -->
+                    <img id="live-camera-feed" src="/api/camera/stream" alt="Live Sensory Camera Feed" crossorigin="anonymous">
+                    
+                    <div class="hud-target-reticle" id="target-reticle">
+                        <div class="reticle-box"></div>
+                        <span class="reticle-label">TARGET SENSORY FOCUS</span>
+                    </div>
+                </div>
+
+                <!-- Visual Perception Toolbar -->
+                <div class="cortex-toolbar">
+                    <button class="cortex-action-btn" id="btn-snap-analyze">
+                        <span>📸</span> Snapshot & Inspect
+                    </button>
+                    <button class="cortex-action-btn" id="btn-clear-chat">
+                        <span>🧹</span> Clear Timeline
+                    </button>
+                    <div class="mode-toggle-wrap">
+                        <label class="switch-label" for="auto-perceive-toggle">Auto-Listen VAD</label>
+                        <label class="switch">
+                            <input type="checkbox" id="auto-perceive-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Cognitive Stream & Voice Interface -->
+            <section class="panel cognitive-stream-panel">
+                
+                <!-- Audio Reactor Spectrum -->
+                <div class="audio-reactor-box">
+                    <div class="reactor-header">
+                        <span class="reactor-title">NEURAL AUDIO SPECTRUM // VOICE HARMONICS</span>
+                        <span class="reactor-state" id="reactor-state">IDLE</span>
+                    </div>
+                    <canvas id="audio-spectrum-canvas" width="600" height="70"></canvas>
+                </div>
+
+                <!-- Settings Strip (Model & Male Voice Selector) -->
+                <div class="settings-strip">
+                    <div class="setting-item">
+                        <label for="select-model" class="setting-label">VISION BRAIN</label>
+                        <select id="select-model" class="hud-select-sm">
+                            <option value="qwen2.5vl:7b" selected>Qwen2.5-VL 7B (Max Power)</option>
+                            <option value="qwen2.5vl:3b">Qwen2.5-VL 3B (Ultra Fast)</option>
+                            <option value="qwen2vl:7b">Qwen2-VL 7B</option>
+                            <option value="llava:7b">LLaVA 7B</option>
+                            <option value="deepseek-r1:latest">DeepSeek-R1 (Local)</option>
+                            <option value="qwen2.5-coder:7b">Qwen2.5-Coder 7B</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="select-voice" class="setting-label">MALE VOICE</label>
+                        <select id="select-voice" class="hud-select-sm">
+                            <option value="guy" selected>Guy (US Crisp & Authoritative)</option>
+                            <option value="christopher">Christopher (US Calm & Intelligent)</option>
+                            <option value="eric">Eric (US Energetic)</option>
+                            <option value="ryan">Ryan (British Tech-Refined)</option>
+                            <option value="william">William (Australian Clear)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Chat & Thought Timeline -->
+                <div class="thought-stream" id="thought-stream">
+                    <div class="message-card system-card">
+                        <div class="msg-header">
+                            <span class="msg-author">CORE SENSORY SYSTEM</span>
+                            <span class="msg-time">INIT</span>
+                        </div>
+                        <div class="msg-body">
+                            Visual cortical loop linked with Camo Camera. NVIDIA RTX 3050 GPU accelerated inference online. Speak into your microphone or type a query to begin.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Typing / Processing Indicator -->
+                <div class="thinking-hud" id="thinking-hud" style="display: none;">
+                    <div class="thinking-spinner"></div>
+                    <span class="thinking-text" id="thinking-text">Processing live sensory data...</span>
+                </div>
+
+                <!-- Interaction Dock (Microphone & Prompt Bar) -->
+                <div class="interaction-dock">
+                    <div class="dock-top">
+                        <!-- Push to Talk Button -->
+                        <button class="push-to-talk-btn" id="btn-push-to-talk">
+                            <div class="btn-mic-ring"></div>
+                            <span class="btn-mic-icon">🎙️</span>
+                            <span class="btn-mic-label" id="mic-btn-label">HOLD TO SPEAK</span>
+                        </button>
+                    </div>
+
+                    <div class="dock-bottom">
+                        <div class="input-glow-wrapper">
+                            <input type="text" id="text-prompt-input" class="prompt-input" placeholder="Ask anything about what the robot sees..." autocomplete="off">
+                            <button id="btn-send-text" class="send-btn" title="Send Query">
+                                <span>⚡</span> SEND
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!-- Bottom Telemetry Bar -->
+        <footer class="hud-footer">
+            <div class="telemetry-item">
+                <span class="t-label">ENGINE:</span>
+                <span class="t-val highlight" id="t-engine">Ollama + Qwen-VL</span>
+            </div>
+            <div class="telemetry-item">
+                <span class="t-label">STT INFERENCE:</span>
+                <span class="t-val" id="t-stt">Faster-Whisper (Int8)</span>
+            </div>
+            <div class="telemetry-item">
+                <span class="t-label">TTS ENGINE:</span>
+                <span class="t-val" id="t-tts">Neural Male Voice</span>
+            </div>
+            <div class="telemetry-item">
+                <span class="t-label">LATENCY:</span>
+                <span class="t-val" id="t-latency">-- ms</span>
+            </div>
+            <div class="telemetry-item">
+                <span class="t-label">WS LINK:</span>
+                <span class="t-val status-online" id="t-ws-status">CONNECTED</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Hidden Audio Player for Speech Output -->
+    <audio id="speech-audio-player" preload="auto"></audio>
+
+    <!-- Scripts -->
+    <script src="/static/audio_visualizer.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
