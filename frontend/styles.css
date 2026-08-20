@@ -225,7 +225,14 @@ body {
     justify-content: space-between;
     padding: 8px 14px;
     border-bottom: 1px solid var(--border-subtle);
-    height: 42px;
+    height: 44px;
+    gap: 8px;
+}
+
+.camera-controls-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .topbar-title {
@@ -256,6 +263,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     transition: 0.15s;
+    white-space: nowrap;
 }
 
 .tab-item.active {
@@ -269,14 +277,17 @@ body {
     border: 1px solid var(--border-subtle);
     color: var(--text-high);
     font-family: var(--font-sans);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     padding: 4px 8px;
     border-radius: var(--radius-sm);
     outline: none;
+    max-width: 180px;
+    text-overflow: ellipsis;
 }
 
 .dropdown-clean.full {
     width: 100%;
+    max-width: 100%;
 }
 
 .telemetry {
@@ -292,6 +303,7 @@ body {
     background: var(--bg-surface);
     padding: 2px 6px;
     border-radius: 4px;
+    white-space: nowrap;
 }
 
 .telemetry-tag.tag-live {
@@ -321,6 +333,8 @@ body {
     position: absolute;
     bottom: 12px;
     right: 12px;
+    display: flex;
+    gap: 8px;
     z-index: 10;
 }
 

@@ -10,18 +10,17 @@ from typing import Optional, Dict, List, Any
 from PIL import Image
 
 ROBOT_SYSTEM_PROMPT = """You are an intelligent, perceptive multimodal assistant connected to a live 1080p camera feed and voice interface.
-Your parameters:
+Operating rules:
 - Observe the physical environment through the camera frames.
 - Respond concisely, naturally, and directly (1 to 3 sentences suitable for speech).
-- Describe objects, people, workspace items, scene changes, or spatial arrangements accurately.
+- Accurately describe objects, individuals, workspace items, scene changes, or spatial arrangements.
 - Avoid robotic meta-language or unnecessary filler.
 """
 
 class VisionBrain:
     """
     100% In-Process Native PyTorch GPU Vision Engine for Qwen2.5-VL.
-    Loads model with 4-bit CUDA quantization directly into VRAM.
-    Zero external server processes, zero Ollama dependencies.
+    Optimized dynamic resolution processing to eliminate CUDA device-side assertions.
     """
     def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct", port: int = 8001, **kwargs):
         self.model_id = model_id
@@ -33,10 +32,10 @@ class VisionBrain:
         self.is_starting = False
         self.startup_error = None
         self.conversation_history: List[Dict] = []
-        self.max_history = 8
+        self.max_history = 6
         self.lock = threading.Lock()
 
-        # Start non-blocking model loader in background
+        # Non-blocking model loading thread
         threading.Thread(target=self._load_model_weights, daemon=True).start()
 
     def _load_model_weights(self):
@@ -50,8 +49,11 @@ class VisionBrain:
         try:
             from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor, BitsAndBytesConfig
 
+            # Optimal vision resolution bounds to prevent CUDA attention tensor overflow
             self.processor = AutoProcessor.from_pretrained(
                 self.model_id,
+                min_pixels=256 * 28 * 28,
+                max_pixels=768 * 28 * 28,
                 trust_remote_code=True
             )
 
@@ -97,7 +99,6 @@ class VisionBrain:
                 torch.cuda.empty_cache()
 
     def get_status(self) -> Dict:
-        """Returns live model diagnostics for UI telemetry."""
         status_label = "Ready" if self.is_server_ready else ("Initializing..." if self.is_starting else "Standby")
         if self.startup_error:
             status_label = f"Error: {self.startup_error}"
@@ -118,8 +119,8 @@ class VisionBrain:
         user_prompt: str,
         model_name: Optional[str] = None
     ) -> Dict:
-        """Executes multimodal inference directly on the GPU."""
-        prompt_text = user_prompt.strip() if user_prompt else "Describe the physical scene in front of the camera clearly and concisely."
+        """Executes robust multimodal inference with bounded resolution scaling."""
+        prompt_text = user_prompt.strip() if user_prompt else "Describe what you see in the camera frame clearly and concisely."
         start_time = time.time()
 
         if self.is_server_ready and self.model is not None and self.processor is not None:
@@ -130,6 +131,8 @@ class VisionBrain:
                 if image_base64:
                     img_bytes = base64.b64decode(image_base64)
                     pil_img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
+                    # Ensure image is resized to standard dimensions
+                    pil_img.thumbnail((1280, 720))
                     content_list.append({"type": "image", "image": pil_img})
 
                 content_list.append({"type": "text", "text": prompt_text})
@@ -155,13 +158,18 @@ class VisionBrain:
                 if self.device == "cuda":
                     inputs = inputs.to("cuda")
 
+                pad_id = self.processor.tokenizer.pad_token_id
+                if pad_id is None:
+                    pad_id = self.processor.tokenizer.eos_token_id
+
                 with torch.no_grad():
                     generated_ids = self.model.generate(
                         **inputs,
-                        max_new_tokens=150,
+                        max_new_tokens=100,
                         do_sample=True,
                         temperature=0.4,
-                        top_p=0.9
+                        top_p=0.9,
+                        pad_token_id=pad_id
                     )
 
                 generated_ids_trimmed = [
@@ -183,9 +191,11 @@ class VisionBrain:
                     "latency_seconds": round(time.time() - start_time, 2)
                 }
             except Exception as e:
-                print(f"[VisionBrain] GPU Inference error: {e}")
+                print(f"[VisionBrain] GPU Inference warning: {e}")
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
 
-        fallback = f"Visual stream active. Processing environment."
+        fallback = f"Visual sensor active. Scene received."
         self._record_history(prompt_text, fallback)
         return {
             "success": True,

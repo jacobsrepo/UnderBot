@@ -1,5 +1,5 @@
 /**
- * VLA Studio - Executive Client Controller (Multi-Device & LAN Support)
+ * VLA Studio - Executive Client Controller (Multi-Camera & Feedback-Free Audio)
  */
 
 class VLAStudioApp {
@@ -11,6 +11,7 @@ class VLAStudioApp {
         this.micStream = null;
         this.cameraStream = null;
         this.activeCameraSource = 'browser';
+        this.selectedDeviceId = null;
         this.isFacingUser = true;
         this.visualizer = null;
         this.frameInterval = null;
@@ -31,6 +32,7 @@ class VLAStudioApp {
         this.btnSceneScan = document.getElementById('btn-scene-scan');
         this.btnInspectFrame = document.getElementById('btn-inspect-frame');
         this.btnFlipCamera = document.getElementById('btn-flip-camera');
+        this.browserCameraSelect = document.getElementById('browser-camera-select');
         this.tabCamBrowser = document.getElementById('tab-cam-browser');
         this.tabCamHost = document.getElementById('tab-cam-host');
         this.hostCamSelectWrap = document.getElementById('host-cam-select-wrap');
@@ -69,23 +71,121 @@ class VLAStudioApp {
     }
 
     async init() {
-        console.log('[VLA Studio] Initializing multi-device client...');
+        console.log('[VLA Studio] Initializing multi-camera feedback-free client...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
         this.visualizer.connectAudioElement(this.ttsAudioPlayer);
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
         this.voiceSelect.value = savedVoice;
 
-        // Check if mobile device to show flip button
         if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
             if (this.btnFlipCamera) this.btnFlipCamera.style.display = 'flex';
         }
 
         this.initWebSocket();
-        this.initBrowserCamera();
+        await this.initBrowserCamera();
+        await this.enumerateAllCameras();
         this.initMicrophone();
         this.initEventListeners();
         this.startDiagnosticsPolling();
+    }
+
+    async enumerateAllCameras() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(d => d.kind === 'videoinput');
+
+            this.browserCameraSelect.innerHTML = '';
+
+            if (videoDevices.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'Default Camera';
+                this.browserCameraSelect.appendChild(opt);
+                return;
+            }
+
+            videoDevices.forEach((device, index) => {
+                const opt = document.createElement('option');
+                opt.value = device.deviceId;
+                opt.textContent = device.label || `Camera ${index + 1}`;
+                if (this.selectedDeviceId === device.deviceId) {
+                    opt.selected = true;
+                }
+                this.browserCameraSelect.appendChild(opt);
+            });
+
+            console.log(`[Camera] Discovered ${videoDevices.length} video input devices.`);
+        } catch (e) {
+            console.warn('[Camera] Device enumeration error:', e);
+        }
+    }
+
+    async initBrowserCamera(deviceId = null) {
+        try {
+            if (this.cameraStream) {
+                this.cameraStream.getTracks().forEach(t => t.stop());
+            }
+
+            const videoConstraints = {
+                width: { ideal: 1920, min: 1280 },
+                height: { ideal: 1080, min: 720 }
+            };
+
+            if (deviceId) {
+                videoConstraints.deviceId = { exact: deviceId };
+                this.selectedDeviceId = deviceId;
+            } else if (this.selectedDeviceId) {
+                videoConstraints.deviceId = { exact: this.selectedDeviceId };
+            } else {
+                videoConstraints.facingMode = this.isFacingUser ? 'user' : 'environment';
+            }
+
+            this.cameraStream = await navigator.mediaDevices.getUserMedia({
+                video: videoConstraints
+            });
+
+            this.clientVideo.srcObject = this.cameraStream;
+            this.clientVideo.onloadedmetadata = () => {
+                this.clientVideo.play();
+                this.videoResolutionTag.textContent = `${this.clientVideo.videoWidth} x ${this.clientVideo.videoHeight} (Full HD)`;
+            };
+
+            if (this.frameInterval) clearInterval(this.frameInterval);
+            this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
+
+            console.log('[Camera] Webcam active.');
+        } catch (e) {
+            console.warn('[Camera] Webcam high-res denied, falling back to standard resolution:', e);
+            try {
+                const fallbackConstraints = deviceId ? { deviceId: { exact: deviceId } } : true;
+                this.cameraStream = await navigator.mediaDevices.getUserMedia({ video: fallbackConstraints });
+                this.clientVideo.srcObject = this.cameraStream;
+                this.clientVideo.play();
+            } catch (err) {
+                this.switchCameraSource('host');
+            }
+        }
+    }
+
+    async initMicrophone() {
+        try {
+            // Strict acoustic echo cancellation & noise suppression to eliminate feedback
+            this.micStream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    echoCancellation: { ideal: true },
+                    noiseSuppression: { ideal: true },
+                    autoGainControl: { ideal: true },
+                    channelCount: 1,
+                    sampleRate: 16000
+                }
+            });
+            console.log('[Audio] Microphone ready with acoustic echo cancellation.');
+        } catch (e) {
+            console.warn('[Audio] Microphone access denied:', e);
+        }
     }
 
     startDiagnosticsPolling() {
@@ -154,53 +254,6 @@ class VLAStudioApp {
         };
     }
 
-    async initBrowserCamera() {
-        try {
-            if (this.cameraStream) {
-                this.cameraStream.getTracks().forEach(t => t.stop());
-            }
-
-            const facing = this.isFacingUser ? 'user' : 'environment';
-
-            this.cameraStream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: { ideal: 1920, min: 1280 },
-                    height: { ideal: 1080, min: 720 },
-                    facingMode: facing
-                }
-            });
-
-            this.clientVideo.srcObject = this.cameraStream;
-            this.clientVideo.onloadedmetadata = () => {
-                this.clientVideo.play();
-                this.videoResolutionTag.textContent = `${this.clientVideo.videoWidth} x ${this.clientVideo.videoHeight} (Full HD)`;
-            };
-
-            if (this.frameInterval) clearInterval(this.frameInterval);
-            this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
-
-            console.log('[Camera] 1080p Webcam active.');
-        } catch (e) {
-            console.warn('[Camera] Webcam access issue, attempting fallback:', e);
-            try {
-                this.cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
-                this.clientVideo.srcObject = this.cameraStream;
-                this.clientVideo.play();
-            } catch (err) {
-                this.switchCameraSource('host');
-            }
-        }
-    }
-
-    async initMicrophone() {
-        try {
-            this.micStream = await navigator.mediaDevices.getUserMedia({
-                audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true }
-            });
-            console.log('[Audio] Microphone ready.');
-        } catch (e) {}
-    }
-
     initEventListeners() {
         this.tabCamBrowser.addEventListener('click', () => this.switchCameraSource('browser'));
         this.tabCamHost.addEventListener('click', () => {
@@ -208,9 +261,18 @@ class VLAStudioApp {
             this.fetchHostCamerasOnce();
         });
 
+        // Switch camera dropdown
+        this.browserCameraSelect.addEventListener('change', (e) => {
+            const devId = e.target.value;
+            if (devId) {
+                this.initBrowserCamera(devId);
+            }
+        });
+
         if (this.btnFlipCamera) {
             this.btnFlipCamera.addEventListener('click', () => {
                 this.isFacingUser = !this.isFacingUser;
+                this.selectedDeviceId = null;
                 this.initBrowserCamera();
             });
         }
@@ -241,7 +303,7 @@ class VLAStudioApp {
 
         this.btnSceneScan.addEventListener('click', () => this.triggerSceneScan());
         this.btnInspectFrame.addEventListener('click', () => {
-            this.sendTextMessage("Analyze this 1080p visual frame and describe key elements in detail.");
+            this.sendTextMessage("Analyze this visual frame and describe key elements in detail.");
         });
 
         this.hostCameraSelect.addEventListener('change', async (e) => {
@@ -320,13 +382,15 @@ class VLAStudioApp {
             this.clientVideo.style.display = 'block';
             this.serverVideoFeed.style.display = 'none';
             this.hostCamSelectWrap.style.display = 'none';
-            this.initBrowserCamera();
+            this.browserCameraSelect.style.display = 'block';
+            this.initBrowserCamera(this.selectedDeviceId);
         } else {
             this.tabCamHost.classList.add('active');
             this.tabCamBrowser.classList.remove('active');
             this.clientVideo.style.display = 'none';
             this.serverVideoFeed.style.display = 'block';
             this.hostCamSelectWrap.style.display = 'block';
+            this.browserCameraSelect.style.display = 'none';
             if (this.frameInterval) clearInterval(this.frameInterval);
             this.serverVideoFeed.src = `/api/camera/stream?t=${Date.now()}`;
             this.videoResolutionTag.textContent = 'Host Camera 1080p';
@@ -335,10 +399,10 @@ class VLAStudioApp {
 
     captureCurrentFrameBase64() {
         if (this.activeCameraSource === 'browser' && this.clientVideo.videoWidth > 0) {
-            this.hiddenFrameCanvas.width = 1920;
-            this.hiddenFrameCanvas.height = 1080;
+            this.hiddenFrameCanvas.width = 1280;
+            this.hiddenFrameCanvas.height = 720;
             const ctx = this.hiddenFrameCanvas.getContext('2d');
-            ctx.drawImage(this.clientVideo, 0, 0, 1920, 1080);
+            ctx.drawImage(this.clientVideo, 0, 0, 1280, 720);
             return this.hiddenFrameCanvas.toDataURL('image/jpeg', 0.85).split(',')[1];
         }
         return null;
@@ -356,6 +420,12 @@ class VLAStudioApp {
     startRecording() {
         if (!this.micStream) return;
         if (this.isRecording) return;
+
+        // Immediately silence any active TTS speech output to prevent audio feedback
+        if (this.ttsAudioPlayer) {
+            this.ttsAudioPlayer.pause();
+            this.ttsAudioPlayer.currentTime = 0;
+        }
 
         this.isRecording = true;
         this.audioChunks = [];
@@ -433,8 +503,8 @@ class VLAStudioApp {
     }
 
     triggerSceneScan() {
-        this.appendMessage('user', 'System 1080p scan request');
-        this.showProcessing('Analyzing 1080p visual environment (Qwen2.5-VL)...');
+        this.appendMessage('user', 'System visual scan request');
+        this.showProcessing('Analyzing visual environment (Qwen2.5-VL)...');
 
         const frameB64 = this.captureCurrentFrameBase64();
 

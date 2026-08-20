@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?t=lan">
+    <link rel="stylesheet" href="/static/styles.css?t=v340">
 </head>
 <body>
     <div class="app-layout">
@@ -48,7 +48,7 @@
                 </button>
 
                 <button class="control-btn" id="btn-open-settings" title="Preferences">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     <span>Preferences</span>
                 </button>
 
@@ -66,14 +66,21 @@
             <!-- Left: Video Panel -->
             <section class="panel video-panel">
                 <div class="panel-topbar">
-                    <div class="tabs">
-                        <button class="tab-item active" id="tab-cam-browser">Webcam (1080p)</button>
-                        <button class="tab-item" id="tab-cam-host">Host Camera</button>
+                    <div class="camera-controls-left">
+                        <div class="tabs">
+                            <button class="tab-item active" id="tab-cam-browser">Webcam (1080p)</button>
+                            <button class="tab-item" id="tab-cam-host">Host Camera</button>
+                        </div>
+
+                        <!-- Active Camera Selector Dropdown for Multi-Camera Devices (Surface, Tablets, USB Cams) -->
+                        <select id="browser-camera-select" class="dropdown-clean" title="Select active camera device">
+                            <option value="">Detecting cameras...</option>
+                        </select>
                     </div>
 
                     <div class="host-cam-select" id="host-cam-select-wrap" style="display: none;">
                         <select id="host-camera-select" class="dropdown-clean">
-                            <option value="0">Camera 0</option>
+                            <option value="0">Host Camera 0</option>
                         </select>
                     </div>
 
@@ -91,7 +98,7 @@
                     <div class="viewport-overlay">
                         <button class="overlay-btn" id="btn-flip-camera" style="display: none;" title="Flip Front / Rear Camera">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8v2"></path><path d="M4 14c0 4.418 3.582 8 8 8s8-3.582 8-8v-2"></path><polyline points="1 9 4 12 7 9"></polyline><polyline points="23 15 20 12 17 15"></polyline></svg>
-                            <span>Flip</span>
+                            <span>Switch Cam</span>
                         </button>
                         <button class="overlay-btn" id="btn-inspect-frame">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
@@ -251,7 +258,7 @@
     <!-- Hidden audio element for TTS -->
     <audio id="tts-audio-element" preload="auto"></audio>
 
-    <script src="/static/audio_visualizer.js?t=lan"></script>
-    <script src="/static/app.js?t=lan"></script>
+    <script src="/static/audio_visualizer.js?t=v340"></script>
+    <script src="/static/app.js?t=v340"></script>
 </body>
 </html>
