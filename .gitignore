@@ -7,8 +7,15 @@ __pycache__/
 *.egg-info/
 *.egg/
 
-# Ollama Installer (large binary)
-OllamaSetup.exe
+# Local Model Weights (GGUF >5GB)
+models/*.gguf
+models/
+
+# Standalone Binaries
+bin/
+*.exe
+*.dll
+*.zip
 
 # Test audio artifacts
 test_voice.mp3

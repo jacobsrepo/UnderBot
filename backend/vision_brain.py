@@ -1,7 +1,10 @@
 import os
+import sys
 import json
 import base64
 import time
+import threading
+import subprocess
 import requests
 import cv2
 import numpy as np
@@ -19,23 +22,26 @@ Your role:
 
 class VisionBrain:
     """
-    Universal Multimodal Vision Brain.
-    Supports:
-    1. Local Ollama (Qwen2.5-VL, LLaVA, Moondream, etc.)
-    2. Cloud / Custom OpenAI-compatible / Gemini multimodal endpoints
-    3. Built-in Local OpenCV Sensory Analysis (100% offline, zero-install fallback)
+    100% Local & Self-Contained Vision Brain.
+    Runs the embedded Qwen2.5-VL GGUF model via local standalone engine (bin/llama/llama-server.exe)
+    with non-blocking background initialization, zero external dependencies, zero Ollama, and zero cloud.
     """
-    def __init__(self, ollama_url: str = "http://127.0.0.1:11434", default_model: str = "qwen2.5vl:7b"):
-        self.ollama_url = ollama_url.rstrip("/")
-        self.default_model = default_model
-        self.provider = "auto"  # 'auto', 'ollama', 'cloud_api', 'local_cv'
-        self.api_key = os.environ.get("OPENAI_API_KEY", "") or os.environ.get("GEMINI_API_KEY", "")
-        self.api_base_url = "https://api.openai.com/v1"
-        self.api_model = "gpt-4o-mini"
+    def __init__(self, port: int = 8001):
+        self.port = port
+        self.server_url = f"http://127.0.0.1:{self.port}/v1"
+        self.server_process: Optional[subprocess.Popen] = None
+        self.is_server_ready = False
+        self.is_starting = False
         self.conversation_history: List[Dict] = []
         self.max_history = 10
 
-        # Load OpenCV Face Detector for offline CV perception
+        # Paths
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.bin_dir = os.path.join(base_dir, "bin", "llama")
+        self.server_exe = os.path.join(self.bin_dir, "llama-server.exe")
+        self.model_path = os.path.join(base_dir, "models", "qwen2.5vl-7b.gguf")
+
+        # Local CV Fallback Detector
         self.face_cascade = None
         try:
             cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
@@ -44,104 +50,146 @@ class VisionBrain:
         except Exception:
             pass
 
-    def update_config(self, provider: str = None, model: str = None, api_key: str = None, api_base: str = None):
-        if provider:
-            self.provider = provider
-        if model:
-            self.default_model = model
-        if api_key is not None:
-            self.api_key = api_key
-        if api_base:
-            self.api_base_url = api_base.rstrip("/")
+        # Launch model in background thread so server boots instantly
+        threading.Thread(target=self._start_local_engine, daemon=True).start()
 
-    def check_ollama_status(self) -> Dict:
+    def _start_local_engine(self):
+        """Starts the standalone llama-server with GPU acceleration on the local model."""
+        if self.is_starting or self.is_server_ready:
+            return
+
+        self.is_starting = True
+
+        if not os.path.exists(self.server_exe) or not os.path.exists(self.model_path):
+            print(f"[VisionBrain] Note: Embedded engine not ready. Exe: {os.path.exists(self.server_exe)}, Model: {os.path.exists(self.model_path)}")
+            self.is_starting = False
+            return
+
+        # Check if already running on port
         try:
-            r = requests.get(f"{self.ollama_url}/api/tags", timeout=1.5)
+            r = requests.get(f"{self.server_url}/models", timeout=1)
             if r.status_code == 200:
-                data = r.json()
-                models = [m.get("name", "") for m in data.get("models", [])]
-                return {
-                    "online": True,
-                    "models": models,
-                    "selected_model": self.default_model,
-                    "has_selected_model": any(self.default_model in m for m in models)
-                }
+                print(f"[VisionBrain] Embedded engine already online on port {self.port}.")
+                self.is_server_ready = True
+                self.is_starting = False
+                return
         except Exception:
             pass
+
+        print(f"[VisionBrain] Launching embedded GPU model server ({os.path.basename(self.model_path)})...")
+        
+        creationflags = 0x08000000 if sys.platform == "win32" else 0  # CREATE_NO_WINDOW
+
+        cmd = [
+            self.server_exe,
+            "-m", self.model_path,
+            "--port", str(self.port),
+            "--host", "127.0.0.1",
+            "-ngl", "99",              # Offload all layers to GPU (RTX 3050 CUDA)
+            "-c", "4096",              # Context window
+            "-b", "512",
+            "--mmproj", self.model_path,
+            "--temp", "0.4",
+            "--chat-template", "chatml"
+        ]
+
+        try:
+            env = os.environ.copy()
+            env["PATH"] = self.bin_dir + os.pathsep + env.get("PATH", "")
+
+            self.server_process = subprocess.Popen(
+                cmd,
+                cwd=self.bin_dir,
+                env=env,
+                creationflags=creationflags,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            
+            # Poll for readiness in background up to 30 seconds
+            for _ in range(30):
+                time.sleep(1)
+                try:
+                    r = requests.get(f"{self.server_url}/models", timeout=1)
+                    if r.status_code == 200:
+                        self.is_server_ready = True
+                        print("[VisionBrain] Embedded Qwen2.5-VL engine is READY on GPU!")
+                        break
+                except Exception:
+                    pass
+        except Exception as e:
+            print(f"[VisionBrain] Error starting embedded engine: {e}")
+        finally:
+            self.is_starting = False
+
+    def shutdown(self):
+        """Cleanly terminates the local model engine."""
+        if self.server_process:
+            print("[VisionBrain] Shutting down embedded model engine...")
+            try:
+                self.server_process.terminate()
+                self.server_process.wait(timeout=3)
+            except Exception:
+                try:
+                    self.server_process.kill()
+                except Exception:
+                    pass
+            self.server_process = None
+            self.is_server_ready = False
+
+    def get_status(self) -> Dict:
         return {
-            "online": False,
-            "models": [],
-            "selected_model": self.default_model
+            "engine": "Embedded Standalone Qwen2.5-VL 7B (Direct GGUF)",
+            "ready": self.is_server_ready,
+            "gpu_accelerated": True,
+            "model_file": os.path.basename(self.model_path) if os.path.exists(self.model_path) else "Not found",
+            "model_size_gb": round(os.path.getsize(self.model_path) / (1024**3), 2) if os.path.exists(self.model_path) else 0
         }
 
     def _analyze_frame_with_local_cv(self, image_base64: str, user_prompt: str) -> str:
-        """
-        Fast local computer vision analysis. Runs on any computer with zero GPU/server requirements.
-        """
+        """Fast fallback while model is warming up."""
         try:
             img_bytes = base64.b64decode(image_base64)
             np_arr = np.frombuffer(img_bytes, np.uint8)
             img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-            
             if img is None:
-                return "The optical feed is active, but no visual frame was received."
+                return "Camera feed active, but no visual frame was received."
 
             h, w, _ = img.shape
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             mean_brightness = np.mean(gray)
             
-            # Detect faces
             num_faces = 0
             if self.face_cascade is not None:
                 faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(30, 30))
                 num_faces = len(faces)
 
-            # Edge & texture density
-            edges = cv2.Canny(gray, 100, 200)
-            edge_density = np.count_nonzero(edges) / (h * w)
-
             lighting = "well-lit" if mean_brightness > 100 else ("moderately lit" if mean_brightness > 40 else "dimly lit")
-            
-            details = []
-            if num_faces > 0:
-                details.append(f"I see {num_faces} person directly in view")
-            if edge_density > 0.05:
-                details.append("a detailed workspace with various objects and surfaces")
-            else:
-                details.append("a relatively open and clear viewpoint")
-
+            details = [f"{num_faces} person in view" if num_faces > 0 else "clear field of view"]
             summary = ", ".join(details)
-            lower_prompt = user_prompt.lower()
 
-            if any(k in lower_prompt for k in ["what do you see", "describe", "scan", "look", "surrounding"]):
-                return f"I can see your live camera feed in a {lighting} environment. {summary.capitalize()}."
-            else:
-                return f"I heard your question: '{user_prompt}'. I am monitoring the live camera stream ({w}x{h} resolution in {lighting} lighting). Connect an API key or local Qwen-VL model in Settings for deep semantic answers."
-        except Exception as e:
-            return f"I heard your query: '{user_prompt}'. Optical cortex online."
+            return f"I see your camera feed in a {lighting} space with {summary}. Embedded neural vision is warming up."
+        except Exception:
+            return "Optical feed online. Standing by."
 
-    async def _analyze_with_cloud_api(self, image_base64: str, user_prompt: str) -> Optional[Dict]:
+    async def analyze_frame_async(
+        self,
+        image_base64: str,
+        user_prompt: str,
+        model_name: Optional[str] = None
+    ) -> Dict:
         """
-        Sends frame to any OpenAI-compatible Vision API (e.g. OpenAI GPT-4o-mini, Groq, OpenRouter, etc.)
+        Runs local inference directly on the embedded Qwen2.5-VL model.
         """
-        if not self.api_key:
-            return None
+        prompt_text = user_prompt.strip() if user_prompt else "Describe what you see in front of the camera clearly and concisely."
+        start_time = time.time()
 
-        url = f"{self.api_base_url}/chat/completions"
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
-        }
+        messages = [{"role": "system", "content": ROBOT_SYSTEM_PROMPT}]
 
-        messages = [
-            {"role": "system", "content": ROBOT_SYSTEM_PROMPT}
-        ]
-        
-        # Add recent conversation history
         for msg in self.conversation_history[-4:]:
             messages.append({"role": msg["role"], "content": msg["text"]})
 
-        user_content = [{"type": "text", "text": user_prompt or "Describe what you see in this live camera frame."}]
+        user_content = [{"type": "text", "text": prompt_text}]
         if image_base64:
             user_content.append({
                 "type": "image_url",
@@ -151,113 +199,41 @@ class VisionBrain:
         messages.append({"role": "user", "content": user_content})
 
         payload = {
-            "model": self.api_model,
             "messages": messages,
             "max_tokens": 200,
             "temperature": 0.4
         }
 
-        start_time = time.time()
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(url, json=payload, headers=headers, timeout=aiohttp.ClientTimeout(total=20)) as resp:
-                    if resp.status == 200:
-                        data = await resp.json()
-                        text = data["choices"][0]["message"]["content"].strip()
-                        return {
-                            "success": True,
-                            "response": text,
-                            "model": f"Cloud API ({self.api_model})",
-                            "tokens_per_sec": 0,
-                            "latency_seconds": round(time.time() - start_time, 2)
-                        }
-        except Exception as e:
-            print(f"[VisionBrain] Cloud API error: {e}")
-        return None
+        # Try sending to embedded server if ready
+        if self.is_server_ready:
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        f"{self.server_url}/chat/completions",
+                        json=payload,
+                        timeout=aiohttp.ClientTimeout(total=30)
+                    ) as resp:
+                        if resp.status == 200:
+                            data = await resp.json()
+                            text = data["choices"][0]["message"]["content"].strip()
+                            self._record_history(prompt_text, text)
+                            return {
+                                "success": True,
+                                "response": text,
+                                "model": "Embedded Qwen2.5-VL 7B (Direct Local)",
+                                "latency_seconds": round(time.time() - start_time, 2)
+                            }
+            except Exception as e:
+                print(f"[VisionBrain] Embedded engine query notice: {e}")
 
-    async def _analyze_with_ollama(self, image_base64: str, user_prompt: str, model_name: str) -> Optional[Dict]:
-        """
-        Sends frame to local Ollama instance (Qwen2.5-VL, etc.)
-        """
-        start_time = time.time()
-        payload = {
-            "model": model_name or self.default_model,
-            "prompt": user_prompt or "Describe what you see in front of you clearly and concisely.",
-            "system": ROBOT_SYSTEM_PROMPT,
-            "images": [image_base64] if image_base64 else [],
-            "stream": False,
-            "options": {
-                "temperature": 0.4,
-                "top_p": 0.9,
-                "num_predict": 250
-            }
-        }
-
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    f"{self.ollama_url}/api/generate",
-                    json=payload,
-                    timeout=aiohttp.ClientTimeout(total=25)
-                ) as resp:
-                    if resp.status == 200:
-                        data = await resp.json()
-                        response_text = data.get("response", "").strip()
-                        eval_duration = data.get("eval_duration", 0) / 1e9
-                        tokens_evaluated = data.get("eval_count", 0)
-                        fps = round(tokens_evaluated / eval_duration, 1) if eval_duration > 0 else 0
-
-                        return {
-                            "success": True,
-                            "response": response_text,
-                            "model": model_name or self.default_model,
-                            "tokens_per_sec": fps,
-                            "latency_seconds": round(time.time() - start_time, 2),
-                            "token_count": tokens_evaluated
-                        }
-        except Exception as e:
-            print(f"[VisionBrain] Ollama error: {e}")
-        return None
-
-    async def analyze_frame_async(
-        self,
-        image_base64: str,
-        user_prompt: str,
-        model_name: Optional[str] = None
-    ) -> Dict:
-        """
-        Unified analysis entry point with multi-tier fallback:
-        1. Cloud API (if configured)
-        2. Local Ollama (if online)
-        3. Local CV Sensory Analysis (guaranteed fallback)
-        """
-        prompt_text = user_prompt.strip() if user_prompt else "Describe what you see in front of you clearly and concisely."
-        start_time = time.time()
-
-        # Tier 1: Cloud API if provider is explicitly set or key provided
-        if self.provider in ["cloud_api", "openai"] and self.api_key:
-            cloud_res = await self._analyze_with_cloud_api(image_base64, prompt_text)
-            if cloud_res and cloud_res.get("success"):
-                self._record_history(prompt_text, cloud_res["response"])
-                return cloud_res
-
-        # Tier 2: Local Ollama (e.g. Qwen2.5-VL)
-        if self.provider in ["auto", "ollama"]:
-            ollama_res = await self._analyze_with_ollama(image_base64, prompt_text, model_name or self.default_model)
-            if ollama_res and ollama_res.get("success"):
-                self._record_history(prompt_text, ollama_res["response"])
-                return ollama_res
-
-        # Tier 3: Universal Local Computer Vision Fallback (Zero dependencies)
-        fallback_reply = self._analyze_frame_with_local_cv(image_base64, prompt_text)
-        self._record_history(prompt_text, fallback_reply)
+        # Instant CV fallback while engine finishes warming up
+        fallback = self._analyze_frame_with_local_cv(image_base64, prompt_text)
+        self._record_history(prompt_text, fallback)
         return {
             "success": True,
-            "response": fallback_reply,
-            "model": "Local Computer Vision (Universal Offline Mode)",
-            "tokens_per_sec": 0,
-            "latency_seconds": round(time.time() - start_time, 2),
-            "token_count": 0
+            "response": fallback,
+            "model": "Embedded Local CV Sensory Engine",
+            "latency_seconds": round(time.time() - start_time, 2)
         }
 
     def _record_history(self, user_text: str, assistant_text: str):

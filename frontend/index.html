@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vision & Voice Assistant</title>
+    <title>AURA // Local Vision & Voice Assistant</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,17 +17,17 @@
         <header class="app-header">
             <div class="header-brand">
                 <div class="brand-symbol"></div>
-                <h1 class="brand-title">AURA <span class="brand-sub">VISION & VOICE</span></h1>
+                <h1 class="brand-title">AURA <span class="brand-sub">LOCAL MULTIMODAL CORTEX</span></h1>
             </div>
 
             <div class="header-center">
                 <div class="status-indicator online" id="connection-status">
                     <span class="status-dot"></span>
-                    <span id="connection-label">Connected</span>
+                    <span id="connection-label">Connected (100% Local)</span>
                 </div>
                 <div class="model-badge" id="active-model-badge">
-                    <span class="badge-icon">🧠</span>
-                    <span id="badge-model-name">Qwen2.5-VL 7B</span>
+                    <span class="badge-icon">⚡</span>
+                    <span id="badge-model-name">Qwen2.5-VL 7B (GPU)</span>
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M3 9V5a2 2 0 0 1 2-2h4M21 9V5a2 2 0 0 0-2-2h-4M3 15v4a2 2 0 0 0 2 2h4M21 15v4a2 2 0 0 1-2 2h-4"></path></svg>
                     <span>Scan Scene</span>
                 </button>
-                <button class="action-btn icon" id="btn-open-settings" title="Settings & Provider Config">
+                <button class="action-btn icon" id="btn-open-settings" title="Voice & Camera Settings">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 </button>
             </div>
@@ -56,7 +56,7 @@
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
                                 <span>Browser Camera</span>
                             </button>
-                            <button class="toggle-btn" id="btn-source-server" title="Use host PC camera (Camo/USB)">
+                            <button class="toggle-btn" id="btn-source-server" title="Use host PC camera (Camo / USB)">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                                 <span>Host Camera</span>
                             </button>
@@ -71,9 +71,7 @@
 
                     <!-- Video Viewport -->
                     <div class="video-viewport">
-                        <!-- Browser Local Video (Direct HTML5 Camera) -->
                         <video id="browser-video-element" autoplay playsinline muted></video>
-                        <!-- Server Video Stream (Fallback) -->
                         <img id="server-stream-element" src="/api/camera/stream" alt="Camera Feed" style="display: none;" crossorigin="anonymous">
                         <canvas id="browser-frame-canvas" style="display: none;"></canvas>
 
@@ -113,7 +111,7 @@
                                 <span class="message-time">Now</span>
                             </div>
                             <div class="message-content">
-                                Vision and voice cortex active. Hold the microphone button below or press <strong>Space</strong> to talk.
+                                Standalone neural cortex online. Hold <strong>Space</strong> or click the microphone to speak.
                             </div>
                         </div>
                     </div>
@@ -127,7 +125,6 @@
                     <!-- Bottom Dock -->
                     <div class="chat-dock">
                         <div class="dock-row">
-                            <!-- Push-To-Talk Button -->
                             <button class="ptt-button" id="btn-ptt">
                                 <div class="ptt-icon-wrap">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
@@ -137,9 +134,8 @@
                             </button>
                         </div>
 
-                        <!-- Text Input Row -->
                         <div class="input-row">
-                            <input type="text" id="text-input-field" class="clean-input" placeholder="Type a message or ask what the camera sees..." autocomplete="off">
+                            <input type="text" id="text-input-field" class="clean-input" placeholder="Ask what the camera sees or type a query..." autocomplete="off">
                             <button id="btn-send-message" class="send-button" title="Send message">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                             </button>
@@ -154,50 +150,30 @@
         <div class="modal-backdrop" id="settings-modal" style="display: none;">
             <div class="modal-card">
                 <div class="modal-header">
-                    <h2 class="modal-title">Settings & Configuration</h2>
+                    <h2 class="modal-title">Preferences</h2>
                     <button class="modal-close-btn" id="btn-close-settings">✕</button>
                 </div>
                 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label">Vision Provider</label>
-                        <select id="config-provider-select" class="clean-select full">
-                            <option value="auto">Auto (Ollama if running, else Local CV)</option>
-                            <option value="ollama">Local Ollama (Qwen2.5-VL / LLaVA)</option>
-                            <option value="cloud_api">Cloud Vision API (OpenAI / Gemini / Groq)</option>
-                            <option value="local_cv">Local Computer Vision (100% Offline)</option>
+                        <label class="form-label">Neural Voice (Male)</label>
+                        <select id="config-voice-select" class="clean-select full">
+                            <option value="guy">Guy (Natural & Clear)</option>
+                            <option value="christopher">Christopher (Calm & Authoritative)</option>
+                            <option value="eric">Eric (Energetic)</option>
+                            <option value="ryan">Ryan (British Tech)</option>
                         </select>
-                    </div>
-
-                    <div class="form-group" id="group-ollama-model">
-                        <label class="form-label">Ollama Model</label>
-                        <input type="text" id="config-ollama-model" class="clean-input full" value="qwen2.5vl:7b" placeholder="e.g. qwen2.5vl:7b, qwen2.5vl:3b, moondream">
-                    </div>
-
-                    <div class="form-group" id="group-api-key" style="display: none;">
-                        <label class="form-label">Vision API Key</label>
-                        <input type="password" id="config-api-key" class="clean-input full" placeholder="sk-...">
-                    </div>
-
-                    <div class="form-group" id="group-api-base" style="display: none;">
-                        <label class="form-label">API Base URL</label>
-                        <input type="text" id="config-api-base" class="clean-input full" value="https://api.openai.com/v1" placeholder="https://api.openai.com/v1">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Assistant Voice</label>
-                        <select id="config-voice-select" class="clean-select full">
-                            <option value="guy">Guy (Male - Natural & Clear)</option>
-                            <option value="christopher">Christopher (Male - Calm & Authoritative)</option>
-                            <option value="eric">Eric (Male - Energetic)</option>
-                            <option value="ryan">Ryan (Male - British Tech)</option>
-                        </select>
+                        <label class="form-label">Local Neural Engine</label>
+                        <input type="text" class="clean-input full" value="Qwen2.5-VL 7B (Direct GGUF - GPU Accelerated)" disabled style="opacity: 0.7;">
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button class="action-btn secondary" id="btn-cancel-settings">Cancel</button>
-                    <button class="action-btn primary" id="btn-save-settings">Save Settings</button>
+                    <button class="action-btn secondary" id="btn-cancel-settings">Close</button>
+                    <button class="action-btn primary" id="btn-save-settings">Save</button>
                 </div>
             </div>
         </div>

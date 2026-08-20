@@ -1,5 +1,5 @@
 /**
- * AURA Vision & Voice Assistant - Frontend Controller
+ * AURA Local Vision & Voice Assistant - Frontend Controller
  */
 
 class VisionVoiceApp {
@@ -35,7 +35,6 @@ class VisionVoiceApp {
         this.visualizerStatus = document.getElementById('visualizer-status-text');
         this.connectionStatus = document.getElementById('connection-status');
         this.connectionLabel = document.getElementById('connection-label');
-        this.badgeModelName = document.getElementById('badge-model-name');
         this.viewportResolution = document.getElementById('viewport-resolution');
 
         // Modal Elements
@@ -44,56 +43,24 @@ class VisionVoiceApp {
         this.btnCloseSettings = document.getElementById('btn-close-settings');
         this.btnCancelSettings = document.getElementById('btn-cancel-settings');
         this.btnSaveSettings = document.getElementById('btn-save-settings');
-        this.configProvider = document.getElementById('config-provider-select');
-        this.configOllamaModel = document.getElementById('config-ollama-model');
-        this.configApiKey = document.getElementById('config-api-key');
-        this.configApiBase = document.getElementById('config-api-base');
         this.configVoice = document.getElementById('config-voice-select');
-        this.groupOllama = document.getElementById('group-ollama-model');
-        this.groupApiKey = document.getElementById('group-api-key');
-        this.groupApiBase = document.getElementById('group-api-base');
 
         this.init();
     }
 
     async init() {
-        console.log('[AURA] Starting assistant controller...');
+        console.log('[AURA] Starting local assistant controller...');
         this.visualizer = new AudioSpectrumVisualizer('minimal-audio-canvas');
         this.visualizer.connectAudioElement(this.audioPlayer);
 
-        this.loadSavedSettings();
+        const savedVoice = localStorage.getItem('aura_voice') || 'guy';
+        this.configVoice.value = savedVoice;
+
         this.initWebSocket();
         this.initBrowserCamera();
         this.initMicrophone();
         this.initEventListeners();
         this.fetchServerCameras();
-    }
-
-    loadSavedSettings() {
-        const savedProvider = localStorage.getItem('aura_provider') || 'auto';
-        const savedModel = localStorage.getItem('aura_model') || 'qwen2.5vl:7b';
-        const savedKey = localStorage.getItem('aura_api_key') || '';
-        const savedBase = localStorage.getItem('aura_api_base') || 'https://api.openai.com/v1';
-        const savedVoice = localStorage.getItem('aura_voice') || 'guy';
-
-        this.configProvider.value = savedProvider;
-        this.configOllamaModel.value = savedModel;
-        this.configApiKey.value = savedKey;
-        this.configApiBase.value = savedBase;
-        this.configVoice.value = savedVoice;
-
-        this.updateModalFields();
-        this.updateModelBadge(savedProvider, savedModel);
-    }
-
-    updateModelBadge(provider, model) {
-        if (provider === 'local_cv') {
-            this.badgeModelName.textContent = 'Local Computer Vision';
-        } else if (provider === 'cloud_api') {
-            this.badgeModelName.textContent = 'Cloud Vision API';
-        } else {
-            this.badgeModelName.textContent = model || 'Qwen2.5-VL 7B';
-        }
     }
 
     initWebSocket() {
@@ -104,8 +71,9 @@ class VisionVoiceApp {
 
         this.ws.onopen = () => {
             this.connectionStatus.className = 'status-indicator online';
-            this.connectionLabel.textContent = 'Connected';
-            this.syncConfigToServer();
+            this.connectionLabel.textContent = 'Connected (100% Local)';
+            const voice = localStorage.getItem('aura_voice') || 'guy';
+            this.ws.send(JSON.stringify({ type: 'set_voice', voice_key: voice }));
         };
 
         this.ws.onmessage = (e) => {
@@ -131,11 +99,7 @@ class VisionVoiceApp {
             }
 
             this.cameraStream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    facingMode: 'user'
-                }
+                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' }
             });
 
             this.browserVideo.srcObject = this.cameraStream;
@@ -144,13 +108,12 @@ class VisionVoiceApp {
                 this.viewportResolution.textContent = `${this.browserVideo.videoWidth} × ${this.browserVideo.videoHeight}`;
             };
 
-            // Start sending frames to backend periodically (~2 FPS) for continuous sync
             if (this.frameInterval) clearInterval(this.frameInterval);
             this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
 
-            console.log('[Camera] Browser webcam connected.');
+            console.log('[Camera] Browser webcam active.');
         } catch (e) {
-            console.warn('[Camera] Browser webcam not accessible, falling back to server feed:', e);
+            console.warn('[Camera] Browser webcam not accessible, switching to host camera:', e);
             this.switchCameraSource('server');
         }
     }
@@ -167,18 +130,15 @@ class VisionVoiceApp {
     }
 
     initEventListeners() {
-        // Source Switcher
         this.btnSourceBrowser.addEventListener('click', () => this.switchCameraSource('browser'));
         this.btnSourceServer.addEventListener('click', () => this.switchCameraSource('server'));
 
-        // Push-to-Talk (Mouse & Touch)
         this.btnPtt.addEventListener('mousedown', () => this.startRecording());
         this.btnPtt.addEventListener('mouseup', () => this.stopRecording());
         this.btnPtt.addEventListener('mouseleave', () => { if (this.isRecording) this.stopRecording(); });
         this.btnPtt.addEventListener('touchstart', (e) => { e.preventDefault(); this.startRecording(); });
         this.btnPtt.addEventListener('touchend', (e) => { e.preventDefault(); this.stopRecording(); });
 
-        // Spacebar Hotkey for Push-To-Talk
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space' && document.activeElement !== this.textInput && !this.isRecording && !this.settingsModal.style.display.includes('flex')) {
                 e.preventDefault();
@@ -192,19 +152,16 @@ class VisionVoiceApp {
             }
         });
 
-        // Text Send
         this.btnSend.addEventListener('click', () => this.sendTextMessage());
         this.textInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') this.sendTextMessage();
         });
 
-        // Scene Scan & Snapshot
         this.btnSceneScan.addEventListener('click', () => this.triggerSceneScan());
         this.btnSnapInspect.addEventListener('click', () => {
             this.sendTextMessage("Describe what is in front of the camera in detail.");
         });
 
-        // Server camera selector
         this.serverCameraSelect.addEventListener('change', async (e) => {
             const idx = e.target.value;
             try {
@@ -213,12 +170,17 @@ class VisionVoiceApp {
             } catch (err) {}
         });
 
-        // Modal Controls
-        this.btnOpenSettings.addEventListener('click', () => this.openSettings());
-        this.btnCloseSettings.addEventListener('click', () => this.closeSettings());
-        this.btnCancelSettings.addEventListener('click', () => this.closeSettings());
-        this.configProvider.addEventListener('change', () => this.updateModalFields());
-        this.btnSaveSettings.addEventListener('click', () => this.saveSettings());
+        this.btnOpenSettings.addEventListener('click', () => { this.settingsModal.style.display = 'flex'; });
+        this.btnCloseSettings.addEventListener('click', () => { this.settingsModal.style.display = 'none'; });
+        this.btnCancelSettings.addEventListener('click', () => { this.settingsModal.style.display = 'none'; });
+        this.btnSaveSettings.addEventListener('click', () => {
+            const voice = this.configVoice.value;
+            localStorage.setItem('aura_voice', voice);
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(JSON.stringify({ type: 'set_voice', voice_key: voice }));
+            }
+            this.settingsModal.style.display = 'none';
+        });
     }
 
     switchCameraSource(source) {
@@ -238,7 +200,7 @@ class VisionVoiceApp {
             this.serverCamDropdownWrap.style.display = 'block';
             if (this.frameInterval) clearInterval(this.frameInterval);
             this.serverStream.src = `/api/camera/stream?t=${Date.now()}`;
-            this.viewportResolution.textContent = 'Server Camera';
+            this.viewportResolution.textContent = 'Host Camera';
         }
     }
 
@@ -302,7 +264,7 @@ class VisionVoiceApp {
         if (this.audioChunks.length === 0) return;
 
         const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-        this.showThinking('Transcribing voice...');
+        this.showThinking('Transcribing speech...');
 
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
@@ -328,7 +290,7 @@ class VisionVoiceApp {
         if (!overrideText) this.textInput.value = '';
 
         this.appendMessage('user', text);
-        this.showThinking('Analyzing visual surroundings...');
+        this.showThinking('Analyzing visual surroundings with Qwen2.5-VL...');
 
         const frameB64 = this.captureCurrentFrameBase64();
 
@@ -343,7 +305,7 @@ class VisionVoiceApp {
 
     triggerSceneScan() {
         this.appendMessage('user', '🔍 Scan scene requested');
-        this.showThinking('Assessing environment...');
+        this.showThinking('Assessing environment with Qwen2.5-VL...');
 
         const frameB64 = this.captureCurrentFrameBase64();
 
@@ -359,7 +321,7 @@ class VisionVoiceApp {
         if (!data || !data.type) return;
 
         if (data.type === 'status_update') {
-            if (data.state === 'thinking') this.showThinking('Analyzing...');
+            if (data.state === 'thinking') this.showThinking('Analyzing visual feed...');
             else if (data.state === 'transcribing') this.showThinking('Transcribing speech...');
             else if (data.state === 'idle') this.hideThinking();
         } else if (data.type === 'stt_result') {
@@ -384,7 +346,7 @@ class VisionVoiceApp {
 
         const sender = document.createElement('span');
         sender.className = 'message-sender';
-        sender.textContent = role === 'user' ? 'You' : 'Assistant';
+        sender.textContent = role === 'user' ? 'You' : 'AURA (Qwen2.5-VL)';
 
         const timeSpan = document.createElement('span');
         timeSpan.className = 'message-time';
@@ -441,69 +403,6 @@ class VisionVoiceApp {
         } catch (e) {
             console.error('[Audio] Error:', e);
         }
-    }
-
-    openSettings() {
-        this.settingsModal.style.display = 'flex';
-    }
-
-    closeSettings() {
-        this.settingsModal.style.display = 'none';
-    }
-
-    updateModalFields() {
-        const provider = this.configProvider.value;
-        if (provider === 'cloud_api') {
-            this.groupOllama.style.display = 'none';
-            this.groupApiKey.style.display = 'flex';
-            this.groupApiBase.style.display = 'flex';
-        } else if (provider === 'ollama') {
-            this.groupOllama.style.display = 'flex';
-            this.groupApiKey.style.display = 'none';
-            this.groupApiBase.style.display = 'none';
-        } else {
-            this.groupOllama.style.display = 'flex';
-            this.groupApiKey.style.display = 'none';
-            this.groupApiBase.style.display = 'none';
-        }
-    }
-
-    saveSettings() {
-        const provider = this.configProvider.value;
-        const model = this.configOllamaModel.value.trim();
-        const apiKey = this.configApiKey.value.trim();
-        const apiBase = this.configApiBase.value.trim();
-        const voice = this.configVoice.value;
-
-        localStorage.setItem('aura_provider', provider);
-        localStorage.setItem('aura_model', model);
-        localStorage.setItem('aura_api_key', apiKey);
-        localStorage.setItem('aura_api_base', apiBase);
-        localStorage.setItem('aura_voice', voice);
-
-        this.updateModelBadge(provider, model);
-        this.syncConfigToServer();
-        this.closeSettings();
-    }
-
-    syncConfigToServer() {
-        const payload = {
-            provider: localStorage.getItem('aura_provider') || 'auto',
-            model: localStorage.getItem('aura_model') || 'qwen2.5vl:7b',
-            api_key: localStorage.getItem('aura_api_key') || '',
-            api_base: localStorage.getItem('aura_api_base') || 'https://api.openai.com/v1',
-            voice: localStorage.getItem('aura_voice') || 'guy'
-        };
-
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify({ type: 'update_config', ...payload }));
-        }
-
-        fetch('/api/config', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).catch(() => {});
     }
 
     async fetchServerCameras() {
