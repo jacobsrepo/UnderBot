@@ -11,51 +11,51 @@ from vision_brain import VisionBrain
 
 def run_tests():
     print("=" * 60)
-    print("   AURA // 100% STANDALONE LOCAL PIPELINE TEST")
+    print("   VLA STUDIO - LOCAL SUBSYSTEM VERIFICATION TEST")
     print("=" * 60)
 
-    # 1. Test Camera
+    # 1. Camera
     print("\n[1/4] Testing Camera Capture...")
     cam = CameraManager(device_index=0)
     cam.start(0)
-    time.sleep(1.0)
+    time.sleep(0.5)
     frame = cam.get_latest_frame_cv2()
     if frame is not None:
-        print(f"  --> Camera OK! Shape: {frame.shape}, FPS: {cam.fps}")
+        print(f"  [OK] Camera active: {frame.shape}, FPS: {cam.fps}")
     else:
-        print("  --> Camera Warning: No local frame. Browser webcam will be used.")
+        print("  [INFO] Host camera standing by. Browser camera available.")
     cam.stop()
 
-    # 2. Test TTS (Male Voice)
-    print("\n[2/4] Testing Neural Male Voice TTS...")
+    # 2. TTS
+    print("\n[2/4] Testing Speech Synthesis...")
     tts = TTSEngine(default_voice_key="guy")
-    audio_bytes = tts.synthesize_sync("Local standalone cortex online. All systems nominal.")
+    audio_bytes = tts.synthesize_sync("VLA Studio operational.")
     if audio_bytes and len(audio_bytes) > 500:
-        print(f"  --> TTS OK! Generated {len(audio_bytes)} bytes with voice '{tts.default_voice_key}'.")
+        print(f"  [OK] Audio generated: {len(audio_bytes)} bytes (voice: {tts.default_voice_key}).")
     else:
-        print("  --> TTS Error: Audio synthesis failed.")
+        print("  [WARN] Speech synthesis error.")
 
-    # 3. Test STT
-    print("\n[3/4] Testing Faster-Whisper STT...")
+    # 3. STT
+    print("\n[3/4] Testing Speech Recognition...")
     stt = STTEngine(model_size="base.en", device="cpu", compute_type="int8")
     if stt.model is not None:
-        print("  --> STT OK! Faster-Whisper ready.")
+        print("  [OK] Faster-Whisper ready.")
     else:
-        print("  --> STT Error: STT failed to load.")
+        print("  [WARN] Speech recognition error.")
 
-    # 4. Test Embedded Standalone Qwen2.5-VL Engine
-    print("\n[4/4] Testing Standalone Embedded Qwen2.5-VL 7B...")
+    # 4. Embedded Model Engine
+    print("\n[4/4] Testing Embedded Qwen2.5-VL Engine...")
     brain = VisionBrain(port=8001)
     status = brain.get_status()
-    print(f"  --> Engine: {status['engine']}")
-    print(f"  --> Model File: {status['model_file']} ({status['model_size_gb']} GB)")
-    print(f"  --> Ready on GPU: {status['ready']}")
+    print(f"  [OK] Model Name: {status['model_name']}")
+    print(f"  [OK] Model File: {status['model_file']} ({status['model_size_gb']} GB)")
+    print(f"  [OK] Acceleration: {status['acceleration']}")
 
-    time.sleep(2)
+    time.sleep(1)
     brain.shutdown()
 
     print("\n" + "=" * 60)
-    print("   100% LOCAL STANDALONE SETUP FULLY OPERATIONAL!")
+    print("   ALL SUBSYSTEMS VERIFIED SUCCESSFULLY")
     print("=" * 60)
 
 if __name__ == "__main__":

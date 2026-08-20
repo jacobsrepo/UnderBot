@@ -11,20 +11,19 @@ import numpy as np
 from typing import Optional, Dict, List, Any
 import aiohttp
 
-ROBOT_SYSTEM_PROMPT = """You are an intelligent, perceptive multimodal AI assistant connected to a live camera feed and voice interface.
-Your role:
-- Observe the physical environment through the camera frames.
-- Listen to spoken user queries and respond concisely, clearly, and naturally.
-- Keep your answers direct, intelligent, and conversational (1 to 3 sentences for speech output).
-- Describe objects, people, text, scene dynamics, or spatial context accurately.
-- Avoid robotic cliches, markdown tables, or unnecessary filler words.
+ROBOT_SYSTEM_PROMPT = """You are a perceptive multimodal artificial intelligence connected to a real-time visual input and speech interface.
+Operating parameters:
+- Observe visual details from the camera feed.
+- Provide concise, articulate, and direct responses suitable for text-to-speech output (1 to 3 sentences).
+- Accurately describe objects, individuals, text, workspace dynamics, and spatial environments.
+- Maintain a professional, conversational tone without meta-language or filler phrases.
 """
 
 class VisionBrain:
     """
-    100% Local & Self-Contained Vision Brain.
-    Runs the embedded Qwen2.5-VL GGUF model via local standalone engine (bin/llama/llama-server.exe)
-    with non-blocking background initialization, zero external dependencies, zero Ollama, and zero cloud.
+    Self-contained multimodal vision engine.
+    Executes the embedded Qwen2.5-VL GGUF model via local standalone engine.
+    Provides real-time model status diagnostics and fallback perception.
     """
     def __init__(self, port: int = 8001):
         self.port = port
@@ -32,16 +31,17 @@ class VisionBrain:
         self.server_process: Optional[subprocess.Popen] = None
         self.is_server_ready = False
         self.is_starting = False
+        self.startup_error = None
         self.conversation_history: List[Dict] = []
         self.max_history = 10
 
-        # Paths
+        # Base directories
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.bin_dir = os.path.join(base_dir, "bin", "llama")
         self.server_exe = os.path.join(self.bin_dir, "llama-server.exe")
         self.model_path = os.path.join(base_dir, "models", "qwen2.5vl-7b.gguf")
 
-        # Local CV Fallback Detector
+        # Fallback CV detector
         self.face_cascade = None
         try:
             cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
@@ -50,34 +50,32 @@ class VisionBrain:
         except Exception:
             pass
 
-        # Launch model in background thread so server boots instantly
+        # Non-blocking threaded startup
         threading.Thread(target=self._start_local_engine, daemon=True).start()
 
     def _start_local_engine(self):
-        """Starts the standalone llama-server with GPU acceleration on the local model."""
+        """Initializes and runs the standalone model server."""
         if self.is_starting or self.is_server_ready:
             return
 
         self.is_starting = True
+        self.startup_error = None
 
         if not os.path.exists(self.server_exe) or not os.path.exists(self.model_path):
-            print(f"[VisionBrain] Note: Embedded engine not ready. Exe: {os.path.exists(self.server_exe)}, Model: {os.path.exists(self.model_path)}")
+            self.startup_error = "Model binary or weights file not found."
             self.is_starting = False
             return
 
-        # Check if already running on port
+        # Check if already active
         try:
             r = requests.get(f"{self.server_url}/models", timeout=1)
             if r.status_code == 200:
-                print(f"[VisionBrain] Embedded engine already online on port {self.port}.")
                 self.is_server_ready = True
                 self.is_starting = False
                 return
         except Exception:
             pass
 
-        print(f"[VisionBrain] Launching embedded GPU model server ({os.path.basename(self.model_path)})...")
-        
         creationflags = 0x08000000 if sys.platform == "win32" else 0  # CREATE_NO_WINDOW
 
         cmd = [
@@ -85,8 +83,8 @@ class VisionBrain:
             "-m", self.model_path,
             "--port", str(self.port),
             "--host", "127.0.0.1",
-            "-ngl", "99",              # Offload all layers to GPU (RTX 3050 CUDA)
-            "-c", "4096",              # Context window
+            "-ngl", "99",               # Maximum GPU layer offload
+            "-c", "4096",               # Context length
             "-b", "512",
             "--mmproj", self.model_path,
             "--temp", "0.4",
@@ -105,27 +103,25 @@ class VisionBrain:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL
             )
-            
-            # Poll for readiness in background up to 30 seconds
+
+            # Poll for readiness up to 30 seconds
             for _ in range(30):
                 time.sleep(1)
                 try:
                     r = requests.get(f"{self.server_url}/models", timeout=1)
                     if r.status_code == 200:
                         self.is_server_ready = True
-                        print("[VisionBrain] Embedded Qwen2.5-VL engine is READY on GPU!")
                         break
                 except Exception:
                     pass
         except Exception as e:
-            print(f"[VisionBrain] Error starting embedded engine: {e}")
+            self.startup_error = str(e)
         finally:
             self.is_starting = False
 
     def shutdown(self):
-        """Cleanly terminates the local model engine."""
+        """Terminates the local engine process."""
         if self.server_process:
-            print("[VisionBrain] Shutting down embedded model engine...")
             try:
                 self.server_process.terminate()
                 self.server_process.wait(timeout=3)
@@ -138,22 +134,31 @@ class VisionBrain:
             self.is_server_ready = False
 
     def get_status(self) -> Dict:
+        """Returns comprehensive diagnostic metrics for the UI."""
+        status_label = "Ready" if self.is_server_ready else ("Initializing..." if self.is_starting else "Standby")
+        if self.startup_error:
+            status_label = f"Error: {self.startup_error}"
+
         return {
-            "engine": "Embedded Standalone Qwen2.5-VL 7B (Direct GGUF)",
+            "status": status_label,
             "ready": self.is_server_ready,
-            "gpu_accelerated": True,
-            "model_file": os.path.basename(self.model_path) if os.path.exists(self.model_path) else "Not found",
-            "model_size_gb": round(os.path.getsize(self.model_path) / (1024**3), 2) if os.path.exists(self.model_path) else 0
+            "is_starting": self.is_starting,
+            "model_name": "Qwen2.5-VL 7B",
+            "format": "Direct GGUF (Embedded)",
+            "acceleration": "Hardware Accelerated (GPU Offload)",
+            "model_file": os.path.basename(self.model_path) if os.path.exists(self.model_path) else "Unavailable",
+            "model_size_gb": round(os.path.getsize(self.model_path) / (1024**3), 2) if os.path.exists(self.model_path) else 0,
+            "process_pid": self.server_process.pid if self.server_process else None
         }
 
     def _analyze_frame_with_local_cv(self, image_base64: str, user_prompt: str) -> str:
-        """Fast fallback while model is warming up."""
+        """Heuristic computer vision fallback."""
         try:
             img_bytes = base64.b64decode(image_base64)
             np_arr = np.frombuffer(img_bytes, np.uint8)
             img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
             if img is None:
-                return "Camera feed active, but no visual frame was received."
+                return "Optical stream connected, awaiting visual frame."
 
             h, w, _ = img.shape
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -165,12 +170,11 @@ class VisionBrain:
                 num_faces = len(faces)
 
             lighting = "well-lit" if mean_brightness > 100 else ("moderately lit" if mean_brightness > 40 else "dimly lit")
-            details = [f"{num_faces} person in view" if num_faces > 0 else "clear field of view"]
-            summary = ", ".join(details)
+            subject = f"{num_faces} person identified" if num_faces > 0 else "clear spatial view"
 
-            return f"I see your camera feed in a {lighting} space with {summary}. Embedded neural vision is warming up."
+            return f"Visual feed active in a {lighting} environment with {subject}. Neural model is completing initialization."
         except Exception:
-            return "Optical feed online. Standing by."
+            return "Visual sensor active. Ready for input."
 
     async def analyze_frame_async(
         self,
@@ -178,10 +182,8 @@ class VisionBrain:
         user_prompt: str,
         model_name: Optional[str] = None
     ) -> Dict:
-        """
-        Runs local inference directly on the embedded Qwen2.5-VL model.
-        """
-        prompt_text = user_prompt.strip() if user_prompt else "Describe what you see in front of the camera clearly and concisely."
+        """Executes multimodal inference on the visual frame."""
+        prompt_text = user_prompt.strip() if user_prompt else "Describe the physical scene in front of the camera clearly and concisely."
         start_time = time.time()
 
         messages = [{"role": "system", "content": ROBOT_SYSTEM_PROMPT}]
@@ -204,7 +206,7 @@ class VisionBrain:
             "temperature": 0.4
         }
 
-        # Try sending to embedded server if ready
+        # Check server readiness
         if self.is_server_ready:
             try:
                 async with aiohttp.ClientSession() as session:
@@ -220,19 +222,19 @@ class VisionBrain:
                             return {
                                 "success": True,
                                 "response": text,
-                                "model": "Embedded Qwen2.5-VL 7B (Direct Local)",
+                                "model": "Qwen2.5-VL 7B (Local Neural Engine)",
                                 "latency_seconds": round(time.time() - start_time, 2)
                             }
             except Exception as e:
-                print(f"[VisionBrain] Embedded engine query notice: {e}")
+                pass
 
-        # Instant CV fallback while engine finishes warming up
+        # Fallback while model is warming up
         fallback = self._analyze_frame_with_local_cv(image_base64, prompt_text)
         self._record_history(prompt_text, fallback)
         return {
             "success": True,
             "response": fallback,
-            "model": "Embedded Local CV Sensory Engine",
+            "model": "Fallback Sensory Processor",
             "latency_seconds": round(time.time() - start_time, 2)
         }
 

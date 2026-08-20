@@ -1,17 +1,26 @@
+import os
+import sys
+
+# Silence OpenCV internal C++ driver warnings
+os.environ["OPENCV_LOG_LEVEL"] = "OFF"
+os.environ["OPENCV_VIDEOIO_DEBUG"] = "0"
+
 import cv2
+try:
+    cv2.setLogLevel(0)
+except Exception:
+    pass
+
 import threading
 import time
 import base64
 import platform
-from typing import Optional, Tuple, List, Dict
+from typing import Optional, List, Dict
 
 class CameraManager:
     """
-    Universal Camera Manager.
-    Supports:
-    - Any local USB / laptop webcam / virtual camera (Camo, OBS, Integrated)
-    - Browser Client-Side Camera (frames streamed directly from phone/laptop browser)
-    - Multi-platform backends (Windows MSMF/DSHOW, Linux V4L2, macOS AVFoundation)
+    Universal camera manager.
+    Supports local webcams, virtual cameras (Camo Studio, OBS), and client-side browser streams.
     """
     def __init__(self, device_index: int = 0):
         self.device_index = device_index
@@ -20,11 +29,12 @@ class CameraManager:
         self.latest_jpeg = None
         self.latest_base64 = None
         self.is_running = False
-        self.is_client_stream = False  # True when using browser webcam
+        self.is_client_stream = False
         self.lock = threading.Lock()
         self.fps = 0.0
         self.frame_count = 0
         self.last_frame_time = 0
+        self.consecutive_errors = 0
         self.thread: Optional[threading.Thread] = None
         self.width = 1280
         self.height = 720
@@ -36,40 +46,28 @@ class CameraManager:
 
         self.stop()
         self.is_client_stream = False
+        self.consecutive_errors = 0
 
-        print(f"[CameraManager] Initializing camera device index {self.device_index} on {self.os_type}...")
-        
-        # Pick best platform-specific backend list
-        backends = []
-        if self.os_type == "Windows":
-            backends = [cv2.CAP_MSMF, cv2.CAP_DSHOW, cv2.CAP_ANY]
-        elif self.os_type == "Darwin":  # macOS
-            backends = [cv2.CAP_AVFOUNDATION, cv2.CAP_ANY]
-        elif self.os_type == "Linux":
-            backends = [cv2.CAP_V4L2, cv2.CAP_ANY]
-        else:
-            backends = [cv2.CAP_ANY]
+        # Prioritize DirectShow on Windows to prevent MSMF driver grab errors
+        backends = [cv2.CAP_DSHOW, cv2.CAP_ANY] if self.os_type == "Windows" else [cv2.CAP_ANY]
 
         for backend in backends:
             try:
                 cap = cv2.VideoCapture(self.device_index, backend)
                 if cap.isOpened():
                     self.cap = cap
-                    print(f"[CameraManager] Opened successfully with backend: {backend}")
                     break
                 cap.release()
             except Exception:
                 pass
 
         if not self.cap or not self.cap.isOpened():
-            # Last fallback
             try:
                 self.cap = cv2.VideoCapture(self.device_index)
             except Exception:
                 pass
 
         if not self.cap or not self.cap.isOpened():
-            print(f"[CameraManager] Note: Local camera {self.device_index} not opened. Standing by for browser webcam stream.")
             return False
 
         try:
@@ -82,7 +80,6 @@ class CameraManager:
         self.is_running = True
         self.thread = threading.Thread(target=self._capture_loop, daemon=True)
         self.thread.start()
-        print(f"[CameraManager] Camera worker active (Device {self.device_index})")
         return True
 
     def stop(self):
@@ -97,10 +94,7 @@ class CameraManager:
             self.cap = None
 
     def update_client_frame(self, image_base64: str):
-        """
-        Accepts a live frame sent directly from the client's browser webcam.
-        Enables instant use on mobile phones, tablets, or laptops over the network.
-        """
+        """Updates buffer with frame captured directly from the browser webcam."""
         try:
             img_bytes = base64.b64decode(image_base64)
             with self.lock:
@@ -109,18 +103,29 @@ class CameraManager:
                 self.frame_count += 1
                 self.last_frame_time = time.time()
                 self.is_client_stream = True
-        except Exception as e:
-            print(f"[CameraManager] Error decoding client frame: {e}")
+        except Exception:
+            pass
 
     def _capture_loop(self):
         fps_counter = 0
         fps_timer = time.time()
 
         while self.is_running and self.cap and self.cap.isOpened():
-            ret, frame = self.cap.read()
+            try:
+                ret, frame = self.cap.read()
+            except Exception:
+                ret, frame = False, None
+
             if not ret or frame is None:
-                time.sleep(0.02)
+                self.consecutive_errors += 1
+                # If camera is not streaming frames, back off to avoid console CPU thrashing
+                if self.consecutive_errors > 5:
+                    time.sleep(0.5)
+                else:
+                    time.sleep(0.05)
                 continue
+
+            self.consecutive_errors = 0
 
             try:
                 _, jpeg_buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
@@ -169,13 +174,13 @@ class CameraManager:
             }
 
     @staticmethod
-    def list_available_cameras(max_tested: int = 6) -> List[Dict]:
+    def list_available_cameras(max_tested: int = 4) -> List[Dict]:
         found = []
         os_name = platform.system()
 
         for i in range(max_tested):
             opened = False
-            backends = [cv2.CAP_MSMF, cv2.CAP_DSHOW, cv2.CAP_ANY] if os_name == "Windows" else [cv2.CAP_ANY]
+            backends = [cv2.CAP_DSHOW, cv2.CAP_ANY] if os_name == "Windows" else [cv2.CAP_ANY]
             
             for backend in backends:
                 try:
@@ -183,10 +188,10 @@ class CameraManager:
                     if cap.isOpened():
                         ret, _ = cap.read()
                         cap.release()
-                        name = "Integrated / Camo Camera" if i == 0 else f"Camera Device {i}"
+                        name = "Host Camera 0 (Integrated / Camo)" if i == 0 else f"Camera Device {i}"
                         found.append({
                             "index": i,
-                            "name": f"{name} (Index {i})",
+                            "name": f"{name}",
                             "accessible": bool(ret)
                         })
                         opened = True

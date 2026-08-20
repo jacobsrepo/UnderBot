@@ -5,14 +5,14 @@ import time
 import json
 import base64
 import asyncio
+import signal
 from typing import Optional, List, Dict
 
-# Ensure backend directory is in sys.path
 _BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 if _BACKEND_DIR not in sys.path:
     sys.path.insert(0, _BACKEND_DIR)
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, UploadFile, File, Form, Query
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, UploadFile, File, Form, Query, BackgroundTasks
 from fastapi.responses import StreamingResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,14 +23,12 @@ from vision_brain import VisionBrain
 from tts_engine import TTSEngine
 from stt_engine import STTEngine
 
-# Initialize FastAPI App
 app = FastAPI(
-    title="AURA - Standalone Multimodal Vision-Voice Assistant",
-    description="100% self-contained, fully local Vision-Language-Voice system.",
-    version="3.0.0"
+    title="Local Vision-Voice Assistant",
+    description="Self-contained multimodal interface with local neural execution.",
+    version="3.1.0"
 )
 
-# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -47,15 +45,15 @@ stt = STTEngine(model_size="base.en", device="cpu", compute_type="int8")
 
 @app.on_event("startup")
 async def startup_event():
-    print("[Server] Starting AURA Standalone Assistant Server...")
+    print("[Server] Local Assistant Server online.")
     try:
         camera.start(0)
-    except Exception as e:
-        print(f"[Server] Camera start notice: {e}")
+    except Exception:
+        pass
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    print("[Server] Shutting down camera and embedded brain...")
+    print("[Server] Terminating camera and model processes...")
     camera.stop()
     brain.shutdown()
 
@@ -72,6 +70,28 @@ async def get_system_status():
         "selected_voice": tts.default_voice_key,
         "active_voice_name": tts.AVAILABLE_VOICES.get(tts.default_voice_key, {}).get("name", "Guy")
     }
+
+@app.get("/api/diagnostics")
+async def get_diagnostics():
+    return {
+        "brain": brain.get_status(),
+        "camera": camera.get_stats(),
+        "voice": tts.default_voice_key
+    }
+
+@app.post("/api/system/shutdown")
+async def shutdown_system(background_tasks: BackgroundTasks):
+    """Cleanly terminates the server, releases cameras, and kills child processes."""
+    print("[Server] Shutdown request received from client.")
+    
+    def kill_process():
+        time.sleep(0.5)
+        camera.stop()
+        brain.shutdown()
+        os.kill(os.getpid(), signal.SIGTERM if sys.platform != "win32" else signal.SIGINT)
+
+    background_tasks.add_task(kill_process)
+    return {"success": True, "message": "System is powering down."}
 
 @app.get("/api/camera/stream")
 def video_feed():
@@ -146,7 +166,6 @@ async def analyze_scene(req: AnalyzeRequest):
 @app.websocket("/ws/live")
 async def websocket_live_endpoint(websocket: WebSocket):
     await websocket.accept()
-    print("[WebSocket] Client connected.")
 
     try:
         await websocket.send_json({
@@ -161,7 +180,11 @@ async def websocket_live_endpoint(websocket: WebSocket):
             msg_type = msg.get("type", "")
 
             if msg_type == "ping":
-                await websocket.send_json({"type": "pong", "time": time.time()})
+                await websocket.send_json({
+                    "type": "pong",
+                    "time": time.time(),
+                    "brain": brain.get_status()
+                })
 
             elif msg_type == "client_frame":
                 b64 = msg.get("image_base64", "")
@@ -231,12 +254,12 @@ async def websocket_live_endpoint(websocket: WebSocket):
                             "speech": speech_data
                         })
                     else:
-                        await websocket.send_json({"type": "status_update", "state": "idle", "message": "No audible speech detected."})
+                        await websocket.send_json({"type": "status_update", "state": "idle", "message": "No speech detected."})
 
             elif msg_type == "scene_scan":
                 custom_frame = msg.get("image_base64")
                 frame_b64 = custom_frame or camera.get_latest_frame_base64() or ""
-                prompt = "Give a concise 2-sentence description of what you observe in front of the camera."
+                prompt = "Give a concise 2-sentence description of the visual scene in front of the camera."
 
                 res = await brain.analyze_frame_async(image_base64=frame_b64, user_prompt=prompt)
                 reply_text = res.get("response", "")
@@ -256,11 +279,11 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 await websocket.send_json({"type": "voice_updated", "voice_key": tts.default_voice_key})
 
     except WebSocketDisconnect:
-        print("[WebSocket] Client disconnected.")
+        pass
     except Exception as e:
-        print(f"[WebSocket] Error: {e}")
+        print(f"[WebSocket] Loop exception: {e}")
 
-# Mount static frontend
+# Mount frontend
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
 if os.path.exists(FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")

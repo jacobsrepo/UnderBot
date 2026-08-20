@@ -1,9 +1,9 @@
 @echo off
-title AURA Vision & Voice Assistant
+title VLA Studio - Multimodal Vision and Voice Assistant
 color 0f
 echo ======================================================================
-echo                  AURA VISION & VOICE ASSISTANT
-echo         Universal Multimodal Cognitive Studio (v2.0)
+echo                  VLA STUDIO // LOCAL MULTIMODAL CORTEX
+echo            Self-Contained Vision-Language-Action Architecture
 echo ======================================================================
 echo.
 
@@ -16,11 +16,11 @@ if exist ".venv\Scripts\python.exe" (
     set "PYTHON_EXE=python"
 )
 
-echo [2/2] Launching Universal Server (FastAPI + WebSockets)...
+echo [2/2] Starting Local Server...
 echo.
 echo ----------------------------------------------------------------------
-echo  Local Interface:   http://localhost:8000
-echo  Network Access:    http://0.0.0.0:8000 (Open on phone/laptop)
+echo  Interface URL:    http://localhost:8000
+echo  Network Access:   http://0.0.0.0:8000
 echo ----------------------------------------------------------------------
 echo.
 
