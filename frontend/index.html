@@ -3,225 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neural Sensory Cortex // Local Robot Brain</title>
-    <meta name="description" content="Local Multimodal Live Vision and Voice Brain for Robotics with Qwen-VL and Camo Camera.">
-    <!-- Google Fonts -->
+    <title>Vision & Voice Assistant</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
-<body class="dark-theme">
-    <div class="hud-scanlines"></div>
-    <div class="hud-vignette"></div>
-
-    <!-- Main Container -->
-    <div class="app-container">
+<body>
+    <div class="app-shell">
         
-        <!-- Header Bar -->
-        <header class="hud-header">
-            <div class="header-left">
-                <div class="brand-badge">
-                    <span class="pulsing-core"></span>
-                    <span class="brand-title">NEURAL CORTEX</span>
-                    <span class="brand-version">v2.5.0-LOCAL</span>
-                </div>
-                <div class="system-status-chip online" id="system-status-chip">
-                    <span class="status-dot"></span>
-                    <span id="system-status-text">SYSTEM OPERATIONAL</span>
-                </div>
+        <!-- Minimal Top Navigation -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-symbol"></div>
+                <h1 class="brand-title">AURA <span class="brand-sub">VISION & VOICE</span></h1>
             </div>
 
             <div class="header-center">
-                <div class="hardware-pill">
-                    <span class="hw-icon">⚡</span>
-                    <span class="hw-name">NVIDIA RTX 3050 (8GB)</span>
-                    <span class="hw-sep">|</span>
-                    <span class="hw-val" id="model-pill">QWEN2.5-VL 7B</span>
+                <div class="status-indicator online" id="connection-status">
+                    <span class="status-dot"></span>
+                    <span id="connection-label">Connected</span>
+                </div>
+                <div class="model-badge" id="active-model-badge">
+                    <span class="badge-icon">🧠</span>
+                    <span id="badge-model-name">Qwen2.5-VL 7B</span>
                 </div>
             </div>
 
-            <div class="header-right">
-                <div class="voice-badge">
-                    <span class="voice-icon">🎙️</span>
-                    <span class="voice-label">VOICE:</span>
-                    <span class="voice-val" id="active-voice-pill">Guy (Male)</span>
-                </div>
-                <button class="hud-btn scan-btn" id="btn-scene-scan" title="Trigger instant autonomous environmental scan">
-                    <span class="btn-icon">👁️</span> SCAN SCENE
+            <div class="header-actions">
+                <button class="action-btn secondary" id="btn-scene-scan" title="Scan current visual surroundings">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M3 9V5a2 2 0 0 1 2-2h4M21 9V5a2 2 0 0 0-2-2h-4M3 15v4a2 2 0 0 0 2 2h4M21 15v4a2 2 0 0 1-2 2h-4"></path></svg>
+                    <span>Scan Scene</span>
+                </button>
+                <button class="action-btn icon" id="btn-open-settings" title="Settings & Provider Config">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 </button>
             </div>
         </header>
 
-        <!-- Main Cockpit Grid -->
-        <main class="cockpit-grid">
+        <!-- Main Workspace -->
+        <main class="main-workspace">
             
-            <!-- Left Panel: Live Visual Cortex -->
-            <section class="panel visual-cortex-panel">
-                <div class="panel-header">
-                    <div class="panel-title-wrap">
-                        <span class="panel-tag">CAM.01</span>
-                        <h2 class="panel-title">LIVE OPTICAL SENSORY FEED</h2>
-                    </div>
-                    <div class="cam-controls">
-                        <select id="camera-select" class="hud-select" title="Select Video Device">
-                            <option value="0">Camera 0 (Camo Studio)</option>
-                        </select>
-                        <button id="btn-refresh-cams" class="icon-btn" title="Refresh Camera Devices">🔄</button>
-                    </div>
-                </div>
-
-                <!-- Video Viewport Canvas Container -->
-                <div class="viewport-wrapper">
-                    <div class="hud-corner top-left"></div>
-                    <div class="hud-corner top-right"></div>
-                    <div class="hud-corner bottom-left"></div>
-                    <div class="hud-corner bottom-right"></div>
+            <!-- Left: Video Feed Area -->
+            <section class="video-section">
+                <div class="card video-card">
                     
-                    <div class="hud-crosshair"></div>
-                    <div class="hud-grid-overlay"></div>
-                    
-                    <div class="hud-telemetry-overlay">
-                        <span class="telemetry-badge" id="cam-fps-badge">FPS: 30.0</span>
-                        <span class="telemetry-badge" id="cam-res-badge">1280x720</span>
-                        <span class="telemetry-badge status-live">LIVE CAMO STREAM</span>
-                    </div>
-
-                    <!-- Live MJPEG Stream -->
-                    <img id="live-camera-feed" src="/api/camera/stream" alt="Live Sensory Camera Feed" crossorigin="anonymous">
-                    
-                    <div class="hud-target-reticle" id="target-reticle">
-                        <div class="reticle-box"></div>
-                        <span class="reticle-label">TARGET SENSORY FOCUS</span>
-                    </div>
-                </div>
-
-                <!-- Visual Perception Toolbar -->
-                <div class="cortex-toolbar">
-                    <button class="cortex-action-btn" id="btn-snap-analyze">
-                        <span>📸</span> Snapshot & Inspect
-                    </button>
-                    <button class="cortex-action-btn" id="btn-clear-chat">
-                        <span>🧹</span> Clear Timeline
-                    </button>
-                    <div class="mode-toggle-wrap">
-                        <label class="switch-label" for="auto-perceive-toggle">Auto-Listen VAD</label>
-                        <label class="switch">
-                            <input type="checkbox" id="auto-perceive-toggle">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Right Panel: Cognitive Stream & Voice Interface -->
-            <section class="panel cognitive-stream-panel">
-                
-                <!-- Audio Reactor Spectrum -->
-                <div class="audio-reactor-box">
-                    <div class="reactor-header">
-                        <span class="reactor-title">NEURAL AUDIO SPECTRUM // VOICE HARMONICS</span>
-                        <span class="reactor-state" id="reactor-state">IDLE</span>
-                    </div>
-                    <canvas id="audio-spectrum-canvas" width="600" height="70"></canvas>
-                </div>
-
-                <!-- Settings Strip (Model & Male Voice Selector) -->
-                <div class="settings-strip">
-                    <div class="setting-item">
-                        <label for="select-model" class="setting-label">VISION BRAIN</label>
-                        <select id="select-model" class="hud-select-sm">
-                            <option value="qwen2.5vl:7b" selected>Qwen2.5-VL 7B (Max Power)</option>
-                            <option value="qwen2.5vl:3b">Qwen2.5-VL 3B (Ultra Fast)</option>
-                            <option value="qwen2vl:7b">Qwen2-VL 7B</option>
-                            <option value="llava:7b">LLaVA 7B</option>
-                            <option value="deepseek-r1:latest">DeepSeek-R1 (Local)</option>
-                            <option value="qwen2.5-coder:7b">Qwen2.5-Coder 7B</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <label for="select-voice" class="setting-label">MALE VOICE</label>
-                        <select id="select-voice" class="hud-select-sm">
-                            <option value="guy" selected>Guy (US Crisp & Authoritative)</option>
-                            <option value="christopher">Christopher (US Calm & Intelligent)</option>
-                            <option value="eric">Eric (US Energetic)</option>
-                            <option value="ryan">Ryan (British Tech-Refined)</option>
-                            <option value="william">William (Australian Clear)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Chat & Thought Timeline -->
-                <div class="thought-stream" id="thought-stream">
-                    <div class="message-card system-card">
-                        <div class="msg-header">
-                            <span class="msg-author">CORE SENSORY SYSTEM</span>
-                            <span class="msg-time">INIT</span>
+                    <!-- Video Top Controls -->
+                    <div class="video-toolbar">
+                        <div class="source-toggle">
+                            <button class="toggle-btn active" id="btn-source-browser" title="Use this device's camera">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                                <span>Browser Camera</span>
+                            </button>
+                            <button class="toggle-btn" id="btn-source-server" title="Use host PC camera (Camo/USB)">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                <span>Host Camera</span>
+                            </button>
                         </div>
-                        <div class="msg-body">
-                            Visual cortical loop linked with Camo Camera. NVIDIA RTX 3050 GPU accelerated inference online. Speak into your microphone or type a query to begin.
+
+                        <div class="camera-select-wrap" id="server-cam-dropdown-wrap" style="display: none;">
+                            <select id="server-camera-select" class="clean-select">
+                                <option value="0">Camera 0</option>
+                            </select>
                         </div>
                     </div>
-                </div>
 
-                <!-- Live Typing / Processing Indicator -->
-                <div class="thinking-hud" id="thinking-hud" style="display: none;">
-                    <div class="thinking-spinner"></div>
-                    <span class="thinking-text" id="thinking-text">Processing live sensory data...</span>
-                </div>
+                    <!-- Video Viewport -->
+                    <div class="video-viewport">
+                        <!-- Browser Local Video (Direct HTML5 Camera) -->
+                        <video id="browser-video-element" autoplay playsinline muted></video>
+                        <!-- Server Video Stream (Fallback) -->
+                        <img id="server-stream-element" src="/api/camera/stream" alt="Camera Feed" style="display: none;" crossorigin="anonymous">
+                        <canvas id="browser-frame-canvas" style="display: none;"></canvas>
 
-                <!-- Interaction Dock (Microphone & Prompt Bar) -->
-                <div class="interaction-dock">
-                    <div class="dock-top">
-                        <!-- Push to Talk Button -->
-                        <button class="push-to-talk-btn" id="btn-push-to-talk">
-                            <div class="btn-mic-ring"></div>
-                            <span class="btn-mic-icon">🎙️</span>
-                            <span class="btn-mic-label" id="mic-btn-label">HOLD TO SPEAK</span>
-                        </button>
-                    </div>
+                        <!-- Minimal Overlay Badges -->
+                        <div class="viewport-overlay-top">
+                            <span class="live-pill">LIVE</span>
+                            <span class="fps-pill" id="viewport-resolution">1280 × 720</span>
+                        </div>
 
-                    <div class="dock-bottom">
-                        <div class="input-glow-wrapper">
-                            <input type="text" id="text-prompt-input" class="prompt-input" placeholder="Ask anything about what the robot sees..." autocomplete="off">
-                            <button id="btn-send-text" class="send-btn" title="Send Query">
-                                <span>⚡</span> SEND
+                        <div class="viewport-overlay-bottom">
+                            <button class="viewport-action-btn" id="btn-snap-inspect" title="Inspect current frame">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Inspect Frame</span>
                             </button>
                         </div>
                     </div>
                 </div>
+            </section>
 
+            <!-- Right: Interactive Conversation & Voice -->
+            <section class="conversation-section">
+                <div class="card conversation-card">
+                    
+                    <!-- Audio Wave Visualizer Header -->
+                    <div class="visualizer-header">
+                        <div class="visualizer-title-wrap">
+                            <span class="visualizer-status" id="visualizer-status-text">Standby</span>
+                        </div>
+                        <canvas id="minimal-audio-canvas" width="400" height="32"></canvas>
+                    </div>
+
+                    <!-- Chat Timeline -->
+                    <div class="chat-timeline" id="chat-timeline">
+                        <div class="chat-message assistant-message">
+                            <div class="message-meta">
+                                <span class="message-sender">Assistant</span>
+                                <span class="message-time">Now</span>
+                            </div>
+                            <div class="message-content">
+                                Vision and voice cortex active. Hold the microphone button below or press <strong>Space</strong> to talk.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Processing State -->
+                    <div class="thinking-state" id="thinking-state" style="display: none;">
+                        <div class="pulse-dot"></div>
+                        <span id="thinking-label">Analyzing visual feed...</span>
+                    </div>
+
+                    <!-- Bottom Dock -->
+                    <div class="chat-dock">
+                        <div class="dock-row">
+                            <!-- Push-To-Talk Button -->
+                            <button class="ptt-button" id="btn-ptt">
+                                <div class="ptt-icon-wrap">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                </div>
+                                <span id="ptt-label">Hold to Speak</span>
+                                <span class="key-badge">Space</span>
+                            </button>
+                        </div>
+
+                        <!-- Text Input Row -->
+                        <div class="input-row">
+                            <input type="text" id="text-input-field" class="clean-input" placeholder="Type a message or ask what the camera sees..." autocomplete="off">
+                            <button id="btn-send-message" class="send-button" title="Send message">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
             </section>
         </main>
 
-        <!-- Bottom Telemetry Bar -->
-        <footer class="hud-footer">
-            <div class="telemetry-item">
-                <span class="t-label">ENGINE:</span>
-                <span class="t-val highlight" id="t-engine">Ollama + Qwen-VL</span>
+        <!-- Minimal Settings Modal -->
+        <div class="modal-backdrop" id="settings-modal" style="display: none;">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2 class="modal-title">Settings & Configuration</h2>
+                    <button class="modal-close-btn" id="btn-close-settings">✕</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Vision Provider</label>
+                        <select id="config-provider-select" class="clean-select full">
+                            <option value="auto">Auto (Ollama if running, else Local CV)</option>
+                            <option value="ollama">Local Ollama (Qwen2.5-VL / LLaVA)</option>
+                            <option value="cloud_api">Cloud Vision API (OpenAI / Gemini / Groq)</option>
+                            <option value="local_cv">Local Computer Vision (100% Offline)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="group-ollama-model">
+                        <label class="form-label">Ollama Model</label>
+                        <input type="text" id="config-ollama-model" class="clean-input full" value="qwen2.5vl:7b" placeholder="e.g. qwen2.5vl:7b, qwen2.5vl:3b, moondream">
+                    </div>
+
+                    <div class="form-group" id="group-api-key" style="display: none;">
+                        <label class="form-label">Vision API Key</label>
+                        <input type="password" id="config-api-key" class="clean-input full" placeholder="sk-...">
+                    </div>
+
+                    <div class="form-group" id="group-api-base" style="display: none;">
+                        <label class="form-label">API Base URL</label>
+                        <input type="text" id="config-api-base" class="clean-input full" value="https://api.openai.com/v1" placeholder="https://api.openai.com/v1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Assistant Voice</label>
+                        <select id="config-voice-select" class="clean-select full">
+                            <option value="guy">Guy (Male - Natural & Clear)</option>
+                            <option value="christopher">Christopher (Male - Calm & Authoritative)</option>
+                            <option value="eric">Eric (Male - Energetic)</option>
+                            <option value="ryan">Ryan (Male - British Tech)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="action-btn secondary" id="btn-cancel-settings">Cancel</button>
+                    <button class="action-btn primary" id="btn-save-settings">Save Settings</button>
+                </div>
             </div>
-            <div class="telemetry-item">
-                <span class="t-label">STT INFERENCE:</span>
-                <span class="t-val" id="t-stt">Faster-Whisper (Int8)</span>
-            </div>
-            <div class="telemetry-item">
-                <span class="t-label">TTS ENGINE:</span>
-                <span class="t-val" id="t-tts">Neural Male Voice</span>
-            </div>
-            <div class="telemetry-item">
-                <span class="t-label">LATENCY:</span>
-                <span class="t-val" id="t-latency">-- ms</span>
-            </div>
-            <div class="telemetry-item">
-                <span class="t-label">WS LINK:</span>
-                <span class="t-val status-online" id="t-ws-status">CONNECTED</span>
-            </div>
-        </footer>
+        </div>
 
     </div>
 
-    <!-- Hidden Audio Player for Speech Output -->
-    <audio id="speech-audio-player" preload="auto"></audio>
+    <!-- Hidden audio element for TTS playback -->
+    <audio id="tts-audio-element" preload="auto"></audio>
 
     <!-- Scripts -->
     <script src="/static/audio_visualizer.js"></script>

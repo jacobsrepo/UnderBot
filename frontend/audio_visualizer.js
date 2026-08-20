@@ -1,6 +1,5 @@
 /**
- * Real-time Audio Spectrum & Waveform Visualizer
- * Powered by HTML5 Canvas & Web Audio API
+ * Minimalist Audio Wave Visualizer
  */
 
 class AudioSpectrumVisualizer {
@@ -22,8 +21,8 @@ class AudioSpectrumVisualizer {
 
     initCanvasSize() {
         const rect = this.canvas.getBoundingClientRect();
-        this.canvas.width = rect.width * window.devicePixelRatio || 600;
-        this.canvas.height = 70 * window.devicePixelRatio || 70;
+        this.canvas.width = (rect.width || 140) * (window.devicePixelRatio || 1);
+        this.canvas.height = (rect.height || 24) * (window.devicePixelRatio || 1);
     }
 
     ensureAudioContext() {
@@ -31,8 +30,8 @@ class AudioSpectrumVisualizer {
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             this.audioCtx = new AudioContextClass();
             this.analyser = this.audioCtx.createAnalyser();
-            this.analyser.fftSize = 128;
-            this.analyser.smoothingTimeConstant = 0.85;
+            this.analyser.fftSize = 64;
+            this.analyser.smoothingTimeConstant = 0.8;
             this.bufferLength = this.analyser.frequencyBinCount;
             this.dataArray = new Uint8Array(this.bufferLength);
         }
@@ -44,15 +43,13 @@ class AudioSpectrumVisualizer {
     connectMediaStream(stream) {
         this.ensureAudioContext();
         try {
-            if (this.source) {
-                this.source.disconnect();
-            }
+            if (this.source) this.source.disconnect();
             this.source = this.audioCtx.createMediaStreamSource(stream);
             this.source.connect(this.analyser);
             this.isActive = true;
             this.startLoop();
         } catch (e) {
-            console.warn('[Visualizer] Error connecting stream:', e);
+            console.warn('[Visualizer] Stream error:', e);
         }
     }
 
@@ -68,14 +65,12 @@ class AudioSpectrumVisualizer {
             this.isActive = true;
             this.startLoop();
         } catch (e) {
-            console.warn('[Visualizer] Error connecting audio element:', e);
+            console.warn('[Visualizer] Audio element error:', e);
         }
     }
 
     startLoop() {
-        if (this.animationId) {
-            cancelAnimationFrame(this.animationId);
-        }
+        if (this.animationId) cancelAnimationFrame(this.animationId);
 
         const draw = () => {
             this.animationId = requestAnimationFrame(draw);
@@ -91,29 +86,23 @@ class AudioSpectrumVisualizer {
             const height = this.canvas.height;
             this.ctx.clearRect(0, 0, width, height);
 
-            const barWidth = (width / this.bufferLength) * 1.8;
-            let x = 0;
+            const count = 16;
+            const barWidth = (width / count) * 0.6;
+            const gap = (width - (count * barWidth)) / (count - 1);
 
-            for (let i = 0; i < this.bufferLength; i++) {
-                const val = this.dataArray[i];
+            for (let i = 0; i < count; i++) {
+                const idx = Math.floor((i / count) * this.bufferLength);
+                const val = this.dataArray[idx] || 0;
                 const percent = val / 255;
-                const barHeight = percent * height * 0.9;
+                const barHeight = Math.max(3, percent * height * 0.85);
 
-                // Cyberpunk Neon Gradient
-                const gradient = this.ctx.createLinearGradient(0, height, 0, 0);
-                gradient.addColorStop(0, 'rgba(0, 243, 255, 0.2)');
-                gradient.addColorStop(0.5, 'rgba(0, 243, 255, 0.8)');
-                gradient.addColorStop(1, 'rgba(0, 255, 136, 1)');
+                const x = i * (barWidth + gap);
+                const y = (height - barHeight) / 2;
 
-                this.ctx.fillStyle = gradient;
-                this.ctx.shadowBlur = 8;
-                this.ctx.shadowColor = 'rgba(0, 243, 255, 0.5)';
-
-                // Draw symmetrical centered bar
-                const y = height - barHeight;
-                this.ctx.fillRect(x, y, barWidth - 2, barHeight);
-
-                x += barWidth;
+                this.ctx.fillStyle = '#3b82f6';
+                this.ctx.beginPath();
+                this.ctx.roundRect(x, y, barWidth, barHeight, 2);
+                this.ctx.fill();
             }
         };
 
@@ -125,20 +114,20 @@ class AudioSpectrumVisualizer {
         const height = this.canvas.height;
         this.ctx.clearRect(0, 0, width, height);
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, height / 2);
+        const count = 16;
+        const barWidth = (width / count) * 0.6;
+        const gap = (width - (count * barWidth)) / (count - 1);
 
-        const time = Date.now() * 0.003;
-        for (let x = 0; x < width; x += 4) {
-            const y = (height / 2) + Math.sin(x * 0.02 + time) * 3;
-            this.ctx.lineTo(x, y);
+        for (let i = 0; i < count; i++) {
+            const x = i * (barWidth + gap);
+            const barHeight = 3;
+            const y = (height - barHeight) / 2;
+
+            this.ctx.fillStyle = '#1e2433';
+            this.ctx.beginPath();
+            this.ctx.roundRect(x, y, barWidth, barHeight, 2);
+            this.ctx.fill();
         }
-
-        this.ctx.strokeStyle = 'rgba(0, 243, 255, 0.25)';
-        this.ctx.lineWidth = 2;
-        this.ctx.shadowBlur = 4;
-        this.ctx.shadowColor = 'rgba(0, 243, 255, 0.3)';
-        this.ctx.stroke();
     }
 
     setIdle() {

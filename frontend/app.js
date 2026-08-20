@@ -1,127 +1,186 @@
 /**
- * Neural Sensory Cortex - Robot Brain Frontend Controller
+ * AURA Vision & Voice Assistant - Frontend Controller
  */
 
-class RobotBrainCockpit {
+class VisionVoiceApp {
     constructor() {
         this.ws = null;
         this.isRecording = false;
         this.mediaRecorder = null;
         this.audioChunks = [];
         this.micStream = null;
+        this.cameraStream = null;
+        this.activeCameraSource = 'browser'; // 'browser' or 'server'
         this.visualizer = null;
-        this.audioPlayer = document.getElementById('speech-audio-player');
-        this.isSpeaking = false;
-        this.handsFreeVAD = false;
-        this.vadTimer = null;
+        this.frameInterval = null;
 
         // Elements
-        this.thoughtStream = document.getElementById('thought-stream');
-        this.thinkingHud = document.getElementById('thinking-hud');
-        this.thinkingText = document.getElementById('thinking-text');
-        this.btnPushToTalk = document.getElementById('btn-push-to-talk');
-        this.micLabel = document.getElementById('mic-btn-label');
-        this.textInput = document.getElementById('text-prompt-input');
-        this.btnSendText = document.getElementById('btn-send-text');
+        this.browserVideo = document.getElementById('browser-video-element');
+        this.serverStream = document.getElementById('server-stream-element');
+        this.frameCanvas = document.getElementById('browser-frame-canvas');
+        this.audioPlayer = document.getElementById('tts-audio-element');
+        this.chatTimeline = document.getElementById('chat-timeline');
+        this.thinkingState = document.getElementById('thinking-state');
+        this.thinkingLabel = document.getElementById('thinking-label');
+        this.btnPtt = document.getElementById('btn-ptt');
+        this.pttLabel = document.getElementById('ptt-label');
+        this.textInput = document.getElementById('text-input-field');
+        this.btnSend = document.getElementById('btn-send-message');
         this.btnSceneScan = document.getElementById('btn-scene-scan');
-        this.btnSnapAnalyze = document.getElementById('btn-snap-analyze');
-        this.btnClearChat = document.getElementById('btn-clear-chat');
-        this.cameraSelect = document.getElementById('camera-select');
-        this.btnRefreshCams = document.getElementById('btn-refresh-cams');
-        this.selectModel = document.getElementById('select-model');
-        this.selectVoice = document.getElementById('select-voice');
-        this.autoPerceiveToggle = document.getElementById('auto-perceive-toggle');
-        this.reactorState = document.getElementById('reactor-state');
-        this.tLatency = document.getElementById('t-latency');
-        this.tWsStatus = document.getElementById('t-ws-status');
-        this.activeVoicePill = document.getElementById('active-voice-pill');
-        this.modelPill = document.getElementById('model-pill');
+        this.btnSnapInspect = document.getElementById('btn-snap-inspect');
+        this.btnSourceBrowser = document.getElementById('btn-source-browser');
+        this.btnSourceServer = document.getElementById('btn-source-server');
+        this.serverCamDropdownWrap = document.getElementById('server-cam-dropdown-wrap');
+        this.serverCameraSelect = document.getElementById('server-camera-select');
+        this.visualizerStatus = document.getElementById('visualizer-status-text');
+        this.connectionStatus = document.getElementById('connection-status');
+        this.connectionLabel = document.getElementById('connection-label');
+        this.badgeModelName = document.getElementById('badge-model-name');
+        this.viewportResolution = document.getElementById('viewport-resolution');
+
+        // Modal Elements
+        this.settingsModal = document.getElementById('settings-modal');
+        this.btnOpenSettings = document.getElementById('btn-open-settings');
+        this.btnCloseSettings = document.getElementById('btn-close-settings');
+        this.btnCancelSettings = document.getElementById('btn-cancel-settings');
+        this.btnSaveSettings = document.getElementById('btn-save-settings');
+        this.configProvider = document.getElementById('config-provider-select');
+        this.configOllamaModel = document.getElementById('config-ollama-model');
+        this.configApiKey = document.getElementById('config-api-key');
+        this.configApiBase = document.getElementById('config-api-base');
+        this.configVoice = document.getElementById('config-voice-select');
+        this.groupOllama = document.getElementById('group-ollama-model');
+        this.groupApiKey = document.getElementById('group-api-key');
+        this.groupApiBase = document.getElementById('group-api-base');
 
         this.init();
     }
 
-    init() {
-        console.log('[Cockpit] Initializing sensory loop...');
-        this.visualizer = new AudioSpectrumVisualizer('audio-spectrum-canvas');
+    async init() {
+        console.log('[AURA] Starting assistant controller...');
+        this.visualizer = new AudioSpectrumVisualizer('minimal-audio-canvas');
         this.visualizer.connectAudioElement(this.audioPlayer);
 
+        this.loadSavedSettings();
         this.initWebSocket();
+        this.initBrowserCamera();
         this.initMicrophone();
         this.initEventListeners();
-        this.fetchCameraDevices();
-        this.fetchVoices();
+        this.fetchServerCameras();
+    }
+
+    loadSavedSettings() {
+        const savedProvider = localStorage.getItem('aura_provider') || 'auto';
+        const savedModel = localStorage.getItem('aura_model') || 'qwen2.5vl:7b';
+        const savedKey = localStorage.getItem('aura_api_key') || '';
+        const savedBase = localStorage.getItem('aura_api_base') || 'https://api.openai.com/v1';
+        const savedVoice = localStorage.getItem('aura_voice') || 'guy';
+
+        this.configProvider.value = savedProvider;
+        this.configOllamaModel.value = savedModel;
+        this.configApiKey.value = savedKey;
+        this.configApiBase.value = savedBase;
+        this.configVoice.value = savedVoice;
+
+        this.updateModalFields();
+        this.updateModelBadge(savedProvider, savedModel);
+    }
+
+    updateModelBadge(provider, model) {
+        if (provider === 'local_cv') {
+            this.badgeModelName.textContent = 'Local Computer Vision';
+        } else if (provider === 'cloud_api') {
+            this.badgeModelName.textContent = 'Cloud Vision API';
+        } else {
+            this.badgeModelName.textContent = model || 'Qwen2.5-VL 7B';
+        }
     }
 
     initWebSocket() {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${protocol}//${window.location.host}/ws/live`;
-        
-        console.log(`[WebSocket] Connecting to ${wsUrl}...`);
+
         this.ws = new WebSocket(wsUrl);
 
         this.ws.onopen = () => {
-            console.log('[WebSocket] Connected.');
-            this.tWsStatus.textContent = 'ONLINE';
-            this.tWsStatus.className = 't-val status-online';
+            this.connectionStatus.className = 'status-indicator online';
+            this.connectionLabel.textContent = 'Connected';
+            this.syncConfigToServer();
         };
 
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = (e) => {
             try {
-                const data = jsonParseSafe(event.data);
-                this.handleServerMessage(data);
-            } catch (e) {
-                console.error('[WebSocket] Error parsing message:', e);
+                const data = JSON.parse(e.data);
+                this.handleServerEvent(data);
+            } catch (err) {
+                console.error('[WS] Parse error:', err);
             }
         };
 
         this.ws.onclose = () => {
-            console.warn('[WebSocket] Disconnected. Reconnecting in 2s...');
-            this.tWsStatus.textContent = 'RECONNECTING';
-            this.tWsStatus.className = 't-val highlight';
+            this.connectionStatus.className = 'status-indicator offline';
+            this.connectionLabel.textContent = 'Reconnecting...';
             setTimeout(() => this.initWebSocket(), 2000);
         };
+    }
 
-        this.ws.onerror = (err) => {
-            console.error('[WebSocket] Error:', err);
-        };
+    async initBrowserCamera() {
+        try {
+            if (this.cameraStream) {
+                this.cameraStream.getTracks().forEach(t => t.stop());
+            }
+
+            this.cameraStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: 'user'
+                }
+            });
+
+            this.browserVideo.srcObject = this.cameraStream;
+            this.browserVideo.onloadedmetadata = () => {
+                this.browserVideo.play();
+                this.viewportResolution.textContent = `${this.browserVideo.videoWidth} × ${this.browserVideo.videoHeight}`;
+            };
+
+            // Start sending frames to backend periodically (~2 FPS) for continuous sync
+            if (this.frameInterval) clearInterval(this.frameInterval);
+            this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
+
+            console.log('[Camera] Browser webcam connected.');
+        } catch (e) {
+            console.warn('[Camera] Browser webcam not accessible, falling back to server feed:', e);
+            this.switchCameraSource('server');
+        }
     }
 
     async initMicrophone() {
         try {
             this.micStream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                    channelCount: 1,
-                    sampleRate: 16000,
-                    echoCancellation: true,
-                    noiseSuppression: true
-                }
+                audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true }
             });
-            console.log('[Audio] Microphone access granted.');
+            console.log('[Audio] Microphone ready.');
         } catch (e) {
-            console.warn('[Audio] Microphone access denied or not available:', e);
+            console.warn('[Audio] Microphone access denied:', e);
         }
     }
 
     initEventListeners() {
-        // Push-to-Talk Mouse & Touch Events
-        this.btnPushToTalk.addEventListener('mousedown', () => this.startRecording());
-        this.btnPushToTalk.addEventListener('mouseup', () => this.stopRecording());
-        this.btnPushToTalk.addEventListener('mouseleave', () => {
-            if (this.isRecording) this.stopRecording();
-        });
+        // Source Switcher
+        this.btnSourceBrowser.addEventListener('click', () => this.switchCameraSource('browser'));
+        this.btnSourceServer.addEventListener('click', () => this.switchCameraSource('server'));
 
-        this.btnPushToTalk.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.startRecording();
-        });
-        this.btnPushToTalk.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.stopRecording();
-        });
+        // Push-to-Talk (Mouse & Touch)
+        this.btnPtt.addEventListener('mousedown', () => this.startRecording());
+        this.btnPtt.addEventListener('mouseup', () => this.stopRecording());
+        this.btnPtt.addEventListener('mouseleave', () => { if (this.isRecording) this.stopRecording(); });
+        this.btnPtt.addEventListener('touchstart', (e) => { e.preventDefault(); this.startRecording(); });
+        this.btnPtt.addEventListener('touchend', (e) => { e.preventDefault(); this.stopRecording(); });
 
-        // Spacebar shortcut for Push-To-Talk
+        // Spacebar Hotkey for Push-To-Talk
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && document.activeElement !== this.textInput && !this.isRecording) {
+            if (e.code === 'Space' && document.activeElement !== this.textInput && !this.isRecording && !this.settingsModal.style.display.includes('flex')) {
                 e.preventDefault();
                 this.startRecording();
             }
@@ -133,349 +192,335 @@ class RobotBrainCockpit {
             }
         });
 
-        // Text input send
-        this.btnSendText.addEventListener('click', () => this.sendTextQuery());
+        // Text Send
+        this.btnSend.addEventListener('click', () => this.sendTextMessage());
         this.textInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') this.sendTextQuery();
+            if (e.key === 'Enter') this.sendTextMessage();
         });
 
-        // Scene Scan button
+        // Scene Scan & Snapshot
         this.btnSceneScan.addEventListener('click', () => this.triggerSceneScan());
-        this.btnSnapAnalyze.addEventListener('click', () => {
-            this.sendTextQuery("Inspect this exact snapshot. What objects, text, or activities do you observe?");
+        this.btnSnapInspect.addEventListener('click', () => {
+            this.sendTextMessage("Describe what is in front of the camera in detail.");
         });
 
-        // Clear Timeline
-        this.btnClearChat.addEventListener('click', () => {
-            this.thoughtStream.innerHTML = '';
-            this.appendMessage('system', 'Timeline cleared. Sensory system standing by.');
-        });
-
-        // Camera Switcher
-        this.cameraSelect.addEventListener('change', async (e) => {
-            const idx = parseInt(e.target.value, 10);
+        // Server camera selector
+        this.serverCameraSelect.addEventListener('change', async (e) => {
+            const idx = e.target.value;
             try {
                 await fetch(`/api/camera/select?index=${idx}`, { method: 'POST' });
-                // Force refresh image tag
-                const camFeed = document.getElementById('live-camera-feed');
-                camFeed.src = `/api/camera/stream?t=${Date.now()}`;
-            } catch (err) {
-                console.error('[Camera] Select error:', err);
-            }
+                this.serverStream.src = `/api/camera/stream?t=${Date.now()}`;
+            } catch (err) {}
         });
 
-        this.btnRefreshCams.addEventListener('click', () => this.fetchCameraDevices());
+        // Modal Controls
+        this.btnOpenSettings.addEventListener('click', () => this.openSettings());
+        this.btnCloseSettings.addEventListener('click', () => this.closeSettings());
+        this.btnCancelSettings.addEventListener('click', () => this.closeSettings());
+        this.configProvider.addEventListener('change', () => this.updateModalFields());
+        this.btnSaveSettings.addEventListener('click', () => this.saveSettings());
+    }
 
-        // Model Selector
-        this.selectModel.addEventListener('change', (e) => {
-            const modelName = e.target.value;
-            this.modelPill.textContent = modelName.toUpperCase();
-            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({ type: 'set_model', model_name: modelName }));
-            }
-        });
+    switchCameraSource(source) {
+        this.activeCameraSource = source;
+        if (source === 'browser') {
+            this.btnSourceBrowser.classList.add('active');
+            this.btnSourceServer.classList.remove('active');
+            this.browserVideo.style.display = 'block';
+            this.serverStream.style.display = 'none';
+            this.serverCamDropdownWrap.style.display = 'none';
+            this.initBrowserCamera();
+        } else {
+            this.btnSourceServer.classList.add('active');
+            this.btnSourceBrowser.classList.remove('active');
+            this.browserVideo.style.display = 'none';
+            this.serverStream.style.display = 'block';
+            this.serverCamDropdownWrap.style.display = 'block';
+            if (this.frameInterval) clearInterval(this.frameInterval);
+            this.serverStream.src = `/api/camera/stream?t=${Date.now()}`;
+            this.viewportResolution.textContent = 'Server Camera';
+        }
+    }
 
-        // Voice Selector
-        this.selectVoice.addEventListener('change', (e) => {
-            const voiceKey = e.target.value;
-            const text = e.target.options[e.target.selectedIndex].text.split('(')[0].trim();
-            this.activeVoicePill.textContent = `${text} (Male)`;
-            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({ type: 'set_voice', voice_key: voiceKey }));
-            }
-        });
+    captureCurrentFrameBase64() {
+        if (this.activeCameraSource === 'browser' && this.browserVideo.videoWidth > 0) {
+            this.frameCanvas.width = 640;
+            this.frameCanvas.height = 360;
+            const ctx = this.frameCanvas.getContext('2d');
+            ctx.drawImage(this.browserVideo, 0, 0, 640, 360);
+            return this.frameCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+        }
+        return null;
+    }
 
-        // Auto VAD toggle
-        this.autoPerceiveToggle.addEventListener('change', (e) => {
-            this.handsFreeVAD = e.target.checked;
-            if (this.handsFreeVAD) {
-                this.appendMessage('system', 'Autonomous hands-free voice detection active.');
+    broadcastCurrentFrame() {
+        if (this.activeCameraSource === 'browser' && this.ws && this.ws.readyState === WebSocket.OPEN) {
+            const b64 = this.captureCurrentFrameBase64();
+            if (b64) {
+                this.ws.send(JSON.stringify({ type: 'client_frame', image_base64: b64 }));
             }
-        });
+        }
     }
 
     startRecording() {
-        if (!this.micStream) {
-            this.appendMessage('system', 'Microphone stream not accessible. Please grant mic permission in your browser.');
-            return;
-        }
-
+        if (!this.micStream) return;
         if (this.isRecording) return;
 
         this.isRecording = true;
         this.audioChunks = [];
-        this.btnPushToTalk.classList.add('recording');
-        this.micLabel.textContent = 'LISTENING... (RELEASE TO SEND)';
-        this.reactorState.textContent = 'LISTENING';
-        this.reactorState.className = 'reactor-state active';
+        this.btnPtt.classList.add('recording');
+        this.pttLabel.textContent = 'Listening...';
+        this.visualizerStatus.textContent = 'Listening';
+        this.visualizerStatus.className = 'visualizer-status active';
 
-        // Connect mic stream to visualizer
         this.visualizer.connectMediaStream(this.micStream);
 
-        const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-        this.mediaRecorder = new MediaRecorder(this.micStream, { mimeType });
+        const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+        this.mediaRecorder = new MediaRecorder(this.micStream, { mimeType: mime });
 
         this.mediaRecorder.ondataavailable = (e) => {
-            if (e.data && e.data.size > 0) {
-                this.audioChunks.push(e.data);
-            }
+            if (e.data && e.data.size > 0) this.audioChunks.push(e.data);
         };
 
-        this.mediaRecorder.onstop = () => {
-            this.processRecordedAudio();
-        };
-
+        this.mediaRecorder.onstop = () => this.processRecordedAudio();
         this.mediaRecorder.start();
     }
 
     stopRecording() {
         if (!this.isRecording) return;
         this.isRecording = false;
-        this.btnPushToTalk.classList.remove('recording');
-        this.micLabel.textContent = 'HOLD TO SPEAK';
-        this.reactorState.textContent = 'PROCESSING';
+        this.btnPtt.classList.remove('recording');
+        this.pttLabel.textContent = 'Hold to Speak';
+        this.visualizerStatus.textContent = 'Processing';
 
         if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
             this.mediaRecorder.stop();
         }
     }
 
-    async processRecordedAudio() {
+    processRecordedAudio() {
         if (this.audioChunks.length === 0) return;
 
         const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-        this.showThinking('Transcribing voice input with Faster-Whisper...');
+        this.showThinking('Transcribing voice...');
 
-        // Convert blob to base64
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
         reader.onloadend = () => {
-            const base64Audio = reader.result.split(',')[1];
+            const b64 = reader.result.split(',')[1];
+            const frameB64 = this.captureCurrentFrameBase64();
+
             if (this.ws && this.ws.readyState === WebSocket.OPEN) {
                 this.ws.send(JSON.stringify({
                     type: 'audio_query',
-                    audio_base64: base64Audio,
+                    audio_base64: b64,
+                    image_base64: frameB64,
                     format: 'webm'
                 }));
             }
         };
     }
 
-    sendTextQuery(overrideText = null) {
+    sendTextMessage(overrideText = null) {
         const text = overrideText || this.textInput.value.trim();
         if (!text) return;
 
-        if (!overrideText) {
-            this.textInput.value = '';
-        }
+        if (!overrideText) this.textInput.value = '';
 
         this.appendMessage('user', text);
-        this.showThinking('Qwen-VL analyzing scene & synthesizing response...');
+        this.showThinking('Analyzing visual surroundings...');
+
+        const frameB64 = this.captureCurrentFrameBase64();
 
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify({
                 type: 'text_query',
-                text: text
+                text: text,
+                image_base64: frameB64
             }));
         }
     }
 
     triggerSceneScan() {
-        this.appendMessage('user', '🔍 [Environmental Scan Requested]');
-        this.showThinking('Scanning optical feed and assessing environment...');
+        this.appendMessage('user', '🔍 Scan scene requested');
+        this.showThinking('Assessing environment...');
+
+        const frameB64 = this.captureCurrentFrameBase64();
 
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify({
-                type: 'scene_scan'
+                type: 'scene_scan',
+                image_base64: frameB64
             }));
         }
     }
 
-    handleServerMessage(data) {
+    handleServerEvent(data) {
         if (!data || !data.type) return;
 
-        switch (data.type) {
-            case 'handshake':
-                console.log('[Server Handshake]', data);
-                if (data.system && data.system.selected_model) {
-                    this.selectModel.value = data.system.selected_model;
-                    this.modelPill.textContent = data.system.selected_model.toUpperCase();
-                }
-                break;
+        if (data.type === 'status_update') {
+            if (data.state === 'thinking') this.showThinking('Analyzing...');
+            else if (data.state === 'transcribing') this.showThinking('Transcribing speech...');
+            else if (data.state === 'idle') this.hideThinking();
+        } else if (data.type === 'stt_result') {
+            if (data.text) this.appendMessage('user', data.text);
+        } else if (data.type === 'brain_response' || data.type === 'scene_briefing') {
+            this.hideThinking();
+            const reply = data.response || 'No response.';
+            this.appendMessage('assistant', reply, data.speech);
 
-            case 'status_update':
-                if (data.state === 'thinking') {
-                    this.showThinking('Vision Cortex reasoning on camera feed...');
-                } else if (data.state === 'transcribing') {
-                    this.showThinking('Transcribing speech...');
-                } else if (data.state === 'idle') {
-                    this.hideThinking();
-                }
-                break;
-
-            case 'stt_result':
-                if (data.text) {
-                    this.appendMessage('user', data.text);
-                }
-                break;
-
-            case 'brain_response':
-            case 'scene_briefing':
-                this.hideThinking();
-                const reply = data.response || 'No visual response received.';
-                const tokensSec = data.tokens_per_sec ? `${data.tokens_per_sec} tok/s` : null;
-                const latency = data.latency_seconds ? `${data.latency_seconds}s` : null;
-
-                if (data.latency_seconds) {
-                    this.tLatency.textContent = `${Math.round(data.latency_seconds * 1000)} ms`;
-                }
-
-                this.appendMessage('assistant', reply, {
-                    tokensSec,
-                    latency,
-                    speechData: data.speech
-                });
-
-                // Auto play male voice speech
-                if (data.speech && data.speech.audio_base64) {
-                    this.playSpeechAudio(data.speech.audio_base64);
-                }
-                break;
-
-            case 'voice_updated':
-                console.log(`[Voice Updated] ${data.voice_key}`);
-                break;
-
-            case 'model_updated':
-                console.log(`[Model Updated] ${data.model_name}`);
-                break;
+            if (data.speech && data.speech.audio_base64) {
+                this.playSpeech(data.speech.audio_base64);
+            }
         }
     }
 
-    appendMessage(role, text, meta = {}) {
-        const card = document.createElement('div');
-        card.className = `message-card ${role}-card`;
+    appendMessage(role, text, speechData = null) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message ${role}-message`;
 
-        const header = document.createElement('div');
-        header.className = 'msg-header';
+        const meta = document.createElement('div');
+        meta.className = 'message-meta';
 
-        const author = document.createElement('span');
-        author.className = 'msg-author';
-        author.textContent = role === 'user' ? 'OPERATOR (YOU)' : (role === 'assistant' ? 'QWEN-VL COGNITIVE CORTEX' : 'SYSTEM');
+        const sender = document.createElement('span');
+        sender.className = 'message-sender';
+        sender.textContent = role === 'user' ? 'You' : 'Assistant';
 
-        header.appendChild(author);
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'message-time';
+        const now = new Date();
+        timeSpan.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-        if (meta.tokensSec || meta.latency) {
-            const metrics = document.createElement('div');
-            metrics.className = 'msg-metrics';
+        meta.appendChild(sender);
+        meta.appendChild(timeSpan);
 
-            if (meta.tokensSec) {
-                const tag1 = document.createElement('span');
-                tag1.className = 'metric-tag';
-                tag1.textContent = meta.tokensSec;
-                metrics.appendChild(tag1);
-            }
-            if (meta.latency) {
-                const tag2 = document.createElement('span');
-                tag2.className = 'metric-tag';
-                tag2.textContent = meta.latency;
-                metrics.appendChild(tag2);
-            }
-            if (meta.speechData && meta.speechData.audio_base64) {
-                const playBtn = document.createElement('button');
-                playBtn.className = 'msg-play-btn';
-                playBtn.title = 'Replay Voice';
-                playBtn.textContent = '🔊';
-                playBtn.onclick = () => this.playSpeechAudio(meta.speechData.audio_base64);
-                metrics.appendChild(playBtn);
-            }
-            header.appendChild(metrics);
+        if (speechData && speechData.audio_base64) {
+            const playBtn = document.createElement('button');
+            playBtn.className = 'message-audio-btn';
+            playBtn.textContent = '🔊 Play';
+            playBtn.onclick = () => this.playSpeech(speechData.audio_base64);
+            meta.appendChild(playBtn);
         }
 
-        const body = document.createElement('div');
-        body.className = 'msg-body';
-        body.textContent = text;
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        content.textContent = text;
 
-        card.appendChild(header);
-        card.appendChild(body);
+        msgDiv.appendChild(meta);
+        msgDiv.appendChild(content);
 
-        this.thoughtStream.appendChild(card);
-        this.thoughtStream.scrollTop = this.thoughtStream.scrollHeight;
+        this.chatTimeline.appendChild(msgDiv);
+        this.chatTimeline.scrollTop = this.chatTimeline.scrollHeight;
     }
 
     showThinking(label) {
-        this.thinkingText.textContent = label;
-        this.thinkingHud.style.display = 'flex';
+        this.thinkingLabel.textContent = label;
+        this.thinkingState.style.display = 'flex';
     }
 
     hideThinking() {
-        this.thinkingHud.style.display = 'none';
-        this.reactorState.textContent = 'IDLE';
-        this.reactorState.className = 'reactor-state';
+        this.thinkingState.style.display = 'none';
+        this.visualizerStatus.textContent = 'Standby';
+        this.visualizerStatus.className = 'visualizer-status';
     }
 
-    playSpeechAudio(audioBase64) {
+    playSpeech(audioBase64) {
         if (!audioBase64) return;
         try {
-            this.reactorState.textContent = 'SPEAKING (MALE VOICE)';
-            this.reactorState.className = 'reactor-state active';
+            this.visualizerStatus.textContent = 'Speaking';
+            this.visualizerStatus.className = 'visualizer-status active';
 
             this.audioPlayer.src = `data:audio/mp3;base64,${audioBase64}`;
-            this.audioPlayer.play().catch(e => console.warn('[Audio] Autoplay policy block:', e));
+            this.audioPlayer.play().catch(e => console.warn('[Audio] Play error:', e));
 
             this.audioPlayer.onended = () => {
-                this.reactorState.textContent = 'IDLE';
-                this.reactorState.className = 'reactor-state';
+                this.visualizerStatus.textContent = 'Standby';
+                this.visualizerStatus.className = 'visualizer-status';
                 this.visualizer.setIdle();
             };
         } catch (e) {
-            console.error('[Audio] Playback error:', e);
+            console.error('[Audio] Error:', e);
         }
     }
 
-    async fetchCameraDevices() {
+    openSettings() {
+        this.settingsModal.style.display = 'flex';
+    }
+
+    closeSettings() {
+        this.settingsModal.style.display = 'none';
+    }
+
+    updateModalFields() {
+        const provider = this.configProvider.value;
+        if (provider === 'cloud_api') {
+            this.groupOllama.style.display = 'none';
+            this.groupApiKey.style.display = 'flex';
+            this.groupApiBase.style.display = 'flex';
+        } else if (provider === 'ollama') {
+            this.groupOllama.style.display = 'flex';
+            this.groupApiKey.style.display = 'none';
+            this.groupApiBase.style.display = 'none';
+        } else {
+            this.groupOllama.style.display = 'flex';
+            this.groupApiKey.style.display = 'none';
+            this.groupApiBase.style.display = 'none';
+        }
+    }
+
+    saveSettings() {
+        const provider = this.configProvider.value;
+        const model = this.configOllamaModel.value.trim();
+        const apiKey = this.configApiKey.value.trim();
+        const apiBase = this.configApiBase.value.trim();
+        const voice = this.configVoice.value;
+
+        localStorage.setItem('aura_provider', provider);
+        localStorage.setItem('aura_model', model);
+        localStorage.setItem('aura_api_key', apiKey);
+        localStorage.setItem('aura_api_base', apiBase);
+        localStorage.setItem('aura_voice', voice);
+
+        this.updateModelBadge(provider, model);
+        this.syncConfigToServer();
+        this.closeSettings();
+    }
+
+    syncConfigToServer() {
+        const payload = {
+            provider: localStorage.getItem('aura_provider') || 'auto',
+            model: localStorage.getItem('aura_model') || 'qwen2.5vl:7b',
+            api_key: localStorage.getItem('aura_api_key') || '',
+            api_base: localStorage.getItem('aura_api_base') || 'https://api.openai.com/v1',
+            voice: localStorage.getItem('aura_voice') || 'guy'
+        };
+
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({ type: 'update_config', ...payload }));
+        }
+
+        fetch('/api/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(() => {});
+    }
+
+    async fetchServerCameras() {
         try {
             const res = await fetch('/api/camera/devices');
             const data = await res.json();
-            this.cameraSelect.innerHTML = '';
-            data.forEach(cam => {
+            this.serverCameraSelect.innerHTML = '';
+            data.forEach(c => {
                 const opt = document.createElement('option');
-                opt.value = cam.index;
-                opt.textContent = `${cam.name} ${cam.accessible ? '(Online)' : ''}`;
-                this.cameraSelect.appendChild(opt);
+                opt.value = c.index;
+                opt.textContent = c.name;
+                this.serverCameraSelect.appendChild(opt);
             });
-        } catch (e) {
-            console.warn('[Camera] Failed to fetch devices:', e);
-        }
-    }
-
-    async fetchVoices() {
-        try {
-            const res = await fetch('/api/voices');
-            const data = await res.json();
-            this.selectVoice.innerHTML = '';
-            data.forEach(v => {
-                const opt = document.createElement('option');
-                opt.value = v.key;
-                opt.textContent = `${v.name} (${v.gender})`;
-                if (v.selected) opt.selected = true;
-                this.selectVoice.appendChild(opt);
-            });
-        } catch (e) {
-            console.warn('[Voices] Failed to fetch voices:', e);
-        }
+        } catch (e) {}
     }
 }
 
-function jsonParseSafe(str) {
-    try {
-        return JSON.parse(str);
-    } catch {
-        return null;
-    }
-}
-
-// Initialize on DOM load
 window.addEventListener('DOMContentLoaded', () => {
-    window.cockpit = new RobotBrainCockpit();
+    window.auraApp = new VisionVoiceApp();
 });
