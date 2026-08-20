@@ -23,8 +23,9 @@ class VisionBrain:
     Loads model with 4-bit CUDA quantization directly into VRAM.
     Zero external server processes, zero Ollama dependencies.
     """
-    def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct"):
+    def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct", port: int = 8001, **kwargs):
         self.model_id = model_id
+        self.port = port
         self.model = None
         self.processor = None
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -105,7 +106,7 @@ class VisionBrain:
             "status": status_label,
             "ready": self.is_server_ready,
             "is_starting": self.is_starting,
-            "model_name": "Qwen2.5-VL (Local PyTorch)",
+            "model_name": "Qwen2.5-VL (Local PyTorch GPU)",
             "device": self.device.upper(),
             "acceleration": "Hardware Accelerated (CUDA 4-Bit VRAM Offload)" if self.device == "cuda" else "CPU Mode",
             "model_size_gb": 3.2 if self.device == "cuda" else 6.0
@@ -184,7 +185,6 @@ class VisionBrain:
             except Exception as e:
                 print(f"[VisionBrain] GPU Inference error: {e}")
 
-        # Instant Heuristic Perception while initializing
         fallback = f"Visual stream active. Processing environment."
         self._record_history(prompt_text, fallback)
         return {

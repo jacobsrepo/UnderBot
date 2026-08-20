@@ -13,7 +13,7 @@ if _BACKEND_DIR not in sys.path:
     sys.path.insert(0, _BACKEND_DIR)
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, UploadFile, File, Form, Query, BackgroundTasks, Request, Response
-from fastapi.responses import StreamingResponse, JSONResponse, FileResponse, Response
+from fastapi.responses import StreamingResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -37,7 +37,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Cache-busting middleware for static files so changes apply immediately
+# Cache-busting middleware for static files
 @app.middleware("http")
 async def add_no_cache_headers(request: Request, call_next):
     response: Response = await call_next(request)
@@ -49,17 +49,17 @@ async def add_no_cache_headers(request: Request, call_next):
 
 # Core Instances
 camera = CameraManager(device_index=0)
-brain = VisionBrain(port=8001)
+brain = VisionBrain()
 tts = TTSEngine(default_voice_key="guy")
 stt = STTEngine(model_size="base.en", device="cpu", compute_type="int8")
 
 @app.on_event("startup")
 async def startup_event():
-    print("[Server] VLA Studio server ready.")
+    print("[Server] VLA Studio server online.")
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    print("[Server] Shutting down background tasks and model processes...")
+    print("[Server] Terminating tasks and releasing resources...")
     camera.stop()
     brain.shutdown()
 
@@ -292,7 +292,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
     except Exception as e:
         pass
 
-# Mount frontend with cache-busting headers
+# Mount frontend
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
 if os.path.exists(FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
