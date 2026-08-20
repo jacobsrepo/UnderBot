@@ -1,7 +1,7 @@
 import os
 import sys
 
-# Completely silence OpenCV C++ internal stderr logging
+# Silence OpenCV internal C++ warnings
 os.environ["OPENCV_LOG_LEVEL"] = "SILENT"
 os.environ["OPENCV_VIDEOIO_DEBUG"] = "0"
 os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
@@ -20,9 +20,8 @@ from typing import Optional, List, Dict
 
 class CameraManager:
     """
-    Zero-warning camera manager.
-    Relies primarily on client-side browser webcam frames.
-    Host camera access is purely on-demand with DirectShow to avoid MSMF errors.
+    1080p Full HD Camera Manager.
+    Supports browser-based WebRTC streaming at 1920x1080 and host DirectShow capture.
     """
     def __init__(self, device_index: int = 0):
         self.device_index = device_index
@@ -31,25 +30,23 @@ class CameraManager:
         self.latest_jpeg = None
         self.latest_base64 = None
         self.is_running = False
-        self.is_client_stream = True  # Default to browser stream
+        self.is_client_stream = True
         self.lock = threading.Lock()
         self.fps = 30.0
         self.frame_count = 0
         self.last_frame_time = 0
         self.thread: Optional[threading.Thread] = None
-        self.width = 1280
-        self.height = 720
+        self.width = 1920
+        self.height = 1080
         self.os_type = platform.system()
 
     def start(self, device_index: Optional[int] = None) -> bool:
-        """Starts host camera capture only when explicitly requested."""
         if device_index is not None:
             self.device_index = device_index
 
         self.stop()
         self.is_client_stream = False
 
-        # Only use DirectShow on Windows to avoid MSMF and FFMPEG warnings
         backend = cv2.CAP_DSHOW if self.os_type == "Windows" else cv2.CAP_ANY
 
         try:
@@ -101,7 +98,7 @@ class CameraManager:
                     time.sleep(0.1)
                     continue
 
-                _, jpeg_buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+                _, jpeg_buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])
                 jpeg_bytes = jpeg_buffer.tobytes()
                 b64_str = base64.b64encode(jpeg_bytes).decode('utf-8')
 
@@ -139,7 +136,6 @@ class CameraManager:
 
     @staticmethod
     def list_available_cameras() -> List[Dict]:
-        """Safe camera discovery using DSHOW only on Windows."""
         found = []
         os_name = platform.system()
         backend = cv2.CAP_DSHOW if os_name == "Windows" else cv2.CAP_ANY

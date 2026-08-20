@@ -15,7 +15,7 @@ def run_tests():
     print("=" * 60)
 
     # 1. Camera
-    print("\n[1/4] Testing Camera Capture...")
+    print("\n[1/4] Testing 1080p Camera Stream...")
     cam = CameraManager(device_index=0)
     cam.start(0)
     time.sleep(0.5)
@@ -29,7 +29,7 @@ def run_tests():
     # 2. TTS
     print("\n[2/4] Testing Speech Synthesis...")
     tts = TTSEngine(default_voice_key="guy")
-    audio_bytes = tts.synthesize_sync("VLA Studio operational.")
+    audio_bytes = tts.synthesize_sync("VLA Studio 1080p operational.")
     if audio_bytes and len(audio_bytes) > 500:
         print(f"  [OK] Audio generated: {len(audio_bytes)} bytes (voice: {tts.default_voice_key}).")
     else:
@@ -43,15 +43,21 @@ def run_tests():
     else:
         print("  [WARN] Speech recognition error.")
 
-    # 4. Embedded Model Engine
-    print("\n[4/4] Testing Embedded Qwen2.5-VL Engine...")
-    brain = VisionBrain(port=8001)
+    # 4. Native GPU Model Engine
+    print("\n[4/4] Testing Native PyTorch Qwen2.5-VL Engine...")
+    brain = VisionBrain()
+    # Wait 5 seconds for background loader
+    for _ in range(10):
+        if brain.is_server_ready:
+            break
+        time.sleep(1)
+
     status = brain.get_status()
     print(f"  [OK] Model Name: {status['model_name']}")
-    print(f"  [OK] Model File: {status['model_file']} ({status['model_size_gb']} GB)")
+    print(f"  [OK] Device: {status['device']}")
     print(f"  [OK] Acceleration: {status['acceleration']}")
+    print(f"  [OK] Ready: {status['ready']}")
 
-    time.sleep(1)
     brain.shutdown()
 
     print("\n" + "=" * 60)

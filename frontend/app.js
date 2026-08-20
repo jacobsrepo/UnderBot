@@ -1,5 +1,5 @@
 /**
- * VLA Studio - Executive Client Controller
+ * VLA Studio - Executive Client Controller (1080p Full HD)
  */
 
 class VLAStudioApp {
@@ -58,7 +58,7 @@ class VLAStudioApp {
     }
 
     async init() {
-        console.log('[VLA Studio] Initializing client...');
+        console.log('[VLA Studio] Initializing 1080p client...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
         this.visualizer.connectAudioElement(this.ttsAudioPlayer);
 
@@ -82,19 +82,19 @@ class VLAStudioApp {
                     
                     if (brain.ready) {
                         this.statusDot.className = 'status-dot online';
-                        this.statusModelName.textContent = brain.model_name || 'Qwen2.5-VL 7B';
+                        this.statusModelName.textContent = brain.model_name || 'Qwen2.5-VL';
                         this.statusStateText.textContent = 'Ready (GPU Active)';
                         
                         this.diagStatusBadge.className = 'diag-badge';
                         this.diagStatusBadge.textContent = 'ONLINE & READY (GPU ACCELERATED)';
-                        this.diagHwMode.textContent = brain.acceleration || 'Hardware Accelerated (GPU Offload)';
-                        this.diagEngineName.textContent = `${brain.model_name || 'Qwen2.5-VL 7B'} (${brain.model_size_gb || '5.56'} GB)`;
+                        this.diagHwMode.textContent = brain.acceleration || 'Hardware Accelerated (CUDA 4-Bit VRAM Offload)';
+                        this.diagEngineName.textContent = `${brain.model_name || 'Qwen2.5-VL'} (${brain.model_size_gb || '3.2'} GB VRAM)`;
                     } else if (brain.is_starting) {
                         this.statusDot.className = 'status-dot loading';
                         this.statusStateText.textContent = 'Loading weights...';
                         
                         this.diagStatusBadge.className = 'diag-badge loading';
-                        this.diagStatusBadge.textContent = 'INITIALIZING WEIGHTS (WARMING UP)...';
+                        this.diagStatusBadge.textContent = 'INITIALIZING WEIGHTS INTO VRAM...';
                     } else {
                         this.statusDot.className = 'status-dot offline';
                         this.statusStateText.textContent = brain.status || 'Standby';
@@ -144,22 +144,27 @@ class VLAStudioApp {
                 this.cameraStream.getTracks().forEach(t => t.stop());
             }
 
+            // 1920x1080 Full HD Constraints
             this.cameraStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' }
+                video: {
+                    width: { ideal: 1920, min: 1280 },
+                    height: { ideal: 1080, min: 720 },
+                    facingMode: 'user'
+                }
             });
 
             this.clientVideo.srcObject = this.cameraStream;
             this.clientVideo.onloadedmetadata = () => {
                 this.clientVideo.play();
-                this.videoResolutionTag.textContent = `${this.clientVideo.videoWidth} x ${this.clientVideo.videoHeight}`;
+                this.videoResolutionTag.textContent = `${this.clientVideo.videoWidth} x ${this.clientVideo.videoHeight} (Full HD)`;
             };
 
             if (this.frameInterval) clearInterval(this.frameInterval);
             this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
 
-            console.log('[Camera] Browser webcam active.');
+            console.log('[Camera] 1080p Browser webcam active.');
         } catch (e) {
-            console.warn('[Camera] Browser webcam denied or unavailable:', e);
+            console.warn('[Camera] Browser webcam unavailable, switching to host camera:', e);
             this.switchCameraSource('host');
         }
     }
@@ -206,7 +211,7 @@ class VLAStudioApp {
 
         this.btnSceneScan.addEventListener('click', () => this.triggerSceneScan());
         this.btnInspectFrame.addEventListener('click', () => {
-            this.sendTextMessage("Analyze this visual frame and describe key elements in detail.");
+            this.sendTextMessage("Analyze this 1080p visual frame and describe key elements in detail.");
         });
 
         this.hostCameraSelect.addEventListener('change', async (e) => {
@@ -230,7 +235,7 @@ class VLAStudioApp {
             this.modalPreferences.style.display = 'none';
         });
 
-        // Stop / Power Off System Button
+        // Stop System Button
         this.btnStopSystem.addEventListener('click', () => this.confirmShutdown());
     }
 
@@ -268,17 +273,17 @@ class VLAStudioApp {
             this.hostCamSelectWrap.style.display = 'block';
             if (this.frameInterval) clearInterval(this.frameInterval);
             this.serverVideoFeed.src = `/api/camera/stream?t=${Date.now()}`;
-            this.videoResolutionTag.textContent = 'Host Camera';
+            this.videoResolutionTag.textContent = 'Host Camera 1080p';
         }
     }
 
     captureCurrentFrameBase64() {
         if (this.activeCameraSource === 'browser' && this.clientVideo.videoWidth > 0) {
-            this.hiddenFrameCanvas.width = 640;
-            this.hiddenFrameCanvas.height = 360;
+            this.hiddenFrameCanvas.width = 1920;
+            this.hiddenFrameCanvas.height = 1080;
             const ctx = this.hiddenFrameCanvas.getContext('2d');
-            ctx.drawImage(this.clientVideo, 0, 0, 640, 360);
-            return this.hiddenFrameCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+            ctx.drawImage(this.clientVideo, 0, 0, 1920, 1080);
+            return this.hiddenFrameCanvas.toDataURL('image/jpeg', 0.85).split(',')[1];
         }
         return null;
     }
@@ -358,7 +363,7 @@ class VLAStudioApp {
         if (!overrideText) this.textInput.value = '';
 
         this.appendMessage('user', text);
-        this.showProcessing('Running Qwen2.5-VL inference...');
+        this.showProcessing('Running Qwen2.5-VL GPU inference...');
 
         const frameB64 = this.captureCurrentFrameBase64();
 
@@ -372,8 +377,8 @@ class VLAStudioApp {
     }
 
     triggerSceneScan() {
-        this.appendMessage('user', 'System scan request');
-        this.showProcessing('Analyzing visual environment (Qwen2.5-VL)...');
+        this.appendMessage('user', 'System 1080p scan request');
+        this.showProcessing('Analyzing 1080p visual environment (Qwen2.5-VL)...');
 
         const frameB64 = this.captureCurrentFrameBase64();
 

@@ -7,11 +7,11 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>VLA Studio - Executive Multimodal Interface</title>
-    <!-- Modern Sans Typography -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?t=20260820">
+    <link rel="stylesheet" href="/static/styles.css?t=1080p">
 </head>
 <body>
     <div class="app-layout">
@@ -29,7 +29,7 @@
             <div class="header-center">
                 <div class="engine-telemetry-badge" id="engine-telemetry-pill">
                     <span class="status-dot loading" id="status-dot"></span>
-                    <span class="status-model-name" id="status-model-name">Qwen2.5-VL 7B</span>
+                    <span class="status-model-name" id="status-model-name">Qwen2.5-VL</span>
                     <span class="status-divider">|</span>
                     <span class="status-state-text" id="status-state-text">Initializing weights...</span>
                 </div>
@@ -42,7 +42,7 @@
                 </button>
 
                 <button class="control-btn" id="btn-open-settings" title="Preferences">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83-2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     <span>Preferences</span>
                 </button>
 
@@ -61,7 +61,7 @@
             <section class="panel video-panel">
                 <div class="panel-topbar">
                     <div class="tabs">
-                        <button class="tab-item active" id="tab-cam-browser">Webcam Stream</button>
+                        <button class="tab-item active" id="tab-cam-browser">Webcam Stream (1080p)</button>
                         <button class="tab-item" id="tab-cam-host">Host Camera</button>
                     </div>
 
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="telemetry">
-                        <span class="telemetry-tag" id="video-resolution-tag">1280 x 720</span>
+                        <span class="telemetry-tag" id="video-resolution-tag">1920 x 1080 Full HD</span>
                         <span class="telemetry-tag tag-live">Active</span>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     <div class="viewport-overlay">
                         <button class="overlay-btn" id="btn-inspect-frame">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                            <span>Inspect Frame</span>
+                            <span>Inspect Frame (1080p)</span>
                         </button>
                     </div>
                 </div>
@@ -106,15 +106,15 @@
                 <div class="model-diagnostic-card" id="model-diagnostic-card">
                     <div class="diagnostic-row">
                         <span class="diag-label">Model Engine:</span>
-                        <span class="diag-value" id="diag-engine-name">Qwen2.5-VL 7B (Embedded GGUF)</span>
+                        <span class="diag-value" id="diag-engine-name">Qwen2.5-VL (Local PyTorch GPU)</span>
                     </div>
                     <div class="diagnostic-row">
                         <span class="diag-label">Hardware Mode:</span>
-                        <span class="diag-value text-accent" id="diag-hw-mode">Hardware Accelerated (GPU Offload)</span>
+                        <span class="diag-value text-accent" id="diag-hw-mode">Hardware Accelerated (CUDA 4-Bit VRAM Offload)</span>
                     </div>
                     <div class="diagnostic-row">
                         <span class="diag-label">Status:</span>
-                        <span class="diag-badge" id="diag-status-badge">ONLINE & READY</span>
+                        <span class="diag-badge" id="diag-status-badge">ONLINE & READY (GPU ACCELERATED)</span>
                     </div>
                 </div>
 
@@ -126,7 +126,7 @@
                             <span class="bubble-time">Ready</span>
                         </div>
                         <div class="bubble-body">
-                            Multimodal vision and voice interface operational. Hold the push-to-talk button or spacebar to speak.
+                            1080p Full HD visual stream and local Qwen2.5-VL neural processor active. Hold Spacebar or click the microphone to speak.
                         </div>
                     </div>
                 </div>
@@ -175,12 +175,12 @@
                         </select>
                     </div>
                     <div class="form-field">
-                        <label class="form-label">Neural Model</label>
-                        <input type="text" class="text-input full" value="Qwen2.5-VL 7B (Embedded Standalone GGUF)" readonly>
+                        <label class="form-label">Camera Stream Resolution</label>
+                        <input type="text" class="text-input full" value="1920 x 1080 (1080p Full HD)" readonly>
                     </div>
                     <div class="form-field">
-                        <label class="form-label">Execution Environment</label>
-                        <input type="text" class="text-input full" value="Hardware Accelerated (GPU Offload)" readonly>
+                        <label class="form-label">Neural Model</label>
+                        <input type="text" class="text-input full" value="Qwen2.5-VL (Local PyTorch GPU)" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -207,7 +207,7 @@
     <!-- Hidden audio element for TTS -->
     <audio id="tts-audio-element" preload="auto"></audio>
 
-    <script src="/static/audio_visualizer.js?t=20260820"></script>
-    <script src="/static/app.js?t=20260820"></script>
+    <script src="/static/audio_visualizer.js?t=1080p"></script>
+    <script src="/static/app.js?t=1080p"></script>
 </body>
 </html>
