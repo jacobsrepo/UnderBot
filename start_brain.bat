@@ -13,24 +13,28 @@ cd /d "%~dp0"
 echo [1/3] Terminating any conflicting background server instances...
 powershell -Command "Get-NetTCPConnection -LocalPort 8000,8001 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }" >nul 2>&1
 
-echo [2/3] Preparing Python Virtual Environment...
+echo [2/3] Preparing Python Virtual Environment and Network Certificates...
 if exist ".venv\Scripts\python.exe" (
     set "PYTHON_EXE=.venv\Scripts\python.exe"
 ) else (
     set "PYTHON_EXE=python"
 )
 
-echo [3/3] Starting Local Server...
+:: Generate SSL certs if missing
+"%PYTHON_EXE%" -c "from backend.ssl_helper import ensure_ssl_certificates; ensure_ssl_certificates('certs')" >nul 2>&1
+
+echo [3/3] Starting Local and Network Server...
 echo.
 echo ----------------------------------------------------------------------
-echo  Interface URL:    http://localhost:8000
-echo  Network Access:   http://0.0.0.0:8000
+echo  Local Desktop Access:   https://localhost:8000
+echo  Network Mobile Access:  https://192.168.0.26:8000
 echo ----------------------------------------------------------------------
+echo  (Open the Network URL on your phone or laptop on the same Wi-Fi)
 echo.
 
-:: Launch default browser with cache-busting timestamp
-start http://localhost:8000/?v=%RANDOM%
+:: Launch default browser
+start https://localhost:8000/?v=%RANDOM%
 
-"%PYTHON_EXE%" -m uvicorn backend.app:app --host 0.0.0.0 --port 8000
+"%PYTHON_EXE%" backend/app.py
 
 pause

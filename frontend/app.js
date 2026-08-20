@@ -1,5 +1,5 @@
 /**
- * VLA Studio - Executive Client Controller (1080p Full HD)
+ * VLA Studio - Executive Client Controller (Multi-Device & LAN Support)
  */
 
 class VLAStudioApp {
@@ -11,6 +11,7 @@ class VLAStudioApp {
         this.micStream = null;
         this.cameraStream = null;
         this.activeCameraSource = 'browser';
+        this.isFacingUser = true;
         this.visualizer = null;
         this.frameInterval = null;
         this.diagnosticsInterval = null;
@@ -29,6 +30,7 @@ class VLAStudioApp {
         this.btnSend = document.getElementById('btn-send');
         this.btnSceneScan = document.getElementById('btn-scene-scan');
         this.btnInspectFrame = document.getElementById('btn-inspect-frame');
+        this.btnFlipCamera = document.getElementById('btn-flip-camera');
         this.tabCamBrowser = document.getElementById('tab-cam-browser');
         this.tabCamHost = document.getElementById('tab-cam-host');
         this.hostCamSelectWrap = document.getElementById('host-cam-select-wrap');
@@ -54,16 +56,30 @@ class VLAStudioApp {
         this.btnStopSystem = document.getElementById('btn-stop-system');
         this.modalShutdown = document.getElementById('modal-shutdown');
 
+        // Network / Mobile Pairing Modal
+        this.btnNetworkConnect = document.getElementById('btn-network-connect');
+        this.modalNetwork = document.getElementById('modal-network');
+        this.btnCloseNetwork = document.getElementById('btn-close-network');
+        this.btnCloseNetworkFooter = document.getElementById('btn-close-network-footer');
+        this.qrCodeImage = document.getElementById('qr-code-image');
+        this.networkUrlInput = document.getElementById('network-url-input');
+        this.btnCopyNetworkUrl = document.getElementById('btn-copy-network-url');
+
         this.init();
     }
 
     async init() {
-        console.log('[VLA Studio] Initializing 1080p client...');
+        console.log('[VLA Studio] Initializing multi-device client...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
         this.visualizer.connectAudioElement(this.ttsAudioPlayer);
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
         this.voiceSelect.value = savedVoice;
+
+        // Check if mobile device to show flip button
+        if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+            if (this.btnFlipCamera) this.btnFlipCamera.style.display = 'flex';
+        }
 
         this.initWebSocket();
         this.initBrowserCamera();
@@ -144,12 +160,13 @@ class VLAStudioApp {
                 this.cameraStream.getTracks().forEach(t => t.stop());
             }
 
-            // 1920x1080 Full HD Constraints
+            const facing = this.isFacingUser ? 'user' : 'environment';
+
             this.cameraStream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     width: { ideal: 1920, min: 1280 },
                     height: { ideal: 1080, min: 720 },
-                    facingMode: 'user'
+                    facingMode: facing
                 }
             });
 
@@ -162,10 +179,16 @@ class VLAStudioApp {
             if (this.frameInterval) clearInterval(this.frameInterval);
             this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
 
-            console.log('[Camera] 1080p Browser webcam active.');
+            console.log('[Camera] 1080p Webcam active.');
         } catch (e) {
-            console.warn('[Camera] Browser webcam unavailable, switching to host camera:', e);
-            this.switchCameraSource('host');
+            console.warn('[Camera] Webcam access issue, attempting fallback:', e);
+            try {
+                this.cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                this.clientVideo.srcObject = this.cameraStream;
+                this.clientVideo.play();
+            } catch (err) {
+                this.switchCameraSource('host');
+            }
         }
     }
 
@@ -185,6 +208,13 @@ class VLAStudioApp {
             this.fetchHostCamerasOnce();
         });
 
+        if (this.btnFlipCamera) {
+            this.btnFlipCamera.addEventListener('click', () => {
+                this.isFacingUser = !this.isFacingUser;
+                this.initBrowserCamera();
+            });
+        }
+
         this.btnPtt.addEventListener('mousedown', () => this.startRecording());
         this.btnPtt.addEventListener('mouseup', () => this.stopRecording());
         this.btnPtt.addEventListener('mouseleave', () => { if (this.isRecording) this.stopRecording(); });
@@ -192,7 +222,7 @@ class VLAStudioApp {
         this.btnPtt.addEventListener('touchend', (e) => { e.preventDefault(); this.stopRecording(); });
 
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && document.activeElement !== this.textInput && !this.isRecording && this.modalPreferences.style.display !== 'flex') {
+            if (e.code === 'Space' && document.activeElement !== this.textInput && !this.isRecording && this.modalPreferences.style.display !== 'flex' && this.modalNetwork.style.display !== 'flex') {
                 e.preventDefault();
                 this.startRecording();
             }
@@ -222,6 +252,16 @@ class VLAStudioApp {
             } catch (err) {}
         });
 
+        // Network / Mobile Pairing Modal
+        this.btnNetworkConnect.addEventListener('click', () => this.openNetworkModal());
+        this.btnCloseNetwork.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
+        this.btnCloseNetworkFooter.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
+        this.btnCopyNetworkUrl.addEventListener('click', () => {
+            navigator.clipboard.writeText(this.networkUrlInput.value);
+            this.btnCopyNetworkUrl.textContent = 'Copied!';
+            setTimeout(() => { this.btnCopyNetworkUrl.textContent = 'Copy'; }, 2000);
+        });
+
         // Preferences modal
         this.btnOpenSettings.addEventListener('click', () => { this.modalPreferences.style.display = 'flex'; });
         this.btnModalClose.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
@@ -237,6 +277,22 @@ class VLAStudioApp {
 
         // Stop System Button
         this.btnStopSystem.addEventListener('click', () => this.confirmShutdown());
+    }
+
+    async openNetworkModal() {
+        try {
+            const res = await fetch('/api/network/info');
+            if (res.ok) {
+                const data = await res.json();
+                this.networkUrlInput.value = data.network_url;
+                if (data.qr_base64) {
+                    this.qrCodeImage.src = `data:image/png;base64,${data.qr_base64}`;
+                }
+            }
+        } catch (e) {
+            this.networkUrlInput.value = window.location.href;
+        }
+        this.modalNetwork.style.display = 'flex';
     }
 
     async confirmShutdown() {

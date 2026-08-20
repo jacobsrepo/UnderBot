@@ -1,16 +1,17 @@
 # VLA Studio - Local Multimodal Vision & Voice Architecture
 
-A fully self-contained, local Vision-Language-Action (VLA) interface designed for real-time visual reasoning, speech transcription, and natural conversational response.
+A fully self-contained, local Vision-Language-Action (VLA) interface designed for real-time visual reasoning, speech transcription, and natural conversational dialogue across desktop and network-connected devices.
 
 ---
 
 ## Overview
 
 VLA Studio provides an end-to-end multimodal perception loop running entirely on local hardware:
-- **Visual Reasoning**: Embedded Qwen2.5-VL 7B executing directly on local GPU via a standalone CUDA engine.
+- **Visual Reasoning**: In-process Qwen2.5-VL executing directly on local GPU with 4-bit CUDA quantization.
+- **Full HD 1080p Perception**: 1920x1080 high-framerate visual capture with frame inspection.
+- **Universal Multi-Device Operation**: Connect any mobile phone, iPad, or laptop on the local Wi-Fi network to use its camera and microphone as sensory inputs.
 - **Speech Recognition**: Low-latency speech-to-text powered by Faster-Whisper.
-- **Speech Synthesis**: Neural male voice output for direct conversational dialogue.
-- **Multi-Camera Capture**: Direct support for browser-based webcams (via WebRTC) and host-connected cameras (Camo Studio, USB webcams, integrated sensors).
+- **Speech Synthesis**: Neural male voice output for conversational responses.
 - **Diagnostics & Control**: Real-time engine readiness indicators and one-click system power-off controls.
 
 ---
@@ -19,15 +20,11 @@ VLA Studio provides an end-to-end multimodal perception loop running entirely on
 
 ```
 local-robot-brain/
-|-- bin/llama/              # Standalone CUDA model execution engine
-|   |-- llama-server.exe
-|   `-- cudart64_12.dll
-|-- models/
-|   `-- qwen2.5vl-7b.gguf   # Local Qwen2.5-VL model weights (5.56 GB)
 |-- backend/
 |   |-- app.py              # FastAPI server and lifecycle manager
-|   |-- vision_brain.py     # In-process neural model controller and diagnostics
-|   |-- camera_stream.py    # DirectShow and WebRTC camera stream coordinator
+|   |-- vision_brain.py     # In-process PyTorch CUDA Qwen2.5-VL controller
+|   |-- camera_stream.py    # 1080p WebRTC and DirectShow camera coordinator
+|   |-- ssl_helper.py       # Local network TLS certificate manager
 |   |-- tts_engine.py       # Neural speech synthesis engine
 |   |-- stt_engine.py       # Faster-Whisper speech transcription engine
 |   `-- requirements.txt
@@ -46,7 +43,7 @@ local-robot-brain/
 ### 1. Requirements
 - Windows 10/11, Linux, or macOS
 - Python 3.10+
-- Dedicated GPU with CUDA support recommended for acceleration
+- Dedicated GPU with CUDA support recommended
 
 ### 2. Environment Setup
 ```cmd
@@ -61,16 +58,16 @@ start_brain.bat
 ```
 Or start the server manually:
 ```cmd
-python -m uvicorn backend.app:app --host 0.0.0.0 --port 8000
+python backend/app.py
 ```
-
-Navigate to `http://localhost:8000` in any web browser.
 
 ---
 
-## Usage Instructions
+## Multi-Device / Network Access
 
-- **Hold Spacebar** or click the push-to-talk button to record a question about the visual feed.
-- Click **Scan Scene** to trigger an autonomous environmental summary.
-- Click **Analyze Frame** in the visual viewport to query the current camera snapshot.
-- Click **Stop System** in the header navigation to cleanly terminate all model processes and shut down the server.
+To use a smartphone, tablet, or another laptop as the camera and microphone:
+1. Ensure both devices are connected to the same Wi-Fi network.
+2. In the desktop interface, click **Connect Device** in the top navigation bar.
+3. Scan the displayed **QR Code** with your phone's camera, or navigate directly to the printed network address (e.g. `https://<YOUR_LOCAL_IP>:8000`).
+4. If a self-signed security prompt appears in your browser, select **Advanced -> Proceed** to grant camera and microphone permissions.
+5. Tap **Flip** to toggle between front and rear cameras on mobile devices.

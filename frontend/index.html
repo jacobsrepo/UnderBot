@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?t=1080p">
+    <link rel="stylesheet" href="/static/styles.css?t=lan">
 </head>
 <body>
     <div class="app-layout">
@@ -36,13 +36,19 @@
             </div>
 
             <div class="header-right">
+                <!-- Mobile / LAN Pairing Button -->
+                <button class="control-btn" id="btn-network-connect" title="Connect other devices on Wi-Fi">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    <span>Connect Device</span>
+                </button>
+
                 <button class="control-btn" id="btn-scene-scan" title="Scan visual surroundings">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M3 9V5a2 2 0 0 1 2-2h4M21 9V5a2 2 0 0 0-2-2h-4M3 15v4a2 2 0 0 0 2 2h4M21 15v4a2 2 0 0 1-2 2h-4"></path></svg>
                     <span>Scan Scene</span>
                 </button>
 
                 <button class="control-btn" id="btn-open-settings" title="Preferences">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83-2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     <span>Preferences</span>
                 </button>
 
@@ -61,7 +67,7 @@
             <section class="panel video-panel">
                 <div class="panel-topbar">
                     <div class="tabs">
-                        <button class="tab-item active" id="tab-cam-browser">Webcam Stream (1080p)</button>
+                        <button class="tab-item active" id="tab-cam-browser">Webcam (1080p)</button>
                         <button class="tab-item" id="tab-cam-host">Host Camera</button>
                     </div>
 
@@ -83,6 +89,10 @@
                     <canvas id="hidden-frame-canvas" style="display: none;"></canvas>
 
                     <div class="viewport-overlay">
+                        <button class="overlay-btn" id="btn-flip-camera" style="display: none;" title="Flip Front / Rear Camera">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8v2"></path><path d="M4 14c0 4.418 3.582 8 8 8s8-3.582 8-8v-2"></path><polyline points="1 9 4 12 7 9"></polyline><polyline points="23 15 20 12 17 15"></polyline></svg>
+                            <span>Flip</span>
+                        </button>
                         <button class="overlay-btn" id="btn-inspect-frame">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                             <span>Inspect Frame (1080p)</span>
@@ -126,7 +136,7 @@
                             <span class="bubble-time">Ready</span>
                         </div>
                         <div class="bubble-body">
-                            1080p Full HD visual stream and local Qwen2.5-VL neural processor active. Hold Spacebar or click the microphone to speak.
+                            1080p Full HD visual stream and local Qwen2.5-VL neural processor active. Hold Spacebar or tap the microphone to speak from any device on your Wi-Fi network.
                         </div>
                     </div>
                 </div>
@@ -156,6 +166,40 @@
                 </div>
             </section>
         </main>
+
+        <!-- Network / Mobile Pairing Modal -->
+        <div class="modal-backdrop" id="modal-network" style="display: none;">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3 class="modal-title">Connect Any Device (Wi-Fi)</h3>
+                    <button class="modal-close" id="btn-close-network">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: var(--text-medium); font-size: 0.85rem;">
+                        Scan the QR code with your phone or open the link below on any device connected to the same Wi-Fi network:
+                    </p>
+                    
+                    <div style="display: flex; justify-content: center; margin: 10px 0;">
+                        <img id="qr-code-image" src="" alt="Scan QR Code" style="background: white; padding: 10px; border-radius: 8px; max-width: 180px; height: auto;">
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Network Address</label>
+                        <div style="display: flex; gap: 6px;">
+                            <input type="text" id="network-url-input" class="text-input full" readonly style="font-family: var(--font-mono); font-size: 0.82rem;">
+                            <button class="control-btn" id="btn-copy-network-url" style="white-space: nowrap;">Copy</button>
+                        </div>
+                    </div>
+
+                    <p style="color: var(--text-low); font-size: 0.76rem; line-height: 1.4;">
+                        Tip: When opening on mobile, if a security prompt appears, tap <strong>Advanced &rarr; Proceed</strong> to allow camera and microphone access.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="control-btn btn-primary" id="btn-close-network-footer">Done</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Preferences Modal -->
         <div class="modal-backdrop" id="modal-preferences" style="display: none;">
@@ -207,7 +251,7 @@
     <!-- Hidden audio element for TTS -->
     <audio id="tts-audio-element" preload="auto"></audio>
 
-    <script src="/static/audio_visualizer.js?t=1080p"></script>
-    <script src="/static/app.js?t=1080p"></script>
+    <script src="/static/audio_visualizer.js?t=lan"></script>
+    <script src="/static/app.js?t=lan"></script>
 </body>
 </html>

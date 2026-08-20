@@ -22,11 +22,12 @@ from camera_stream import CameraManager
 from vision_brain import VisionBrain
 from tts_engine import TTSEngine
 from stt_engine import STTEngine
+from ssl_helper import get_local_ip, ensure_ssl_certificates, get_network_details
 
 app = FastAPI(
     title="VLA Studio",
     description="Executive Multimodal Interface for Local Vision-Language-Action.",
-    version="3.2.0"
+    version="3.3.0"
 )
 
 app.add_middleware(
@@ -77,6 +78,7 @@ async def get_system_status():
         "status": "online",
         "brain": brain_stats,
         "camera": cam_stats,
+        "network": get_network_details(8000, is_https=os.path.exists("certs/cert.pem")),
         "selected_voice": tts.default_voice_key,
         "active_voice_name": tts.AVAILABLE_VOICES.get(tts.default_voice_key, {}).get("name", "Guy")
     }
@@ -86,8 +88,31 @@ async def get_diagnostics():
     return {
         "brain": brain.get_status(),
         "camera": camera.get_stats(),
+        "network": get_network_details(8000, is_https=os.path.exists("certs/cert.pem")),
         "voice": tts.default_voice_key
     }
+
+@app.get("/api/network/info")
+def get_network_info():
+    is_https = os.path.exists("certs/cert.pem")
+    details = get_network_details(8000, is_https=is_https)
+    
+    # Generate QR code for mobile pairing
+    qr_b64 = ""
+    try:
+        import qrcode
+        qr = qrcode.QRCode(box_size=5, border=1)
+        qr.add_data(details["network_url"])
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        qr_b64 = base64.b64encode(buf.getvalue()).decode()
+    except Exception:
+        pass
+
+    details["qr_base64"] = qr_b64
+    return details
 
 @app.post("/api/system/shutdown")
 async def shutdown_system(background_tasks: BackgroundTasks):
@@ -303,4 +328,8 @@ if os.path.exists(FRONTEND_DIR):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
+    cert_path, key_path = ensure_ssl_certificates("certs")
+    ssl_kwargs = {}
+    if os.path.exists(cert_path) and os.path.exists(key_path):
+        ssl_kwargs = {"ssl_keyfile": key_path, "ssl_certfile": cert_path}
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False, **ssl_kwargs)

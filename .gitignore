@@ -17,6 +17,10 @@ bin/
 *.dll
 *.zip
 
+# Local TLS Certificates
+certs/
+*.pem
+
 # Test audio artifacts
 test_voice.mp3
 *.wav
