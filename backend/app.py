@@ -12,8 +12,8 @@ _BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 if _BACKEND_DIR not in sys.path:
     sys.path.insert(0, _BACKEND_DIR)
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, UploadFile, File, Form, Query, BackgroundTasks
-from fastapi.responses import StreamingResponse, JSONResponse, FileResponse
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, UploadFile, File, Form, Query, BackgroundTasks, Request, Response
+from fastapi.responses import StreamingResponse, JSONResponse, FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -24,9 +24,9 @@ from tts_engine import TTSEngine
 from stt_engine import STTEngine
 
 app = FastAPI(
-    title="Local Vision-Voice Assistant",
-    description="Self-contained multimodal interface with local neural execution.",
-    version="3.1.0"
+    title="VLA Studio",
+    description="Executive Multimodal Interface for Local Vision-Language-Action.",
+    version="3.2.0"
 )
 
 app.add_middleware(
@@ -37,6 +37,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Cache-busting middleware for static files so changes apply immediately
+@app.middleware("http")
+async def add_no_cache_headers(request: Request, call_next):
+    response: Response = await call_next(request)
+    if request.url.path.startswith("/static") or request.url.path == "/":
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 # Core Instances
 camera = CameraManager(device_index=0)
 brain = VisionBrain(port=8001)
@@ -45,17 +55,17 @@ stt = STTEngine(model_size="base.en", device="cpu", compute_type="int8")
 
 @app.on_event("startup")
 async def startup_event():
-    print("[Server] Local Assistant Server online.")
-    try:
-        camera.start(0)
-    except Exception:
-        pass
+    print("[Server] VLA Studio server ready.")
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    print("[Server] Terminating camera and model processes...")
+    print("[Server] Shutting down background tasks and model processes...")
     camera.stop()
     brain.shutdown()
+
+@app.get("/favicon.ico")
+def get_favicon():
+    return Response(status_code=204)
 
 # ==================== REST API ENDPOINTS ====================
 
@@ -81,8 +91,7 @@ async def get_diagnostics():
 
 @app.post("/api/system/shutdown")
 async def shutdown_system(background_tasks: BackgroundTasks):
-    """Cleanly terminates the server, releases cameras, and kills child processes."""
-    print("[Server] Shutdown request received from client.")
+    print("[Server] Executing system shutdown...")
     
     def kill_process():
         time.sleep(0.5)
@@ -91,7 +100,7 @@ async def shutdown_system(background_tasks: BackgroundTasks):
         os.kill(os.getpid(), signal.SIGTERM if sys.platform != "win32" else signal.SIGINT)
 
     background_tasks.add_task(kill_process)
-    return {"success": True, "message": "System is powering down."}
+    return {"success": True, "message": "Server and model engine terminated."}
 
 @app.get("/api/camera/stream")
 def video_feed():
@@ -281,9 +290,9 @@ async def websocket_live_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         pass
     except Exception as e:
-        print(f"[WebSocket] Loop exception: {e}")
+        pass
 
-# Mount frontend
+# Mount frontend with cache-busting headers
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")
 if os.path.exists(FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
