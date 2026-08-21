@@ -6,9 +6,10 @@ from faster_whisper import WhisperModel
 
 class STTEngine:
     """
-    Faster-Whisper Speech-To-Text pipeline with low-latency local inference.
+    High-accuracy Speech-To-Text engine using Faster-Whisper small.en.
+    Optimized for low-latency conversational speech recognition.
     """
-    def __init__(self, model_size: str = "base.en", device: str = "cpu", compute_type: str = "int8"):
+    def __init__(self, model_size: str = "small.en", device: str = "cpu", compute_type: str = "int8"):
         self.model_size = model_size
         self.device = device
         self.compute_type = compute_type
@@ -19,37 +20,39 @@ class STTEngine:
         print(f"[STTEngine] Initializing Faster-Whisper ({self.model_size}, {self.device}, {self.compute_type})...")
         try:
             self.model = WhisperModel(self.model_size, device=self.device, compute_type=self.compute_type)
-            print("[STTEngine] Faster-Whisper loaded successfully.")
+            print(f"[STTEngine] Faster-Whisper ({self.model_size}) loaded successfully.")
         except Exception as e:
-            print(f"[STTEngine] Warning: Faster-Whisper initialization error: {e}")
-            if self.device != "cpu":
-                print("[STTEngine] Retrying with CPU int8 fallback...")
-                self.device = "cpu"
-                self.compute_type = "int8"
-                self.model = WhisperModel(self.model_size, device="cpu", compute_type="int8")
+            print(f"[STTEngine] Warning: Failed loading {self.model_size} ({e}). Falling back to base.en...")
+            try:
+                self.model_size = "base.en"
+                self.model = WhisperModel("base.en", device="cpu", compute_type="int8")
+                print("[STTEngine] Faster-Whisper (base.en) loaded.")
+            except Exception as fallback_e:
+                print(f"[STTEngine] Critical STT error: {fallback_e}")
 
-    def transcribe_audio_bytes(self, audio_bytes: bytes, file_format: str = "wav") -> Dict:
+    def transcribe_audio_bytes(self, audio_bytes: bytes, file_format: str = "webm") -> Dict:
         """
-        Transcribes raw audio bytes into text.
+        Transcribes raw audio bytes into text with high sensitivity.
         """
         if not self.model:
             return {"text": "", "error": "STT model not initialized"}
 
-        if not audio_bytes or len(audio_bytes) < 100:
+        if not audio_bytes or len(audio_bytes) < 200:
             return {"text": "", "segments": []}
 
-        # Write to a temporary file for Whisper decoding
         with tempfile.NamedTemporaryFile(suffix=f".{file_format}", delete=False) as tmp:
             tmp.write(audio_bytes)
             tmp_path = tmp.name
 
         try:
+            # Transcribe with zero temperature and gentle VAD to never drop short phrases
             segments, info = self.model.transcribe(
                 tmp_path,
                 beam_size=5,
                 language="en",
-                vad_filter=True,
-                vad_parameters=dict(min_silence_duration_ms=500)
+                temperature=0.0,
+                condition_on_previous_text=False,
+                vad_filter=False
             )
 
             full_text = []
@@ -67,12 +70,12 @@ class STTEngine:
             result_text = " ".join(full_text).strip()
             return {
                 "text": result_text,
-                "language": info.language,
-                "duration": info.duration,
+                "language": info.language if hasattr(info, "language") else "en",
+                "duration": info.duration if hasattr(info, "duration") else 0,
                 "segments": segment_list
             }
         except Exception as e:
-            print(f"[STTEngine] Transcription error: {e}")
+            print(f"[STTEngine] Transcription notice: {e}")
             return {"text": "", "error": str(e)}
         finally:
             if os.path.exists(tmp_path):

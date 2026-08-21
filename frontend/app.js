@@ -1,5 +1,5 @@
 /**
- * VLA Studio - Executive Client Controller (Multi-Camera & Feedback-Free Audio)
+ * VLA Studio - Executive Client Controller (Zero Feedback & High-Accuracy Audio)
  */
 
 class VLAStudioApp {
@@ -16,6 +16,8 @@ class VLAStudioApp {
         this.visualizer = null;
         this.frameInterval = null;
         this.diagnosticsInterval = null;
+        this.speechRecognizer = null;
+        this.recognizedSpeechText = '';
 
         // Elements
         this.clientVideo = document.getElementById('client-video');
@@ -71,9 +73,8 @@ class VLAStudioApp {
     }
 
     async init() {
-        console.log('[VLA Studio] Initializing multi-camera feedback-free client...');
+        console.log('[VLA Studio] Initializing zero-feedback multimodal client...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
-        this.visualizer.connectAudioElement(this.ttsAudioPlayer);
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
         this.voiceSelect.value = savedVoice;
@@ -82,12 +83,40 @@ class VLAStudioApp {
             if (this.btnFlipCamera) this.btnFlipCamera.style.display = 'flex';
         }
 
+        this.initSpeechRecognition();
         this.initWebSocket();
         await this.initBrowserCamera();
         await this.enumerateAllCameras();
-        this.initMicrophone();
+        await this.initMicrophone();
         this.initEventListeners();
         this.startDiagnosticsPolling();
+    }
+
+    initSpeechRecognition() {
+        const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognitionClass) {
+            try {
+                this.speechRecognizer = new SpeechRecognitionClass();
+                this.speechRecognizer.continuous = false;
+                this.speechRecognizer.interimResults = true;
+                this.speechRecognizer.lang = 'en-US';
+
+                this.speechRecognizer.onresult = (event) => {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    if (transcript.trim()) {
+                        this.recognizedSpeechText = transcript.trim();
+                        this.textInput.placeholder = `Listening: "${this.recognizedSpeechText}"`;
+                    }
+                };
+
+                this.speechRecognizer.onerror = (e) => {
+                    // Fail gracefully and rely on Faster-Whisper backend
+                };
+            } catch (e) {}
+        }
     }
 
     async enumerateAllCameras() {
@@ -116,11 +145,7 @@ class VLAStudioApp {
                 }
                 this.browserCameraSelect.appendChild(opt);
             });
-
-            console.log(`[Camera] Discovered ${videoDevices.length} video input devices.`);
-        } catch (e) {
-            console.warn('[Camera] Device enumeration error:', e);
-        }
+        } catch (e) {}
     }
 
     async initBrowserCamera(deviceId = null) {
@@ -155,10 +180,7 @@ class VLAStudioApp {
 
             if (this.frameInterval) clearInterval(this.frameInterval);
             this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
-
-            console.log('[Camera] Webcam active.');
         } catch (e) {
-            console.warn('[Camera] Webcam high-res denied, falling back to standard resolution:', e);
             try {
                 const fallbackConstraints = deviceId ? { deviceId: { exact: deviceId } } : true;
                 this.cameraStream = await navigator.mediaDevices.getUserMedia({ video: fallbackConstraints });
@@ -172,7 +194,11 @@ class VLAStudioApp {
 
     async initMicrophone() {
         try {
-            // Strict acoustic echo cancellation & noise suppression to eliminate feedback
+            if (this.micStream) {
+                this.micStream.getTracks().forEach(t => t.stop());
+            }
+
+            // High-fidelity voice constraints with acoustic echo cancellation
             this.micStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     echoCancellation: { ideal: true },
@@ -182,9 +208,11 @@ class VLAStudioApp {
                     sampleRate: 16000
                 }
             });
-            console.log('[Audio] Microphone ready with acoustic echo cancellation.');
+
+            this.visualizer.connectMediaStream(this.micStream);
+            console.log('[Audio] Feedback-isolated microphone active.');
         } catch (e) {
-            console.warn('[Audio] Microphone access denied:', e);
+            console.warn('[Audio] Microphone access issue:', e);
         }
     }
 
@@ -261,7 +289,6 @@ class VLAStudioApp {
             this.fetchHostCamerasOnce();
         });
 
-        // Switch camera dropdown
         this.browserCameraSelect.addEventListener('change', (e) => {
             const devId = e.target.value;
             if (devId) {
@@ -277,8 +304,9 @@ class VLAStudioApp {
             });
         }
 
-        this.btnPtt.addEventListener('mousedown', () => this.startRecording());
-        this.btnPtt.addEventListener('mouseup', () => this.stopRecording());
+        // Push-to-Talk Event Listeners
+        this.btnPtt.addEventListener('mousedown', (e) => { e.preventDefault(); this.startRecording(); });
+        this.btnPtt.addEventListener('mouseup', (e) => { e.preventDefault(); this.stopRecording(); });
         this.btnPtt.addEventListener('mouseleave', () => { if (this.isRecording) this.stopRecording(); });
         this.btnPtt.addEventListener('touchstart', (e) => { e.preventDefault(); this.startRecording(); });
         this.btnPtt.addEventListener('touchend', (e) => { e.preventDefault(); this.stopRecording(); });
@@ -314,7 +342,7 @@ class VLAStudioApp {
             } catch (err) {}
         });
 
-        // Network / Mobile Pairing Modal
+        // Network Modal
         this.btnNetworkConnect.addEventListener('click', () => this.openNetworkModal());
         this.btnCloseNetwork.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
         this.btnCloseNetworkFooter.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
@@ -324,7 +352,7 @@ class VLAStudioApp {
             setTimeout(() => { this.btnCopyNetworkUrl.textContent = 'Copy'; }, 2000);
         });
 
-        // Preferences modal
+        // Preferences Modal
         this.btnOpenSettings.addEventListener('click', () => { this.modalPreferences.style.display = 'flex'; });
         this.btnModalClose.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
         this.btnModalCancel.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
@@ -421,7 +449,7 @@ class VLAStudioApp {
         if (!this.micStream) return;
         if (this.isRecording) return;
 
-        // Immediately silence any active TTS speech output to prevent audio feedback
+        // Instant Silence: Stop any assistant audio immediately to eliminate feedback
         if (this.ttsAudioPlayer) {
             this.ttsAudioPlayer.pause();
             this.ttsAudioPlayer.currentTime = 0;
@@ -429,22 +457,29 @@ class VLAStudioApp {
 
         this.isRecording = true;
         this.audioChunks = [];
+        this.recognizedSpeechText = '';
         this.btnPtt.classList.add('recording');
         this.pttLabel.textContent = 'Listening...';
-        this.audioStatusLabel.textContent = 'Recording';
+        this.audioStatusLabel.textContent = 'Listening';
         this.audioStatusLabel.className = 'audio-label active';
 
-        this.visualizer.connectMediaStream(this.micStream);
+        // Start native browser SpeechRecognition in parallel if available
+        if (this.speechRecognizer) {
+            try { this.speechRecognizer.start(); } catch (e) {}
+        }
 
         const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
         this.mediaRecorder = new MediaRecorder(this.micStream, { mimeType: mime });
 
         this.mediaRecorder.ondataavailable = (e) => {
-            if (e.data && e.data.size > 0) this.audioChunks.push(e.data);
+            if (e.data && e.data.size > 0) {
+                this.audioChunks.push(e.data);
+            }
         };
 
         this.mediaRecorder.onstop = () => this.processRecordedAudio();
-        this.mediaRecorder.start();
+        // Record in 100ms slices so no speech is clipped
+        this.mediaRecorder.start(100);
     }
 
     stopRecording() {
@@ -454,16 +489,22 @@ class VLAStudioApp {
         this.pttLabel.textContent = 'Hold to Speak';
         this.audioStatusLabel.textContent = 'Processing';
 
+        if (this.speechRecognizer) {
+            try { this.speechRecognizer.stop(); } catch (e) {}
+        }
+
         if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
             this.mediaRecorder.stop();
         }
     }
 
     processRecordedAudio() {
-        if (this.audioChunks.length === 0) return;
+        this.textInput.placeholder = 'Ask what the camera sees or enter query...';
+
+        if (this.audioChunks.length === 0 && !this.recognizedSpeechText) return;
 
         const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-        this.showProcessing('Transcribing speech (Faster-Whisper)...');
+        this.showProcessing('Transcribing speech...');
 
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
@@ -475,6 +516,7 @@ class VLAStudioApp {
                 this.ws.send(JSON.stringify({
                     type: 'audio_query',
                     audio_base64: b64,
+                    fallback_text: this.recognizedSpeechText,
                     image_base64: frameB64,
                     format: 'webm'
                 }));

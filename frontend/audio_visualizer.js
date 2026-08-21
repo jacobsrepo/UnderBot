@@ -1,11 +1,11 @@
 /**
- * Minimalist Audio Wave Visualizer
+ * Audio Spectrum Visualizer - Isolated Read-Only Analyzer (No Audio Loopback)
  */
 
 class AudioSpectrumVisualizer {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
         this.audioCtx = null;
         this.analyser = null;
         this.source = null;
@@ -14,15 +14,18 @@ class AudioSpectrumVisualizer {
         this.animationId = null;
         this.isActive = false;
 
-        this.initCanvasSize();
-        window.addEventListener('resize', () => this.initCanvasSize());
-        this.renderIdleWaveform();
+        if (this.canvas) {
+            this.initCanvasSize();
+            window.addEventListener('resize', () => this.initCanvasSize());
+            this.renderIdleWaveform();
+        }
     }
 
     initCanvasSize() {
+        if (!this.canvas) return;
         const rect = this.canvas.getBoundingClientRect();
-        this.canvas.width = (rect.width || 140) * (window.devicePixelRatio || 1);
-        this.canvas.height = (rect.height || 24) * (window.devicePixelRatio || 1);
+        this.canvas.width = (rect.width || 110) * (window.devicePixelRatio || 1);
+        this.canvas.height = (rect.height || 20) * (window.devicePixelRatio || 1);
     }
 
     ensureAudioContext() {
@@ -34,6 +37,8 @@ class AudioSpectrumVisualizer {
             this.analyser.smoothingTimeConstant = 0.8;
             this.bufferLength = this.analyser.frequencyBinCount;
             this.dataArray = new Uint8Array(this.bufferLength);
+            // CRITICAL: NEVER connect this.analyser to this.audioCtx.destination!
+            // Keeping it isolated ensures microphone audio is never routed to the speakers.
         }
         if (this.audioCtx.state === 'suspended') {
             this.audioCtx.resume();
@@ -41,32 +46,26 @@ class AudioSpectrumVisualizer {
     }
 
     connectMediaStream(stream) {
+        if (!stream) return;
         this.ensureAudioContext();
         try {
-            if (this.source) this.source.disconnect();
+            if (this.source) {
+                try { this.source.disconnect(); } catch (e) {}
+            }
             this.source = this.audioCtx.createMediaStreamSource(stream);
+            // Connect mic source ONLY to analyser (NOT to audioCtx.destination)
             this.source.connect(this.analyser);
             this.isActive = true;
             this.startLoop();
         } catch (e) {
-            console.warn('[Visualizer] Stream error:', e);
+            console.warn('[Visualizer] Stream connection error:', e);
         }
     }
 
     connectAudioElement(audioElement) {
-        this.ensureAudioContext();
-        try {
-            if (!audioElement._hasSource) {
-                const audioSource = this.audioCtx.createMediaElementSource(audioElement);
-                audioSource.connect(this.analyser);
-                this.analyser.connect(this.audioCtx.destination);
-                audioElement._hasSource = true;
-            }
-            this.isActive = true;
-            this.startLoop();
-        } catch (e) {
-            console.warn('[Visualizer] Audio element error:', e);
-        }
+        // Audio element is played natively by browser HTML5 <audio> tag.
+        // We do not route mic or HTML5 audio through Web Audio Graph destination to avoid loops.
+        this.renderIdleWaveform();
     }
 
     startLoop() {
@@ -75,7 +74,7 @@ class AudioSpectrumVisualizer {
         const draw = () => {
             this.animationId = requestAnimationFrame(draw);
 
-            if (!this.analyser || !this.isActive) {
+            if (!this.analyser || !this.isActive || !this.ctx) {
                 this.renderIdleWaveform();
                 return;
             }
@@ -86,8 +85,8 @@ class AudioSpectrumVisualizer {
             const height = this.canvas.height;
             this.ctx.clearRect(0, 0, width, height);
 
-            const count = 16;
-            const barWidth = (width / count) * 0.6;
+            const count = 14;
+            const barWidth = (width / count) * 0.55;
             const gap = (width - (count * barWidth)) / (count - 1);
 
             for (let i = 0; i < count; i++) {
@@ -99,7 +98,7 @@ class AudioSpectrumVisualizer {
                 const x = i * (barWidth + gap);
                 const y = (height - barHeight) / 2;
 
-                this.ctx.fillStyle = '#3b82f6';
+                this.ctx.fillStyle = percent > 0.15 ? '#10b981' : '#3b82f6';
                 this.ctx.beginPath();
                 this.ctx.roundRect(x, y, barWidth, barHeight, 2);
                 this.ctx.fill();
@@ -109,30 +108,34 @@ class AudioSpectrumVisualizer {
         draw();
     }
 
+    setIdle() {
+        this.isActive = false;
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+        }
+        this.renderIdleWaveform();
+    }
+
     renderIdleWaveform() {
+        if (!this.ctx || !this.canvas) return;
         const width = this.canvas.width;
         const height = this.canvas.height;
         this.ctx.clearRect(0, 0, width, height);
 
-        const count = 16;
-        const barWidth = (width / count) * 0.6;
+        const count = 14;
+        const barWidth = (width / count) * 0.55;
         const gap = (width - (count * barWidth)) / (count - 1);
 
         for (let i = 0; i < count; i++) {
-            const x = i * (barWidth + gap);
             const barHeight = 3;
+            const x = i * (barWidth + gap);
             const y = (height - barHeight) / 2;
 
-            this.ctx.fillStyle = '#1e2433';
+            this.ctx.fillStyle = '#2f323c';
             this.ctx.beginPath();
-            this.ctx.roundRect(x, y, barWidth, barHeight, 2);
+            this.ctx.roundRect(x, y, barWidth, barHeight, 1);
             this.ctx.fill();
         }
     }
-
-    setIdle() {
-        this.isActive = false;
-    }
 }
-
-window.AudioSpectrumVisualizer = AudioSpectrumVisualizer;

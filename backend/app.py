@@ -27,7 +27,7 @@ from ssl_helper import get_local_ip, ensure_ssl_certificates, get_network_detail
 app = FastAPI(
     title="VLA Studio",
     description="Executive Multimodal Interface for Local Vision-Language-Action.",
-    version="3.3.0"
+    version="3.4.0"
 )
 
 app.add_middleware(
@@ -52,7 +52,7 @@ async def add_no_cache_headers(request: Request, call_next):
 camera = CameraManager(device_index=0)
 brain = VisionBrain()
 tts = TTSEngine(default_voice_key="guy")
-stt = STTEngine(model_size="base.en", device="cpu", compute_type="int8")
+stt = STTEngine(model_size="small.en", device="cpu", compute_type="int8")
 
 @app.on_event("startup")
 async def startup_event():
@@ -97,7 +97,6 @@ def get_network_info():
     is_https = os.path.exists("certs/cert.pem")
     details = get_network_details(8000, is_https=is_https)
     
-    # Generate QR code for mobile pairing
     qr_b64 = ""
     try:
         import qrcode
@@ -175,7 +174,7 @@ async def speak_text(req: TTSRequest):
 @app.post("/api/stt/transcribe")
 async def transcribe_audio(file: UploadFile = File(...)):
     audio_bytes = await file.read()
-    fmt = file.filename.split(".")[-1] if file.filename and "." in file.filename else "wav"
+    fmt = file.filename.split(".")[-1] if file.filename and "." in file.filename else "webm"
     result = stt.transcribe_audio_bytes(audio_bytes, file_format=fmt)
     return result
 
@@ -257,38 +256,43 @@ async def websocket_live_endpoint(websocket: WebSocket):
             elif msg_type == "audio_query":
                 audio_b64 = msg.get("audio_base64", "")
                 audio_fmt = msg.get("format", "webm")
+                fallback_text = msg.get("fallback_text", "").strip()
                 custom_frame = msg.get("image_base64")
 
+                transcribed_text = ""
                 if audio_b64:
                     audio_bytes = base64.b64decode(audio_b64)
                     await websocket.send_json({"type": "status_update", "state": "transcribing"})
 
                     stt_res = stt.transcribe_audio_bytes(audio_bytes, file_format=audio_fmt)
-                    transcribed_text = stt_res.get("text", "")
+                    transcribed_text = stt_res.get("text", "").strip()
 
-                    if transcribed_text:
-                        await websocket.send_json({"type": "stt_result", "text": transcribed_text})
-                        await websocket.send_json({"type": "status_update", "state": "thinking", "query": transcribed_text})
+                if not transcribed_text and fallback_text:
+                    transcribed_text = fallback_text
 
-                        frame_b64 = custom_frame or camera.get_latest_frame_base64() or ""
+                if transcribed_text:
+                    await websocket.send_json({"type": "stt_result", "text": transcribed_text})
+                    await websocket.send_json({"type": "status_update", "state": "thinking", "query": transcribed_text})
 
-                        res = await brain.analyze_frame_async(
-                            image_base64=frame_b64,
-                            user_prompt=transcribed_text
-                        )
-                        reply_text = res.get("response", "")
-                        speech_data = await tts.synthesize_base64(reply_text)
+                    frame_b64 = custom_frame or camera.get_latest_frame_base64() or ""
 
-                        await websocket.send_json({
-                            "type": "brain_response",
-                            "query": transcribed_text,
-                            "response": reply_text,
-                            "model": res.get("model", ""),
-                            "latency_seconds": res.get("latency_seconds", 0),
-                            "speech": speech_data
-                        })
-                    else:
-                        await websocket.send_json({"type": "status_update", "state": "idle", "message": "No speech detected."})
+                    res = await brain.analyze_frame_async(
+                        image_base64=frame_b64,
+                        user_prompt=transcribed_text
+                    )
+                    reply_text = res.get("response", "")
+                    speech_data = await tts.synthesize_base64(reply_text)
+
+                    await websocket.send_json({
+                        "type": "brain_response",
+                        "query": transcribed_text,
+                        "response": reply_text,
+                        "model": res.get("model", ""),
+                        "latency_seconds": res.get("latency_seconds", 0),
+                        "speech": speech_data
+                    })
+                else:
+                    await websocket.send_json({"type": "status_update", "state": "idle", "message": "No speech detected."})
 
             elif msg_type == "scene_scan":
                 custom_frame = msg.get("image_base64")
