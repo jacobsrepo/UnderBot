@@ -5,13 +5,24 @@ import shutil
 import glob
 import psutil
 import time
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
+
+try:
+    import pygetwindow as gw
+except ImportError:
+    gw = None
+
+try:
+    from rapidocr_onnxruntime import RapidOCR
+    _OCR_ENGINE = RapidOCR()
+except Exception:
+    _OCR_ENGINE = None
 
 class DesktopAgent:
     """
-    Windows Desktop Automation & OS Control Agent for Contender.
-    Provides direct window control (minimize all, show desktop), application launching,
-    file operations, desktop organization, and telemetry.
+    Windows Desktop OS Automation & Screen OCR Engine for Contender.
+    Provides Win32/PowerShell window management, application execution,
+    file operations with safety guardrails, system telemetry, and fast local OCR.
     """
 
     KNOWN_APPS = {
@@ -36,16 +47,52 @@ class DesktopAgent:
         "settings": "ms-settings:"
     }
 
+    DESTRUCTIVE_PATTERNS = [
+        "format-volume", "format ", "rmdir /s", "remove-item -recurse c:\\",
+        "reg delete", "del /f /s /q c:\\", "bcdedit", "diskpart", "shutdown /r"
+    ]
+
     def __init__(self):
         self.user_profile = os.environ.get("USERPROFILE", "C:\\Users\\Public")
         self.desktop_path = os.path.join(self.user_profile, "Desktop")
         self.documents_path = os.path.join(self.user_profile, "Documents")
         self.downloads_path = os.path.join(self.user_profile, "Downloads")
 
-    # ==================== WINDOW & DESKTOP CONTROLS ====================
+    # ==================== EXECUTION SAFETY GUARDRAILS ====================
+
+    def check_safety_guardrail(self, command_or_path: str, action_type: str = "shell") -> Dict[str, Any]:
+        """
+        Intercepts destructive actions and routes them to HUD confirmation.
+        """
+        lower = command_or_path.lower().strip()
+        for pat in self.DESTRUCTIVE_PATTERNS:
+            if pat in lower:
+                return {
+                    "is_safe": False,
+                    "requires_confirmation": True,
+                    "action_type": action_type,
+                    "target": command_or_path,
+                    "warning": f"Potentially destructive operation detected: '{pat}'. Explicit confirmation required."
+                }
+
+        # Check for system file deletion
+        if action_type == "delete":
+            sys_paths = ["c:\\windows", "c:\\program files", "c:\\users\\public", "c:\\system"]
+            for sp in sys_paths:
+                if lower.startswith(sp):
+                    return {
+                        "is_safe": False,
+                        "requires_confirmation": True,
+                        "action_type": action_type,
+                        "target": command_or_path,
+                        "warning": f"Attempting to modify system path: '{command_or_path}'. Confirmation required."
+                    }
+
+        return {"is_safe": True, "requires_confirmation": False}
+
+    # ==================== WINDOW & DESKTOP MANAGEMENT ====================
 
     def minimize_all_windows(self) -> Dict[str, Any]:
-        """Minimizes all open windows on the Windows desktop."""
         cmd = "powershell -Command \"(New-Object -ComObject Shell.Application).MinimizeAll()\""
         try:
             subprocess.run(cmd, shell=True, check=True, timeout=5)
@@ -54,7 +101,6 @@ class DesktopAgent:
             return {"success": False, "error": str(e)}
 
     def undo_minimize_all(self) -> Dict[str, Any]:
-        """Restores previously minimized windows."""
         cmd = "powershell -Command \"(New-Object -ComObject Shell.Application).UndoMinimizeALL()\""
         try:
             subprocess.run(cmd, shell=True, check=True, timeout=5)
@@ -62,11 +108,16 @@ class DesktopAgent:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
+    def list_open_windows(self) -> List[str]:
+        if not gw:
+            return []
+        try:
+            titles = [w.title.strip() for w in gw.getAllWindows() if w.title and len(w.title.strip()) > 1]
+            return titles
+        except Exception:
+            return []
+
     def organize_desktop_files(self) -> Dict[str, Any]:
-        """
-        Organizes loose desktop files into categorized folders:
-        Documents, Images, Code, Archives, Media.
-        """
         if not os.path.exists(self.desktop_path):
             return {"success": False, "error": "Desktop path not found"}
 
@@ -99,9 +150,12 @@ class DesktopAgent:
     # ==================== APPLICATION MANAGEMENT ====================
 
     def launch_application(self, app_name: str) -> Dict[str, Any]:
-        """Launches a desktop application."""
         clean_name = app_name.strip().lower()
         cmd = self.KNOWN_APPS.get(clean_name, clean_name)
+
+        guard = self.check_safety_guardrail(cmd, action_type="app_launch")
+        if not guard["is_safe"]:
+            return guard
 
         try:
             if sys.platform == "win32":
@@ -117,10 +171,67 @@ class DesktopAgent:
         except Exception as e:
             return {"success": False, "app_name": app_name, "error": str(e)}
 
+    # ==================== SMART LOCAL SCREEN OCR ====================
+
+    def extract_screen_text(self) -> Dict[str, Any]:
+        """
+        Captures current desktop screen and extracts structured text via RapidOCR.
+        Provides zero-VLM text perception for code, errors, and terminal logs.
+        """
+        if not _OCR_ENGINE:
+            return {"success": False, "text": "", "lines": []}
+
+        try:
+            import numpy as np
+            from PIL import ImageGrab
+
+            # Capture using PIL ImageGrab (robust across Windows sessions)
+            screenshot = ImageGrab.grab()
+            img_np = np.array(screenshot)
+            img_bgr = img_np[:, :, ::-1]  # RGB to BGR
+
+            results, elapse_list = _OCR_ENGINE(img_bgr)
+            lines = []
+            if results:
+                for line in results:
+                    text = line[1]
+                    conf = line[2]
+                    if conf > 0.4:
+                        lines.append(text)
+
+            full_text = "\n".join(lines)
+            return {
+                "success": True,
+                "text": full_text,
+                "line_count": len(lines),
+                "preview": full_text[:400]
+            }
+        except Exception as e:
+            print(f"[DesktopAgent] Screen OCR notice: {e}")
+            return {"success": False, "text": "", "lines": []}
+
+    def capture_screen_base64(self) -> Optional[str]:
+        try:
+            import mss
+            import io
+            from PIL import Image
+            import base64
+
+            with mss.mss() as sct:
+                monitor = sct.monitors[1] if len(sct.monitors) > 1 else sct.monitors[0]
+                sct_img = sct.grab(monitor)
+                img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
+                img = img.resize((1280, 720), Image.Resampling.LANCZOS)
+                buf = io.BytesIO()
+                img.save(buf, format="JPEG", quality=85)
+                return base64.b64encode(buf.getvalue()).decode()
+        except Exception as e:
+            print(f"[DesktopAgent] Screen capture notice: {e}")
+            return None
+
     # ==================== SYSTEM TELEMETRY ====================
 
     def get_system_metrics(self) -> Dict[str, Any]:
-        """Retrieves real-time CPU, RAM, Disk, and Battery metrics."""
         cpu_percent = psutil.cpu_percent(interval=0.1)
         ram = psutil.virtual_memory()
         disk = psutil.disk_usage("C:\\" if sys.platform == "win32" else "/")
@@ -166,6 +277,10 @@ class DesktopAgent:
             return {"success": False, "error": str(e)}
 
     def delete_file(self, path: str) -> Dict[str, Any]:
+        guard = self.check_safety_guardrail(path, action_type="delete")
+        if not guard["is_safe"]:
+            return guard
+
         try:
             resolved_path = self._resolve_path(path)
             if os.path.isdir(resolved_path):
@@ -217,26 +332,6 @@ class DesktopAgent:
             return {"success": True, "query": query, "count": len(matches), "matches": matches[:25]}
         except Exception as e:
             return {"success": False, "error": str(e)}
-
-    def capture_screen_base64(self) -> Optional[str]:
-        try:
-            import mss
-            import mss.tools
-            import io
-            from PIL import Image
-            import base64
-
-            with mss.mss() as sct:
-                monitor = sct.monitors[1] if len(sct.monitors) > 1 else sct.monitors[0]
-                sct_img = sct.grab(monitor)
-                img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
-                img = img.resize((1280, 720), Image.Resampling.LANCZOS)
-                buf = io.BytesIO()
-                img.save(buf, format="JPEG", quality=85)
-                return base64.b64encode(buf.getvalue()).decode()
-        except Exception as e:
-            print(f"[DesktopAgent] Screen grab notice: {e}")
-            return None
 
     def _resolve_path(self, path: str) -> str:
         p_lower = path.strip().lower()

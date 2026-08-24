@@ -26,11 +26,12 @@ from ssl_helper import get_local_ip, ensure_ssl_certificates, get_network_detail
 from desktop_agent import DesktopAgent
 from embedded_agent import EmbeddedAgent
 from intent_router import IntentRouter
+from cognitive_core import CognitiveCore
 
 app = FastAPI(
     title="Contender AI Assistant",
-    description="Tactical Multimodal Assistant with Autonomous OS & Hardware Execution.",
-    version="4.4.0"
+    description="Dual-Engine Tactical Assistant with Decoupled Vision, OCR, and Deterministic Hardware Reflection.",
+    version="5.0.0"
 )
 
 app.add_middleware(
@@ -50,7 +51,7 @@ async def add_no_cache_headers(request: Request, call_next):
         response.headers["Expires"] = "0"
     return response
 
-# Core Subsystems
+# Subsystems
 camera = CameraManager(device_index=0)
 brain = VisionBrain()
 tts = TTSEngine(default_voice_key="guy")
@@ -58,13 +59,14 @@ stt = STTEngine(model_size="small.en", device="cpu", compute_type="int8")
 desktop = DesktopAgent()
 embedded = EmbeddedAgent()
 router = IntentRouter()
+core = CognitiveCore(desktop, embedded, brain)
 
 _LATEST_SCREEN_B64: Optional[str] = None
 _LATEST_CAMERA_B64: Optional[str] = None
 
 @app.on_event("startup")
 async def startup_event():
-    print("[Contender] Tactical Studio online and standing by.")
+    print("[Contender] Dual-Engine Tactical Studio online and standing by.")
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -77,16 +79,17 @@ async def shutdown_event():
 def get_favicon():
     return Response(status_code=204)
 
-# ==================== SYSTEM & REST APIS ====================
+# ==================== SYSTEM & STATUS REST APIS ====================
 
 @app.get("/api/status")
 async def get_system_status():
     return {
         "status": "online",
         "brain": brain.get_status(),
+        "active_engine": core.active_mode,
         "camera": camera.get_stats(),
         "network": get_network_details(8000, is_https=os.path.exists("certs/cert.pem")),
-        "ports": embedded.scan_ports(),
+        "ports": embedded.detect_boards(),
         "metrics": desktop.get_system_metrics(),
         "selected_voice": tts.default_voice_key,
         "active_voice_name": tts.AVAILABLE_VOICES.get(tts.default_voice_key, {}).get("name", "Guy")
@@ -96,6 +99,7 @@ async def get_system_status():
 async def get_diagnostics():
     return {
         "brain": brain.get_status(),
+        "active_engine": core.active_mode,
         "camera": camera.get_stats(),
         "network": get_network_details(8000, is_https=os.path.exists("certs/cert.pem")),
         "metrics": desktop.get_system_metrics(),
@@ -160,6 +164,10 @@ def restore_windows():
 def organize_desktop():
     return desktop.organize_desktop_files()
 
+@app.get("/api/desktop/ocr")
+def run_screen_ocr():
+    return desktop.extract_screen_text()
+
 class FileOpRequest(BaseModel):
     action: str
     src: Optional[str] = None
@@ -189,9 +197,13 @@ def handle_file_operation(req: FileOpRequest):
 
 # ==================== EMBEDDED HARDWARE APIS ====================
 
+@app.get("/api/embedded/boards")
+def get_boards():
+    return embedded.detect_boards()
+
 @app.get("/api/embedded/ports")
 def get_serial_ports():
-    return embedded.scan_ports()
+    return embedded.detect_boards()
 
 class ProgramMicrocontrollerRequest(BaseModel):
     prompt: str
@@ -258,135 +270,6 @@ class TTSRequest(BaseModel):
 async def speak_text(req: TTSRequest):
     return await tts.synthesize_base64(req.text, req.voice_key)
 
-# ==================== AGENTIC ACTION DISPATCHER ====================
-
-async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], screen_b64: Optional[str], cam_b64: Optional[str], progress_callback=None) -> Tuple[str, Optional[Dict], str]:
-    intent = intent_info.get("intent", "CONVERSATION")
-    prompt = intent_info.get("prompt", user_text)
-    vision_source = intent_info.get("vision_source", "screen")
-    board_hint = intent_info.get("board_hint", "auto")
-    lower = user_text.lower()
-    action_log = None
-    system_context = None
-
-    def notify(msg):
-        if progress_callback:
-            try:
-                asyncio.create_task(progress_callback(msg))
-            except Exception:
-                pass
-
-    # Action 1: Window Minimization / Desktop Controls
-    if any(k in lower for k in ["minimize all", "minimize everything", "minimize the stuff", "show desktop", "minimize windows"]):
-        notify("Minimizing desktop windows...")
-        res = desktop.minimize_all_windows()
-        if res.get("success"):
-            action_log = {"type": "window_control", "title": "Minimized All Windows", "status": "Done"}
-            system_context = "All open desktop windows have been minimized."
-        else:
-            action_log = {"type": "window_control", "title": "Minimize Failed", "status": res.get("error")}
-            system_context = f"Failed to minimize windows: {res.get('error')}"
-
-    elif any(k in lower for k in ["restore window", "undo minimize", "unminimize"]):
-        notify("Restoring desktop windows...")
-        res = desktop.undo_minimize_all()
-        action_log = {"type": "window_control", "title": "Restored Windows", "status": "Done"}
-        system_context = "Desktop windows have been restored to screen."
-
-    elif any(k in lower for k in ["organize desktop", "tidy desktop", "clean up desktop"]):
-        notify("Organizing desktop files into folders...")
-        res = desktop.organize_desktop_files()
-        action_log = {"type": "desktop_organize", "title": "Organized Desktop", "status": f"{res.get('moved_count', 0)} files categorized"}
-        system_context = f"Organized {res.get('moved_count', 0)} files on the desktop into categorized folders."
-
-    # Action 2: Embedded Microcontroller Auto-Program
-    elif intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "nano", "uno", "esp32", "blink", "led"]):
-        if any(k in lower for k in ["program", "flash", "upload", "write code", "blink", "load sketch", "led"]):
-            notify("Detecting connected board and compiling firmware...")
-            flash_res = await asyncio.to_thread(
-                embedded.auto_compile_and_flash_sketch,
-                prompt,
-                board_hint,
-                lambda m: notify(m)
-            )
-            if flash_res.get("success"):
-                action_log = {
-                    "type": "hardware_flash",
-                    "title": f"Flashed {flash_res.get('board')}",
-                    "status": f"Uploaded to {flash_res.get('port')}"
-                }
-                system_context = f"Successfully compiled and uploaded the sketch to {flash_res.get('board')} on {flash_res.get('port')}. The microcontroller is active."
-            else:
-                action_log = {
-                    "type": "hardware_flash",
-                    "title": "Hardware Notice",
-                    "status": flash_res.get("error", "No board detected")
-                }
-                system_context = f"Hardware status: {flash_res.get('error')}"
-        elif any(k in lower for k in ["scan", "list port", "detect", "see the arduino", "check port"]):
-            ports = embedded.scan_ports()
-            active_devs = [p for p in ports if p.get("is_usb")]
-            if active_devs:
-                port_desc = [f"{p['port']} ({p['board_type']})" for p in active_devs]
-                action_log = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": port_desc}
-                system_context = f"Connected USB boards: {', '.join(port_desc)}"
-            else:
-                action_log = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": ["No USB boards detected"]}
-                system_context = "No USB Arduino or microcontroller board is currently detected on the system ports."
-
-    # Action 3: Launch Application
-    elif intent == "DESKTOP_APP" or any(k in lower for k in ["launch", "open "]):
-        target_app = None
-        for app_k in desktop.KNOWN_APPS.keys():
-            if app_k in lower:
-                target_app = app_k
-                break
-        if not target_app:
-            parts = lower.replace("launch", "open").split("open")
-            if len(parts) > 1:
-                target_app = parts[-1].strip()
-
-        if target_app:
-            notify(f"Launching {target_app.title()}...")
-            res = desktop.launch_application(target_app)
-            if res.get("success"):
-                action_log = {"type": "app_launch", "title": f"Launched {target_app.title()}", "status": "Success"}
-                system_context = f"Launched {target_app.title()} on the user's desktop."
-            else:
-                action_log = {"type": "app_launch", "title": f"Launch Failed", "status": res.get("error")}
-                system_context = f"Failed to launch {target_app}: {res.get('error')}"
-
-    # Action 4: File Operations
-    elif intent == "FILE_OPERATION":
-        if "list" in lower:
-            res = desktop.list_directory("Desktop")
-            action_log = {"type": "file_op", "title": "Listed Desktop Items", "count": res.get("count", 0)}
-            system_context = f"Desktop contains {res.get('count', 0)} items: {[i['name'] for i in res.get('items', [])[:8]]}"
-        elif "copy" in lower:
-            action_log = {"type": "file_op", "title": "File Copy Executed", "status": "Done"}
-            system_context = "Copied the requested file to the destination folder."
-
-    # Action 5: System Metrics
-    elif intent == "SYSTEM_METRICS":
-        metrics = desktop.get_system_metrics()
-        action_log = {"type": "system_metrics", "title": "System Telemetry", "cpu": f"{metrics.get('cpu_percent')}%", "ram": f"{metrics.get('ram_used_gb')}/{metrics.get('ram_total_gb')} GB"}
-        system_context = f"Metrics: CPU at {metrics.get('cpu_percent')}%, RAM at {metrics.get('ram_used_gb')}GB of {metrics.get('ram_total_gb')}GB ({metrics.get('ram_percent')}%), Battery: {metrics.get('battery')}"
-
-    # Auto-Arbitrate Visual Feed
-    if vision_source == "camera":
-        chosen_frame = cam_b64 or _LATEST_CAMERA_B64 or camera.get_latest_frame_base64()
-    else:
-        chosen_frame = screen_b64 or _LATEST_SCREEN_B64 or desktop.capture_screen_base64()
-
-    notify("Synthesizing response...")
-    analysis = await brain.analyze_frame_async(
-        image_base64=chosen_frame,
-        user_prompt=prompt,
-        system_context=system_context
-    )
-
-    return analysis.get("response", "Standing by."), action_log, vision_source
-
 # ==================== WEBSOCKET LIVE STREAMING ====================
 
 @app.websocket("/ws/live")
@@ -430,7 +313,8 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 await websocket.send_json({
                     "type": "pong",
                     "time": time.time(),
-                    "brain": brain.get_status()
+                    "brain": brain.get_status(),
+                    "active_engine": core.active_mode
                 })
 
             elif msg_type == "screen_frame":
@@ -458,16 +342,28 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 })
 
                 intent_res = router.process_utterance(user_text)
-                reply_text, action_card, auto_vision = await execute_agentic_action(user_text, intent_res, screen_b64, cam_b64, progress_callback=send_progress_update)
+                
+                # Execute through Dual-Engine Cognitive Core
+                dispatch_res = await core.process_user_directive(
+                    text=user_text,
+                    intent_info=intent_res,
+                    screen_b64=screen_b64 or _LATEST_SCREEN_B64,
+                    cam_b64=cam_b64 or _LATEST_CAMERA_B64,
+                    progress_cb=lambda m: asyncio.create_task(send_progress_update(m))
+                )
+
+                reply_text = dispatch_res["reply"]
                 speech_data = await tts.synthesize_base64(reply_text)
 
                 await websocket.send_json({
                     "type": "brain_response",
                     "query": user_text,
                     "response": reply_text,
-                    "action_card": action_card,
-                    "auto_vision": auto_vision,
-                    "model": "Contender Core",
+                    "action_card": dispatch_res.get("action_card"),
+                    "auto_vision": dispatch_res.get("active_vision", "screen"),
+                    "active_engine": dispatch_res.get("active_engine", "CODER_CONTROLLER"),
+                    "requires_confirmation": dispatch_res.get("requires_confirmation", False),
+                    "model": "Contender Dual Core",
                     "speech": speech_data
                 })
 
@@ -482,7 +378,6 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 if audio_b64:
                     audio_bytes = base64.b64decode(audio_b64)
                     await websocket.send_json({"type": "status_update", "state": "transcribing"})
-
                     stt_res = stt.transcribe_audio_bytes(audio_bytes, file_format=audio_fmt)
                     transcribed_text = stt_res.get("text", "").strip()
 
@@ -500,16 +395,26 @@ async def websocket_live_endpoint(websocket: WebSocket):
                     })
                     await websocket.send_json({"type": "status_update", "state": "thinking", "query": transcribed_text})
 
-                    reply_text, action_card, auto_vision = await execute_agentic_action(transcribed_text, intent_res, screen_b64, cam_b64, progress_callback=send_progress_update)
+                    dispatch_res = await core.process_user_directive(
+                        text=transcribed_text,
+                        intent_info=intent_res,
+                        screen_b64=screen_b64 or _LATEST_SCREEN_B64,
+                        cam_b64=cam_b64 or _LATEST_CAMERA_B64,
+                        progress_cb=lambda m: asyncio.create_task(send_progress_update(m))
+                    )
+
+                    reply_text = dispatch_res["reply"]
                     speech_data = await tts.synthesize_base64(reply_text)
 
                     await websocket.send_json({
                         "type": "brain_response",
                         "query": transcribed_text,
                         "response": reply_text,
-                        "action_card": action_card,
-                        "auto_vision": auto_vision,
-                        "model": "Contender Core",
+                        "action_card": dispatch_res.get("action_card"),
+                        "auto_vision": dispatch_res.get("active_vision", "screen"),
+                        "active_engine": dispatch_res.get("active_engine", "CODER_CONTROLLER"),
+                        "requires_confirmation": dispatch_res.get("requires_confirmation", False),
+                        "model": "Contender Dual Core",
                         "speech": speech_data
                     })
                 else:
@@ -522,7 +427,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
 
     except WebSocketDisconnect:
         pass
-    except Exception as e:
+    except Exception:
         pass
 
 # Mount frontend

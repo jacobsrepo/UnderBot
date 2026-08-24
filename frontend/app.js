@@ -1,6 +1,6 @@
 /**
- * Contender Tactical Studio - Client Controller
- * 100% Echo-Free Voice & Instant Physical Interruption (Spacebar, Escape, Screen Click)
+ * Contender Dual-Engine Tactical Studio - Client Controller
+ * Decoupled Architecture, Event-Driven Snapshotting, Reflection HUD & Safety Guardrails
  */
 
 class ContenderStudioApp {
@@ -9,8 +9,6 @@ class ContenderStudioApp {
         this.isRecording = false;
         this.isHandsFreeActive = true;
         this.isMuted = false;
-        this.mediaRecorder = null;
-        this.audioChunks = [];
         this.micStream = null;
         this.screenStream = null;
         this.cameraStream = null;
@@ -18,8 +16,6 @@ class ContenderStudioApp {
         this.selectedDeviceId = null;
         this.isMiniHud = false;
         this.visualizer = null;
-        this.screenFrameInterval = null;
-        this.cameraFrameInterval = null;
         this.diagnosticsInterval = null;
         
         // Continuous Hands-Free Voice & Echo Rejection
@@ -46,6 +42,7 @@ class ContenderStudioApp {
         this.tabCam = document.getElementById('tab-cam');
         this.browserCameraSelect = document.getElementById('browser-camera-select');
         this.visionModeTag = document.getElementById('vision-mode-tag');
+        this.activeEngineBadge = document.getElementById('active-engine-badge');
         this.audioStatusLabel = document.getElementById('audio-status-label');
         
         // Mute Elements
@@ -69,6 +66,7 @@ class ContenderStudioApp {
         this.btnToggleMiniHud = document.getElementById('btn-toggle-mini-hud');
         this.btnExpandStudio = document.getElementById('btn-expand-studio');
         this.miniStatusDot = document.getElementById('mini-status-dot');
+        this.miniEngineTag = document.getElementById('mini-engine-tag');
 
         // Hardware Drawer Elements
         this.hardwareDrawer = document.getElementById('hardware-drawer');
@@ -79,6 +77,14 @@ class ContenderStudioApp {
         this.serialConsole = document.getElementById('serial-console');
         this.serialSendInput = document.getElementById('serial-send-input');
         this.btnSendSerial = document.getElementById('btn-send-serial');
+
+        // Safety Modal
+        this.modalSafety = document.getElementById('modal-safety');
+        this.safetyModalMsg = document.getElementById('safety-modal-msg');
+        this.btnSafetyCancel = document.getElementById('btn-safety-cancel');
+        this.btnSafetyConfirm = document.getElementById('btn-safety-confirm');
+        this.btnCloseSafety = document.getElementById('btn-close-safety');
+        this.pendingSafetyAction = null;
 
         // Modals
         this.modalPreferences = document.getElementById('modal-preferences');
@@ -101,7 +107,7 @@ class ContenderStudioApp {
     }
 
     async init() {
-        console.log('[Contender Studio] Initializing 100% echo-free assistant...');
+        console.log('[Contender Studio] Initializing dual-engine tactical assistant...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
@@ -158,7 +164,7 @@ class ContenderStudioApp {
     initContinuousHandsFreeRecognition() {
         const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognitionClass) {
-            console.log('[Voice] SpeechRecognition API not supported. Using push-to-talk.');
+            console.log('[Voice] SpeechRecognition API not supported.');
             return;
         }
 
@@ -176,10 +182,7 @@ class ContenderStudioApp {
             };
 
             this.speechRecognizer.onresult = (event) => {
-                // Strict isolation: Never process speech while assistant is speaking or muted
-                if (this.isAssistantSpeaking || this.isMuted) {
-                    return;
-                }
+                if (this.isAssistantSpeaking || this.isMuted) return;
 
                 let interim = '';
                 let final = '';
@@ -223,7 +226,7 @@ class ContenderStudioApp {
             };
 
             this.speechRecognizer.start();
-            console.log('[Voice] 100% echo-free continuous speech recognizer active.');
+            console.log('[Voice] Dual-engine continuous speech recognizer active.');
         } catch (e) {
             console.warn('[Voice] Recognizer error:', e);
         }
@@ -236,13 +239,13 @@ class ContenderStudioApp {
         if (!text || text.length < 3) return;
 
         this.currentSpokenSentence = '';
-        this.textInput.placeholder = "Give command (e.g. 'minimize all windows', 'what's on my screen')...";
+        this.textInput.placeholder = "Give command (e.g. 'minimize all windows', 'program arduino nano')...";
         
         console.log('[Voice] Dispatching query:', text);
         this.sendTextMessage(text);
     }
 
-    // ==================== VISUAL STREAMS (SCREEN & CAMERA) ====================
+    // ==================== VISUAL FEEDS (EVENT-DRIVEN SNAPSHOTS) ====================
 
     async initContinuousScreenFeed() {
         try {
@@ -254,11 +257,8 @@ class ContenderStudioApp {
                 this.screenVideo.play();
             }
         } catch (e) {
-            console.log('[Screen] Using native desktop background screen capture.');
+            console.log('[Screen] Screen capture initialized.');
         }
-
-        if (this.screenFrameInterval) clearInterval(this.screenFrameInterval);
-        this.screenFrameInterval = setInterval(() => this.broadcastScreenFrame(), 800);
     }
 
     async initCameraFeed() {
@@ -278,9 +278,6 @@ class ContenderStudioApp {
             this.clientVideo.srcObject = this.cameraStream;
             this.clientVideo.play();
             await this.enumerateCameras();
-
-            if (this.cameraFrameInterval) clearInterval(this.cameraFrameInterval);
-            this.cameraFrameInterval = setInterval(() => this.broadcastCameraFrame(), 800);
         } catch (e) {
             console.warn('[Camera] Notice:', e);
         }
@@ -319,13 +316,13 @@ class ContenderStudioApp {
             });
 
             this.visualizer.connectMediaStream(this.micStream);
-            console.log('[Audio] Isolated microphone stream online.');
+            console.log('[Audio] Feedback-isolated microphone active.');
         } catch (e) {
             console.warn('[Audio] Mic issue:', e);
         }
     }
 
-    // ==================== AUTOMATIC SENSORY SWITCHING ====================
+    // ==================== SENSORY SOURCE SWITCHING ====================
 
     switchVisionSource(source) {
         if (this.activeVisionSource === source) return;
@@ -337,8 +334,8 @@ class ContenderStudioApp {
             this.screenVideo.style.display = 'block';
             this.clientVideo.style.display = 'none';
             this.browserCameraSelect.style.display = 'none';
-            this.visionModeTag.textContent = 'Continuous Screen';
-            this.diagSensoryMode.textContent = 'Continuous Screen (GPU Accelerated)';
+            this.visionModeTag.textContent = 'Screen OCR / Event Feed';
+            this.diagSensoryMode.textContent = 'RapidOCR Pre-Filter (Zero-VLM Overhead)';
         } else {
             this.tabCam.classList.add('active');
             this.tabScreen.classList.remove('active');
@@ -346,7 +343,7 @@ class ContenderStudioApp {
             this.clientVideo.style.display = 'block';
             this.browserCameraSelect.style.display = 'block';
             this.visionModeTag.textContent = 'Physical Camera';
-            this.diagSensoryMode.textContent = 'Physical Camera (1080p)';
+            this.diagSensoryMode.textContent = 'On-Demand Vision VLM (1080p)';
         }
     }
 
@@ -359,24 +356,6 @@ class ContenderStudioApp {
             return this.hiddenFrameCanvas.toDataURL('image/jpeg', 0.85).split(',')[1];
         }
         return null;
-    }
-
-    broadcastScreenFrame() {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            const b64 = this.captureFrameBase64(this.screenVideo);
-            if (b64) {
-                this.ws.send(JSON.stringify({ type: 'screen_frame', image_base64: b64 }));
-            }
-        }
-    }
-
-    broadcastCameraFrame() {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            const b64 = this.captureFrameBase64(this.clientVideo);
-            if (b64) {
-                this.ws.send(JSON.stringify({ type: 'client_frame', image_base64: b64 }));
-            }
-        }
     }
 
     // ==================== WEBSOCKET & ACTION DISPATCH ====================
@@ -413,6 +392,7 @@ class ContenderStudioApp {
         this.appendMessage('user', text);
         this.showProcessing('Contender executing directive...');
 
+        // Event-driven frame capture only when dispatching!
         const screenB64 = this.captureFrameBase64(this.screenVideo);
         const camB64 = this.captureFrameBase64(this.clientVideo);
 
@@ -430,7 +410,7 @@ class ContenderStudioApp {
         if (!data || !data.type) return;
 
         if (data.type === 'status_update') {
-            if (data.state === 'thinking') this.showProcessing('Analyzing directive and compiling actions...');
+            if (data.state === 'thinking') this.showProcessing('Evaluating directive and routing tool calls...');
             else if (data.state === 'transcribing') this.showProcessing('Transcribing speech...');
             else if (data.state === 'idle') this.hideProcessing();
         } else if (data.type === 'progress_update') {
@@ -445,6 +425,25 @@ class ContenderStudioApp {
             
             if (data.auto_vision) {
                 this.switchVisionSource(data.auto_vision);
+            }
+
+            // Update active cognitive engine badge
+            if (data.active_engine === 'VISION_VLM') {
+                this.activeEngineBadge.textContent = 'Vision VLM (Active)';
+                this.activeEngineBadge.className = 'telemetry-tag tag-live';
+                this.diagEngineName.textContent = 'On-Demand Vision VLM';
+                if (this.miniEngineTag) this.miniEngineTag.textContent = 'Vision VLM';
+            } else {
+                this.activeEngineBadge.textContent = 'Coder Core';
+                this.activeEngineBadge.className = 'telemetry-tag';
+                this.diagEngineName.textContent = 'Coder & Tool Engine (Decoupled)';
+                if (this.miniEngineTag) this.miniEngineTag.textContent = 'Coder Core';
+            }
+
+            // Safety guardrail interception
+            if (data.requires_confirmation) {
+                this.openSafetyModal(data.response);
+                return;
             }
 
             const reply = data.response || 'Mission confirmed.';
@@ -470,7 +469,6 @@ class ContenderStudioApp {
             this.audioStatusLabel.textContent = 'Speaking (Press Space / Click to Stop)';
             this.audioStatusLabel.className = 'audio-label active';
 
-            // MUTE MICROPHONE AND ABORT RECOGNIZER WHILE SPEAKING
             if (this.micStream) {
                 this.micStream.getAudioTracks().forEach(t => t.enabled = false);
             }
@@ -493,7 +491,7 @@ class ContenderStudioApp {
     }
 
     onSpeechPlaybackEnded(immediate = false) {
-        const delay = immediate ? 50 : 500; // 500ms room echo decay buffer
+        const delay = immediate ? 50 : 500;
         setTimeout(() => {
             this.isAssistantSpeaking = false;
             if (!this.isMuted) {
@@ -502,7 +500,6 @@ class ContenderStudioApp {
             }
             this.visualizer.setIdle();
 
-            // Re-arm microphone and speech recognizer
             if (!this.isMuted) {
                 if (this.micStream) {
                     this.micStream.getAudioTracks().forEach(t => t.enabled = true);
@@ -580,6 +577,12 @@ class ContenderStudioApp {
         }
     }
 
+    // Safety Guardrail Modal
+    openSafetyModal(warningMsg) {
+        this.safetyModalMsg.textContent = warningMsg;
+        this.modalSafety.style.display = 'flex';
+    }
+
     // ==================== EVENT LISTENERS & MODALS ====================
 
     initEventListeners() {
@@ -614,6 +617,14 @@ class ContenderStudioApp {
             if (e.key === 'Enter') this.sendSerialCommand();
         });
 
+        // Safety Modal actions
+        this.btnSafetyCancel.addEventListener('click', () => { this.modalSafety.style.display = 'none'; });
+        this.btnCloseSafety.addEventListener('click', () => { this.modalSafety.style.display = 'none'; });
+        this.btnSafetyConfirm.addEventListener('click', () => {
+            this.modalSafety.style.display = 'none';
+            this.appendMessage('assistant', "Action override confirmed by Operator.");
+        });
+
         // Instant Stop on click or Space / Escape
         this.transcriptFeed.addEventListener('click', () => {
             if (this.isAssistantSpeaking) this.interruptAssistant();
@@ -635,7 +646,7 @@ class ContenderStudioApp {
             this.sendTextMessage("Contender, inspect the visual context and report key status.");
         });
 
-        // Modals
+        // Preferences & Network
         this.btnNetworkConnect.addEventListener('click', () => this.openNetworkModal());
         this.btnCloseNetwork.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
         this.btnCloseNetworkFooter.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
@@ -788,7 +799,7 @@ class ContenderStudioApp {
                     if (brain.ready) {
                         this.statusDot.className = 'status-dot online';
                         this.miniStatusDot.className = 'mini-status-dot';
-                        this.statusModelName.textContent = 'Contender Core';
+                        this.statusModelName.textContent = 'Coder & Tool Engine';
                         this.statusStateText.textContent = 'Ready (Tactical Mode)';
                         this.diagStatusBadge.className = 'diag-badge';
                         this.diagStatusBadge.textContent = 'ONLINE & READY';

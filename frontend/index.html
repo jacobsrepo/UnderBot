@@ -6,12 +6,12 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>Contender - Tactical Desktop Studio</title>
+    <title>Contender - Dual-Engine Tactical Studio</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?t=v430">
+    <link rel="stylesheet" href="/static/styles.css?t=v500">
 </head>
 <body class="mode-studio">
     
@@ -20,7 +20,8 @@
         <div class="mini-hud-left">
             <div class="mini-status-dot" id="mini-status-dot"></div>
             <span class="mini-title">Contender</span>
-            <canvas id="mini-waveform-canvas" width="60" height="14"></canvas>
+            <span class="mini-engine-tag" id="mini-engine-tag">Coder Core</span>
+            <canvas id="mini-waveform-canvas" width="50" height="14"></canvas>
         </div>
         <div class="mini-hud-right">
             <button class="mini-ptt-btn" id="btn-mini-mute" title="Toggle Mute">
@@ -40,17 +41,17 @@
             <div class="header-left">
                 <div class="brand">
                     <span class="brand-title">CONTENDER</span>
-                    <span class="brand-badge">TACTICAL ASSISTANT</span>
+                    <span class="brand-badge">DUAL-ENGINE STUDIO</span>
                 </div>
             </div>
 
             <!-- Central Live Telemetry Badge -->
             <div class="header-center">
                 <div class="engine-telemetry-badge" id="engine-telemetry-pill">
-                    <span class="status-dot loading" id="status-dot"></span>
-                    <span class="status-model-name" id="status-model-name">Contender Core</span>
+                    <span class="status-dot online" id="status-dot"></span>
+                    <span class="status-model-name" id="status-model-name">Coder & Tool Engine</span>
                     <span class="status-divider">|</span>
-                    <span class="status-state-text" id="status-state-text">Initializing weights...</span>
+                    <span class="status-state-text" id="status-state-text">Ready (Tactical Mode)</span>
                 </div>
             </div>
 
@@ -92,7 +93,7 @@
         <!-- Main Workspace -->
         <main class="app-main">
             
-            <!-- Left: Multimodal Vision Panel (Continuous Screen vs Camera) -->
+            <!-- Left: Multimodal Vision Panel (Screen vs Camera) -->
             <section class="panel video-panel">
                 <div class="panel-topbar">
                     <div class="camera-controls-left">
@@ -108,8 +109,8 @@
                     </div>
 
                     <div class="telemetry">
-                        <span class="telemetry-tag" id="vision-mode-tag">Continuous Screen</span>
-                        <span class="telemetry-tag tag-live">Active</span>
+                        <span class="telemetry-tag" id="vision-mode-tag">Screen OCR / Event Feed</span>
+                        <span class="telemetry-tag tag-live" id="active-engine-badge">Coder Core</span>
                     </div>
                 </div>
 
@@ -155,7 +156,7 @@
                     <span class="topbar-title">Mission Log & Actions</span>
                     
                     <div class="audio-status-wrap">
-                        <span class="audio-label" id="audio-status-label">Hands-Free (Active)</span>
+                        <span class="audio-label active" id="audio-status-label">Hands-Free (Active)</span>
                         <canvas id="audio-waveform-canvas" width="110" height="20"></canvas>
                     </div>
                 </div>
@@ -163,12 +164,12 @@
                 <!-- Live Model Diagnostic Confirmation Card -->
                 <div class="model-diagnostic-card" id="model-diagnostic-card">
                     <div class="diagnostic-row">
-                        <span class="diag-label">Persona & Core:</span>
-                        <span class="diag-value" id="diag-engine-name">Contender (Cortana Tactical Persona)</span>
+                        <span class="diag-label">Active Core:</span>
+                        <span class="diag-value text-accent" id="diag-engine-name">Coder & Tool Engine (Decoupled)</span>
                     </div>
                     <div class="diagnostic-row">
                         <span class="diag-label">Sensory Stream:</span>
-                        <span class="diag-value text-accent" id="diag-sensory-mode">Continuous Screen (GPU Accelerated)</span>
+                        <span class="diag-value" id="diag-sensory-mode">RapidOCR Pre-Filter (Zero-VLM Overhead)</span>
                     </div>
                     <div class="diagnostic-row">
                         <span class="diag-label">Status:</span>
@@ -184,7 +185,7 @@
                             <span class="bubble-time">Ready</span>
                         </div>
                         <div class="bubble-body">
-                            Online and standing by. Continuous screen perception active. Ready for desktop operations, microcontroller programming, or voice commands.
+                            Dual-engine architecture initialized. Standing by for desktop commands, hardware programming, or screen analysis.
                         </div>
                     </div>
                 </div>
@@ -207,7 +208,7 @@
                     </div>
 
                     <div class="input-container">
-                        <input type="text" id="text-input" class="text-input" placeholder="Give command (e.g. 'program arduino nano to blink', 'what's on my screen')..." autocomplete="off">
+                        <input type="text" id="text-input" class="text-input" placeholder="Give command (e.g. 'minimize all windows', 'program arduino nano')..." autocomplete="off">
                         <button id="btn-send" class="btn-send" title="Send command">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
@@ -215,6 +216,23 @@
                 </div>
             </section>
         </main>
+
+        <!-- Safety Confirmation Modal -->
+        <div class="modal-backdrop" id="modal-safety" style="display: none;">
+            <div class="modal-card safety-card">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="color: var(--accent-red);">⚠️ Security Guardrail Notice</h3>
+                    <button class="modal-close" id="btn-close-safety">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p id="safety-modal-msg" style="color: var(--text-medium); font-size: 0.9rem; line-height: 1.4;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="control-btn" id="btn-safety-cancel">Cancel Operation</button>
+                    <button class="control-btn btn-danger" id="btn-safety-confirm">Confirm & Proceed</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Network / Mobile Pairing Modal -->
         <div class="modal-backdrop" id="modal-network" style="display: none;">
@@ -227,11 +245,9 @@
                     <p style="color: var(--text-medium); font-size: 0.85rem;">
                         Scan the QR code with your phone or open the link below on any device on your Wi-Fi:
                     </p>
-                    
                     <div style="display: flex; justify-content: center; margin: 10px 0;">
                         <img id="qr-code-image" src="" alt="Scan QR Code" style="background: white; padding: 10px; border-radius: 8px; max-width: 180px; height: auto;">
                     </div>
-
                     <div class="form-field">
                         <label class="form-label">Network Address</label>
                         <div style="display: flex; gap: 6px;">
@@ -264,8 +280,8 @@
                         </select>
                     </div>
                     <div class="form-field">
-                        <label class="form-label">Primary Sensory View</label>
-                        <input type="text" class="text-input full" value="Continuous Desktop Screen Perception" readonly>
+                        <label class="form-label">Cognitive Pipeline</label>
+                        <input type="text" class="text-input full" value="Decoupled Tool Coder + On-Demand Vision" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -289,10 +305,9 @@
 
     </div>
 
-    <!-- Hidden audio element for TTS -->
     <audio id="tts-audio-element" preload="auto"></audio>
 
-    <script src="/static/audio_visualizer.js?t=v430"></script>
-    <script src="/static/app.js?t=v430"></script>
+    <script src="/static/audio_visualizer.js?t=v500"></script>
+    <script src="/static/app.js?t=v500"></script>
 </body>
 </html>
