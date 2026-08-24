@@ -29,8 +29,8 @@ from intent_router import IntentRouter
 
 app = FastAPI(
     title="Contender AI Assistant",
-    description="Tactical Multimodal Assistant with Desktop OS Automation & Hardware Engineering.",
-    version="4.0.0"
+    description="Tactical Multimodal Assistant with Autonomous Sensory Switching & Hands-Free Voice.",
+    version="4.1.0"
 )
 
 app.add_middleware(
@@ -41,7 +41,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Cache-busting middleware for static assets
+# Cache-busting middleware
 @app.middleware("http")
 async def add_no_cache_headers(request: Request, call_next):
     response: Response = await call_next(request)
@@ -60,8 +60,9 @@ desktop = DesktopAgent()
 embedded = EmbeddedAgent()
 router = IntentRouter()
 
-# Store latest desktop screen frame
+# Store latest visual frames
 _LATEST_SCREEN_B64: Optional[str] = None
+_LATEST_CAMERA_B64: Optional[str] = None
 
 @app.on_event("startup")
 async def startup_event():
@@ -267,14 +268,16 @@ class TTSRequest(BaseModel):
 async def speak_text(req: TTSRequest):
     return await tts.synthesize_base64(req.text, req.voice_key)
 
-# ==================== AGENTIC ACTION DISPATCHER ====================
+# ==================== AGENTIC ACTION & SENSORY DISPATCHER ====================
 
-async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], screen_b64: Optional[str], cam_b64: Optional[str]) -> Tuple[str, Optional[Dict]]:
+async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], screen_b64: Optional[str], cam_b64: Optional[str]) -> Tuple[str, Optional[Dict], str]:
     """
-    Executes real desktop and embedded actions based on intent, then crafts response.
+    Executes real desktop and embedded actions, automatically chooses Screen vs Camera,
+    and returns (reply_text, action_card, active_vision_source).
     """
     intent = intent_info.get("intent", "CONVERSATION")
     prompt = intent_info.get("prompt", user_text)
+    vision_source = intent_info.get("vision_source", "screen")
     lower = user_text.lower()
     action_log = None
     system_context = None
@@ -287,7 +290,6 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
                 target_app = app_k
                 break
         if not target_app:
-            # Extract after open/launch
             parts = lower.replace("launch", "open").split("open")
             if len(parts) > 1:
                 target_app = parts[-1].strip()
@@ -330,11 +332,11 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
         action_log = {"type": "system_metrics", "title": "System Telemetry", "cpu": f"{metrics.get('cpu_percent')}%", "ram": f"{metrics.get('ram_used_gb')}/{metrics.get('ram_total_gb')} GB"}
         system_context = f"Current Metrics: CPU at {metrics.get('cpu_percent')}%, RAM at {metrics.get('ram_used_gb')}GB of {metrics.get('ram_total_gb')}GB ({metrics.get('ram_percent')}%), Battery: {metrics.get('battery')}"
 
-    # Visual Selection: Screen vs Camera
-    # Continuous Screen perception is default unless user specifically asks for camera!
-    chosen_frame = screen_b64 or _LATEST_SCREEN_B64 or desktop.capture_screen_base64()
-    if intent == "CAMERA_QUERY" or any(k in lower for k in ["camera", "webcam", "holding", "room", "desk"]):
-        chosen_frame = cam_b64 or camera.get_latest_frame_base64()
+    # Auto-Arbitrate Visual Feed
+    if vision_source == "camera":
+        chosen_frame = cam_b64 or _LATEST_CAMERA_B64 or camera.get_latest_frame_base64()
+    else:
+        chosen_frame = screen_b64 or _LATEST_SCREEN_B64 or desktop.capture_screen_base64()
 
     analysis = await brain.analyze_frame_async(
         image_base64=chosen_frame,
@@ -342,7 +344,7 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
         system_context=system_context
     )
 
-    return analysis.get("response", "Standing by."), action_log
+    return analysis.get("response", "Standing by."), action_log, vision_source
 
 # ==================== WEBSOCKET LIVE STREAMING ====================
 
@@ -350,7 +352,6 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
 async def websocket_live_endpoint(websocket: WebSocket):
     await websocket.accept()
 
-    # Register serial listener to stream live microcontroller telemetry
     async def push_serial_telemetry(line: str):
         try:
             await websocket.send_json({
@@ -389,8 +390,10 @@ async def websocket_live_endpoint(websocket: WebSocket):
                     _LATEST_SCREEN_B64 = b64
 
             elif msg_type == "client_frame":
+                global _LATEST_CAMERA_B64
                 b64 = msg.get("image_base64", "")
                 if b64:
+                    _LATEST_CAMERA_B64 = b64
                     camera.update_client_frame(b64)
 
             elif msg_type == "text_query":
@@ -405,7 +408,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 })
 
                 intent_res = router.process_utterance(user_text)
-                reply_text, action_card = await execute_agentic_action(user_text, intent_res, screen_b64, cam_b64)
+                reply_text, action_card, auto_vision = await execute_agentic_action(user_text, intent_res, screen_b64, cam_b64)
                 speech_data = await tts.synthesize_base64(reply_text)
 
                 await websocket.send_json({
@@ -413,6 +416,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
                     "query": user_text,
                     "response": reply_text,
                     "action_card": action_card,
+                    "auto_vision": auto_vision,
                     "model": "Contender Core",
                     "speech": speech_data
                 })
@@ -438,10 +442,15 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 if transcribed_text:
                     intent_res = router.process_utterance(transcribed_text)
                     
-                    await websocket.send_json({"type": "stt_result", "text": transcribed_text, "is_directed": intent_res["is_directed"]})
+                    await websocket.send_json({
+                        "type": "stt_result",
+                        "text": transcribed_text,
+                        "is_directed": intent_res["is_directed"],
+                        "auto_vision": intent_res["vision_source"]
+                    })
                     await websocket.send_json({"type": "status_update", "state": "thinking", "query": transcribed_text})
 
-                    reply_text, action_card = await execute_agentic_action(transcribed_text, intent_res, screen_b64, cam_b64)
+                    reply_text, action_card, auto_vision = await execute_agentic_action(transcribed_text, intent_res, screen_b64, cam_b64)
                     speech_data = await tts.synthesize_base64(reply_text)
 
                     await websocket.send_json({
@@ -449,6 +458,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
                         "query": transcribed_text,
                         "response": reply_text,
                         "action_card": action_card,
+                        "auto_vision": auto_vision,
                         "model": "Contender Core",
                         "speech": speech_data
                     })

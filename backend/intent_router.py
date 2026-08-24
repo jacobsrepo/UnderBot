@@ -4,13 +4,30 @@ from typing import Dict, Any, Tuple
 
 class IntentRouter:
     """
-    Directed Speech & Wake-Word Analyzer for Contender.
-    Distinguishes direct commands from ambient chatter and routes desktop/hardware actions.
+    Directed Speech, Wake-Word, and Sensory Routing Analyzer for Contender.
+    Intelligently routes between Continuous Screen perception and Physical Camera vision
+    and detects conversational speech triggers.
     """
 
     WAKE_TRIGGERS = ["contender", "hey contender", "ok contender", "okay contender", "computer"]
 
-    def __init__(self, conversation_timeout_seconds: float = 30.0):
+    # Physical environment / camera keywords
+    CAMERA_TRIGGERS = [
+        "camera", "webcam", "look at me", "see me", "holding", "in my hand",
+        "on my desk", "my face", "my shirt", "this object", "physical",
+        "room", "surroundings", "in front of me", "what is this in my hand",
+        "look at this thing", "inspect this part", "look through camera", "my hands"
+    ]
+
+    # Digital / Desktop screen keywords
+    SCREEN_TRIGGERS = [
+        "screen", "on my screen", "desktop", "code", "error", "terminal",
+        "browser", "window", "document", "tab", "vs code", "vscode",
+        "this file", "website", "program", "app", "read this", "debug this",
+        "what does this say", "summarize this", "my display", "look at this code"
+    ]
+
+    def __init__(self, conversation_timeout_seconds: float = 35.0):
         self.last_directed_interaction = 0.0
         self.conversation_timeout = conversation_timeout_seconds
         self.is_session_active = False
@@ -18,7 +35,7 @@ class IntentRouter:
     def process_utterance(self, text: str) -> Dict[str, Any]:
         """
         Analyzes user speech, checks for wake-word presence or ongoing active thread,
-        and classifies the target action intent.
+        classifies intent, and automatically selects the optimal sensory source (Screen vs Camera).
         """
         clean = text.strip()
         lower = clean.lower()
@@ -42,20 +59,31 @@ class IntentRouter:
             self.last_directed_interaction = now
             self.is_session_active = True
 
-        # Intent Categorization
-        intent = "CONVERSATION"
-        intent_data = {}
+        # ==================== SENSORY SOURCE ARBITRATION ====================
+        # Automatically choose between Screen and Camera based on semantic context
+        vision_source = "screen"  # Screen is default for desktop assistant
 
-        if any(k in lower for k in ["launch", "open app", "start app", "open program", "open chrome", "open vscode", "open code", "open calculator", "open notepad", "open terminal"]):
+        has_cam_keywords = any(k in lower for k in self.CAMERA_TRIGGERS)
+        has_screen_keywords = any(k in lower for k in self.SCREEN_TRIGGERS)
+
+        if has_cam_keywords and not has_screen_keywords:
+            vision_source = "camera"
+        elif has_screen_keywords:
+            vision_source = "screen"
+
+        # ==================== INTENT CATEGORIZATION ====================
+        intent = "CONVERSATION"
+
+        if any(k in lower for k in ["launch", "open app", "start app", "open program", "open chrome", "open vscode", "open code", "open calculator", "open notepad", "open terminal", "open spotify"]):
             intent = "DESKTOP_APP"
         elif any(k in lower for k in ["copy file", "move file", "delete file", "list files", "search files", "organize desktop", "read file"]):
             intent = "FILE_OPERATION"
-        elif any(k in lower for k in ["arduino", "esp32", "esp8266", "com port", "serial port", "flash firmware", "upload sketch", "baud rate", "sensor reading"]):
+        elif any(k in lower for k in ["arduino", "esp32", "esp8266", "com port", "serial port", "flash firmware", "upload sketch", "baud rate", "sensor reading", "relay"]):
             intent = "EMBEDDED_HARDWARE"
-        elif any(k in lower for k in ["look at my screen", "what's on my screen", "see my screen", "inspect screen", "debug this error", "on this window"]):
-            intent = "SCREEN_QUERY"
-        elif any(k in lower for k in ["camera", "look through camera", "webcam", "what am i holding", "scan room", "scan desk"]):
+        elif vision_source == "camera":
             intent = "CAMERA_QUERY"
+        elif vision_source == "screen" and (has_screen_keywords or any(k in lower for k in ["look", "see", "what is", "explain", "summarize", "inspect", "debug"])):
+            intent = "SCREEN_QUERY"
         elif any(k in lower for k in ["cpu", "ram usage", "battery", "system stats", "disk space"]):
             intent = "SYSTEM_METRICS"
 
@@ -66,7 +94,7 @@ class IntentRouter:
             "raw_text": clean,
             "prompt": stripped_prompt,
             "intent": intent,
-            "intent_data": intent_data
+            "vision_source": vision_source
         }
 
     def reset_thread(self):

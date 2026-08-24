@@ -1,12 +1,13 @@
 /**
  * Contender Tactical Studio - Client Controller
- * Multimodal Desktop Automation, Continuous Screen Vision & Hardware Engineering
+ * Autonomous Sensory Switching & Continuous Hands-Free Voice Assistant
  */
 
 class ContenderStudioApp {
     constructor() {
         this.ws = null;
         this.isRecording = false;
+        this.isHandsFreeActive = true; // Enabled by default for natural hands-free conversation
         this.mediaRecorder = null;
         this.audioChunks = [];
         this.micStream = null;
@@ -17,9 +18,14 @@ class ContenderStudioApp {
         this.isMiniHud = false;
         this.visualizer = null;
         this.screenFrameInterval = null;
+        this.cameraFrameInterval = null;
         this.diagnosticsInterval = null;
+        
+        // Continuous Hands-Free Voice Processing
         this.speechRecognizer = null;
-        this.recognizedSpeechText = '';
+        this.handsFreeSilenceTimer = null;
+        this.currentSpokenSentence = '';
+        this.isAssistantSpeaking = false;
 
         // Elements
         this.screenVideo = document.getElementById('screen-video');
@@ -87,48 +93,114 @@ class ContenderStudioApp {
     }
 
     async init() {
-        console.log('[Contender Studio] Initializing tactical client...');
+        console.log('[Contender Studio] Initializing hands-free tactical assistant...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
         this.voiceSelect.value = savedVoice;
 
-        this.initSpeechRecognition();
         this.initWebSocket();
-        await this.initContinuousScreenFeed();
         await this.initMicrophone();
+        await this.initContinuousScreenFeed();
+        await this.initCameraFeed();
+        this.initContinuousHandsFreeRecognition();
         this.initEventListeners();
         this.startDiagnosticsPolling();
         this.refreshHardwarePorts();
     }
 
-    initSpeechRecognition() {
-        const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognitionClass) {
-            try {
-                this.speechRecognizer = new SpeechRecognitionClass();
-                this.speechRecognizer.continuous = false;
-                this.speechRecognizer.interimResults = true;
-                this.speechRecognizer.lang = 'en-US';
+    // ==================== CONTINUOUS HANDS-FREE VOICE DETECTION ====================
 
-                this.speechRecognizer.onresult = (event) => {
-                    let transcript = '';
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        transcript += event.results[i][0].transcript;
+    initContinuousHandsFreeRecognition() {
+        const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognitionClass) {
+            console.log('[Voice] Web Speech API not available. Using Push-to-Talk as primary.');
+            return;
+        }
+
+        try {
+            this.speechRecognizer = new SpeechRecognitionClass();
+            this.speechRecognizer.continuous = true;
+            this.speechRecognizer.interimResults = true;
+            this.speechRecognizer.lang = 'en-US';
+
+            this.speechRecognizer.onstart = () => {
+                if (this.isHandsFreeActive) {
+                    this.audioStatusLabel.textContent = 'Hands-Free (Active)';
+                    this.audioStatusLabel.className = 'audio-label active';
+                }
+            };
+
+            this.speechRecognizer.onresult = (event) => {
+                if (this.isAssistantSpeaking) return; // Mute input while assistant speaks
+
+                let interim = '';
+                let final = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        final += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
                     }
-                    if (transcript.trim()) {
-                        this.recognizedSpeechText = transcript.trim();
-                        this.textInput.placeholder = `Listening: "${this.recognizedSpeechText}"`;
-                    }
-                };
-            } catch (e) {}
+                }
+
+                const currentText = (final || interim).trim();
+                if (currentText) {
+                    this.currentSpokenSentence = currentText;
+                    this.textInput.placeholder = `Listening: "${currentText}"`;
+                    this.audioStatusLabel.textContent = 'Hearing Speech...';
+
+                    // Reset silence timer
+                    if (this.handsFreeSilenceTimer) clearTimeout(this.handsFreeSilenceTimer);
+
+                    // When user pauses for 1000ms, automatically submit command hands-free!
+                    this.handsFreeSilenceTimer = setTimeout(() => {
+                        this.commitHandsFreeUtterance();
+                    }, 1100);
+                }
+            };
+
+            this.speechRecognizer.onerror = (e) => {
+                // Auto-restart continuous recognizer on error
+                if (this.isHandsFreeActive && !this.isAssistantSpeaking) {
+                    setTimeout(() => {
+                        try { this.speechRecognizer.start(); } catch (err) {}
+                    }, 1000);
+                }
+            };
+
+            this.speechRecognizer.onend = () => {
+                if (this.isHandsFreeActive && !this.isAssistantSpeaking) {
+                    setTimeout(() => {
+                        try { this.speechRecognizer.start(); } catch (err) {}
+                    }, 300);
+                }
+            };
+
+            this.speechRecognizer.start();
+            console.log('[Voice] Continuous hands-free recognition active.');
+        } catch (e) {
+            console.warn('[Voice] Hands-free recognition initialization:', e);
         }
     }
+
+    commitHandsFreeUtterance() {
+        const text = this.currentSpokenSentence.trim();
+        if (!text || this.isAssistantSpeaking) return;
+
+        this.currentSpokenSentence = '';
+        this.textInput.placeholder = "Give command (e.g. 'open vscode', 'what's on my screen', 'what am i holding')...";
+        
+        console.log('[Voice] Hands-free query dispatched:', text);
+        this.sendTextMessage(text);
+    }
+
+    // ==================== VISUAL STREAMS (SCREEN & CAMERA) ====================
 
     async initContinuousScreenFeed() {
         try {
             if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
-                // Try capturing display stream
                 this.screenStream = await navigator.mediaDevices.getDisplayMedia({
                     video: { frameRate: 15, width: { ideal: 1920 }, height: { ideal: 1080 } }
                 });
@@ -136,11 +208,11 @@ class ContenderStudioApp {
                 this.screenVideo.play();
             }
         } catch (e) {
-            console.log('[Screen] Using native desktop background screen capture loop.');
+            console.log('[Screen] Using native desktop screen grab loop.');
         }
 
         if (this.screenFrameInterval) clearInterval(this.screenFrameInterval);
-        this.screenFrameInterval = setInterval(() => this.broadcastVisionFrame(), 800);
+        this.screenFrameInterval = setInterval(() => this.broadcastScreenFrame(), 800);
     }
 
     async initCameraFeed() {
@@ -160,6 +232,9 @@ class ContenderStudioApp {
             this.clientVideo.srcObject = this.cameraStream;
             this.clientVideo.play();
             await this.enumerateCameras();
+
+            if (this.cameraFrameInterval) clearInterval(this.cameraFrameInterval);
+            this.cameraFrameInterval = setInterval(() => this.broadcastCameraFrame(), 800);
         } catch (e) {
             console.warn('[Camera] Notice:', e);
         }
@@ -198,11 +273,67 @@ class ContenderStudioApp {
             });
 
             this.visualizer.connectMediaStream(this.micStream);
-            console.log('[Audio] Contender voice channel ready.');
+            console.log('[Audio] Feedback-isolated microphone active.');
         } catch (e) {
-            console.warn('[Audio] Mic access issue:', e);
+            console.warn('[Audio] Mic issue:', e);
         }
     }
+
+    // ==================== AUTOMATIC SENSORY SWITCHING ====================
+
+    switchVisionSource(source) {
+        if (this.activeVisionSource === source) return;
+        this.activeVisionSource = source;
+
+        if (source === 'screen') {
+            this.tabScreen.classList.add('active');
+            this.tabCam.classList.remove('active');
+            this.screenVideo.style.display = 'block';
+            this.clientVideo.style.display = 'none';
+            this.browserCameraSelect.style.display = 'none';
+            this.visionModeTag.textContent = 'Continuous Screen';
+            this.diagSensoryMode.textContent = 'Continuous Screen (GPU Accelerated)';
+        } else {
+            this.tabCam.classList.add('active');
+            this.tabScreen.classList.remove('active');
+            this.screenVideo.style.display = 'none';
+            this.clientVideo.style.display = 'block';
+            this.browserCameraSelect.style.display = 'block';
+            this.visionModeTag.textContent = 'Physical Camera';
+            this.diagSensoryMode.textContent = 'Physical Camera (1080p)';
+        }
+    }
+
+    captureFrameBase64(videoElement) {
+        if (videoElement && videoElement.videoWidth > 0) {
+            this.hiddenFrameCanvas.width = 1280;
+            this.hiddenFrameCanvas.height = 720;
+            const ctx = this.hiddenFrameCanvas.getContext('2d');
+            ctx.drawImage(videoElement, 0, 0, 1280, 720);
+            return this.hiddenFrameCanvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+        }
+        return null;
+    }
+
+    broadcastScreenFrame() {
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            const b64 = this.captureFrameBase64(this.screenVideo);
+            if (b64) {
+                this.ws.send(JSON.stringify({ type: 'screen_frame', image_base64: b64 }));
+            }
+        }
+    }
+
+    broadcastCameraFrame() {
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            const b64 = this.captureFrameBase64(this.clientVideo);
+            if (b64) {
+                this.ws.send(JSON.stringify({ type: 'client_frame', image_base64: b64 }));
+            }
+        }
+    }
+
+    // ==================== WEBSOCKET & ACTION DISPATCH ====================
 
     initWebSocket() {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -227,230 +358,6 @@ class ContenderStudioApp {
         };
     }
 
-    initEventListeners() {
-        // Tab switching (Screen vs Camera)
-        this.tabScreen.addEventListener('click', () => this.switchVisionSource('screen'));
-        this.tabCam.addEventListener('click', () => this.switchVisionSource('camera'));
-
-        this.browserCameraSelect.addEventListener('change', (e) => {
-            this.selectedDeviceId = e.target.value;
-            this.initCameraFeed();
-        });
-
-        // Mini HUD Toggle
-        this.btnToggleMiniHud.addEventListener('click', () => this.toggleMiniHud(true));
-        this.btnExpandStudio.addEventListener('click', () => this.toggleMiniHud(false));
-
-        // Hardware Drawer Toggle
-        this.btnToggleHardware.addEventListener('click', () => {
-            const isHidden = this.hardwareDrawer.style.display === 'none';
-            this.hardwareDrawer.style.display = isHidden ? 'flex' : 'none';
-            if (isHidden) this.refreshHardwarePorts();
-        });
-
-        this.btnRefreshPorts.addEventListener('click', () => this.refreshHardwarePorts());
-        this.btnConnectPort.addEventListener('click', () => this.togglePortConnection());
-        this.btnSendSerial.addEventListener('click', () => this.sendSerialCommand());
-        this.serialSendInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') this.sendSerialCommand();
-        });
-
-        // Push-to-Talk (Spacebar and Buttons)
-        const setupPttBtn = (el) => {
-            el.addEventListener('mousedown', (e) => { e.preventDefault(); this.startRecording(); });
-            el.addEventListener('mouseup', (e) => { e.preventDefault(); this.stopRecording(); });
-            el.addEventListener('mouseleave', () => { if (this.isRecording) this.stopRecording(); });
-            el.addEventListener('touchstart', (e) => { e.preventDefault(); this.startRecording(); });
-            el.addEventListener('touchend', (e) => { e.preventDefault(); this.stopRecording(); });
-        };
-
-        setupPttBtn(this.btnPtt);
-        setupPttBtn(this.btnMiniPtt);
-
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && document.activeElement !== this.textInput && document.activeElement !== this.serialSendInput && !this.isRecording && this.modalPreferences.style.display !== 'flex' && this.modalNetwork.style.display !== 'flex') {
-                e.preventDefault();
-                this.startRecording();
-            }
-        });
-        window.addEventListener('keyup', (e) => {
-            if (e.code === 'Space' && this.isRecording) {
-                e.preventDefault();
-                this.stopRecording();
-            }
-        });
-
-        this.btnSend.addEventListener('click', () => this.sendTextMessage());
-        this.textInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') this.sendTextMessage();
-        });
-
-        this.btnInspectFrame.addEventListener('click', () => {
-            this.sendTextMessage("Contender, inspect the visual context and report key status.");
-        });
-
-        // Modals
-        this.btnNetworkConnect.addEventListener('click', () => this.openNetworkModal());
-        this.btnCloseNetwork.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
-        this.btnCloseNetworkFooter.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
-        this.btnCopyNetworkUrl.addEventListener('click', () => {
-            navigator.clipboard.writeText(this.networkUrlInput.value);
-            this.btnCopyNetworkUrl.textContent = 'Copied!';
-            setTimeout(() => { this.btnCopyNetworkUrl.textContent = 'Copy'; }, 2000);
-        });
-
-        this.btnOpenSettings.addEventListener('click', () => { this.modalPreferences.style.display = 'flex'; });
-        this.btnModalClose.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
-        this.btnModalCancel.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
-        this.btnModalSave.addEventListener('click', () => {
-            const voice = this.voiceSelect.value;
-            localStorage.setItem('vla_voice', voice);
-            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({ type: 'set_voice', voice_key: voice }));
-            }
-            this.modalPreferences.style.display = 'none';
-        });
-
-        this.btnStopSystem.addEventListener('click', () => this.confirmShutdown());
-    }
-
-    toggleMiniHud(enable) {
-        this.isMiniHud = enable;
-        if (enable) {
-            this.mainStudioLayout.style.display = 'none';
-            this.miniHudWidget.style.display = 'flex';
-            if (window.pywebview && window.pywebview.api) {
-                try { window.pywebview.api.toggle_mini_mode(); } catch (e) {}
-            }
-        } else {
-            this.miniHudWidget.style.display = 'none';
-            this.mainStudioLayout.style.display = 'flex';
-            if (window.pywebview && window.pywebview.api) {
-                try { window.pywebview.api.expand_studio_mode(); } catch (e) {}
-            }
-        }
-    }
-
-    switchVisionSource(source) {
-        this.activeVisionSource = source;
-        if (source === 'screen') {
-            this.tabScreen.classList.add('active');
-            this.tabCam.classList.remove('active');
-            this.screenVideo.style.display = 'block';
-            this.clientVideo.style.display = 'none';
-            this.browserCameraSelect.style.display = 'none';
-            this.visionModeTag.textContent = 'Continuous Screen';
-            this.diagSensoryMode.textContent = 'Continuous Screen (GPU Accelerated)';
-        } else {
-            this.tabCam.classList.add('active');
-            this.tabScreen.classList.remove('active');
-            this.screenVideo.style.display = 'none';
-            this.clientVideo.style.display = 'block';
-            this.browserCameraSelect.style.display = 'block';
-            this.visionModeTag.textContent = 'On-Demand Camera';
-            this.diagSensoryMode.textContent = 'Physical Camera (1080p)';
-            this.initCameraFeed();
-        }
-    }
-
-    captureCurrentVisionBase64() {
-        const vid = (this.activeVisionSource === 'screen' && this.screenVideo.videoWidth > 0) ? this.screenVideo : this.clientVideo;
-        if (vid && vid.videoWidth > 0) {
-            this.hiddenFrameCanvas.width = 1280;
-            this.hiddenFrameCanvas.height = 720;
-            const ctx = this.hiddenFrameCanvas.getContext('2d');
-            ctx.drawImage(vid, 0, 0, 1280, 720);
-            return this.hiddenFrameCanvas.toDataURL('image/jpeg', 0.85).split(',')[1];
-        }
-        return null;
-    }
-
-    broadcastVisionFrame() {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            const b64 = this.captureCurrentVisionBase64();
-            if (b64) {
-                const msgType = this.activeVisionSource === 'screen' ? 'screen_frame' : 'client_frame';
-                this.ws.send(JSON.stringify({ type: msgType, image_base64: b64 }));
-            }
-        }
-    }
-
-    startRecording() {
-        if (!this.micStream) return;
-        if (this.isRecording) return;
-
-        if (this.ttsAudioPlayer) {
-            this.ttsAudioPlayer.pause();
-            this.ttsAudioPlayer.currentTime = 0;
-        }
-
-        this.isRecording = true;
-        this.audioChunks = [];
-        this.recognizedSpeechText = '';
-        this.btnPtt.classList.add('recording');
-        this.btnMiniPtt.classList.add('recording');
-        this.pttLabel.textContent = 'Listening to command...';
-        this.audioStatusLabel.textContent = 'Listening';
-        this.audioStatusLabel.className = 'audio-label active';
-
-        if (this.speechRecognizer) {
-            try { this.speechRecognizer.start(); } catch (e) {}
-        }
-
-        const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-        this.mediaRecorder = new MediaRecorder(this.micStream, { mimeType: mime });
-
-        this.mediaRecorder.ondataavailable = (e) => {
-            if (e.data && e.data.size > 0) this.audioChunks.push(e.data);
-        };
-
-        this.mediaRecorder.onstop = () => this.processRecordedAudio();
-        this.mediaRecorder.start(100);
-    }
-
-    stopRecording() {
-        if (!this.isRecording) return;
-        this.isRecording = false;
-        this.btnPtt.classList.remove('recording');
-        this.btnMiniPtt.classList.remove('recording');
-        this.pttLabel.textContent = 'Hold to Speak ("Contender...")';
-        this.audioStatusLabel.textContent = 'Processing';
-
-        if (this.speechRecognizer) {
-            try { this.speechRecognizer.stop(); } catch (e) {}
-        }
-
-        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-            this.mediaRecorder.stop();
-        }
-    }
-
-    processRecordedAudio() {
-        this.textInput.placeholder = "Give command (e.g. 'open vscode', 'check screen', 'flash esp32')...";
-        if (this.audioChunks.length === 0 && !this.recognizedSpeechText) return;
-
-        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-        this.showProcessing('Transcribing command...');
-
-        const reader = new FileReader();
-        reader.readAsDataURL(audioBlob);
-        reader.onloadend = () => {
-            const b64 = reader.result.split(',')[1];
-            const frameB64 = this.captureCurrentVisionBase64();
-
-            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({
-                    type: 'audio_query',
-                    audio_base64: b64,
-                    fallback_text: this.recognizedSpeechText,
-                    screen_base64: this.activeVisionSource === 'screen' ? frameB64 : null,
-                    camera_base64: this.activeVisionSource === 'camera' ? frameB64 : null,
-                    format: 'webm'
-                }));
-            }
-        };
-    }
-
     sendTextMessage(overrideText = null) {
         const text = overrideText || this.textInput.value.trim();
         if (!text) return;
@@ -460,14 +367,15 @@ class ContenderStudioApp {
         this.appendMessage('user', text);
         this.showProcessing('Contender executing directive...');
 
-        const frameB64 = this.captureCurrentVisionBase64();
+        const screenB64 = this.captureFrameBase64(this.screenVideo);
+        const camB64 = this.captureFrameBase64(this.clientVideo);
 
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify({
                 type: 'text_query',
                 text: text,
-                screen_base64: this.activeVisionSource === 'screen' ? frameB64 : null,
-                camera_base64: this.activeVisionSource === 'camera' ? frameB64 : null
+                screen_base64: screenB64,
+                camera_base64: camB64
             }));
         }
     }
@@ -480,9 +388,17 @@ class ContenderStudioApp {
             else if (data.state === 'transcribing') this.showProcessing('Transcribing directive...');
             else if (data.state === 'idle') this.hideProcessing();
         } else if (data.type === 'stt_result') {
-            if (data.text) this.appendMessage('user', data.text);
+            if (data.auto_vision) {
+                this.switchVisionSource(data.auto_vision);
+            }
         } else if (data.type === 'brain_response') {
             this.hideProcessing();
+            
+            // Automatically switch viewport if server indicated camera vs screen
+            if (data.auto_vision) {
+                this.switchVisionSource(data.auto_vision);
+            }
+
             const reply = data.response || 'Mission confirmed.';
             this.appendMessage('assistant', reply, data.speech, data.action_card);
 
@@ -491,6 +407,39 @@ class ContenderStudioApp {
             }
         } else if (data.type === 'serial_telemetry') {
             this.appendSerialLine(data.data);
+        }
+    }
+
+    playSpeech(audioBase64) {
+        if (!audioBase64) return;
+        try {
+            this.isAssistantSpeaking = true;
+            this.audioStatusLabel.textContent = 'Speaking';
+            this.audioStatusLabel.className = 'audio-label active';
+
+            // Pause speech recognition while speaking to avoid mic picking up assistant speech
+            if (this.speechRecognizer) {
+                try { this.speechRecognizer.stop(); } catch (e) {}
+            }
+
+            this.ttsAudioPlayer.src = `data:audio/mp3;base64,${audioBase64}`;
+            this.ttsAudioPlayer.play().catch(() => {});
+
+            this.ttsAudioPlayer.onended = () => {
+                this.isAssistantSpeaking = false;
+                this.audioStatusLabel.textContent = 'Hands-Free (Active)';
+                this.audioStatusLabel.className = 'audio-label active';
+                this.visualizer.setIdle();
+
+                // Resume continuous hands-free listening
+                if (this.isHandsFreeActive && this.speechRecognizer) {
+                    setTimeout(() => {
+                        try { this.speechRecognizer.start(); } catch (e) {}
+                    }, 400);
+                }
+            };
+        } catch (e) {
+            this.isAssistantSpeaking = false;
         }
     }
 
@@ -546,25 +495,149 @@ class ContenderStudioApp {
 
     hideProcessing() {
         this.processingIndicator.style.display = 'none';
-        this.audioStatusLabel.textContent = 'Standby';
-        this.audioStatusLabel.className = 'audio-label';
+        this.audioStatusLabel.textContent = 'Hands-Free (Active)';
+        this.audioStatusLabel.className = 'audio-label active';
     }
 
-    playSpeech(audioBase64) {
-        if (!audioBase64) return;
-        try {
-            this.audioStatusLabel.textContent = 'Speaking';
-            this.audioStatusLabel.className = 'audio-label active';
+    // ==================== EVENT LISTENERS & MODALS ====================
 
-            this.ttsAudioPlayer.src = `data:audio/mp3;base64,${audioBase64}`;
-            this.ttsAudioPlayer.play().catch(() => {});
+    initEventListeners() {
+        this.tabScreen.addEventListener('click', () => this.switchVisionSource('screen'));
+        this.tabCam.addEventListener('click', () => this.switchVisionSource('camera'));
 
-            this.ttsAudioPlayer.onended = () => {
-                this.audioStatusLabel.textContent = 'Standby';
-                this.audioStatusLabel.className = 'audio-label';
-                this.visualizer.setIdle();
-            };
-        } catch (e) {}
+        this.browserCameraSelect.addEventListener('change', (e) => {
+            this.selectedDeviceId = e.target.value;
+            this.initCameraFeed();
+        });
+
+        // Mini HUD Toggle
+        this.btnToggleMiniHud.addEventListener('click', () => this.toggleMiniHud(true));
+        this.btnExpandStudio.addEventListener('click', () => this.toggleMiniHud(false));
+
+        // Hardware Drawer Toggle
+        this.btnToggleHardware.addEventListener('click', () => {
+            const isHidden = this.hardwareDrawer.style.display === 'none';
+            this.hardwareDrawer.style.display = isHidden ? 'flex' : 'none';
+            if (isHidden) this.refreshHardwarePorts();
+        });
+
+        this.btnRefreshPorts.addEventListener('click', () => this.refreshHardwarePorts());
+        this.btnConnectPort.addEventListener('click', () => this.togglePortConnection());
+        this.btnSendSerial.addEventListener('click', () => this.sendSerialCommand());
+        this.serialSendInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') this.sendSerialCommand();
+        });
+
+        // Optional Manual Push-to-Talk Support
+        const setupPttBtn = (el) => {
+            el.addEventListener('mousedown', (e) => { e.preventDefault(); this.startManualRecording(); });
+            el.addEventListener('mouseup', (e) => { e.preventDefault(); this.stopManualRecording(); });
+            el.addEventListener('mouseleave', () => { if (this.isRecording) this.stopManualRecording(); });
+        };
+        setupPttBtn(this.btnPtt);
+        setupPttBtn(this.btnMiniPtt);
+
+        this.btnSend.addEventListener('click', () => this.sendTextMessage());
+        this.textInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') this.sendTextMessage();
+        });
+
+        this.btnInspectFrame.addEventListener('click', () => {
+            this.sendTextMessage("Contender, inspect the visual context and report key status.");
+        });
+
+        // Modals
+        this.btnNetworkConnect.addEventListener('click', () => this.openNetworkModal());
+        this.btnCloseNetwork.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
+        this.btnCloseNetworkFooter.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
+        this.btnCopyNetworkUrl.addEventListener('click', () => {
+            navigator.clipboard.writeText(this.networkUrlInput.value);
+            this.btnCopyNetworkUrl.textContent = 'Copied!';
+            setTimeout(() => { this.btnCopyNetworkUrl.textContent = 'Copy'; }, 2000);
+        });
+
+        this.btnOpenSettings.addEventListener('click', () => { this.modalPreferences.style.display = 'flex'; });
+        this.btnModalClose.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
+        this.btnModalCancel.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
+        this.btnModalSave.addEventListener('click', () => {
+            const voice = this.voiceSelect.value;
+            localStorage.setItem('vla_voice', voice);
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(JSON.stringify({ type: 'set_voice', voice_key: voice }));
+            }
+            this.modalPreferences.style.display = 'none';
+        });
+
+        this.btnStopSystem.addEventListener('click', () => this.confirmShutdown());
+    }
+
+    startManualRecording() {
+        if (!this.micStream || this.isRecording) return;
+        if (this.ttsAudioPlayer) {
+            this.ttsAudioPlayer.pause();
+            this.ttsAudioPlayer.currentTime = 0;
+        }
+        this.isRecording = true;
+        this.audioChunks = [];
+        this.btnPtt.classList.add('recording');
+        this.btnMiniPtt.classList.add('recording');
+        this.pttLabel.textContent = 'Listening...';
+
+        const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+        this.mediaRecorder = new MediaRecorder(this.micStream, { mimeType: mime });
+        this.mediaRecorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) this.audioChunks.push(e.data);
+        };
+        this.mediaRecorder.onstop = () => {
+            if (this.audioChunks.length > 0) {
+                const blob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => {
+                    const b64 = reader.result.split(',')[1];
+                    const screenB64 = this.captureFrameBase64(this.screenVideo);
+                    const camB64 = this.captureFrameBase64(this.clientVideo);
+                    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                        this.ws.send(JSON.stringify({
+                            type: 'audio_query',
+                            audio_base64: b64,
+                            screen_base64: screenB64,
+                            camera_base64: camB64,
+                            format: 'webm'
+                        }));
+                    }
+                };
+            }
+        };
+        this.mediaRecorder.start(100);
+    }
+
+    stopManualRecording() {
+        if (!this.isRecording) return;
+        this.isRecording = false;
+        this.btnPtt.classList.remove('recording');
+        this.btnMiniPtt.classList.remove('recording');
+        this.pttLabel.textContent = 'Hands-Free Active ("Contender...")';
+        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+            this.mediaRecorder.stop();
+        }
+    }
+
+    toggleMiniHud(enable) {
+        this.isMiniHud = enable;
+        if (enable) {
+            this.mainStudioLayout.style.display = 'none';
+            this.miniHudWidget.style.display = 'flex';
+            if (window.pywebview && window.pywebview.api) {
+                try { window.pywebview.api.toggle_mini_mode(); } catch (e) {}
+            }
+        } else {
+            this.miniHudWidget.style.display = 'none';
+            this.mainStudioLayout.style.display = 'flex';
+            if (window.pywebview && window.pywebview.api) {
+                try { window.pywebview.api.expand_studio_mode(); } catch (e) {}
+            }
+        }
     }
 
     // Hardware Drawer Methods
