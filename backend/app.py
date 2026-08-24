@@ -29,8 +29,8 @@ from intent_router import IntentRouter
 
 app = FastAPI(
     title="Contender AI Assistant",
-    description="Tactical Multimodal Assistant with Autonomous Hardware Flashing & Live Action Streaming.",
-    version="4.3.0"
+    description="Tactical Multimodal Assistant with Autonomous Hardware Flashing & Non-Blocking Async Execution.",
+    version="4.3.1"
 )
 
 app.add_middleware(
@@ -41,7 +41,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Cache-busting middleware
 @app.middleware("http")
 async def add_no_cache_headers(request: Request, call_next):
     response: Response = await call_next(request)
@@ -187,8 +186,8 @@ class ProgramMicrocontrollerRequest(BaseModel):
     board_hint: Optional[str] = "auto"
 
 @app.post("/api/embedded/program")
-def auto_program_board(req: ProgramMicrocontrollerRequest):
-    return embedded.auto_compile_and_flash_sketch(req.prompt, req.board_hint or "auto")
+async def auto_program_board(req: ProgramMicrocontrollerRequest):
+    return await asyncio.to_thread(embedded.auto_compile_and_flash_sketch, req.prompt, req.board_hint or "auto")
 
 class ConnectSerialRequest(BaseModel):
     port: str
@@ -260,13 +259,22 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
 
     def notify(msg):
         if progress_callback:
-            asyncio.create_task(progress_callback(msg))
+            try:
+                asyncio.create_task(progress_callback(msg))
+            except Exception:
+                pass
 
     # Action 1: Embedded Microcontroller Auto-Program
     if intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "nano", "uno", "esp32", "blink", "led"]):
         if any(k in lower for k in ["program", "flash", "upload", "write code", "blink", "load sketch", "led"]):
             notify("Detecting connected board and compiling firmware...")
-            flash_res = embedded.auto_compile_and_flash_sketch(prompt, board_hint=board_hint, progress_cb=lambda m: notify(m))
+            # Run blocking subprocesses in background thread so asyncio event loop never blocks
+            flash_res = await asyncio.to_thread(
+                embedded.auto_compile_and_flash_sketch,
+                prompt,
+                board_hint,
+                lambda m: notify(m)
+            )
             if flash_res.get("success"):
                 action_log = {
                     "type": "hardware_flash",

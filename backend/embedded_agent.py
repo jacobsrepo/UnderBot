@@ -30,9 +30,10 @@ class EmbeddedAgent:
     """
 
     KNOWN_CHIP_SIGNATURES = {
-        (0x2341, None): "Arduino Official Device",
-        (0x1A86, 0x7523): "Arduino / ESP (CH340 USB-Serial)",
-        (0x10C4, 0xEA60): "ESP32 / NodeMCU (CP2102 USB-UART)",
+        (0x2341, None): "Arduino Official Board",
+        (0x1A86, 0x7523): "Arduino Nano / Uno (CH340 USB)",
+        (0x1A86, 0x55D4): "Arduino / CH343 USB-Serial",
+        (0x10C4, 0xEA60): "ESP32 / NodeMCU (CP2102 USB)",
         (0x0403, 0x6001): "FTDI USB-Serial Device",
         (0x2E8A, 0x0003): "Raspberry Pi Pico (RP2040)",
         (0x303A, None): "Espressif Native USB Device"
@@ -50,7 +51,6 @@ class EmbeddedAgent:
         self.arduino_cli_path = os.path.join(self.bin_dir, "arduino-cli.exe")
         self._ensure_arduino_cli()
         
-        # Auto-connect to available port in background
         threading.Thread(target=self.auto_connect_default_port, daemon=True).start()
 
     def _ensure_arduino_cli(self):
@@ -80,10 +80,11 @@ class EmbeddedAgent:
         devices = []
         try:
             for p in serial.tools.list_ports.comports():
-                board_type = "Generic Serial Device"
+                board_type = "Generic Serial Port"
                 fqbn = "arduino:avr:uno"
                 vid = p.vid
                 pid = p.pid
+                is_usb = vid is not None
 
                 if vid:
                     for (k_vid, k_pid), name in self.KNOWN_CHIP_SIGNATURES.items():
@@ -102,8 +103,10 @@ class EmbeddedAgent:
                     board_type = f"Arduino ({desc})"
                     fqbn = "arduino:avr:uno"
                 elif "ch340" in desc.lower() or "cp210" in desc.lower():
-                    board_type = f"Arduino / ESP32 ({desc})"
+                    board_type = f"Arduino Nano / ESP32 ({desc})"
                     fqbn = "arduino:avr:nano:cpu=atmega328old"
+                elif p.device == "COM1" and not is_usb:
+                    board_type = "Motherboard Serial Header (COM1)"
 
                 devices.append({
                     "port": p.device,
@@ -111,6 +114,7 @@ class EmbeddedAgent:
                     "hwid": p.hwid,
                     "vid": p.vid,
                     "pid": p.pid,
+                    "is_usb": is_usb,
                     "board_type": board_type,
                     "fqbn": fqbn,
                     "is_active": (self.active_port == p.device and self.is_monitoring)
@@ -125,19 +129,26 @@ class EmbeddedAgent:
         if not ports:
             return None
 
-        # If user explicitly asked for Nano, Uno, Mega, ESP, match it!
+        # 1. Match specific board if requested (Nano, Uno, Mega, ESP)
         if board_hint and board_hint != "auto":
             for p in ports:
                 if board_hint.lower() in p["board_type"].lower():
                     return p
 
+        # 2. Prefer detected USB microcontrollers over internal motherboard ports
         for p in ports:
-            if "arduino" in p["board_type"].lower() or "ch340" in p["board_type"].lower() or "esp" in p["board_type"].lower() or "cp210" in p["board_type"].lower():
+            if p.get("is_usb") and ("arduino" in p["board_type"].lower() or "ch340" in p["board_type"].lower() or "esp" in p["board_type"].lower() or "cp210" in p["board_type"].lower()):
                 return p
-        return ports[0]
+
+        # 3. Any active USB port
+        for p in ports:
+            if p.get("is_usb"):
+                return p
+
+        return None
 
     def auto_connect_default_port(self):
-        """Automatically connects to the first available COM port on launch."""
+        """Automatically connects to the first available USB microcontroller on launch."""
         time.sleep(1.0)
         target = self.auto_detect_target_port()
         if target and not self.is_monitoring:
@@ -157,21 +168,23 @@ class EmbeddedAgent:
         def update_progress(msg: str):
             print(f"[EmbeddedAgent] {msg}")
             if progress_cb:
-                progress_cb(msg)
+                try:
+                    progress_cb(msg)
+                except Exception:
+                    pass
 
-        update_progress("Scanning system COM ports...")
+        update_progress("Scanning system COM ports for USB Arduino / ESP boards...")
         device = self.auto_detect_target_port(board_hint)
         if not device:
             return {
                 "success": False,
-                "error": "No microcontroller or serial device detected on system COM ports. Please connect your board via USB."
+                "error": "No USB Arduino or ESP microcontroller detected on system ports. Please ensure your Arduino USB cable is plugged into the computer."
             }
 
         port_name = device["port"]
-        board_label = device.get("board_type", "Arduino")
-        fqbn = device.get("fqbn", "arduino:avr:uno")
+        board_label = device.get("board_type", "Arduino Nano")
+        fqbn = device.get("fqbn", "arduino:avr:nano:cpu=atmega328")
 
-        # Override FQBN if user specified board
         if board_hint == "nano" or "nano" in prompt.lower():
             fqbn = "arduino:avr:nano:cpu=atmega328"
             board_label = "Arduino Nano"
@@ -186,7 +199,7 @@ class EmbeddedAgent:
         if self.active_port == port_name and self.is_monitoring:
             self.disconnect_serial()
 
-        update_progress(f"Generating optimized firmware for {board_label}...")
+        update_progress(f"Generating optimized C++ sketch for {board_label}...")
         gen_result = self.generate_microcontroller_code(prompt, board="esp32" if "esp" in board_label.lower() else "uno")
         sketch_code = gen_result["code"]
 
@@ -199,22 +212,21 @@ class EmbeddedAgent:
                 f.write(sketch_code)
 
             if not os.path.exists(self.arduino_cli_path):
-                return {"success": False, "error": "arduino-cli toolchain is not ready in bin/."}
+                return {"success": False, "error": "arduino-cli toolchain is missing from bin/."}
 
             # 1. Compile Sketch
-            update_progress(f"Compiling firmware for {board_label} (FQBN: {fqbn})...")
+            update_progress(f"Compiling sketch for {board_label} (FQBN: {fqbn})...")
             comp = subprocess.run(
                 [self.arduino_cli_path, "compile", "--fqbn", fqbn, sketch_folder],
                 capture_output=True,
                 text=True,
-                timeout=25
+                timeout=20
             )
 
             if comp.returncode != 0:
-                # If Nano ATmega328P failed compile, try with generic nano
                 if "nano" in fqbn:
                     fqbn = "arduino:avr:nano"
-                    comp = subprocess.run([self.arduino_cli_path, "compile", "--fqbn", fqbn, sketch_folder], capture_output=True, text=True, timeout=25)
+                    comp = subprocess.run([self.arduino_cli_path, "compile", "--fqbn", fqbn, sketch_folder], capture_output=True, text=True, timeout=20)
                 
                 if comp.returncode != 0:
                     return {
@@ -225,29 +237,35 @@ class EmbeddedAgent:
 
             # 2. Upload to Device
             update_progress(f"Uploading firmware to {board_label} on {port_name}...")
-            upload = subprocess.run(
-                [self.arduino_cli_path, "upload", "-p", port_name, "--fqbn", fqbn, sketch_folder],
-                capture_output=True,
-                text=True,
-                timeout=25
-            )
+            try:
+                upload = subprocess.run(
+                    [self.arduino_cli_path, "upload", "-p", port_name, "--fqbn", fqbn, sketch_folder],
+                    capture_output=True,
+                    text=True,
+                    timeout=15
+                )
+            except subprocess.TimeoutExpired:
+                upload = None
 
-            # If Arduino Nano upload failed with new bootloader, automatically retry with old bootloader (CH340 clone support!)
-            if upload.returncode != 0 and "nano" in fqbn and "old" not in fqbn:
+            # Retry with old bootloader if Nano failed
+            if (not upload or upload.returncode != 0) and "nano" in fqbn and "old" not in fqbn:
                 update_progress("Retrying Arduino Nano upload with Old Bootloader (CH340)...")
                 fqbn_old = "arduino:avr:nano:cpu=atmega328old"
-                subprocess.run([self.arduino_cli_path, "compile", "--fqbn", fqbn_old, sketch_folder], capture_output=True, text=True, timeout=20)
-                upload = subprocess.run([self.arduino_cli_path, "upload", "-p", port_name, "--fqbn", fqbn_old, sketch_folder], capture_output=True, text=True, timeout=25)
+                subprocess.run([self.arduino_cli_path, "compile", "--fqbn", fqbn_old, sketch_folder], capture_output=True, text=True, timeout=15)
+                try:
+                    upload = subprocess.run([self.arduino_cli_path, "upload", "-p", port_name, "--fqbn", fqbn_old, sketch_folder], capture_output=True, text=True, timeout=15)
+                except subprocess.TimeoutExpired:
+                    upload = None
 
-            if upload.returncode != 0:
+            if not upload or upload.returncode != 0:
+                err_msg = upload.stderr.strip() or upload.stdout.strip() if upload else "Upload timed out (no sync response from board)"
                 return {
                     "success": False,
                     "stage": "upload",
-                    "error": f"Upload to {port_name} failed: {upload.stderr.strip() or upload.stdout.strip()}"
+                    "error": f"Upload to {port_name} failed: {err_msg}"
                 }
 
-        update_progress(f"Upload complete! Reconnecting serial monitor to {port_name}...")
-        # Auto-reconnect serial after upload
+        update_progress(f"Upload complete! Re-opening serial telemetry on {port_name}...")
         time.sleep(0.5)
         self.connect_serial(port_name, baudrate=115200)
 
