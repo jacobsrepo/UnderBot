@@ -29,8 +29,8 @@ from intent_router import IntentRouter
 
 app = FastAPI(
     title="Contender AI Assistant",
-    description="Tactical Multimodal Assistant with Autonomous Hardware Flashing & Non-Blocking Async Execution.",
-    version="4.3.1"
+    description="Tactical Multimodal Assistant with Autonomous OS & Hardware Execution.",
+    version="4.4.0"
 )
 
 app.add_middleware(
@@ -148,6 +148,18 @@ class LaunchAppRequest(BaseModel):
 def launch_app(req: LaunchAppRequest):
     return desktop.launch_application(req.app_name)
 
+@app.post("/api/desktop/windows/minimize")
+def minimize_windows():
+    return desktop.minimize_all_windows()
+
+@app.post("/api/desktop/windows/restore")
+def restore_windows():
+    return desktop.undo_minimize_all()
+
+@app.post("/api/desktop/organize")
+def organize_desktop():
+    return desktop.organize_desktop_files()
+
 class FileOpRequest(BaseModel):
     action: str
     src: Optional[str] = None
@@ -264,11 +276,33 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
             except Exception:
                 pass
 
-    # Action 1: Embedded Microcontroller Auto-Program
-    if intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "nano", "uno", "esp32", "blink", "led"]):
+    # Action 1: Window Minimization / Desktop Controls
+    if any(k in lower for k in ["minimize all", "minimize everything", "minimize the stuff", "show desktop", "minimize windows"]):
+        notify("Minimizing desktop windows...")
+        res = desktop.minimize_all_windows()
+        if res.get("success"):
+            action_log = {"type": "window_control", "title": "Minimized All Windows", "status": "Done"}
+            system_context = "All open desktop windows have been minimized."
+        else:
+            action_log = {"type": "window_control", "title": "Minimize Failed", "status": res.get("error")}
+            system_context = f"Failed to minimize windows: {res.get('error')}"
+
+    elif any(k in lower for k in ["restore window", "undo minimize", "unminimize"]):
+        notify("Restoring desktop windows...")
+        res = desktop.undo_minimize_all()
+        action_log = {"type": "window_control", "title": "Restored Windows", "status": "Done"}
+        system_context = "Desktop windows have been restored to screen."
+
+    elif any(k in lower for k in ["organize desktop", "tidy desktop", "clean up desktop"]):
+        notify("Organizing desktop files into folders...")
+        res = desktop.organize_desktop_files()
+        action_log = {"type": "desktop_organize", "title": "Organized Desktop", "status": f"{res.get('moved_count', 0)} files categorized"}
+        system_context = f"Organized {res.get('moved_count', 0)} files on the desktop into categorized folders."
+
+    # Action 2: Embedded Microcontroller Auto-Program
+    elif intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "nano", "uno", "esp32", "blink", "led"]):
         if any(k in lower for k in ["program", "flash", "upload", "write code", "blink", "load sketch", "led"]):
             notify("Detecting connected board and compiling firmware...")
-            # Run blocking subprocesses in background thread so asyncio event loop never blocks
             flash_res = await asyncio.to_thread(
                 embedded.auto_compile_and_flash_sketch,
                 prompt,
@@ -281,21 +315,26 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
                     "title": f"Flashed {flash_res.get('board')}",
                     "status": f"Uploaded to {flash_res.get('port')}"
                 }
-                system_context = f"You autonomously compiled and flashed the sketch to {flash_res.get('board')} on {flash_res.get('port')}. The microcontroller is running the code."
+                system_context = f"Successfully compiled and uploaded the sketch to {flash_res.get('board')} on {flash_res.get('port')}. The microcontroller is active."
             else:
                 action_log = {
                     "type": "hardware_flash",
-                    "title": "Hardware Action Notice",
+                    "title": "Hardware Notice",
                     "status": flash_res.get("error", "No board detected")
                 }
-                system_context = f"Microcontroller status: {flash_res.get('error')}"
-        elif any(k in lower for k in ["scan", "list port", "detect"]):
+                system_context = f"Hardware status: {flash_res.get('error')}"
+        elif any(k in lower for k in ["scan", "list port", "detect", "see the arduino", "check port"]):
             ports = embedded.scan_ports()
-            port_desc = [f"{p['port']} ({p['board_type']})" for p in ports] or ["No active COM ports detected"]
-            action_log = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": port_desc}
-            system_context = f"Connected hardware ports: {', '.join(port_desc)}"
+            active_devs = [p for p in ports if p.get("is_usb")]
+            if active_devs:
+                port_desc = [f"{p['port']} ({p['board_type']})" for p in active_devs]
+                action_log = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": port_desc}
+                system_context = f"Connected USB boards: {', '.join(port_desc)}"
+            else:
+                action_log = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": ["No USB boards detected"]}
+                system_context = "No USB Arduino or microcontroller board is currently detected on the system ports."
 
-    # Action 2: Launch Application
+    # Action 3: Launch Application
     elif intent == "DESKTOP_APP" or any(k in lower for k in ["launch", "open "]):
         target_app = None
         for app_k in desktop.KNOWN_APPS.keys():
@@ -312,12 +351,12 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
             res = desktop.launch_application(target_app)
             if res.get("success"):
                 action_log = {"type": "app_launch", "title": f"Launched {target_app.title()}", "status": "Success"}
-                system_context = f"You successfully launched {target_app.title()} on the user's desktop."
+                system_context = f"Launched {target_app.title()} on the user's desktop."
             else:
                 action_log = {"type": "app_launch", "title": f"Launch Failed", "status": res.get("error")}
                 system_context = f"Failed to launch {target_app}: {res.get('error')}"
 
-    # Action 3: File Operations
+    # Action 4: File Operations
     elif intent == "FILE_OPERATION":
         if "list" in lower:
             res = desktop.list_directory("Desktop")
@@ -327,11 +366,11 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
             action_log = {"type": "file_op", "title": "File Copy Executed", "status": "Done"}
             system_context = "Copied the requested file to the destination folder."
 
-    # Action 4: System Metrics
+    # Action 5: System Metrics
     elif intent == "SYSTEM_METRICS":
         metrics = desktop.get_system_metrics()
         action_log = {"type": "system_metrics", "title": "System Telemetry", "cpu": f"{metrics.get('cpu_percent')}%", "ram": f"{metrics.get('ram_used_gb')}/{metrics.get('ram_total_gb')} GB"}
-        system_context = f"Current Metrics: CPU at {metrics.get('cpu_percent')}%, RAM at {metrics.get('ram_used_gb')}GB of {metrics.get('ram_total_gb')}GB ({metrics.get('ram_percent')}%), Battery: {metrics.get('battery')}"
+        system_context = f"Metrics: CPU at {metrics.get('cpu_percent')}%, RAM at {metrics.get('ram_used_gb')}GB of {metrics.get('ram_total_gb')}GB ({metrics.get('ram_percent')}%), Battery: {metrics.get('battery')}"
 
     # Auto-Arbitrate Visual Feed
     if vision_source == "camera":
@@ -339,7 +378,7 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
     else:
         chosen_frame = screen_b64 or _LATEST_SCREEN_B64 or desktop.capture_screen_base64()
 
-    notify("Executing cognitive reasoning...")
+    notify("Synthesizing response...")
     analysis = await brain.analyze_frame_async(
         image_base64=chosen_frame,
         user_prompt=prompt,

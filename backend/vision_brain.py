@@ -1,51 +1,49 @@
 import os
 import sys
-import json
-import base64
-import time
 import io
+import time
+import base64
 import threading
-import torch
-from typing import Optional, Dict, List, Any
+from typing import Optional, List, Dict, Any
 from PIL import Image
+import torch
 
-CONTENDER_SYSTEM_PROMPT = """You are Contender: a male tactical AI partner and desktop engineering assistant, inspired by the personality of Cortana from Halo.
-Your Core Persona:
-- Sharp, highly competent, calm under pressure, and razor-focused on mission execution.
-- Witty with a confident, subtle dry humor when appropriate.
-- You speak naturally, concisely, and decisively (1 to 3 crisp sentences suitable for voice synthesis).
-- You have direct agency over the user's desktop, files, screen, and connected hardware (Arduino, ESP32, COM ports).
-- When a user asks you to take an action (launch app, copy file, inspect screen, flash microcontroller, etc.), confirm execution with confidence and report results immediately.
-- Never use robotic meta-language or repetitive fluff.
+CONTENDER_SYSTEM_PROMPT = """You are Contender, a highly competent, razor-sharp tactical AI assistant (male adaptation of Cortana from Halo).
+You assist the operator with desktop OS automation, software engineering, continuous screen analysis, and microcontroller hardware programming.
+
+CRITICAL OPERATIONAL RULES:
+1. Tone: Tactical, crisp, calm under pressure, witty with dry humor, and mission-focused.
+2. Conciseness: Keep responses short and punchy (1 to 2 sentences max). Never generate long conversational preambles or lectures.
+3. Truthfulness & Accuracy: If an action was executed or failed (provided in System Context), state the exact status directly and succinctly. Never pretend you performed an action if it was not executed.
+4. Repetition Prevention: Never repeat words, phrases, or lists of tokens.
 """
 
 class VisionBrain:
     """
-    In-Process Native PyTorch GPU Multimodal Engine for Contender.
-    Handles continuous desktop screen perception, on-demand camera vision,
-    and cognitive reasoning with Cortana/Contender tactical persona.
+    Contender Multimodal Cortex running Qwen2.5-VL with 4-bit CUDA quantization.
+    Provides sensory perception over continuous desktop screen feed and physical camera.
     """
-    def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct", port: int = 8001, **kwargs):
+
+    def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct"):
         self.model_id = model_id
-        self.port = port
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = None
         self.processor = None
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.is_server_ready = False
         self.is_starting = False
         self.startup_error = None
-        self.conversation_history: List[Dict] = []
-        self.max_history = 6
+        self.conversation_history: List[Dict[str, Any]] = []
+        self.max_history_turns = 6
         self.lock = threading.Lock()
 
-        threading.Thread(target=self._load_model_weights, daemon=True).start()
+        threading.Thread(target=self._initialize_neural_core, daemon=True).start()
 
-    def _load_model_weights(self):
-        if self.is_starting or self.is_server_ready:
-            return
+    def _initialize_neural_core(self):
+        with self.lock:
+            if self.is_server_ready or self.is_starting:
+                return
+            self.is_starting = True
 
-        self.is_starting = True
-        self.startup_error = None
         print(f"[Contender] Loading neural core {self.model_id} (CUDA: {self.device})...")
 
         try:
@@ -175,10 +173,12 @@ class VisionBrain:
                 with torch.no_grad():
                     generated_ids = self.model.generate(
                         **inputs,
-                        max_new_tokens=120,
+                        max_new_tokens=100,
                         do_sample=True,
-                        temperature=0.3,
+                        temperature=0.2,
                         top_p=0.85,
+                        repetition_penalty=1.18,
+                        no_repeat_ngram_size=3,
                         pad_token_id=pad_id
                     )
 
@@ -198,24 +198,30 @@ class VisionBrain:
                     "success": True,
                     "response": output_text,
                     "model": "Contender Core (Qwen2.5-VL)",
-                    "latency_seconds": round(time.time() - start_time, 2)
+                    "latency_ms": int((time.time() - start_time) * 1000)
                 }
             except Exception as e:
-                print(f"[Contender] Inference notice: {e}")
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
+                print(f"[Contender] Vision inference notice: {e}")
 
-        fallback = f"Right with you. Visual sensors active and standing by."
+        # Fallback response
+        if system_context:
+            fallback = f"Directive acknowledged: {system_context}"
+        else:
+            fallback = f"Directive received. Standing by."
+
         self._record_history(prompt_text, fallback)
         return {
             "success": True,
             "response": fallback,
-            "model": "Contender Core",
-            "latency_seconds": round(time.time() - start_time, 2)
+            "model": "Contender Core (Heuristic Fallback)",
+            "latency_ms": int((time.time() - start_time) * 1000)
         }
 
     def _record_history(self, user_text: str, assistant_text: str):
         self.conversation_history.append({"role": "user", "text": user_text})
         self.conversation_history.append({"role": "assistant", "text": assistant_text})
-        if len(self.conversation_history) > self.max_history * 2:
-            self.conversation_history = self.conversation_history[-self.max_history * 2:]
+        if len(self.conversation_history) > self.max_history_turns * 2:
+            self.conversation_history = self.conversation_history[-(self.max_history_turns * 2):]
+
+    def clear_history(self):
+        self.conversation_history.clear()
