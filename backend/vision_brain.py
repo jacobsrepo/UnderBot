@@ -8,14 +8,18 @@ from typing import Optional, List, Dict, Any
 from PIL import Image
 import torch
 
-CONTENDER_SYSTEM_PROMPT = """You are Contender, a highly competent, razor-sharp tactical AI assistant (male adaptation of Cortana from Halo).
-You assist the operator with desktop OS automation, software engineering, continuous screen analysis, and microcontroller hardware programming.
+CONTENDER_SYSTEM_PROMPT = """You are Contender, a tactical AI assistant inspired by Cortana from Halo.
+You are calm under pressure, razor-sharp, witty with dry humor, and strictly mission-focused.
 
-CRITICAL OPERATIONAL RULES:
-1. Tone: Tactical, crisp, calm under pressure, witty with dry humor, and mission-focused.
-2. Conciseness: Keep responses short and punchy (1 to 2 sentences max). Never generate long conversational preambles or lectures.
-3. Truthfulness & Accuracy: If an action was executed or failed (provided in System Context), state the exact status directly and succinctly. Never pretend you performed an action if it was not executed.
-4. Repetition Prevention: Never repeat words, phrases, or lists of tokens.
+MANDATORY RESPONSE LENGTH CONSTRAINTS:
+1. EXTREME BREVITY BY DEFAULT: Always respond in ONE single, crisp sentence (under 18 words) for confirmations, status reports, questions, and action results.
+   - Good: "Minimizing all desktop windows now."
+   - Good: "No USB Arduino is detected on the COM ports. Check your cable."
+   - Good: "Visual feed active. VS Code and terminal are currently on screen."
+   - Bad: Generating multi-paragraph explanations, numbered tutorials, or long conversational filler.
+2. NEVER output numbered setup guides or unsolicited tutorials unless the user explicitly commands: "explain in detail" or "give me a step-by-step guide".
+3. TRUTHFULNESS: If an action succeeded or failed in System Context, state the exact status directly in 1 short sentence.
+4. REPETITION BAN: Never repeat words or phrases.
 """
 
 class VisionBrain:
@@ -119,6 +123,11 @@ class VisionBrain:
     ) -> Dict:
         prompt_text = user_prompt.strip() if user_prompt else "Awaiting directives."
         start_time = time.time()
+        lower_prompt = prompt_text.lower()
+
+        # Dynamically bound tokens: longer only when explicitly asked for explanations
+        wants_detailed = any(w in lower_prompt for w in ["explain", "why", "how", "detail", "guide", "tutorial", "code", "describe"])
+        max_tokens = 140 if wants_detailed else 45
 
         if self.is_server_ready and self.model is not None and self.processor is not None:
             try:
@@ -141,7 +150,6 @@ class VisionBrain:
                     {"role": "system", "content": CONTENDER_SYSTEM_PROMPT}
                 ]
 
-                # Append recent history for conversational continuity
                 for turn in self.conversation_history[-4:]:
                     messages.append({
                         "role": turn["role"],
@@ -173,11 +181,11 @@ class VisionBrain:
                 with torch.no_grad():
                     generated_ids = self.model.generate(
                         **inputs,
-                        max_new_tokens=100,
+                        max_new_tokens=max_tokens,
                         do_sample=True,
                         temperature=0.2,
                         top_p=0.85,
-                        repetition_penalty=1.18,
+                        repetition_penalty=1.20,
                         no_repeat_ngram_size=3,
                         pad_token_id=pad_id
                     )
@@ -193,6 +201,12 @@ class VisionBrain:
                     clean_up_tokenization_spaces=False
                 )[0].strip()
 
+                # If the output ends with an incomplete sentence due to token cap, cleanly strip to the last period/exclamation
+                if len(output_text) > 20 and not output_text.endswith((".", "!", "?")):
+                    last_punct = max(output_text.rfind("."), output_text.rfind("!"), output_text.rfind("?"))
+                    if last_punct > 10:
+                        output_text = output_text[:last_punct + 1]
+
                 self._record_history(prompt_text, output_text)
                 return {
                     "success": True,
@@ -205,9 +219,9 @@ class VisionBrain:
 
         # Fallback response
         if system_context:
-            fallback = f"Directive acknowledged: {system_context}"
+            fallback = f"{system_context}"
         else:
-            fallback = f"Directive received. Standing by."
+            fallback = f"Standing by for directives."
 
         self._record_history(prompt_text, fallback)
         return {
