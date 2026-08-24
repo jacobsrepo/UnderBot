@@ -2,21 +2,21 @@ import os
 import sys
 import time
 import json
-import re
 from typing import Dict, Any, Optional, Tuple, Callable
 
 class CognitiveCore:
     """
-    Dual-Engine Cognitive Core for Contender.
-    Decouples deterministic tool routing, C++ firmware reflection, and screen OCR
-    from the heavy multimodal vision engine.
+    Decoupled Dual-Engine Cognitive Core for Contender.
+    Primary Brain: Qwen2.5-Coder-7B-Instruct (Tool Calling & C++ Reflection).
+    Secondary Engine: VisionEngine (On-Demand RapidOCR & Isolated Visual Inspection).
     """
 
-    def __init__(self, desktop_agent, embedded_agent, vision_brain):
+    def __init__(self, desktop_agent, embedded_agent, primary_brain, vision_engine):
         self.desktop = desktop_agent
         self.embedded = embedded_agent
-        self.vision = vision_brain
-        self.active_mode = "CODER_CONTROLLER"  # "CODER_CONTROLLER" or "VISION_VLM"
+        self.brain = primary_brain
+        self.vision = vision_engine
+        self.active_mode = "CODER_ENGINE"
 
     async def process_user_directive(
         self,
@@ -32,7 +32,7 @@ class CognitiveCore:
         2. Routes simple OS/Window/File/Hardware actions directly (0ms latency).
         3. For screen code/errors: utilizes lightweight RapidOCR.
         4. For hardware compile/flash: activates automated Reflection Loop.
-        5. For physical vision: summons the On-Demand Vision Module.
+        5. For physical vision: calls isolated On-Demand Vision tool.
         """
         intent = intent_info.get("intent", "CONVERSATION")
         prompt = intent_info.get("prompt", text)
@@ -42,7 +42,7 @@ class CognitiveCore:
 
         action_card = None
         system_context = None
-        self.active_mode = "CODER_CONTROLLER"
+        self.active_mode = "CODER_ENGINE"
 
         # -------------------------------------------------------------
         # STEP 1: SAFETY GUARDRAIL CHECK
@@ -159,33 +159,36 @@ class CognitiveCore:
         # -------------------------------------------------------------
         # STEP 6: SMART OCR PRE-FILTER FOR SCREEN QUERIES
         # -------------------------------------------------------------
-        elif vision_source == "screen" and any(k in lower for k in ["read", "error", "code", "terminal", "text", "what does this say", "summarize"]):
+        elif vision_source == "screen" and any(k in lower for k in ["read", "error", "code", "terminal", "text", "what does this say", "summarize", "screen"]):
             if progress_cb: progress_cb("Ingesting desktop screen via lightweight RapidOCR pre-filter...")
-            ocr_res = self.desktop.extract_screen_text()
-            if ocr_res.get("success") and ocr_res.get("text"):
-                system_context = f"Screen OCR Text:\n{ocr_res['text'][:1500]}"
-                if progress_cb: progress_cb(f"Extracted {ocr_res.get('line_count', 0)} text lines from screen.")
+            ocr_text = self.desktop.capture_screen_context()
+            if ocr_text:
+                system_context = f"Screen OCR Text:\n{ocr_text[:1500]}"
+                if progress_cb: progress_cb(f"Extracted screen text buffer successfully.")
 
         # -------------------------------------------------------------
-        # STEP 7: ON-DEMAND MULTIMODAL VISION OR COGNITIVE RESPONSE
+        # STEP 7: ON-DEMAND VISUAL INSPECTION
         # -------------------------------------------------------------
-        chosen_frame = None
-        if vision_source == "camera" or any(k in lower for k in ["holding", "look at me", "this object", "what is this"]):
-            self.active_mode = "VISION_VLM"
-            chosen_frame = cam_b64
+        elif vision_source == "camera" or any(k in lower for k in ["holding", "look at me", "this object", "what is this"]):
+            self.active_mode = "VISION_INSPECTOR"
+            if progress_cb: progress_cb("Querying On-Demand Vision Module...")
+            vis_summary = self.vision.inspect_visual_target(cam_b64 or screen_b64, prompt=prompt)
+            system_context = f"Visual Inspection Observation: {vis_summary}"
 
-        analysis = await self.vision.analyze_frame_async(
-            image_base64=chosen_frame,
-            user_prompt=prompt,
+        # -------------------------------------------------------------
+        # STEP 8: PRIMARY CODER BRAIN RESPONSE SYNTHESIS
+        # -------------------------------------------------------------
+        coder_res = await self.brain.generate_response_async(
+            prompt_text=prompt,
             system_context=system_context
         )
 
         return {
-            "reply": analysis.get("response", "Directive acknowledged."),
+            "reply": coder_res.get("response", "Directive acknowledged."),
             "action_card": action_card,
             "active_vision": vision_source,
             "active_engine": self.active_mode,
-            "latency_ms": analysis.get("latency_ms", 0)
+            "latency_ms": coder_res.get("latency_ms", 0)
         }
 
     def _reflect_and_repair_firmware(self, prompt: str, current_code: str, compiler_stderr: str) -> str:
@@ -196,15 +199,12 @@ class CognitiveCore:
         """
         print(f"[CognitiveCore/Reflector] Reflecting on compiler diagnostics:\n{compiler_stderr[:200]}")
         
-        # Heuristic Auto-Repairs for common AVR C++ syntax issues
         repaired = current_code
 
-        # Fix 1: Missing pinMode / undefined identifier
         if "was not declared in this scope" in compiler_stderr:
             if "pinMode" not in repaired and "LED_PIN" in repaired:
                 repaired = repaired.replace("void setup() {", "void setup() {\n  pinMode(LED_PIN, OUTPUT);")
 
-        # Fix 2: Missing semicolons
         if "expected ';' before" in compiler_stderr:
             lines = repaired.split("\n")
             for i, line in enumerate(lines):
@@ -213,7 +213,6 @@ class CognitiveCore:
                     lines[i] = line + ";"
             repaired = "\n".join(lines)
 
-        # Fix 3: Standard fallback template if corrupted
         if not repaired or "void loop" not in repaired:
             repaired = """// Auto-Corrected Firmware
 #define LED_PIN 13

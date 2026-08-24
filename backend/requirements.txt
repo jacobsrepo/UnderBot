@@ -13,10 +13,6 @@ sounddevice>=0.5.0
 pillow>=10.0.0
 torch
 torchvision
-transformers>=4.48.0
-accelerate>=1.0.0
-bitsandbytes>=0.45.0
-qwen-vl-utils>=0.0.8
 cryptography>=42.0.0
 qrcode>=7.4.0
 pyserial>=3.5

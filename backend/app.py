@@ -19,7 +19,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from camera_stream import CameraManager
-from vision_brain import VisionBrain
+from brain import Brain
+from vision_engine import VisionEngine
 from tts_engine import TTSEngine
 from stt_engine import STTEngine
 from ssl_helper import get_local_ip, ensure_ssl_certificates, get_network_details
@@ -30,8 +31,8 @@ from cognitive_core import CognitiveCore
 
 app = FastAPI(
     title="Contender AI Assistant",
-    description="Dual-Engine Tactical Assistant with Decoupled Vision, OCR, and Deterministic Hardware Reflection.",
-    version="5.0.0"
+    description="Dual-Engine Tactical Assistant with Decoupled Qwen2.5-Coder Engine & On-Demand Vision.",
+    version="6.0.0"
 )
 
 app.add_middleware(
@@ -53,27 +54,25 @@ async def add_no_cache_headers(request: Request, call_next):
 
 # Subsystems
 camera = CameraManager(device_index=0)
-brain = VisionBrain()
+primary_brain = Brain()
+vision_engine = VisionEngine()
 tts = TTSEngine(default_voice_key="guy")
 stt = STTEngine(model_size="small.en", device="cpu", compute_type="int8")
 desktop = DesktopAgent()
 embedded = EmbeddedAgent()
 router = IntentRouter()
-core = CognitiveCore(desktop, embedded, brain)
-
-_LATEST_SCREEN_B64: Optional[str] = None
-_LATEST_CAMERA_B64: Optional[str] = None
+core = CognitiveCore(desktop, embedded, primary_brain, vision_engine)
 
 @app.on_event("startup")
 async def startup_event():
-    print("[Contender] Dual-Engine Tactical Studio online and standing by.")
+    print("[Contender] Decoupled Coder-Brain & On-Demand Vision Core online.")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     print("[Contender] Powering down subsystems...")
     camera.stop()
     embedded.disconnect_serial()
-    brain.shutdown()
+    primary_brain.shutdown()
 
 @app.get("/favicon.ico")
 def get_favicon():
@@ -85,7 +84,7 @@ def get_favicon():
 async def get_system_status():
     return {
         "status": "online",
-        "brain": brain.get_status(),
+        "brain": primary_brain.get_status(),
         "active_engine": core.active_mode,
         "camera": camera.get_stats(),
         "network": get_network_details(8000, is_https=os.path.exists("certs/cert.pem")),
@@ -98,7 +97,7 @@ async def get_system_status():
 @app.get("/api/diagnostics")
 async def get_diagnostics():
     return {
-        "brain": brain.get_status(),
+        "brain": primary_brain.get_status(),
         "active_engine": core.active_mode,
         "camera": camera.get_stats(),
         "network": get_network_details(8000, is_https=os.path.exists("certs/cert.pem")),
@@ -133,7 +132,7 @@ async def shutdown_system(background_tasks: BackgroundTasks):
         time.sleep(0.5)
         camera.stop()
         embedded.disconnect_serial()
-        brain.shutdown()
+        primary_brain.shutdown()
         os.kill(os.getpid(), signal.SIGTERM if sys.platform != "win32" else signal.SIGINT)
 
     background_tasks.add_task(kill_process)
@@ -270,7 +269,7 @@ class TTSRequest(BaseModel):
 async def speak_text(req: TTSRequest):
     return await tts.synthesize_base64(req.text, req.voice_key)
 
-# ==================== WEBSOCKET LIVE STREAMING ====================
+# ==================== WEBSOCKET LIVE DISPATCH ====================
 
 @app.websocket("/ws/live")
 async def websocket_live_endpoint(websocket: WebSocket):
@@ -313,22 +312,9 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 await websocket.send_json({
                     "type": "pong",
                     "time": time.time(),
-                    "brain": brain.get_status(),
+                    "brain": primary_brain.get_status(),
                     "active_engine": core.active_mode
                 })
-
-            elif msg_type == "screen_frame":
-                global _LATEST_SCREEN_B64
-                b64 = msg.get("image_base64", "")
-                if b64:
-                    _LATEST_SCREEN_B64 = b64
-
-            elif msg_type == "client_frame":
-                global _LATEST_CAMERA_B64
-                b64 = msg.get("image_base64", "")
-                if b64:
-                    _LATEST_CAMERA_B64 = b64
-                    camera.update_client_frame(b64)
 
             elif msg_type == "text_query":
                 user_text = msg.get("text", "")
@@ -343,12 +329,11 @@ async def websocket_live_endpoint(websocket: WebSocket):
 
                 intent_res = router.process_utterance(user_text)
                 
-                # Execute through Dual-Engine Cognitive Core
                 dispatch_res = await core.process_user_directive(
                     text=user_text,
                     intent_info=intent_res,
-                    screen_b64=screen_b64 or _LATEST_SCREEN_B64,
-                    cam_b64=cam_b64 or _LATEST_CAMERA_B64,
+                    screen_b64=screen_b64,
+                    cam_b64=cam_b64,
                     progress_cb=lambda m: asyncio.create_task(send_progress_update(m))
                 )
 
@@ -361,9 +346,9 @@ async def websocket_live_endpoint(websocket: WebSocket):
                     "response": reply_text,
                     "action_card": dispatch_res.get("action_card"),
                     "auto_vision": dispatch_res.get("active_vision", "screen"),
-                    "active_engine": dispatch_res.get("active_engine", "CODER_CONTROLLER"),
+                    "active_engine": dispatch_res.get("active_engine", "CODER_ENGINE"),
                     "requires_confirmation": dispatch_res.get("requires_confirmation", False),
-                    "model": "Contender Dual Core",
+                    "model": "Qwen2.5-Coder Engine",
                     "speech": speech_data
                 })
 
@@ -398,8 +383,8 @@ async def websocket_live_endpoint(websocket: WebSocket):
                     dispatch_res = await core.process_user_directive(
                         text=transcribed_text,
                         intent_info=intent_res,
-                        screen_b64=screen_b64 or _LATEST_SCREEN_B64,
-                        cam_b64=cam_b64 or _LATEST_CAMERA_B64,
+                        screen_b64=screen_b64,
+                        cam_b64=cam_b64,
                         progress_cb=lambda m: asyncio.create_task(send_progress_update(m))
                     )
 
@@ -412,9 +397,9 @@ async def websocket_live_endpoint(websocket: WebSocket):
                         "response": reply_text,
                         "action_card": dispatch_res.get("action_card"),
                         "auto_vision": dispatch_res.get("active_vision", "screen"),
-                        "active_engine": dispatch_res.get("active_engine", "CODER_CONTROLLER"),
+                        "active_engine": dispatch_res.get("active_engine", "CODER_ENGINE"),
                         "requires_confirmation": dispatch_res.get("requires_confirmation", False),
-                        "model": "Contender Dual Core",
+                        "model": "Qwen2.5-Coder Engine",
                         "speech": speech_data
                     })
                 else:

@@ -210,6 +210,13 @@ class DesktopAgent:
             print(f"[DesktopAgent] Screen OCR notice: {e}")
             return {"success": False, "text": "", "lines": []}
 
+    def capture_screen_context(self) -> str:
+        """
+        Captures active screen, runs fast local OCR, and returns structured text buffer.
+        """
+        res = self.extract_screen_text()
+        return res.get("text", "")
+
     def capture_screen_base64(self) -> Optional[str]:
         try:
             import mss
