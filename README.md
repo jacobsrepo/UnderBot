@@ -1,73 +1,71 @@
-# VLA Studio - Local Multimodal Vision & Voice Architecture
+# Contender - Tactical Desktop AI Assistant & Hardware Engineer
 
-A fully self-contained, local Vision-Language-Action (VLA) interface designed for real-time visual reasoning, speech transcription, and natural conversational dialogue across desktop and network-connected devices.
-
----
-
-## Overview
-
-VLA Studio provides an end-to-end multimodal perception loop running entirely on local hardware:
-- **Visual Reasoning**: In-process Qwen2.5-VL executing directly on local GPU with 4-bit CUDA quantization.
-- **Full HD 1080p Perception**: 1920x1080 high-framerate visual capture with frame inspection.
-- **Universal Multi-Device Operation**: Connect any mobile phone, iPad, or laptop on the local Wi-Fi network to use its camera and microphone as sensory inputs.
-- **Speech Recognition**: Low-latency speech-to-text powered by Faster-Whisper.
-- **Speech Synthesis**: Neural male voice output for conversational responses.
-- **Diagnostics & Control**: Real-time engine readiness indicators and one-click system power-off controls.
+A fully self-contained, local multimodal assistant featuring continuous screen perception, on-demand camera vision, Windows desktop OS automation, on-the-fly Arduino & ESP microcontroller programming, and a native desktop shell with an Always-on-Top Floating Mini HUD.
 
 ---
 
-## System Architecture
+## 1. Core Architecture & Persona
+
+- **Persona**: **Contender** — a tactical, razor-sharp male AI partner inspired by the personality of Cortana from Halo. Calm under pressure, highly competent, witty, concise, and mission-focused.
+- **Continuous Screen Perception**: Continuously perceives your desktop screen by default for code debugging, reading documentation, and inspecting UI workflows.
+- **On-Demand Camera Vision**: Physical camera feed is summoned on-demand when inspecting physical objects or real-world surroundings.
+- **Native Desktop Shell & Mini HUD**: Runs as a standalone Windows application with Microsoft Edge WebView2. Minimizing or toggling switches Contender into a sleek, draggable, Always-on-Top floating companion pill.
+- **Hardware & Microcontroller Engineering**: On-the-fly Arduino and ESP32/ESP8266 COM port auto-discovery, code generation, firmware flashing via `esptool`, and a live interactive two-way serial monitor.
+- **Desktop OS Automation**: File management (copy, move, delete, organize, search), application launching (VS Code, Chrome, Terminal, etc.), system metrics, and safe PowerShell execution.
+- **Directed Speech & Wake Word**: Recognizes when you address him (*"Contender"*, *"Hey Contender"*, *"Computer"*) and maintains conversation threads without repeating the wake word.
+
+---
+
+## 2. Directory Structure
 
 ```
 local-robot-brain/
 |-- backend/
-|   |-- app.py              # FastAPI server and lifecycle manager
-|   |-- vision_brain.py     # In-process PyTorch CUDA Qwen2.5-VL controller
-|   |-- camera_stream.py    # 1080p WebRTC and DirectShow camera coordinator
-|   |-- ssl_helper.py       # Local network TLS certificate manager
-|   |-- tts_engine.py       # Neural speech synthesis engine
-|   |-- stt_engine.py       # Faster-Whisper speech transcription engine
+|   |-- app.py              # FastAPI server & WebSocket action coordinator
+|   |-- vision_brain.py     # Contender neural core (Qwen2.5-VL GPU 4-bit)
+|   |-- desktop_agent.py    # Desktop OS automation, file ops & app launcher
+|   |-- embedded_agent.py   # Arduino/ESP port detection, flashing & serial monitor
+|   |-- intent_router.py    # Directed speech & wake-word analyzer
+|   |-- camera_stream.py    # DirectShow / WebRTC video pipeline
+|   |-- ssl_helper.py       # Local LAN TLS certificate manager
+|   |-- tts_engine.py       # Male neural speech synthesizer
+|   |-- stt_engine.py       # Faster-Whisper small.en speech-to-text
 |   `-- requirements.txt
-|-- frontend/               # Professional workspace UI
+|-- frontend/               # Contender Tactical Studio & Mini HUD
 |   |-- index.html
 |   |-- styles.css
 |   |-- app.js
 |   `-- audio_visualizer.js
-`-- start_brain.bat         # Standalone system launcher
+|-- desktop_shell.py        # Native Windows WebView2 shell & Mini HUD manager
+|-- test_desktop_agent.py   # Subsystem verification suite
+|-- test_pipeline.py        # Multimodal pipeline test suite
+`-- start_brain.bat         # One-click launcher
 ```
 
 ---
 
-## Installation & Setup
+## 3. Quick Start
 
-### 1. Requirements
-- Windows 10/11, Linux, or macOS
-- Python 3.10+
-- Dedicated GPU with CUDA support recommended
-
-### 2. Environment Setup
+### Installation
 ```cmd
 uv venv --python 3.11
 uv pip install -r backend/requirements.txt
 ```
 
-### 3. Launching the System
-Execute the launcher script:
+### Launching
+Double-click:
 ```cmd
 start_brain.bat
 ```
-Or start the server manually:
-```cmd
-python backend/app.py
-```
+* Launches the **Contender Native Tactical Studio**.
+* Click **Mini HUD** in the top navigation bar to collapse Contender into a sleek floating Always-on-Top companion widget while you work.
 
 ---
 
-## Multi-Device / Network Access
+## 4. Voice Commands Examples
 
-To use a smartphone, tablet, or another laptop as the camera and microphone:
-1. Ensure both devices are connected to the same Wi-Fi network.
-2. In the desktop interface, click **Connect Device** in the top navigation bar.
-3. Scan the displayed **QR Code** with your phone's camera, or navigate directly to the printed network address (e.g. `https://<YOUR_LOCAL_IP>:8000`).
-4. If a self-signed security prompt appears in your browser, select **Advanced -> Proceed** to grant camera and microphone permissions.
-5. Tap **Flip** to toggle between front and rear cameras on mobile devices.
+- *"Contender, what error is on my screen?"*
+- *"Contender, launch VS Code and organize my Desktop files."*
+- *"Contender, scan COM ports and write an ESP32 Wi-Fi telemetry sketch."*
+- *"Contender, check my CPU and RAM usage."*
+- *"Contender, switch to camera and tell me what I'm holding."*

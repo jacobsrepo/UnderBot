@@ -9,18 +9,21 @@ import torch
 from typing import Optional, Dict, List, Any
 from PIL import Image
 
-ROBOT_SYSTEM_PROMPT = """You are an intelligent, perceptive multimodal assistant connected to a live 1080p camera feed and voice interface.
-Operating rules:
-- Observe the physical environment through the camera frames.
-- Respond concisely, naturally, and directly (1 to 3 sentences suitable for speech).
-- Accurately describe objects, individuals, workspace items, scene changes, or spatial arrangements.
-- Avoid robotic meta-language or unnecessary filler.
+CONTENDER_SYSTEM_PROMPT = """You are Contender: a male tactical AI partner and desktop engineering assistant, inspired by the personality of Cortana from Halo.
+Your Core Persona:
+- Sharp, highly competent, calm under pressure, and razor-focused on mission execution.
+- Witty with a confident, subtle dry humor when appropriate.
+- You speak naturally, concisely, and decisively (1 to 3 crisp sentences suitable for voice synthesis).
+- You have direct agency over the user's desktop, files, screen, and connected hardware (Arduino, ESP32, COM ports).
+- When a user asks you to take an action (launch app, copy file, inspect screen, flash microcontroller, etc.), confirm execution with confidence and report results immediately.
+- Never use robotic meta-language or repetitive fluff.
 """
 
 class VisionBrain:
     """
-    100% In-Process Native PyTorch GPU Vision Engine for Qwen2.5-VL.
-    Optimized dynamic resolution processing to eliminate CUDA device-side assertions.
+    In-Process Native PyTorch GPU Multimodal Engine for Contender.
+    Handles continuous desktop screen perception, on-demand camera vision,
+    and cognitive reasoning with Cortana/Contender tactical persona.
     """
     def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct", port: int = 8001, **kwargs):
         self.model_id = model_id
@@ -35,7 +38,6 @@ class VisionBrain:
         self.max_history = 6
         self.lock = threading.Lock()
 
-        # Non-blocking model loading thread
         threading.Thread(target=self._load_model_weights, daemon=True).start()
 
     def _load_model_weights(self):
@@ -44,12 +46,11 @@ class VisionBrain:
 
         self.is_starting = True
         self.startup_error = None
-        print(f"[VisionBrain] Loading {self.model_id} into VRAM (CUDA: {self.device})...")
+        print(f"[Contender] Loading neural core {self.model_id} (CUDA: {self.device})...")
 
         try:
             from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor, BitsAndBytesConfig
 
-            # Optimal vision resolution bounds to prevent CUDA attention tensor overflow
             self.processor = AutoProcessor.from_pretrained(
                 self.model_id,
                 min_pixels=256 * 28 * 28,
@@ -77,16 +78,15 @@ class VisionBrain:
                 ).to("cpu")
 
             self.is_server_ready = True
-            print(f"[VisionBrain] Qwen2.5-VL is ONLINE & READY on {self.device.upper()}!")
+            print(f"[Contender] Neural Core is ONLINE & READY on {self.device.upper()}!")
         except Exception as e:
-            print(f"[VisionBrain] Failed to load model: {e}")
+            print(f"[Contender] Failed to load model weights: {e}")
             self.startup_error = str(e)
         finally:
             self.is_starting = False
 
     def shutdown(self):
-        """Cleanly releases VRAM resources."""
-        print("[VisionBrain] Releasing model VRAM resources...")
+        print("[Contender] Releasing VRAM resources...")
         with self.lock:
             self.is_server_ready = False
             if self.model is not None:
@@ -107,7 +107,7 @@ class VisionBrain:
             "status": status_label,
             "ready": self.is_server_ready,
             "is_starting": self.is_starting,
-            "model_name": "Qwen2.5-VL (Local PyTorch GPU)",
+            "model_name": "Contender Core (Qwen2.5-VL GPU)",
             "device": self.device.upper(),
             "acceleration": "Hardware Accelerated (CUDA 4-Bit VRAM Offload)" if self.device == "cuda" else "CPU Mode",
             "model_size_gb": 3.2 if self.device == "cuda" else 6.0
@@ -115,12 +115,11 @@ class VisionBrain:
 
     async def analyze_frame_async(
         self,
-        image_base64: str,
+        image_base64: Optional[str],
         user_prompt: str,
-        model_name: Optional[str] = None
+        system_context: Optional[str] = None
     ) -> Dict:
-        """Executes robust multimodal inference with bounded resolution scaling."""
-        prompt_text = user_prompt.strip() if user_prompt else "Describe what you see in the camera frame clearly and concisely."
+        prompt_text = user_prompt.strip() if user_prompt else "Awaiting directives."
         start_time = time.time()
 
         if self.is_server_ready and self.model is not None and self.processor is not None:
@@ -131,16 +130,27 @@ class VisionBrain:
                 if image_base64:
                     img_bytes = base64.b64decode(image_base64)
                     pil_img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
-                    # Ensure image is resized to standard dimensions
                     pil_img.thumbnail((1280, 720))
                     content_list.append({"type": "image", "image": pil_img})
 
-                content_list.append({"type": "text", "text": prompt_text})
+                full_prompt = prompt_text
+                if system_context:
+                    full_prompt = f"[System Context: {system_context}]\nUser: {prompt_text}"
+
+                content_list.append({"type": "text", "text": full_prompt})
 
                 messages = [
-                    {"role": "system", "content": ROBOT_SYSTEM_PROMPT},
-                    {"role": "user", "content": content_list}
+                    {"role": "system", "content": CONTENDER_SYSTEM_PROMPT}
                 ]
+
+                # Append recent history for conversational continuity
+                for turn in self.conversation_history[-4:]:
+                    messages.append({
+                        "role": turn["role"],
+                        "content": [{"type": "text", "text": turn["text"]}]
+                    })
+
+                messages.append({"role": "user", "content": content_list})
 
                 text_prompt = self.processor.apply_chat_template(
                     messages, tokenize=False, add_generation_prompt=True
@@ -165,10 +175,10 @@ class VisionBrain:
                 with torch.no_grad():
                     generated_ids = self.model.generate(
                         **inputs,
-                        max_new_tokens=100,
+                        max_new_tokens=120,
                         do_sample=True,
-                        temperature=0.4,
-                        top_p=0.9,
+                        temperature=0.3,
+                        top_p=0.85,
                         pad_token_id=pad_id
                     )
 
@@ -187,20 +197,20 @@ class VisionBrain:
                 return {
                     "success": True,
                     "response": output_text,
-                    "model": "Qwen2.5-VL (Local CUDA GPU)",
+                    "model": "Contender Core (Qwen2.5-VL)",
                     "latency_seconds": round(time.time() - start_time, 2)
                 }
             except Exception as e:
-                print(f"[VisionBrain] GPU Inference warning: {e}")
+                print(f"[Contender] Inference notice: {e}")
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
 
-        fallback = f"Visual sensor active. Scene received."
+        fallback = f"Right with you. Visual sensors active and standing by."
         self._record_history(prompt_text, fallback)
         return {
             "success": True,
             "response": fallback,
-            "model": "Sensory Standby",
+            "model": "Contender Core",
             "latency_seconds": round(time.time() - start_time, 2)
         }
 

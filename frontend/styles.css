@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VLA STUDIO - MODERN EXECUTIVE INTERFACE
+   CONTENDER TACTICAL STUDIO - EXECUTIVE INTERFACE
    Clean, minimalist, high-contrast dark theme
    ========================================================================== */
 
@@ -19,6 +19,7 @@
     --accent-green: #10b981;
     --accent-amber: #f59e0b;
     --accent-red: #ef4444;
+    --accent-purple: #8b5cf6;
 
     --text-high: #f8fafc;
     --text-medium: #94a3b8;
@@ -50,6 +51,102 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* ==================== FLOATING MINI HUD COMPANION ==================== */
+.mini-hud-widget {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0b0c0e;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    z-index: 9999;
+    user-select: none;
+    -webkit-app-region: drag;
+}
+
+.mini-hud-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    -webkit-app-region: no-drag;
+}
+
+.mini-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.mini-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    color: var(--text-high);
+}
+
+#mini-waveform-canvas {
+    width: 60px;
+    height: 14px;
+    display: block;
+}
+
+.mini-hud-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    -webkit-app-region: no-drag;
+}
+
+.mini-ptt-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.15s;
+}
+
+.mini-ptt-btn:hover {
+    background: var(--accent-blue-hover);
+    transform: scale(1.05);
+}
+
+.mini-ptt-btn.recording {
+    background: var(--accent-red);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+}
+
+.mini-expand-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-medium);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.15s;
+}
+
+.mini-expand-btn:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-high);
+}
+
+/* ==================== MAIN STUDIO LAYOUT ==================== */
 .app-layout {
     display: flex;
     flex-direction: column;
@@ -83,20 +180,21 @@ body {
 }
 
 .brand-title {
-    font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: -0.3px;
+    font-weight: 800;
+    font-size: 0.98rem;
+    letter-spacing: 0.8px;
     color: var(--text-high);
 }
 
 .brand-badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text-low);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.3);
     padding: 2px 6px;
     border-radius: 4px;
+    letter-spacing: 0.5px;
 }
 
 /* Central Telemetry Pill */
@@ -243,7 +341,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* ==================== LEFT: VIDEO ==================== */
+/* ==================== LEFT: MULTIMODAL VIEWPORT ==================== */
 .tabs {
     display: flex;
     background: var(--bg-surface);
@@ -322,7 +420,7 @@ body {
     overflow: hidden;
 }
 
-#client-video, #server-video-feed {
+#screen-video, #client-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -359,7 +457,59 @@ body {
     border-color: var(--accent-blue);
 }
 
-/* ==================== RIGHT: TRANSCRIPT ==================== */
+/* ==================== HARDWARE & SERIAL DRAWER ==================== */
+.hardware-drawer {
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-subtle);
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 190px;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.drawer-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #60a5fa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drawer-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.serial-console {
+    background: #000;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    height: 75px;
+    overflow-y: auto;
+    color: #34d399;
+}
+
+.console-line.info {
+    color: var(--text-low);
+}
+
+.serial-input-row {
+    display: flex;
+    gap: 6px;
+}
+
+/* ==================== RIGHT: MISSION LOG & ACTIONS ==================== */
 .audio-status-wrap {
     display: flex;
     align-items: center;
@@ -383,7 +533,7 @@ body {
     display: block;
 }
 
-/* Dedicated Model Diagnostics Confirmation Card */
+/* Model Diagnostics Card */
 .model-diagnostic-card {
     background: var(--bg-surface);
     border-bottom: 1px solid var(--border-subtle);
@@ -494,7 +644,12 @@ body {
 }
 
 .bubble-author {
-    font-weight: 600;
+    font-weight: 700;
+    color: #93c5fd;
+}
+
+.chat-bubble.user .bubble-author {
+    color: var(--text-low);
 }
 
 .bubble-body {
@@ -502,6 +657,25 @@ body {
     font-size: 0.9rem;
     line-height: 1.45;
     word-break: break-word;
+}
+
+/* Action Executed Card */
+.action-card {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    color: #93c5fd;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.action-card-icon {
+    font-weight: 700;
+    color: #60a5fa;
 }
 
 .audio-play-btn {

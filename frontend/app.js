@@ -1,27 +1,29 @@
 /**
- * VLA Studio - Executive Client Controller (Zero Feedback & High-Accuracy Audio)
+ * Contender Tactical Studio - Client Controller
+ * Multimodal Desktop Automation, Continuous Screen Vision & Hardware Engineering
  */
 
-class VLAStudioApp {
+class ContenderStudioApp {
     constructor() {
         this.ws = null;
         this.isRecording = false;
         this.mediaRecorder = null;
         this.audioChunks = [];
         this.micStream = null;
+        this.screenStream = null;
         this.cameraStream = null;
-        this.activeCameraSource = 'browser';
+        this.activeVisionSource = 'screen';
         this.selectedDeviceId = null;
-        this.isFacingUser = true;
+        this.isMiniHud = false;
         this.visualizer = null;
-        this.frameInterval = null;
+        this.screenFrameInterval = null;
         this.diagnosticsInterval = null;
         this.speechRecognizer = null;
         this.recognizedSpeechText = '';
 
         // Elements
+        this.screenVideo = document.getElementById('screen-video');
         this.clientVideo = document.getElementById('client-video');
-        this.serverVideoFeed = document.getElementById('server-video-feed');
         this.hiddenFrameCanvas = document.getElementById('hidden-frame-canvas');
         this.ttsAudioPlayer = document.getElementById('tts-audio-element');
         this.transcriptFeed = document.getElementById('transcript-feed');
@@ -31,26 +33,40 @@ class VLAStudioApp {
         this.pttLabel = document.getElementById('ptt-label');
         this.textInput = document.getElementById('text-input');
         this.btnSend = document.getElementById('btn-send');
-        this.btnSceneScan = document.getElementById('btn-scene-scan');
         this.btnInspectFrame = document.getElementById('btn-inspect-frame');
-        this.btnFlipCamera = document.getElementById('btn-flip-camera');
+        this.tabScreen = document.getElementById('tab-screen');
+        this.tabCam = document.getElementById('tab-cam');
         this.browserCameraSelect = document.getElementById('browser-camera-select');
-        this.tabCamBrowser = document.getElementById('tab-cam-browser');
-        this.tabCamHost = document.getElementById('tab-cam-host');
-        this.hostCamSelectWrap = document.getElementById('host-cam-select-wrap');
-        this.hostCameraSelect = document.getElementById('host-camera-select');
+        this.visionModeTag = document.getElementById('vision-mode-tag');
         this.audioStatusLabel = document.getElementById('audio-status-label');
-        this.videoResolutionTag = document.getElementById('video-resolution-tag');
         
-        // Status & Diagnostics Elements
+        // Status Elements
         this.statusDot = document.getElementById('status-dot');
         this.statusModelName = document.getElementById('status-model-name');
         this.statusStateText = document.getElementById('status-state-text');
         this.diagEngineName = document.getElementById('diag-engine-name');
-        this.diagHwMode = document.getElementById('diag-hw-mode');
+        this.diagSensoryMode = document.getElementById('diag-sensory-mode');
         this.diagStatusBadge = document.getElementById('diag-status-badge');
 
-        // Modal Elements
+        // Mini HUD Elements
+        this.miniHudWidget = document.getElementById('mini-hud-widget');
+        this.mainStudioLayout = document.getElementById('main-studio-layout');
+        this.btnToggleMiniHud = document.getElementById('btn-toggle-mini-hud');
+        this.btnExpandStudio = document.getElementById('btn-expand-studio');
+        this.btnMiniPtt = document.getElementById('btn-mini-ptt');
+        this.miniStatusDot = document.getElementById('mini-status-dot');
+
+        // Hardware Drawer Elements
+        this.hardwareDrawer = document.getElementById('hardware-drawer');
+        this.btnToggleHardware = document.getElementById('btn-toggle-hardware');
+        this.selectComPorts = document.getElementById('select-com-ports');
+        this.btnRefreshPorts = document.getElementById('btn-refresh-ports');
+        this.btnConnectPort = document.getElementById('btn-connect-port');
+        this.serialConsole = document.getElementById('serial-console');
+        this.serialSendInput = document.getElementById('serial-send-input');
+        this.btnSendSerial = document.getElementById('btn-send-serial');
+
+        // Modals
         this.modalPreferences = document.getElementById('modal-preferences');
         this.btnOpenSettings = document.getElementById('btn-open-settings');
         this.btnModalClose = document.getElementById('btn-modal-close');
@@ -59,8 +75,6 @@ class VLAStudioApp {
         this.voiceSelect = document.getElementById('voice-select');
         this.btnStopSystem = document.getElementById('btn-stop-system');
         this.modalShutdown = document.getElementById('modal-shutdown');
-
-        // Network / Mobile Pairing Modal
         this.btnNetworkConnect = document.getElementById('btn-network-connect');
         this.modalNetwork = document.getElementById('modal-network');
         this.btnCloseNetwork = document.getElementById('btn-close-network');
@@ -73,23 +87,19 @@ class VLAStudioApp {
     }
 
     async init() {
-        console.log('[VLA Studio] Initializing zero-feedback multimodal client...');
+        console.log('[Contender Studio] Initializing tactical client...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
         this.voiceSelect.value = savedVoice;
 
-        if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
-            if (this.btnFlipCamera) this.btnFlipCamera.style.display = 'flex';
-        }
-
         this.initSpeechRecognition();
         this.initWebSocket();
-        await this.initBrowserCamera();
-        await this.enumerateAllCameras();
+        await this.initContinuousScreenFeed();
         await this.initMicrophone();
         this.initEventListeners();
         this.startDiagnosticsPolling();
+        this.refreshHardwarePorts();
     }
 
     initSpeechRecognition() {
@@ -111,85 +121,64 @@ class VLAStudioApp {
                         this.textInput.placeholder = `Listening: "${this.recognizedSpeechText}"`;
                     }
                 };
-
-                this.speechRecognizer.onerror = (e) => {
-                    // Fail gracefully and rely on Faster-Whisper backend
-                };
             } catch (e) {}
         }
     }
 
-    async enumerateAllCameras() {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
-
+    async initContinuousScreenFeed() {
         try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const videoDevices = devices.filter(d => d.kind === 'videoinput');
-
-            this.browserCameraSelect.innerHTML = '';
-
-            if (videoDevices.length === 0) {
-                const opt = document.createElement('option');
-                opt.value = '';
-                opt.textContent = 'Default Camera';
-                this.browserCameraSelect.appendChild(opt);
-                return;
+            if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+                // Try capturing display stream
+                this.screenStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { frameRate: 15, width: { ideal: 1920 }, height: { ideal: 1080 } }
+                });
+                this.screenVideo.srcObject = this.screenStream;
+                this.screenVideo.play();
             }
+        } catch (e) {
+            console.log('[Screen] Using native desktop background screen capture loop.');
+        }
 
-            videoDevices.forEach((device, index) => {
-                const opt = document.createElement('option');
-                opt.value = device.deviceId;
-                opt.textContent = device.label || `Camera ${index + 1}`;
-                if (this.selectedDeviceId === device.deviceId) {
-                    opt.selected = true;
-                }
-                this.browserCameraSelect.appendChild(opt);
-            });
-        } catch (e) {}
+        if (this.screenFrameInterval) clearInterval(this.screenFrameInterval);
+        this.screenFrameInterval = setInterval(() => this.broadcastVisionFrame(), 800);
     }
 
-    async initBrowserCamera(deviceId = null) {
+    async initCameraFeed() {
         try {
             if (this.cameraStream) {
                 this.cameraStream.getTracks().forEach(t => t.stop());
             }
 
-            const videoConstraints = {
-                width: { ideal: 1920, min: 1280 },
-                height: { ideal: 1080, min: 720 }
+            const constraints = {
+                video: { width: { ideal: 1280 }, height: { ideal: 720 } }
             };
-
-            if (deviceId) {
-                videoConstraints.deviceId = { exact: deviceId };
-                this.selectedDeviceId = deviceId;
-            } else if (this.selectedDeviceId) {
-                videoConstraints.deviceId = { exact: this.selectedDeviceId };
-            } else {
-                videoConstraints.facingMode = this.isFacingUser ? 'user' : 'environment';
+            if (this.selectedDeviceId) {
+                constraints.video.deviceId = { exact: this.selectedDeviceId };
             }
 
-            this.cameraStream = await navigator.mediaDevices.getUserMedia({
-                video: videoConstraints
-            });
-
+            this.cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
             this.clientVideo.srcObject = this.cameraStream;
-            this.clientVideo.onloadedmetadata = () => {
-                this.clientVideo.play();
-                this.videoResolutionTag.textContent = `${this.clientVideo.videoWidth} x ${this.clientVideo.videoHeight} (Full HD)`;
-            };
-
-            if (this.frameInterval) clearInterval(this.frameInterval);
-            this.frameInterval = setInterval(() => this.broadcastCurrentFrame(), 600);
+            this.clientVideo.play();
+            await this.enumerateCameras();
         } catch (e) {
-            try {
-                const fallbackConstraints = deviceId ? { deviceId: { exact: deviceId } } : true;
-                this.cameraStream = await navigator.mediaDevices.getUserMedia({ video: fallbackConstraints });
-                this.clientVideo.srcObject = this.cameraStream;
-                this.clientVideo.play();
-            } catch (err) {
-                this.switchCameraSource('host');
-            }
+            console.warn('[Camera] Notice:', e);
         }
+    }
+
+    async enumerateCameras() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(d => d.kind === 'videoinput');
+            this.browserCameraSelect.innerHTML = '';
+            videoDevices.forEach((device, index) => {
+                const opt = document.createElement('option');
+                opt.value = device.deviceId;
+                opt.textContent = device.label || `Camera ${index + 1}`;
+                if (this.selectedDeviceId === device.deviceId) opt.selected = true;
+                this.browserCameraSelect.appendChild(opt);
+            });
+        } catch (e) {}
     }
 
     async initMicrophone() {
@@ -198,7 +187,6 @@ class VLAStudioApp {
                 this.micStream.getTracks().forEach(t => t.stop());
             }
 
-            // High-fidelity voice constraints with acoustic echo cancellation
             this.micStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     echoCancellation: { ideal: true },
@@ -210,53 +198,10 @@ class VLAStudioApp {
             });
 
             this.visualizer.connectMediaStream(this.micStream);
-            console.log('[Audio] Feedback-isolated microphone active.');
+            console.log('[Audio] Contender voice channel ready.');
         } catch (e) {
-            console.warn('[Audio] Microphone access issue:', e);
+            console.warn('[Audio] Mic access issue:', e);
         }
-    }
-
-    startDiagnosticsPolling() {
-        const updateDiagnostics = async () => {
-            try {
-                const res = await fetch('/api/diagnostics');
-                if (res.ok) {
-                    const data = await res.json();
-                    const brain = data.brain || {};
-                    
-                    if (brain.ready) {
-                        this.statusDot.className = 'status-dot online';
-                        this.statusModelName.textContent = brain.model_name || 'Qwen2.5-VL';
-                        this.statusStateText.textContent = 'Ready (GPU Active)';
-                        
-                        this.diagStatusBadge.className = 'diag-badge';
-                        this.diagStatusBadge.textContent = 'ONLINE & READY (GPU ACCELERATED)';
-                        this.diagHwMode.textContent = brain.acceleration || 'Hardware Accelerated (CUDA 4-Bit VRAM Offload)';
-                        this.diagEngineName.textContent = `${brain.model_name || 'Qwen2.5-VL'} (${brain.model_size_gb || '3.2'} GB VRAM)`;
-                    } else if (brain.is_starting) {
-                        this.statusDot.className = 'status-dot loading';
-                        this.statusStateText.textContent = 'Loading weights...';
-                        
-                        this.diagStatusBadge.className = 'diag-badge loading';
-                        this.diagStatusBadge.textContent = 'INITIALIZING WEIGHTS INTO VRAM...';
-                    } else {
-                        this.statusDot.className = 'status-dot offline';
-                        this.statusStateText.textContent = brain.status || 'Standby';
-                        
-                        this.diagStatusBadge.className = 'diag-badge loading';
-                        this.diagStatusBadge.textContent = brain.status || 'STANDBY';
-                    }
-                }
-            } catch (err) {
-                this.statusDot.className = 'status-dot offline';
-                this.statusStateText.textContent = 'Server Offline';
-                this.diagStatusBadge.className = 'diag-badge loading';
-                this.diagStatusBadge.textContent = 'OFFLINE';
-            }
-        };
-
-        updateDiagnostics();
-        this.diagnosticsInterval = setInterval(updateDiagnostics, 2500);
     }
 
     initWebSocket() {
@@ -283,36 +228,47 @@ class VLAStudioApp {
     }
 
     initEventListeners() {
-        this.tabCamBrowser.addEventListener('click', () => this.switchCameraSource('browser'));
-        this.tabCamHost.addEventListener('click', () => {
-            this.switchCameraSource('host');
-            this.fetchHostCamerasOnce();
-        });
+        // Tab switching (Screen vs Camera)
+        this.tabScreen.addEventListener('click', () => this.switchVisionSource('screen'));
+        this.tabCam.addEventListener('click', () => this.switchVisionSource('camera'));
 
         this.browserCameraSelect.addEventListener('change', (e) => {
-            const devId = e.target.value;
-            if (devId) {
-                this.initBrowserCamera(devId);
-            }
+            this.selectedDeviceId = e.target.value;
+            this.initCameraFeed();
         });
 
-        if (this.btnFlipCamera) {
-            this.btnFlipCamera.addEventListener('click', () => {
-                this.isFacingUser = !this.isFacingUser;
-                this.selectedDeviceId = null;
-                this.initBrowserCamera();
-            });
-        }
+        // Mini HUD Toggle
+        this.btnToggleMiniHud.addEventListener('click', () => this.toggleMiniHud(true));
+        this.btnExpandStudio.addEventListener('click', () => this.toggleMiniHud(false));
 
-        // Push-to-Talk Event Listeners
-        this.btnPtt.addEventListener('mousedown', (e) => { e.preventDefault(); this.startRecording(); });
-        this.btnPtt.addEventListener('mouseup', (e) => { e.preventDefault(); this.stopRecording(); });
-        this.btnPtt.addEventListener('mouseleave', () => { if (this.isRecording) this.stopRecording(); });
-        this.btnPtt.addEventListener('touchstart', (e) => { e.preventDefault(); this.startRecording(); });
-        this.btnPtt.addEventListener('touchend', (e) => { e.preventDefault(); this.stopRecording(); });
+        // Hardware Drawer Toggle
+        this.btnToggleHardware.addEventListener('click', () => {
+            const isHidden = this.hardwareDrawer.style.display === 'none';
+            this.hardwareDrawer.style.display = isHidden ? 'flex' : 'none';
+            if (isHidden) this.refreshHardwarePorts();
+        });
+
+        this.btnRefreshPorts.addEventListener('click', () => this.refreshHardwarePorts());
+        this.btnConnectPort.addEventListener('click', () => this.togglePortConnection());
+        this.btnSendSerial.addEventListener('click', () => this.sendSerialCommand());
+        this.serialSendInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') this.sendSerialCommand();
+        });
+
+        // Push-to-Talk (Spacebar and Buttons)
+        const setupPttBtn = (el) => {
+            el.addEventListener('mousedown', (e) => { e.preventDefault(); this.startRecording(); });
+            el.addEventListener('mouseup', (e) => { e.preventDefault(); this.stopRecording(); });
+            el.addEventListener('mouseleave', () => { if (this.isRecording) this.stopRecording(); });
+            el.addEventListener('touchstart', (e) => { e.preventDefault(); this.startRecording(); });
+            el.addEventListener('touchend', (e) => { e.preventDefault(); this.stopRecording(); });
+        };
+
+        setupPttBtn(this.btnPtt);
+        setupPttBtn(this.btnMiniPtt);
 
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && document.activeElement !== this.textInput && !this.isRecording && this.modalPreferences.style.display !== 'flex' && this.modalNetwork.style.display !== 'flex') {
+            if (e.code === 'Space' && document.activeElement !== this.textInput && document.activeElement !== this.serialSendInput && !this.isRecording && this.modalPreferences.style.display !== 'flex' && this.modalNetwork.style.display !== 'flex') {
                 e.preventDefault();
                 this.startRecording();
             }
@@ -329,20 +285,11 @@ class VLAStudioApp {
             if (e.key === 'Enter') this.sendTextMessage();
         });
 
-        this.btnSceneScan.addEventListener('click', () => this.triggerSceneScan());
         this.btnInspectFrame.addEventListener('click', () => {
-            this.sendTextMessage("Analyze this visual frame and describe key elements in detail.");
+            this.sendTextMessage("Contender, inspect the visual context and report key status.");
         });
 
-        this.hostCameraSelect.addEventListener('change', async (e) => {
-            const idx = e.target.value;
-            try {
-                await fetch(`/api/camera/select?index=${idx}`, { method: 'POST' });
-                this.serverVideoFeed.src = `/api/camera/stream?t=${Date.now()}`;
-            } catch (err) {}
-        });
-
-        // Network Modal
+        // Modals
         this.btnNetworkConnect.addEventListener('click', () => this.openNetworkModal());
         this.btnCloseNetwork.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
         this.btnCloseNetworkFooter.addEventListener('click', () => { this.modalNetwork.style.display = 'none'; });
@@ -352,7 +299,6 @@ class VLAStudioApp {
             setTimeout(() => { this.btnCopyNetworkUrl.textContent = 'Copy'; }, 2000);
         });
 
-        // Preferences Modal
         this.btnOpenSettings.addEventListener('click', () => { this.modalPreferences.style.display = 'flex'; });
         this.btnModalClose.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
         this.btnModalCancel.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
@@ -365,82 +311,66 @@ class VLAStudioApp {
             this.modalPreferences.style.display = 'none';
         });
 
-        // Stop System Button
         this.btnStopSystem.addEventListener('click', () => this.confirmShutdown());
     }
 
-    async openNetworkModal() {
-        try {
-            const res = await fetch('/api/network/info');
-            if (res.ok) {
-                const data = await res.json();
-                this.networkUrlInput.value = data.network_url;
-                if (data.qr_base64) {
-                    this.qrCodeImage.src = `data:image/png;base64,${data.qr_base64}`;
-                }
+    toggleMiniHud(enable) {
+        this.isMiniHud = enable;
+        if (enable) {
+            this.mainStudioLayout.style.display = 'none';
+            this.miniHudWidget.style.display = 'flex';
+            if (window.pywebview && window.pywebview.api) {
+                try { window.pywebview.api.toggle_mini_mode(); } catch (e) {}
             }
-        } catch (e) {
-            this.networkUrlInput.value = window.location.href;
-        }
-        this.modalNetwork.style.display = 'flex';
-    }
-
-    async confirmShutdown() {
-        const confirmed = confirm("Are you sure you want to stop the local neural model and shut down the server?");
-        if (!confirmed) return;
-
-        this.modalShutdown.style.display = 'flex';
-        try {
-            if (this.cameraStream) {
-                this.cameraStream.getTracks().forEach(t => t.stop());
-            }
-            await fetch('/api/system/shutdown', { method: 'POST' });
-        } catch (e) {}
-
-        setTimeout(() => {
-            window.close();
-        }, 1500);
-    }
-
-    switchCameraSource(source) {
-        this.activeCameraSource = source;
-        if (source === 'browser') {
-            this.tabCamBrowser.classList.add('active');
-            this.tabCamHost.classList.remove('active');
-            this.clientVideo.style.display = 'block';
-            this.serverVideoFeed.style.display = 'none';
-            this.hostCamSelectWrap.style.display = 'none';
-            this.browserCameraSelect.style.display = 'block';
-            this.initBrowserCamera(this.selectedDeviceId);
         } else {
-            this.tabCamHost.classList.add('active');
-            this.tabCamBrowser.classList.remove('active');
-            this.clientVideo.style.display = 'none';
-            this.serverVideoFeed.style.display = 'block';
-            this.hostCamSelectWrap.style.display = 'block';
-            this.browserCameraSelect.style.display = 'none';
-            if (this.frameInterval) clearInterval(this.frameInterval);
-            this.serverVideoFeed.src = `/api/camera/stream?t=${Date.now()}`;
-            this.videoResolutionTag.textContent = 'Host Camera 1080p';
+            this.miniHudWidget.style.display = 'none';
+            this.mainStudioLayout.style.display = 'flex';
+            if (window.pywebview && window.pywebview.api) {
+                try { window.pywebview.api.expand_studio_mode(); } catch (e) {}
+            }
         }
     }
 
-    captureCurrentFrameBase64() {
-        if (this.activeCameraSource === 'browser' && this.clientVideo.videoWidth > 0) {
+    switchVisionSource(source) {
+        this.activeVisionSource = source;
+        if (source === 'screen') {
+            this.tabScreen.classList.add('active');
+            this.tabCam.classList.remove('active');
+            this.screenVideo.style.display = 'block';
+            this.clientVideo.style.display = 'none';
+            this.browserCameraSelect.style.display = 'none';
+            this.visionModeTag.textContent = 'Continuous Screen';
+            this.diagSensoryMode.textContent = 'Continuous Screen (GPU Accelerated)';
+        } else {
+            this.tabCam.classList.add('active');
+            this.tabScreen.classList.remove('active');
+            this.screenVideo.style.display = 'none';
+            this.clientVideo.style.display = 'block';
+            this.browserCameraSelect.style.display = 'block';
+            this.visionModeTag.textContent = 'On-Demand Camera';
+            this.diagSensoryMode.textContent = 'Physical Camera (1080p)';
+            this.initCameraFeed();
+        }
+    }
+
+    captureCurrentVisionBase64() {
+        const vid = (this.activeVisionSource === 'screen' && this.screenVideo.videoWidth > 0) ? this.screenVideo : this.clientVideo;
+        if (vid && vid.videoWidth > 0) {
             this.hiddenFrameCanvas.width = 1280;
             this.hiddenFrameCanvas.height = 720;
             const ctx = this.hiddenFrameCanvas.getContext('2d');
-            ctx.drawImage(this.clientVideo, 0, 0, 1280, 720);
+            ctx.drawImage(vid, 0, 0, 1280, 720);
             return this.hiddenFrameCanvas.toDataURL('image/jpeg', 0.85).split(',')[1];
         }
         return null;
     }
 
-    broadcastCurrentFrame() {
-        if (this.activeCameraSource === 'browser' && this.ws && this.ws.readyState === WebSocket.OPEN) {
-            const b64 = this.captureCurrentFrameBase64();
+    broadcastVisionFrame() {
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            const b64 = this.captureCurrentVisionBase64();
             if (b64) {
-                this.ws.send(JSON.stringify({ type: 'client_frame', image_base64: b64 }));
+                const msgType = this.activeVisionSource === 'screen' ? 'screen_frame' : 'client_frame';
+                this.ws.send(JSON.stringify({ type: msgType, image_base64: b64 }));
             }
         }
     }
@@ -449,7 +379,6 @@ class VLAStudioApp {
         if (!this.micStream) return;
         if (this.isRecording) return;
 
-        // Instant Silence: Stop any assistant audio immediately to eliminate feedback
         if (this.ttsAudioPlayer) {
             this.ttsAudioPlayer.pause();
             this.ttsAudioPlayer.currentTime = 0;
@@ -459,11 +388,11 @@ class VLAStudioApp {
         this.audioChunks = [];
         this.recognizedSpeechText = '';
         this.btnPtt.classList.add('recording');
-        this.pttLabel.textContent = 'Listening...';
+        this.btnMiniPtt.classList.add('recording');
+        this.pttLabel.textContent = 'Listening to command...';
         this.audioStatusLabel.textContent = 'Listening';
         this.audioStatusLabel.className = 'audio-label active';
 
-        // Start native browser SpeechRecognition in parallel if available
         if (this.speechRecognizer) {
             try { this.speechRecognizer.start(); } catch (e) {}
         }
@@ -472,13 +401,10 @@ class VLAStudioApp {
         this.mediaRecorder = new MediaRecorder(this.micStream, { mimeType: mime });
 
         this.mediaRecorder.ondataavailable = (e) => {
-            if (e.data && e.data.size > 0) {
-                this.audioChunks.push(e.data);
-            }
+            if (e.data && e.data.size > 0) this.audioChunks.push(e.data);
         };
 
         this.mediaRecorder.onstop = () => this.processRecordedAudio();
-        // Record in 100ms slices so no speech is clipped
         this.mediaRecorder.start(100);
     }
 
@@ -486,7 +412,8 @@ class VLAStudioApp {
         if (!this.isRecording) return;
         this.isRecording = false;
         this.btnPtt.classList.remove('recording');
-        this.pttLabel.textContent = 'Hold to Speak';
+        this.btnMiniPtt.classList.remove('recording');
+        this.pttLabel.textContent = 'Hold to Speak ("Contender...")';
         this.audioStatusLabel.textContent = 'Processing';
 
         if (this.speechRecognizer) {
@@ -499,25 +426,25 @@ class VLAStudioApp {
     }
 
     processRecordedAudio() {
-        this.textInput.placeholder = 'Ask what the camera sees or enter query...';
-
+        this.textInput.placeholder = "Give command (e.g. 'open vscode', 'check screen', 'flash esp32')...";
         if (this.audioChunks.length === 0 && !this.recognizedSpeechText) return;
 
         const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-        this.showProcessing('Transcribing speech...');
+        this.showProcessing('Transcribing command...');
 
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
         reader.onloadend = () => {
             const b64 = reader.result.split(',')[1];
-            const frameB64 = this.captureCurrentFrameBase64();
+            const frameB64 = this.captureCurrentVisionBase64();
 
             if (this.ws && this.ws.readyState === WebSocket.OPEN) {
                 this.ws.send(JSON.stringify({
                     type: 'audio_query',
                     audio_base64: b64,
                     fallback_text: this.recognizedSpeechText,
-                    image_base64: frameB64,
+                    screen_base64: this.activeVisionSource === 'screen' ? frameB64 : null,
+                    camera_base64: this.activeVisionSource === 'camera' ? frameB64 : null,
                     format: 'webm'
                 }));
             }
@@ -531,29 +458,16 @@ class VLAStudioApp {
         if (!overrideText) this.textInput.value = '';
 
         this.appendMessage('user', text);
-        this.showProcessing('Running Qwen2.5-VL GPU inference...');
+        this.showProcessing('Contender executing directive...');
 
-        const frameB64 = this.captureCurrentFrameBase64();
+        const frameB64 = this.captureCurrentVisionBase64();
 
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify({
                 type: 'text_query',
                 text: text,
-                image_base64: frameB64
-            }));
-        }
-    }
-
-    triggerSceneScan() {
-        this.appendMessage('user', 'System visual scan request');
-        this.showProcessing('Analyzing visual environment (Qwen2.5-VL)...');
-
-        const frameB64 = this.captureCurrentFrameBase64();
-
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify({
-                type: 'scene_scan',
-                image_base64: frameB64
+                screen_base64: this.activeVisionSource === 'screen' ? frameB64 : null,
+                camera_base64: this.activeVisionSource === 'camera' ? frameB64 : null
             }));
         }
     }
@@ -562,23 +476,25 @@ class VLAStudioApp {
         if (!data || !data.type) return;
 
         if (data.type === 'status_update') {
-            if (data.state === 'thinking') this.showProcessing('Analyzing visual context with Qwen2.5-VL...');
-            else if (data.state === 'transcribing') this.showProcessing('Transcribing speech...');
+            if (data.state === 'thinking') this.showProcessing('Analyzing context and executing actions...');
+            else if (data.state === 'transcribing') this.showProcessing('Transcribing directive...');
             else if (data.state === 'idle') this.hideProcessing();
         } else if (data.type === 'stt_result') {
             if (data.text) this.appendMessage('user', data.text);
-        } else if (data.type === 'brain_response' || data.type === 'scene_briefing') {
+        } else if (data.type === 'brain_response') {
             this.hideProcessing();
-            const reply = data.response || 'No output generated.';
-            this.appendMessage('assistant', reply, data.speech);
+            const reply = data.response || 'Mission confirmed.';
+            this.appendMessage('assistant', reply, data.speech, data.action_card);
 
             if (data.speech && data.speech.audio_base64) {
                 this.playSpeech(data.speech.audio_base64);
             }
+        } else if (data.type === 'serial_telemetry') {
+            this.appendSerialLine(data.data);
         }
     }
 
-    appendMessage(role, text, speechData = null) {
+    appendMessage(role, text, speechData = null, actionCard = null) {
         const bubble = document.createElement('div');
         bubble.className = `chat-bubble ${role}`;
 
@@ -587,7 +503,7 @@ class VLAStudioApp {
 
         const author = document.createElement('span');
         author.className = 'bubble-author';
-        author.textContent = role === 'user' ? 'User' : 'Qwen2.5-VL';
+        author.textContent = role === 'user' ? 'Operator' : 'Contender';
 
         const timeSpan = document.createElement('span');
         timeSpan.className = 'bubble-time';
@@ -611,6 +527,13 @@ class VLAStudioApp {
 
         bubble.appendChild(header);
         bubble.appendChild(body);
+
+        if (actionCard) {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'action-card';
+            cardEl.innerHTML = `<span class="action-card-icon">⚡</span> <strong>[ACTION]</strong> ${actionCard.title || 'Task Executed'}`;
+            bubble.appendChild(cardEl);
+        }
 
         this.transcriptFeed.appendChild(bubble);
         this.transcriptFeed.scrollTop = this.transcriptFeed.scrollHeight;
@@ -644,21 +567,135 @@ class VLAStudioApp {
         } catch (e) {}
     }
 
-    async fetchHostCamerasOnce() {
+    // Hardware Drawer Methods
+    async refreshHardwarePorts() {
         try {
-            const res = await fetch('/api/camera/devices');
-            const data = await res.json();
-            this.hostCameraSelect.innerHTML = '';
-            data.forEach(c => {
+            const res = await fetch('/api/embedded/ports');
+            const ports = await res.json();
+            this.selectComPorts.innerHTML = '';
+            if (ports.length === 0) {
                 const opt = document.createElement('option');
-                opt.value = c.index;
-                opt.textContent = c.name;
-                this.hostCameraSelect.appendChild(opt);
+                opt.value = '';
+                opt.textContent = 'No COM ports detected';
+                this.selectComPorts.appendChild(opt);
+                return;
+            }
+            ports.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.port;
+                opt.textContent = `${p.port} - ${p.board_type}`;
+                this.selectComPorts.appendChild(opt);
             });
         } catch (e) {}
+    }
+
+    async togglePortConnection() {
+        const port = this.selectComPorts.value;
+        if (!port) return;
+        if (this.btnConnectPort.textContent === 'Connect') {
+            const res = await fetch('/api/embedded/serial/connect', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ port: port, baudrate: 115200 })
+            });
+            const data = await res.json();
+            if (data.success) {
+                this.btnConnectPort.textContent = 'Disconnect';
+                this.btnConnectPort.className = 'control-btn btn-danger';
+                this.appendSerialLine(`[Contender] Connected to ${port} @ 115200 baud.`);
+            }
+        } else {
+            await fetch('/api/embedded/serial/disconnect', { method: 'POST' });
+            this.btnConnectPort.textContent = 'Connect';
+            this.btnConnectPort.className = 'control-btn btn-primary';
+            this.appendSerialLine(`[Contender] Disconnected from serial port.`);
+        }
+    }
+
+    async sendSerialCommand() {
+        const text = this.serialSendInput.value.trim();
+        if (!text) return;
+        this.serialSendInput.value = '';
+        await fetch('/api/embedded/serial/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: text })
+        });
+        this.appendSerialLine(`> ${text}`);
+    }
+
+    appendSerialLine(text) {
+        const line = document.createElement('div');
+        line.className = 'console-line';
+        line.textContent = text;
+        this.serialConsole.appendChild(line);
+        this.serialConsole.scrollTop = this.serialConsole.scrollHeight;
+    }
+
+    async openNetworkModal() {
+        try {
+            const res = await fetch('/api/network/info');
+            if (res.ok) {
+                const data = await res.json();
+                this.networkUrlInput.value = data.network_url;
+                if (data.qr_base64) {
+                    this.qrCodeImage.src = `data:image/png;base64,${data.qr_base64}`;
+                }
+            }
+        } catch (e) {
+            this.networkUrlInput.value = window.location.href;
+        }
+        this.modalNetwork.style.display = 'flex';
+    }
+
+    async confirmShutdown() {
+        const confirmed = confirm("Power down Contender tactical core and shut down server?");
+        if (!confirmed) return;
+
+        this.modalShutdown.style.display = 'flex';
+        try {
+            await fetch('/api/system/shutdown', { method: 'POST' });
+        } catch (e) {}
+
+        setTimeout(() => {
+            if (window.pywebview && window.pywebview.api) {
+                try { window.pywebview.api.close_app(); } catch (e) {}
+            } else {
+                window.close();
+            }
+        }, 1200);
+    }
+
+    startDiagnosticsPolling() {
+        const updateDiagnostics = async () => {
+            try {
+                const res = await fetch('/api/diagnostics');
+                if (res.ok) {
+                    const data = await res.json();
+                    const brain = data.brain || {};
+                    
+                    if (brain.ready) {
+                        this.statusDot.className = 'status-dot online';
+                        this.miniStatusDot.className = 'mini-status-dot';
+                        this.statusModelName.textContent = 'Contender Core';
+                        this.statusStateText.textContent = 'Ready (Tactical Mode)';
+                        this.diagStatusBadge.className = 'diag-badge';
+                        this.diagStatusBadge.textContent = 'ONLINE & READY';
+                    } else if (brain.is_starting) {
+                        this.statusDot.className = 'status-dot loading';
+                        this.statusStateText.textContent = 'Loading neural core...';
+                        this.diagStatusBadge.className = 'diag-badge loading';
+                        this.diagStatusBadge.textContent = 'INITIALIZING...';
+                    }
+                }
+            } catch (err) {}
+        };
+
+        updateDiagnostics();
+        this.diagnosticsInterval = setInterval(updateDiagnostics, 3000);
     }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    window.vlaStudio = new VLAStudioApp();
+    window.contenderStudio = new ContenderStudioApp();
 });
