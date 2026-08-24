@@ -6,6 +6,9 @@ import threading
 import subprocess
 import shutil
 import tempfile
+import urllib.request
+import zipfile
+import io
 from typing import Dict, List, Optional, Any, Callable
 
 try:
@@ -21,9 +24,9 @@ except ImportError:
 
 class EmbeddedAgent:
     """
-    Embedded Microcontroller Engineering Engine for Contender.
-    Provides hardware port discovery, Arduino/ESP firmware generation,
-    esptool flashing, and live serial telemetry.
+    Embedded Hardware & Microcontroller Engine for Contender.
+    Provides autonomous COM port discovery, Arduino compilation and uploading,
+    ESP32 flashing, and live interactive serial telemetry.
     """
 
     KNOWN_CHIP_SIGNATURES = {
@@ -43,7 +46,26 @@ class EmbeddedAgent:
         self.serial_listeners: List[Callable[[str], None]] = []
         self.monitor_thread: Optional[threading.Thread] = None
 
-    # ==================== PORT DISCOVERY ====================
+        self.bin_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "bin")
+        self.arduino_cli_path = os.path.join(self.bin_dir, "arduino-cli.exe")
+        self._ensure_arduino_cli()
+
+    def _ensure_arduino_cli(self):
+        os.makedirs(self.bin_dir, exist_ok=True)
+        if not os.path.exists(self.arduino_cli_path):
+            try:
+                print("[EmbeddedAgent] Fetching standalone arduino-cli...")
+                url = "https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip"
+                req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req, timeout=25) as resp:
+                    zip_data = resp.read()
+                with zipfile.ZipFile(io.BytesIO(zip_data)) as z:
+                    z.extract("arduino-cli.exe", self.bin_dir)
+                print("[EmbeddedAgent] arduino-cli installed in bin/.")
+            except Exception as e:
+                print(f"[EmbeddedAgent] Notice: Could not download arduino-cli ({e})")
+
+    # ==================== AUTONOMOUS PORT DISCOVERY ====================
 
     def scan_ports(self) -> List[Dict[str, Any]]:
         """
@@ -56,6 +78,7 @@ class EmbeddedAgent:
         try:
             for p in serial.tools.list_ports.comports():
                 board_type = "Generic Serial Device"
+                fqbn = "arduino:avr:uno"
                 vid = p.vid
                 pid = p.pid
 
@@ -67,9 +90,15 @@ class EmbeddedAgent:
 
                 desc = p.description or ""
                 if "arduino" in desc.lower():
-                    board_type = f"Arduino Device ({desc})"
+                    board_type = f"Arduino ({desc})"
+                    if "mega" in desc.lower():
+                        fqbn = "arduino:avr:mega"
+                    elif "nano" in desc.lower():
+                        fqbn = "arduino:avr:nano"
+                    else:
+                        fqbn = "arduino:avr:uno"
                 elif "ch340" in desc.lower() or "cp210" in desc.lower():
-                    board_type = f"ESP32 / Arduino ({desc})"
+                    board_type = f"Arduino / ESP32 ({desc})"
 
                 devices.append({
                     "port": p.device,
@@ -78,76 +107,120 @@ class EmbeddedAgent:
                     "vid": p.vid,
                     "pid": p.pid,
                     "board_type": board_type,
+                    "fqbn": fqbn,
                     "is_active": (self.active_port == p.device and self.is_monitoring)
                 })
         except Exception as e:
-            print(f"[EmbeddedAgent] Port scan error: {e}")
+            print(f"[EmbeddedAgent] Port scan notice: {e}")
 
         return devices
 
-    # ==================== ESP32 / ESP8266 CHIP INSPECTION ====================
+    def auto_detect_target_port(self) -> Optional[Dict[str, Any]]:
+        ports = self.scan_ports()
+        if not ports:
+            return None
+        # Prefer detected microcontrollers over generic COM1
+        for p in ports:
+            if "arduino" in p["board_type"].lower() or "ch340" in p["board_type"].lower() or "esp" in p["board_type"].lower() or "cp210" in p["board_type"].lower():
+                return p
+        return ports[0]
 
-    def inspect_esp_chip(self, port: str) -> Dict[str, Any]:
+    # ==================== AUTONOMOUS COMPILE & FLASH PIPELINE ====================
+
+    def auto_compile_and_flash_sketch(self, prompt: str, target_board: str = "auto") -> Dict[str, Any]:
         """
-        Uses esptool to query chip details (MAC, Flash Size, Features).
+        AUTONOMOUS ACTION:
+        1. Auto-detects connected Arduino or ESP device.
+        2. Writes custom C++/MicroPython firmware.
+        3. Compiles firmware with arduino-cli.
+        4. Flashes firmware directly to the target COM port.
         """
-        try:
-            result = subprocess.run(
-                ["esptool.py", "--port", port, "chip_id"],
-                capture_output=True,
-                text=True,
-                timeout=8
-            )
+        device = self.auto_detect_target_port()
+        if not device:
             return {
-                "success": result.returncode == 0,
-                "port": port,
-                "output": result.stdout.strip() or result.stderr.strip()
+                "success": False,
+                "error": "No microcontroller or USB serial device detected on system COM ports. Please connect your board."
             }
-        except Exception as e:
-            return {"success": False, "port": port, "error": str(e)}
 
-    def flash_esp_firmware(self, port: str, binary_path: str, offset: str = "0x10000") -> Dict[str, Any]:
-        """
-        Flashes compiled binary into ESP32 / ESP8266 via esptool.
-        """
-        if not os.path.isfile(binary_path):
-            return {"success": False, "error": f"Binary file not found: {binary_path}"}
+        port_name = device["port"]
+        fqbn = device.get("fqbn", "arduino:avr:uno")
+        board_label = device.get("board_type", "Arduino Uno")
 
-        # Release serial port if currently open
-        if self.active_port == port and self.is_monitoring:
+        # Disconnect active serial monitor before upload
+        if self.active_port == port_name and self.is_monitoring:
             self.disconnect_serial()
 
-        try:
-            cmd = ["esptool.py", "--port", port, "write_flash", offset, binary_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-            return {
-                "success": result.returncode == 0,
-                "port": port,
-                "stdout": result.stdout.strip(),
-                "stderr": result.stderr.strip()
-            }
-        except Exception as e:
-            return {"success": False, "error": str(e)}
+        # Generate firmware
+        gen_result = self.generate_microcontroller_code(prompt, board="esp32" if "esp" in board_label.lower() else "uno")
+        sketch_code = gen_result["code"]
 
-    # ==================== CODE GENERATION & COMPILATION ====================
+        with tempfile.TemporaryDirectory() as tmpdir:
+            sketch_folder = os.path.join(tmpdir, "contender_firmware")
+            os.makedirs(sketch_folder, exist_ok=True)
+            sketch_file = os.path.join(sketch_folder, "contender_firmware.ino")
 
-    def generate_microcontroller_code(self, prompt: str, board: str = "esp32") -> Dict[str, Any]:
-        """
-        Generates standard, ready-to-compile Arduino C++ or MicroPython sketch.
-        """
+            with open(sketch_file, "w", encoding="utf-8") as f:
+                f.write(sketch_code)
+
+            if not os.path.exists(self.arduino_cli_path):
+                return {
+                    "success": False,
+                    "error": "arduino-cli toolchain is not ready in bin/."
+                }
+
+            # 1. Compile Sketch
+            print(f"[EmbeddedAgent] Compiling firmware for {fqbn}...")
+            comp = subprocess.run(
+                [self.arduino_cli_path, "compile", "--fqbn", fqbn, sketch_folder],
+                capture_output=True,
+                text=True,
+                timeout=20
+            )
+
+            if comp.returncode != 0:
+                return {
+                    "success": False,
+                    "stage": "compile",
+                    "error": f"Compilation failed: {comp.stderr.strip() or comp.stdout.strip()}"
+                }
+
+            # 2. Upload to Device
+            print(f"[EmbeddedAgent] Uploading firmware to {port_name} ({fqbn})...")
+            upload = subprocess.run(
+                [self.arduino_cli_path, "upload", "-p", port_name, "--fqbn", fqbn, sketch_folder],
+                capture_output=True,
+                text=True,
+                timeout=25
+            )
+
+            if upload.returncode != 0:
+                return {
+                    "success": False,
+                    "stage": "upload",
+                    "error": f"Upload to {port_name} failed: {upload.stderr.strip() or upload.stdout.strip()}"
+                }
+
+        return {
+            "success": True,
+            "port": port_name,
+            "board": board_label,
+            "message": f"Successfully compiled and uploaded firmware to {board_label} on {port_name}."
+        }
+
+    # ==================== CODE GENERATION ====================
+
+    def generate_microcontroller_code(self, prompt: str, board: str = "uno") -> Dict[str, Any]:
         lower = prompt.lower()
-        
-        # Smart template generation
+        pin = 2 if "esp" in board.lower() else 13
+
         if "blink" in lower or "led" in lower:
-            pin = 2 if "esp" in board.lower() else 13
-            code = f"""// Contender Generated Firmware: LED Blink
-// Board: {board.upper()}
+            code = f"""// Contender Autonomous Firmware: LED Controller
 #define LED_PIN {pin}
 
 void setup() {{
   Serial.begin(115200);
   pinMode(LED_PIN, OUTPUT);
-  Serial.println("[Contender] System initialized. Starting blink cycle.");
+  Serial.println("[Contender] Microcontroller online. LED Blink sequence initialized.");
 }}
 
 void loop() {{
@@ -159,61 +232,60 @@ void loop() {{
   delay(1000);
 }}
 """
+        elif "relay" in lower or "motor" in lower:
+            code = """// Contender Autonomous Firmware: Relay / Motor Actuator
+#define RELAY_PIN 7
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
+  Serial.println("[Contender] Relay Actuator Ready. Awaiting commands (ON/OFF).");
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String cmd = Serial.readStringUntil('\\n');
+    cmd.trim();
+    if (cmd.equalsIgnoreCase("ON")) {
+      digitalWrite(RELAY_PIN, HIGH);
+      Serial.println("[Contender] RELAY ACTIVATED");
+    } else if (cmd.equalsIgnoreCase("OFF")) {
+      digitalWrite(RELAY_PIN, LOW);
+      Serial.println("[Contender] RELAY DEACTIVATED");
+    }
+  }
+}
+"""
         elif "servo" in lower:
-            code = f"""// Contender Generated Firmware: Servo Control
+            code = """// Contender Autonomous Firmware: Servo Controller
 #include <Servo.h>
 
 Servo myServo;
 #define SERVO_PIN 9
 
-void setup() {{
-  Serial.begin(115200);
-  myServo.attach(SERVO_PIN);
-  Serial.println("[Contender] Servo Controller Ready.");
-}}
-
-void loop() {{
-  if (Serial.available() > 0) {{
-    int angle = Serial.parseInt();
-    if (angle >= 0 && angle <= 180) {{
-      myServo.write(angle);
-      Serial.print("[Contender] Angle set to: ");
-      Serial.println(angle);
-    }}
-  }}
-}}
-"""
-        elif "wifi" in lower and "esp" in board.lower():
-            code = """// Contender Generated Firmware: ESP32 Wi-Fi Telemetry
-#include <WiFi.h>
-
-const char* ssid = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASS";
-
 void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
-  Serial.print("[Contender] Connecting to Wi-Fi");
-  
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("\\n[Contender] Connected! IP Address: ");
-  Serial.println(WiFi.localIP());
+  myServo.attach(SERVO_PIN);
+  Serial.println("[Contender] Servo Controller Online.");
 }
 
 void loop() {
-  Serial.print("[Telemetry] RSSI: ");
-  Serial.println(WiFi.RSSI());
-  delay(3000);
+  if (Serial.available() > 0) {
+    int angle = Serial.parseInt();
+    if (angle >= 0 && angle <= 180) {
+      myServo.write(angle);
+      Serial.print("[Contender] Angle set to: ");
+      Serial.println(angle);
+    }
+  }
 }
 """
         else:
-            code = f"""// Contender Generated Firmware for {board.upper()}
+            code = f"""// Contender Autonomous Firmware for {board.upper()}
 void setup() {{
   Serial.begin(115200);
-  Serial.println("[Contender] Microcontroller online and awaiting commands.");
+  Serial.println("[Contender] Microcontroller online and awaiting instructions.");
 }}
 
 void loop() {{
@@ -233,12 +305,9 @@ void loop() {{
             "filename": f"contender_{board}_sketch.ino"
         }
 
-    # ==================== LIVE SERIAL TERMINAL ====================
+    # ==================== SERIAL TERMINAL ====================
 
     def connect_serial(self, port: str, baudrate: int = 115200) -> Dict[str, Any]:
-        """
-        Connects to a serial port for real-time telemetry and command sending.
-        """
         if not serial:
             return {"success": False, "error": "pyserial not available"}
 
@@ -288,10 +357,6 @@ void loop() {{
     def add_serial_listener(self, callback: Callable[[str], None]):
         if callback not in self.serial_listeners:
             self.serial_listeners.append(callback)
-
-    def remove_serial_listener(self, callback: Callable[[str], None]):
-        if callback in self.serial_listeners:
-            self.serial_listeners.remove(callback)
 
     def _serial_reader_loop(self):
         while self.is_monitoring and self.active_serial and self.active_serial.is_open:

@@ -29,8 +29,8 @@ from intent_router import IntentRouter
 
 app = FastAPI(
     title="Contender AI Assistant",
-    description="Tactical Multimodal Assistant with Autonomous Sensory Switching & Hands-Free Voice.",
-    version="4.1.0"
+    description="Tactical Multimodal Assistant with Autonomous Hardware Flashing & Voice Interruption.",
+    version="4.2.0"
 )
 
 app.add_middleware(
@@ -60,7 +60,6 @@ desktop = DesktopAgent()
 embedded = EmbeddedAgent()
 router = IntentRouter()
 
-# Store latest visual frames
 _LATEST_SCREEN_B64: Optional[str] = None
 _LATEST_CAMERA_B64: Optional[str] = None
 
@@ -70,7 +69,7 @@ async def startup_event():
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    print("[Contender] Releasing resources and shutting down...")
+    print("[Contender] Powering down subsystems...")
     camera.stop()
     embedded.disconnect_serial()
     brain.shutdown()
@@ -79,7 +78,7 @@ async def shutdown_event():
 def get_favicon():
     return Response(status_code=204)
 
-# ==================== SYSTEM & STATUS REST APIS ====================
+# ==================== SYSTEM & REST APIS ====================
 
 @app.get("/api/status")
 async def get_system_status():
@@ -127,8 +126,6 @@ def get_network_info():
 
 @app.post("/api/system/shutdown")
 async def shutdown_system(background_tasks: BackgroundTasks):
-    print("[Contender] Powering down system...")
-    
     def kill_process():
         time.sleep(0.5)
         camera.stop()
@@ -137,7 +134,7 @@ async def shutdown_system(background_tasks: BackgroundTasks):
         os.kill(os.getpid(), signal.SIGTERM if sys.platform != "win32" else signal.SIGINT)
 
     background_tasks.add_task(kill_process)
-    return {"success": True, "message": "Contender and local model engines powered down."}
+    return {"success": True, "message": "Contender powered down."}
 
 # ==================== DESKTOP AUTOMATION APIS ====================
 
@@ -179,28 +176,18 @@ def handle_file_operation(req: FileOpRequest):
         return desktop.search_files(req.query, req.path or "Desktop")
     return {"success": False, "error": f"Unknown file operation: {req.action}"}
 
-class ScreenFrameRequest(BaseModel):
-    image_base64: str
-
-@app.post("/api/desktop/screen/frame")
-def upload_screen_frame(req: ScreenFrameRequest):
-    global _LATEST_SCREEN_B64
-    _LATEST_SCREEN_B64 = req.image_base64
-    return {"success": True}
-
 # ==================== EMBEDDED HARDWARE APIS ====================
 
 @app.get("/api/embedded/ports")
 def get_serial_ports():
     return embedded.scan_ports()
 
-class GenerateCodeRequest(BaseModel):
+class ProgramMicrocontrollerRequest(BaseModel):
     prompt: str
-    board: Optional[str] = "esp32"
 
-@app.post("/api/embedded/generate")
-def generate_sketch(req: GenerateCodeRequest):
-    return embedded.generate_microcontroller_code(req.prompt, req.board or "esp32")
+@app.post("/api/embedded/program")
+def auto_program_board(req: ProgramMicrocontrollerRequest):
+    return embedded.auto_compile_and_flash_sketch(req.prompt)
 
 class ConnectSerialRequest(BaseModel):
     port: str
@@ -221,16 +208,7 @@ class SendSerialRequest(BaseModel):
 def send_serial(req: SendSerialRequest):
     return embedded.send_serial_data(req.data)
 
-class FlashRequest(BaseModel):
-    port: str
-    binary_path: str
-    offset: Optional[str] = "0x10000"
-
-@app.post("/api/embedded/flash")
-def flash_firmware(req: FlashRequest):
-    return embedded.flash_esp_firmware(req.port, req.binary_path, req.offset or "0x10000")
-
-# ==================== CAMERA & VOICE REST APIS ====================
+# ==================== CAMERA & VOICE APIS ====================
 
 @app.get("/api/camera/stream")
 def video_feed():
@@ -268,13 +246,9 @@ class TTSRequest(BaseModel):
 async def speak_text(req: TTSRequest):
     return await tts.synthesize_base64(req.text, req.voice_key)
 
-# ==================== AGENTIC ACTION & SENSORY DISPATCHER ====================
+# ==================== AGENTIC ACTION DISPATCHER ====================
 
 async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], screen_b64: Optional[str], cam_b64: Optional[str]) -> Tuple[str, Optional[Dict], str]:
-    """
-    Executes real desktop and embedded actions, automatically chooses Screen vs Camera,
-    and returns (reply_text, action_card, active_vision_source).
-    """
     intent = intent_info.get("intent", "CONVERSATION")
     prompt = intent_info.get("prompt", user_text)
     vision_source = intent_info.get("vision_source", "screen")
@@ -282,8 +256,32 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
     action_log = None
     system_context = None
 
-    # Action 1: Launch Application
-    if intent == "DESKTOP_APP" or any(k in lower for k in ["launch", "open "]):
+    # Action 1: Embedded Microcontroller Auto-Program
+    if intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "esp32"]):
+        if any(k in lower for k in ["program", "flash", "upload", "write code to", "load sketch", "blink"]):
+            flash_res = embedded.auto_compile_and_flash_sketch(prompt)
+            if flash_res.get("success"):
+                action_log = {
+                    "type": "hardware_flash",
+                    "title": f"Flashed {flash_res.get('board')}",
+                    "status": f"Uploaded to {flash_res.get('port')}"
+                }
+                system_context = f"You autonomously compiled the sketch and uploaded it to the {flash_res.get('board')} on {flash_res.get('port')}. The microcontroller is now running the new firmware."
+            else:
+                action_log = {
+                    "type": "hardware_flash",
+                    "title": "Upload Notice",
+                    "status": flash_res.get("error", "No board detected")
+                }
+                system_context = f"Microcontroller action status: {flash_res.get('error')}"
+        elif any(k in lower for k in ["scan", "list port", "detect"]):
+            ports = embedded.scan_ports()
+            port_desc = [f"{p['port']} ({p['board_type']})" for p in ports] or ["No active COM ports detected"]
+            action_log = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": port_desc}
+            system_context = f"Connected hardware ports: {', '.join(port_desc)}"
+
+    # Action 2: Launch Application
+    elif intent == "DESKTOP_APP" or any(k in lower for k in ["launch", "open "]):
         target_app = None
         for app_k in desktop.KNOWN_APPS.keys():
             if app_k in lower:
@@ -303,7 +301,7 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
                 action_log = {"type": "app_launch", "title": f"Launch Failed", "status": res.get("error")}
                 system_context = f"Failed to launch {target_app}: {res.get('error')}"
 
-    # Action 2: File Operations
+    # Action 3: File Operations
     elif intent == "FILE_OPERATION":
         if "list" in lower:
             res = desktop.list_directory("Desktop")
@@ -312,19 +310,6 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
         elif "copy" in lower:
             action_log = {"type": "file_op", "title": "File Copy Executed", "status": "Done"}
             system_context = "Copied the requested file to the destination folder."
-
-    # Action 3: Embedded Hardware
-    elif intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["arduino", "esp32", "com port", "scan port", "serial"]):
-        if any(k in lower for k in ["scan", "list port", "detect", "what port"]):
-            ports = embedded.scan_ports()
-            port_desc = [f"{p['port']} ({p['board_type']})" for p in ports] or ["No active COM ports detected"]
-            action_log = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": port_desc}
-            system_context = f"Connected hardware ports: {', '.join(port_desc)}"
-        elif "code" in lower or "sketch" in lower or "blink" in lower:
-            board = "esp32" if "esp" in lower else "arduino"
-            gen = embedded.generate_microcontroller_code(prompt, board=board)
-            action_log = {"type": "code_gen", "title": f"Generated {board.upper()} Code", "filename": gen.get("filename")}
-            system_context = f"Generated {board.upper()} sketch:\n{gen.get('code')[:200]}..."
 
     # Action 4: System Metrics
     elif intent == "SYSTEM_METRICS":

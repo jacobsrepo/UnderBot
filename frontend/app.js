@@ -1,13 +1,13 @@
 /**
  * Contender Tactical Studio - Client Controller
- * Autonomous Sensory Switching & Continuous Hands-Free Voice Assistant
+ * Autonomous Sensory Switching, Autonomous Hardware Flashing & Voice Interruption (Barge-In)
  */
 
 class ContenderStudioApp {
     constructor() {
         this.ws = null;
         this.isRecording = false;
-        this.isHandsFreeActive = true; // Enabled by default for natural hands-free conversation
+        this.isHandsFreeActive = true;
         this.mediaRecorder = null;
         this.audioChunks = [];
         this.micStream = null;
@@ -21,7 +21,7 @@ class ContenderStudioApp {
         this.cameraFrameInterval = null;
         this.diagnosticsInterval = null;
         
-        // Continuous Hands-Free Voice Processing
+        // Continuous Hands-Free Voice & Barge-In Interruption
         this.speechRecognizer = null;
         this.handsFreeSilenceTimer = null;
         this.currentSpokenSentence = '';
@@ -93,7 +93,7 @@ class ContenderStudioApp {
     }
 
     async init() {
-        console.log('[Contender Studio] Initializing hands-free tactical assistant...');
+        console.log('[Contender Studio] Initializing voice-interruption enabled assistant...');
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
@@ -109,12 +109,12 @@ class ContenderStudioApp {
         this.refreshHardwarePorts();
     }
 
-    // ==================== CONTINUOUS HANDS-FREE VOICE DETECTION ====================
+    // ==================== CONTINUOUS HANDS-FREE VOICE DETECTION & BARGE-IN ====================
 
     initContinuousHandsFreeRecognition() {
         const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognitionClass) {
-            console.log('[Voice] Web Speech API not available. Using Push-to-Talk as primary.');
+            console.log('[Voice] Using manual push-to-talk.');
             return;
         }
 
@@ -125,15 +125,13 @@ class ContenderStudioApp {
             this.speechRecognizer.lang = 'en-US';
 
             this.speechRecognizer.onstart = () => {
-                if (this.isHandsFreeActive) {
+                if (this.isHandsFreeActive && !this.isAssistantSpeaking) {
                     this.audioStatusLabel.textContent = 'Hands-Free (Active)';
                     this.audioStatusLabel.className = 'audio-label active';
                 }
             };
 
             this.speechRecognizer.onresult = (event) => {
-                if (this.isAssistantSpeaking) return; // Mute input while assistant speaks
-
                 let interim = '';
                 let final = '';
 
@@ -147,23 +145,27 @@ class ContenderStudioApp {
 
                 const currentText = (final || interim).trim();
                 if (currentText) {
+                    // VOICE BARGE-IN: If assistant is speaking and user speaks, instantly cut off assistant!
+                    if (this.isAssistantSpeaking) {
+                        console.log('[Voice] Barge-In detected! Cutting off assistant speech.');
+                        this.interruptAssistant();
+                    }
+
                     this.currentSpokenSentence = currentText;
                     this.textInput.placeholder = `Listening: "${currentText}"`;
                     this.audioStatusLabel.textContent = 'Hearing Speech...';
 
-                    // Reset silence timer
                     if (this.handsFreeSilenceTimer) clearTimeout(this.handsFreeSilenceTimer);
 
-                    // When user pauses for 1000ms, automatically submit command hands-free!
+                    // Submit after 1000ms pause
                     this.handsFreeSilenceTimer = setTimeout(() => {
                         this.commitHandsFreeUtterance();
-                    }, 1100);
+                    }, 1000);
                 }
             };
 
             this.speechRecognizer.onerror = (e) => {
-                // Auto-restart continuous recognizer on error
-                if (this.isHandsFreeActive && !this.isAssistantSpeaking) {
+                if (this.isHandsFreeActive) {
                     setTimeout(() => {
                         try { this.speechRecognizer.start(); } catch (err) {}
                     }, 1000);
@@ -171,7 +173,7 @@ class ContenderStudioApp {
             };
 
             this.speechRecognizer.onend = () => {
-                if (this.isHandsFreeActive && !this.isAssistantSpeaking) {
+                if (this.isHandsFreeActive) {
                     setTimeout(() => {
                         try { this.speechRecognizer.start(); } catch (err) {}
                     }, 300);
@@ -179,20 +181,30 @@ class ContenderStudioApp {
             };
 
             this.speechRecognizer.start();
-            console.log('[Voice] Continuous hands-free recognition active.');
+            console.log('[Voice] Continuous voice recognition with Barge-In active.');
         } catch (e) {
-            console.warn('[Voice] Hands-free recognition initialization:', e);
+            console.warn('[Voice] Hands-free error:', e);
         }
+    }
+
+    interruptAssistant() {
+        if (this.ttsAudioPlayer) {
+            this.ttsAudioPlayer.pause();
+            this.ttsAudioPlayer.currentTime = 0;
+        }
+        this.isAssistantSpeaking = false;
+        this.audioStatusLabel.textContent = 'Interrupted';
+        this.visualizer.setIdle();
     }
 
     commitHandsFreeUtterance() {
         const text = this.currentSpokenSentence.trim();
-        if (!text || this.isAssistantSpeaking) return;
+        if (!text) return;
 
         this.currentSpokenSentence = '';
-        this.textInput.placeholder = "Give command (e.g. 'open vscode', 'what's on my screen', 'what am i holding')...";
+        this.textInput.placeholder = "Give command (e.g. 'program arduino', 'what's on my screen')...";
         
-        console.log('[Voice] Hands-free query dispatched:', text);
+        console.log('[Voice] Dispatching query:', text);
         this.sendTextMessage(text);
     }
 
@@ -394,7 +406,6 @@ class ContenderStudioApp {
         } else if (data.type === 'brain_response') {
             this.hideProcessing();
             
-            // Automatically switch viewport if server indicated camera vs screen
             if (data.auto_vision) {
                 this.switchVisionSource(data.auto_vision);
             }
@@ -405,6 +416,11 @@ class ContenderStudioApp {
             if (data.speech && data.speech.audio_base64) {
                 this.playSpeech(data.speech.audio_base64);
             }
+
+            // If hardware flash executed, refresh ports list
+            if (data.action_card && data.action_card.type === 'hardware_flash') {
+                this.refreshHardwarePorts();
+            }
         } else if (data.type === 'serial_telemetry') {
             this.appendSerialLine(data.data);
         }
@@ -414,13 +430,8 @@ class ContenderStudioApp {
         if (!audioBase64) return;
         try {
             this.isAssistantSpeaking = true;
-            this.audioStatusLabel.textContent = 'Speaking';
+            this.audioStatusLabel.textContent = 'Speaking (Speak to Interrupt)';
             this.audioStatusLabel.className = 'audio-label active';
-
-            // Pause speech recognition while speaking to avoid mic picking up assistant speech
-            if (this.speechRecognizer) {
-                try { this.speechRecognizer.stop(); } catch (e) {}
-            }
 
             this.ttsAudioPlayer.src = `data:audio/mp3;base64,${audioBase64}`;
             this.ttsAudioPlayer.play().catch(() => {});
@@ -430,13 +441,6 @@ class ContenderStudioApp {
                 this.audioStatusLabel.textContent = 'Hands-Free (Active)';
                 this.audioStatusLabel.className = 'audio-label active';
                 this.visualizer.setIdle();
-
-                // Resume continuous hands-free listening
-                if (this.isHandsFreeActive && this.speechRecognizer) {
-                    setTimeout(() => {
-                        try { this.speechRecognizer.start(); } catch (e) {}
-                    }, 400);
-                }
             };
         } catch (e) {
             this.isAssistantSpeaking = false;
@@ -480,7 +484,7 @@ class ContenderStudioApp {
         if (actionCard) {
             const cardEl = document.createElement('div');
             cardEl.className = 'action-card';
-            cardEl.innerHTML = `<span class="action-card-icon">⚡</span> <strong>[ACTION]</strong> ${actionCard.title || 'Task Executed'}`;
+            cardEl.innerHTML = `<span class="action-card-icon">⚡</span> <strong>[ACTION]</strong> ${actionCard.title || 'Task Executed'} - <em>${actionCard.status || ''}</em>`;
             bubble.appendChild(cardEl);
         }
 
@@ -528,14 +532,13 @@ class ContenderStudioApp {
             if (e.key === 'Enter') this.sendSerialCommand();
         });
 
-        // Optional Manual Push-to-Talk Support
-        const setupPttBtn = (el) => {
-            el.addEventListener('mousedown', (e) => { e.preventDefault(); this.startManualRecording(); });
-            el.addEventListener('mouseup', (e) => { e.preventDefault(); this.stopManualRecording(); });
-            el.addEventListener('mouseleave', () => { if (this.isRecording) this.stopManualRecording(); });
-        };
-        setupPttBtn(this.btnPtt);
-        setupPttBtn(this.btnMiniPtt);
+        // Click / Key to Interrupt Assistant
+        window.addEventListener('keydown', (e) => {
+            if (this.isAssistantSpeaking && (e.code === 'Escape' || e.code === 'Space')) {
+                e.preventDefault();
+                this.interruptAssistant();
+            }
+        });
 
         this.btnSend.addEventListener('click', () => this.sendTextMessage());
         this.textInput.addEventListener('keydown', (e) => {
@@ -569,58 +572,6 @@ class ContenderStudioApp {
         });
 
         this.btnStopSystem.addEventListener('click', () => this.confirmShutdown());
-    }
-
-    startManualRecording() {
-        if (!this.micStream || this.isRecording) return;
-        if (this.ttsAudioPlayer) {
-            this.ttsAudioPlayer.pause();
-            this.ttsAudioPlayer.currentTime = 0;
-        }
-        this.isRecording = true;
-        this.audioChunks = [];
-        this.btnPtt.classList.add('recording');
-        this.btnMiniPtt.classList.add('recording');
-        this.pttLabel.textContent = 'Listening...';
-
-        const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-        this.mediaRecorder = new MediaRecorder(this.micStream, { mimeType: mime });
-        this.mediaRecorder.ondataavailable = (e) => {
-            if (e.data && e.data.size > 0) this.audioChunks.push(e.data);
-        };
-        this.mediaRecorder.onstop = () => {
-            if (this.audioChunks.length > 0) {
-                const blob = new Blob(this.audioChunks, { type: 'audio/webm' });
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = () => {
-                    const b64 = reader.result.split(',')[1];
-                    const screenB64 = this.captureFrameBase64(this.screenVideo);
-                    const camB64 = this.captureFrameBase64(this.clientVideo);
-                    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                        this.ws.send(JSON.stringify({
-                            type: 'audio_query',
-                            audio_base64: b64,
-                            screen_base64: screenB64,
-                            camera_base64: camB64,
-                            format: 'webm'
-                        }));
-                    }
-                };
-            }
-        };
-        this.mediaRecorder.start(100);
-    }
-
-    stopManualRecording() {
-        if (!this.isRecording) return;
-        this.isRecording = false;
-        this.btnPtt.classList.remove('recording');
-        this.btnMiniPtt.classList.remove('recording');
-        this.pttLabel.textContent = 'Hands-Free Active ("Contender...")';
-        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-            this.mediaRecorder.stop();
-        }
     }
 
     toggleMiniHud(enable) {
