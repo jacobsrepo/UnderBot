@@ -299,6 +299,22 @@ body {
     color: #fff;
 }
 
+.control-btn.btn-muted {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: var(--accent-red);
+}
+
+.ptt-button.muted {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    cursor: default;
+}
+
+.ptt-button.muted .ptt-label {
+    color: var(--accent-red);
+}
+
 /* ==================== WORKSPACE ==================== */
 .app-main {
     display: grid;

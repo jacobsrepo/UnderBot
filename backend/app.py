@@ -29,8 +29,8 @@ from intent_router import IntentRouter
 
 app = FastAPI(
     title="Contender AI Assistant",
-    description="Tactical Multimodal Assistant with Autonomous Hardware Flashing & Voice Interruption.",
-    version="4.2.0"
+    description="Tactical Multimodal Assistant with Autonomous Hardware Flashing & Live Action Streaming.",
+    version="4.3.0"
 )
 
 app.add_middleware(
@@ -184,10 +184,11 @@ def get_serial_ports():
 
 class ProgramMicrocontrollerRequest(BaseModel):
     prompt: str
+    board_hint: Optional[str] = "auto"
 
 @app.post("/api/embedded/program")
 def auto_program_board(req: ProgramMicrocontrollerRequest):
-    return embedded.auto_compile_and_flash_sketch(req.prompt)
+    return embedded.auto_compile_and_flash_sketch(req.prompt, req.board_hint or "auto")
 
 class ConnectSerialRequest(BaseModel):
     port: str
@@ -248,32 +249,38 @@ async def speak_text(req: TTSRequest):
 
 # ==================== AGENTIC ACTION DISPATCHER ====================
 
-async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], screen_b64: Optional[str], cam_b64: Optional[str]) -> Tuple[str, Optional[Dict], str]:
+async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], screen_b64: Optional[str], cam_b64: Optional[str], progress_callback=None) -> Tuple[str, Optional[Dict], str]:
     intent = intent_info.get("intent", "CONVERSATION")
     prompt = intent_info.get("prompt", user_text)
     vision_source = intent_info.get("vision_source", "screen")
+    board_hint = intent_info.get("board_hint", "auto")
     lower = user_text.lower()
     action_log = None
     system_context = None
 
+    def notify(msg):
+        if progress_callback:
+            asyncio.create_task(progress_callback(msg))
+
     # Action 1: Embedded Microcontroller Auto-Program
-    if intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "esp32"]):
-        if any(k in lower for k in ["program", "flash", "upload", "write code to", "load sketch", "blink"]):
-            flash_res = embedded.auto_compile_and_flash_sketch(prompt)
+    if intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "nano", "uno", "esp32", "blink", "led"]):
+        if any(k in lower for k in ["program", "flash", "upload", "write code", "blink", "load sketch", "led"]):
+            notify("Detecting connected board and compiling firmware...")
+            flash_res = embedded.auto_compile_and_flash_sketch(prompt, board_hint=board_hint, progress_cb=lambda m: notify(m))
             if flash_res.get("success"):
                 action_log = {
                     "type": "hardware_flash",
                     "title": f"Flashed {flash_res.get('board')}",
                     "status": f"Uploaded to {flash_res.get('port')}"
                 }
-                system_context = f"You autonomously compiled the sketch and uploaded it to the {flash_res.get('board')} on {flash_res.get('port')}. The microcontroller is now running the new firmware."
+                system_context = f"You autonomously compiled and flashed the sketch to {flash_res.get('board')} on {flash_res.get('port')}. The microcontroller is running the code."
             else:
                 action_log = {
                     "type": "hardware_flash",
-                    "title": "Upload Notice",
+                    "title": "Hardware Action Notice",
                     "status": flash_res.get("error", "No board detected")
                 }
-                system_context = f"Microcontroller action status: {flash_res.get('error')}"
+                system_context = f"Microcontroller status: {flash_res.get('error')}"
         elif any(k in lower for k in ["scan", "list port", "detect"]):
             ports = embedded.scan_ports()
             port_desc = [f"{p['port']} ({p['board_type']})" for p in ports] or ["No active COM ports detected"]
@@ -293,6 +300,7 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
                 target_app = parts[-1].strip()
 
         if target_app:
+            notify(f"Launching {target_app.title()}...")
             res = desktop.launch_application(target_app)
             if res.get("success"):
                 action_log = {"type": "app_launch", "title": f"Launched {target_app.title()}", "status": "Success"}
@@ -323,6 +331,7 @@ async def execute_agentic_action(user_text: str, intent_info: Dict[str, Any], sc
     else:
         chosen_frame = screen_b64 or _LATEST_SCREEN_B64 or desktop.capture_screen_base64()
 
+    notify("Executing cognitive reasoning...")
     analysis = await brain.analyze_frame_async(
         image_base64=chosen_frame,
         user_prompt=prompt,
@@ -348,6 +357,15 @@ async def websocket_live_endpoint(websocket: WebSocket):
             pass
 
     embedded.add_serial_listener(lambda line: asyncio.create_task(push_serial_telemetry(line)))
+
+    async def send_progress_update(message: str):
+        try:
+            await websocket.send_json({
+                "type": "progress_update",
+                "message": message
+            })
+        except Exception:
+            pass
 
     try:
         await websocket.send_json({
@@ -393,7 +411,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
                 })
 
                 intent_res = router.process_utterance(user_text)
-                reply_text, action_card, auto_vision = await execute_agentic_action(user_text, intent_res, screen_b64, cam_b64)
+                reply_text, action_card, auto_vision = await execute_agentic_action(user_text, intent_res, screen_b64, cam_b64, progress_callback=send_progress_update)
                 speech_data = await tts.synthesize_base64(reply_text)
 
                 await websocket.send_json({
@@ -435,7 +453,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
                     })
                     await websocket.send_json({"type": "status_update", "state": "thinking", "query": transcribed_text})
 
-                    reply_text, action_card, auto_vision = await execute_agentic_action(transcribed_text, intent_res, screen_b64, cam_b64)
+                    reply_text, action_card, auto_vision = await execute_agentic_action(transcribed_text, intent_res, screen_b64, cam_b64, progress_callback=send_progress_update)
                     speech_data = await tts.synthesize_base64(reply_text)
 
                     await websocket.send_json({

@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?t=v400">
+    <link rel="stylesheet" href="/static/styles.css?t=v430">
 </head>
 <body class="mode-studio">
     
@@ -23,7 +23,7 @@
             <canvas id="mini-waveform-canvas" width="60" height="14"></canvas>
         </div>
         <div class="mini-hud-right">
-            <button class="mini-ptt-btn" id="btn-mini-ptt" title="Hold to speak">
+            <button class="mini-ptt-btn" id="btn-mini-mute" title="Toggle Mute">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
             </button>
             <button class="mini-expand-btn" id="btn-expand-studio" title="Expand Full Studio">
@@ -55,6 +55,13 @@
             </div>
 
             <div class="header-right">
+                <!-- Dedicated Mute / Unmute Button -->
+                <button class="control-btn" id="btn-toggle-mute" title="Mute / Unmute Microphone">
+                    <svg id="icon-mic-unmuted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    <svg id="icon-mic-muted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    <span id="label-mute-state">Mute</span>
+                </button>
+
                 <!-- Mini HUD Toggle -->
                 <button class="control-btn" id="btn-toggle-mini-hud" title="Switch to Always-On-Top Mini Companion HUD">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg>
@@ -94,7 +101,7 @@
                             <button class="tab-item" id="tab-cam">Camera Feed</button>
                         </div>
 
-                        <!-- Camera Device Selector (Shown when camera tab active) -->
+                        <!-- Camera Device Selector -->
                         <select id="browser-camera-select" class="dropdown-clean" style="display: none;" title="Select active camera device">
                             <option value="">Detecting cameras...</option>
                         </select>
@@ -107,11 +114,8 @@
                 </div>
 
                 <div class="viewport">
-                    <!-- Screen Feed Viewport -->
                     <video id="screen-video" autoplay playsinline muted style="display: block;"></video>
-                    <!-- Camera Feed Viewport -->
                     <video id="client-video" autoplay playsinline muted style="display: none;"></video>
-                    
                     <canvas id="hidden-frame-canvas" style="display: none;"></canvas>
 
                     <div class="viewport-overlay">
@@ -122,7 +126,7 @@
                     </div>
                 </div>
 
-                <!-- Hardware & Serial Drawer (Collapsible) -->
+                <!-- Hardware & Serial Drawer -->
                 <div class="hardware-drawer" id="hardware-drawer" style="display: none;">
                     <div class="drawer-header">
                         <span class="drawer-title">Microcontroller & COM Interface</span>
@@ -151,7 +155,7 @@
                     <span class="topbar-title">Mission Log & Actions</span>
                     
                     <div class="audio-status-wrap">
-                        <span class="audio-label" id="audio-status-label">Standby</span>
+                        <span class="audio-label" id="audio-status-label">Hands-Free (Active)</span>
                         <canvas id="audio-waveform-canvas" width="110" height="20"></canvas>
                     </div>
                 </div>
@@ -185,24 +189,25 @@
                     </div>
                 </div>
 
-                <!-- Live Processing Bar -->
+                <!-- Live Step-by-Step Action Execution Bar -->
                 <div class="processing-indicator" id="processing-indicator" style="display: none;">
                     <div class="spinner"></div>
-                    <span id="processing-text">Executing tactical reasoning...</span>
+                    <span id="processing-text">Executing tactical directive...</span>
                 </div>
 
                 <!-- Bottom Controls -->
                 <div class="panel-dock">
-                    <button class="ptt-button" id="btn-ptt">
-                        <div class="ptt-icon">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-                        </div>
-                        <span class="ptt-label" id="ptt-label">Hold to Speak ("Contender...")</span>
-                        <span class="kbd-badge">Space</span>
-                    </button>
+                    <div class="dock-row-controls">
+                        <button class="ptt-button" id="btn-ptt">
+                            <div class="ptt-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                            </div>
+                            <span class="ptt-label" id="ptt-label">Hands-Free Listening ("Contender...")</span>
+                        </button>
+                    </div>
 
                     <div class="input-container">
-                        <input type="text" id="text-input" class="text-input" placeholder="Give command (e.g. 'open vscode', 'check screen', 'flash esp32')..." autocomplete="off">
+                        <input type="text" id="text-input" class="text-input" placeholder="Give command (e.g. 'program arduino nano to blink', 'what's on my screen')..." autocomplete="off">
                         <button id="btn-send" class="btn-send" title="Send command">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
@@ -287,7 +292,7 @@
     <!-- Hidden audio element for TTS -->
     <audio id="tts-audio-element" preload="auto"></audio>
 
-    <script src="/static/audio_visualizer.js?t=v400"></script>
-    <script src="/static/app.js?t=v400"></script>
+    <script src="/static/audio_visualizer.js?t=v430"></script>
+    <script src="/static/app.js?t=v430"></script>
 </body>
 </html>

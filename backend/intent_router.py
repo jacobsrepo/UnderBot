@@ -4,12 +4,18 @@ from typing import Dict, Any, Tuple
 
 class IntentRouter:
     """
-    Directed Speech, Wake-Word, and Sensory Routing Analyzer for Contender.
-    Intelligently routes between Continuous Screen perception and Physical Camera vision
-    and detects conversational speech triggers.
+    Directed Speech, Fuzzy Wake-Word, and Sensory Routing Analyzer for Contender.
+    Intelligently matches fuzzy keywords for hardware, apps, files, and auto-arbitrates Screen vs Camera.
     """
 
     WAKE_TRIGGERS = ["contender", "hey contender", "ok contender", "okay contender", "computer"]
+
+    # Fuzzy patterns for Arduino & Microcontroller Actions
+    HARDWARE_PATTERNS = [
+        r"ardui", r"arudi", r"ardun", r"nano", r"uno", r"mega", r"esp32", r"esp8266",
+        r"microcontroller", r"com\s*port", r"serial\s*port", r"blink", r"onboard\s*led",
+        r"flash", r"upload", r"firmware", r"relay", r"servo", r"sketch"
+    ]
 
     # Physical environment / camera keywords
     CAMERA_TRIGGERS = [
@@ -33,10 +39,6 @@ class IntentRouter:
         self.is_session_active = False
 
     def process_utterance(self, text: str) -> Dict[str, Any]:
-        """
-        Analyzes user speech, checks for wake-word presence or ongoing active thread,
-        classifies intent, and automatically selects the optimal sensory source (Screen vs Camera).
-        """
         clean = text.strip()
         lower = clean.lower()
         now = time.time()
@@ -60,8 +62,7 @@ class IntentRouter:
             self.is_session_active = True
 
         # ==================== SENSORY SOURCE ARBITRATION ====================
-        # Automatically choose between Screen and Camera based on semantic context
-        vision_source = "screen"  # Screen is default for desktop assistant
+        vision_source = "screen"
 
         has_cam_keywords = any(k in lower for k in self.CAMERA_TRIGGERS)
         has_screen_keywords = any(k in lower for k in self.SCREEN_TRIGGERS)
@@ -71,15 +72,27 @@ class IntentRouter:
         elif has_screen_keywords:
             vision_source = "screen"
 
-        # ==================== INTENT CATEGORIZATION ====================
+        # ==================== FUZZY INTENT CATEGORIZATION ====================
         intent = "CONVERSATION"
+        board_hint = "auto"
 
-        if any(k in lower for k in ["launch", "open app", "start app", "open program", "open chrome", "open vscode", "open code", "open calculator", "open notepad", "open terminal", "open spotify"]):
+        # Check for hardware / microcontroller intents with fuzzy regex
+        is_hardware = any(re.search(pat, lower) for pat in self.HARDWARE_PATTERNS)
+        if is_hardware:
+            intent = "EMBEDDED_HARDWARE"
+            if "nano" in lower:
+                board_hint = "nano"
+            elif "mega" in lower:
+                board_hint = "mega"
+            elif "esp32" in lower or "esp" in lower:
+                board_hint = "esp32"
+            elif "uno" in lower:
+                board_hint = "uno"
+
+        elif any(k in lower for k in ["launch", "open app", "start app", "open program", "open chrome", "open vscode", "open code", "open calculator", "open notepad", "open terminal", "open spotify"]):
             intent = "DESKTOP_APP"
         elif any(k in lower for k in ["copy file", "move file", "delete file", "list files", "search files", "organize desktop", "read file"]):
             intent = "FILE_OPERATION"
-        elif any(k in lower for k in ["arduino", "esp32", "esp8266", "com port", "serial port", "flash firmware", "upload sketch", "baud rate", "sensor reading", "relay"]):
-            intent = "EMBEDDED_HARDWARE"
         elif vision_source == "camera":
             intent = "CAMERA_QUERY"
         elif vision_source == "screen" and (has_screen_keywords or any(k in lower for k in ["look", "see", "what is", "explain", "summarize", "inspect", "debug"])):
@@ -94,6 +107,7 @@ class IntentRouter:
             "raw_text": clean,
             "prompt": stripped_prompt,
             "intent": intent,
+            "board_hint": board_hint,
             "vision_source": vision_source
         }
 
