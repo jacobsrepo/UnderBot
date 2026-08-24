@@ -5,19 +5,18 @@ from typing import Dict, Any, Tuple
 class IntentRouter:
     """
     Directed Speech, Fuzzy Wake-Word, and Sensory Routing Analyzer for Contender.
-    Intelligently matches fuzzy keywords for hardware, apps, files, and auto-arbitrates Screen vs Camera.
+    Strictly prevents self-hearing and ambient noise loops by requiring explicit wake-word
+    or active multi-turn context.
     """
 
-    WAKE_TRIGGERS = ["contender", "hey contender", "ok contender", "okay contender", "computer"]
+    WAKE_TRIGGERS = ["contender", "hey contender", "ok contender", "okay contender", "computer", "assistant"]
 
-    # Fuzzy patterns for Arduino & Microcontroller Actions
     HARDWARE_PATTERNS = [
         r"ardui", r"arudi", r"ardun", r"nano", r"uno", r"mega", r"esp32", r"esp8266",
         r"microcontroller", r"com\s*port", r"serial\s*port", r"blink", r"onboard\s*led",
         r"flash", r"upload", r"firmware", r"relay", r"servo", r"sketch"
     ]
 
-    # Physical environment / camera keywords
     CAMERA_TRIGGERS = [
         "camera", "webcam", "look at me", "see me", "holding", "in my hand",
         "on my desk", "my face", "my shirt", "this object", "physical",
@@ -25,7 +24,6 @@ class IntentRouter:
         "look at this thing", "inspect this part", "look through camera", "my hands"
     ]
 
-    # Digital / Desktop screen keywords
     SCREEN_TRIGGERS = [
         "screen", "on my screen", "desktop", "code", "error", "terminal",
         "browser", "window", "document", "tab", "vs code", "vscode",
@@ -33,7 +31,7 @@ class IntentRouter:
         "what does this say", "summarize this", "my display", "look at this code"
     ]
 
-    def __init__(self, conversation_timeout_seconds: float = 35.0):
+    def __init__(self, conversation_timeout_seconds: float = 20.0):
         self.last_directed_interaction = 0.0
         self.conversation_timeout = conversation_timeout_seconds
         self.is_session_active = False
@@ -45,6 +43,19 @@ class IntentRouter:
 
         has_wake_word = any(lower.startswith(w) or f" {w}" in lower for w in self.WAKE_TRIGGERS)
         is_in_active_thread = (now - self.last_directed_interaction) < self.conversation_timeout
+
+        # Discard very short ambient noises
+        if len(clean) < 3:
+            return {
+                "is_directed": False,
+                "has_wake_word": False,
+                "is_thread_active": False,
+                "raw_text": clean,
+                "prompt": "",
+                "intent": "IGNORE",
+                "board_hint": "auto",
+                "vision_source": "screen"
+            }
 
         # Strip wake word for clean prompt processing
         stripped_prompt = clean
@@ -76,7 +87,6 @@ class IntentRouter:
         intent = "CONVERSATION"
         board_hint = "auto"
 
-        # Check for hardware / microcontroller intents with fuzzy regex
         is_hardware = any(re.search(pat, lower) for pat in self.HARDWARE_PATTERNS)
         if is_hardware:
             intent = "EMBEDDED_HARDWARE"
@@ -89,6 +99,8 @@ class IntentRouter:
             elif "uno" in lower:
                 board_hint = "uno"
 
+        elif any(k in lower for k in ["minimize", "show desktop", "restore window", "tidy desktop", "clean desktop"]):
+            intent = "DESKTOP_APP"
         elif any(k in lower for k in ["launch", "open app", "start app", "open program", "open chrome", "open vscode", "open code", "open calculator", "open notepad", "open terminal", "open spotify"]):
             intent = "DESKTOP_APP"
         elif any(k in lower for k in ["copy file", "move file", "delete file", "list files", "search files", "organize desktop", "read file"]):
