@@ -26,7 +26,7 @@ class EmbeddedAgent:
     """
     Embedded Hardware & Microcontroller Engine for Contender.
     Provides autonomous COM port discovery, Arduino compilation and uploading,
-    ESP32 flashing, auto-connection, and live interactive serial telemetry.
+    ESP32 flashing, driver error diagnostics, and live interactive serial telemetry.
     """
 
     KNOWN_CHIP_SIGNATURES = {
@@ -34,7 +34,7 @@ class EmbeddedAgent:
         (0x1A86, 0x7523): "Arduino Nano / Uno (CH340 USB)",
         (0x1A86, 0x55D4): "Arduino / CH343 USB-Serial",
         (0x10C4, 0xEA60): "ESP32 / NodeMCU (CP2102 USB)",
-        (0x0403, 0x6001): "FTDI USB-Serial Device",
+        (0x0403, 0x6001): "Arduino Nano (FT232R USB UART)",
         (0x2E8A, 0x0003): "Raspberry Pi Pico (RP2040)",
         (0x303A, None): "Espressif Native USB Device"
     }
@@ -68,7 +68,21 @@ class EmbeddedAgent:
             except Exception as e:
                 print(f"[EmbeddedAgent] Notice: Could not download arduino-cli ({e})")
 
-    # ==================== AUTONOMOUS PORT DISCOVERY & AUTO-CONNECT ====================
+    # ==================== AUTONOMOUS PORT DISCOVERY & DRIVER DIAGNOSTICS ====================
+
+    def check_unconfigured_pnp_hardware(self) -> Optional[str]:
+        """
+        Checks if an Arduino / USB-UART device is physically plugged in but missing drivers in Windows.
+        """
+        try:
+            cmd = 'powershell -Command "Get-PnpDevice -PresentOnly | Where-Object { $_.Status -ne \'OK\' -and ($_.InstanceId -like \'*0403*\' -or $_.InstanceId -like \'*1A86*\' -or $_.FriendlyName -like \'*UART*\' -or $_.FriendlyName -like \'*FT232*\') } | Select-Object -ExpandProperty FriendlyName"'
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=5)
+            out = res.stdout.strip()
+            if out:
+                return out
+        except Exception:
+            pass
+        return None
 
     def scan_ports(self) -> List[Dict[str, Any]]:
         """
@@ -102,7 +116,7 @@ class EmbeddedAgent:
                 elif "arduino" in desc.lower():
                     board_type = f"Arduino ({desc})"
                     fqbn = "arduino:avr:uno"
-                elif "ch340" in desc.lower() or "cp210" in desc.lower():
+                elif "ch340" in desc.lower() or "cp210" in desc.lower() or "ft232" in desc.lower() or "ftdi" in desc.lower():
                     board_type = f"Arduino Nano / ESP32 ({desc})"
                     fqbn = "arduino:avr:nano:cpu=atmega328old"
                 elif p.device == "COM1" and not is_usb:
@@ -129,18 +143,15 @@ class EmbeddedAgent:
         if not ports:
             return None
 
-        # 1. Match specific board if requested (Nano, Uno, Mega, ESP)
         if board_hint and board_hint != "auto":
             for p in ports:
                 if board_hint.lower() in p["board_type"].lower():
                     return p
 
-        # 2. Prefer detected USB microcontrollers over internal motherboard ports
         for p in ports:
-            if p.get("is_usb") and ("arduino" in p["board_type"].lower() or "ch340" in p["board_type"].lower() or "esp" in p["board_type"].lower() or "cp210" in p["board_type"].lower()):
+            if p.get("is_usb") and ("arduino" in p["board_type"].lower() or "ch340" in p["board_type"].lower() or "esp" in p["board_type"].lower() or "cp210" in p["board_type"].lower() or "ft232" in p["board_type"].lower()):
                 return p
 
-        # 3. Any active USB port
         for p in ports:
             if p.get("is_usb"):
                 return p
@@ -148,7 +159,6 @@ class EmbeddedAgent:
         return None
 
     def auto_connect_default_port(self):
-        """Automatically connects to the first available USB microcontroller on launch."""
         time.sleep(1.0)
         target = self.auto_detect_target_port()
         if target and not self.is_monitoring:
@@ -158,13 +168,6 @@ class EmbeddedAgent:
     # ==================== AUTONOMOUS COMPILE & FLASH PIPELINE ====================
 
     def auto_compile_and_flash_sketch(self, prompt: str, board_hint: str = "auto", progress_cb: Optional[Callable[[str], None]] = None) -> Dict[str, Any]:
-        """
-        AUTONOMOUS ACTION:
-        1. Auto-detects connected Arduino Nano / Uno / Mega / ESP.
-        2. Writes custom C++/MicroPython firmware.
-        3. Compiles firmware with arduino-cli.
-        4. Flashes firmware directly with automatic bootloader fallback.
-        """
         def update_progress(msg: str):
             print(f"[EmbeddedAgent] {msg}")
             if progress_cb:
@@ -176,6 +179,14 @@ class EmbeddedAgent:
         update_progress("Scanning system COM ports for USB Arduino / ESP boards...")
         device = self.auto_detect_target_port(board_hint)
         if not device:
+            # Check if device is physically plugged in but missing driver
+            problem_dev = self.check_unconfigured_pnp_hardware()
+            if problem_dev:
+                return {
+                    "success": False,
+                    "error": f"Detected {problem_dev} connected via USB, but Windows has not assigned a COM port (missing driver). Please right-click {problem_dev} in Device Manager and select 'Update driver'."
+                }
+
             return {
                 "success": False,
                 "error": "No USB Arduino or ESP microcontroller detected on system ports. Please ensure your Arduino USB cable is plugged into the computer."
@@ -195,7 +206,6 @@ class EmbeddedAgent:
             fqbn = "arduino:avr:mega"
             board_label = "Arduino Mega"
 
-        # Disconnect serial monitor before flashing
         if self.active_port == port_name and self.is_monitoring:
             self.disconnect_serial()
 
@@ -214,7 +224,6 @@ class EmbeddedAgent:
             if not os.path.exists(self.arduino_cli_path):
                 return {"success": False, "error": "arduino-cli toolchain is missing from bin/."}
 
-            # 1. Compile Sketch
             update_progress(f"Compiling sketch for {board_label} (FQBN: {fqbn})...")
             comp = subprocess.run(
                 [self.arduino_cli_path, "compile", "--fqbn", fqbn, sketch_folder],
@@ -235,7 +244,6 @@ class EmbeddedAgent:
                         "error": f"Compilation failed: {comp.stderr.strip() or comp.stdout.strip()}"
                     }
 
-            # 2. Upload to Device
             update_progress(f"Uploading firmware to {board_label} on {port_name}...")
             try:
                 upload = subprocess.run(
@@ -247,7 +255,6 @@ class EmbeddedAgent:
             except subprocess.TimeoutExpired:
                 upload = None
 
-            # Retry with old bootloader if Nano failed
             if (not upload or upload.returncode != 0) and "nano" in fqbn and "old" not in fqbn:
                 update_progress("Retrying Arduino Nano upload with Old Bootloader (CH340)...")
                 fqbn_old = "arduino:avr:nano:cpu=atmega328old"
@@ -258,7 +265,7 @@ class EmbeddedAgent:
                     upload = None
 
             if not upload or upload.returncode != 0:
-                err_msg = upload.stderr.strip() or upload.stdout.strip() if upload else "Upload timed out (no sync response from board)"
+                err_msg = upload.stderr.strip() or upload.stdout.strip() if upload else "Upload timed out"
                 return {
                     "success": False,
                     "stage": "upload",
@@ -282,7 +289,7 @@ class EmbeddedAgent:
         lower = prompt.lower()
         pin = 2 if "esp" in board.lower() else 13
 
-        if "blink" in lower or "led" in lower:
+        if "blink" in lower or "led" in lower or "13" in lower:
             code = f"""// Contender Autonomous Firmware: LED Controller
 #define LED_PIN {pin}
 
