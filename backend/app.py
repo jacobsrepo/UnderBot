@@ -6,7 +6,7 @@ import json
 import base64
 import asyncio
 import signal
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 
 _BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 if _BACKEND_DIR not in sys.path:
