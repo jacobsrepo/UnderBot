@@ -117,6 +117,23 @@ class DesktopAgent:
         except Exception:
             return []
 
+    def focus_window(self, query: str) -> Dict[str, Any]:
+        """Brings the matching window to the foreground."""
+        if not gw:
+            return {"success": False, "error": "pygetwindow not available"}
+        try:
+            q_lower = query.lower().strip()
+            windows = gw.getAllWindows()
+            for w in windows:
+                if w.title and q_lower in w.title.lower():
+                    if w.isMinimized:
+                        w.restore()
+                    w.activate()
+                    return {"success": True, "title": w.title, "message": f"Activated window: {w.title}"}
+            return {"success": False, "error": f"No open window matching '{query}' found."}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
     def organize_desktop_files(self) -> Dict[str, Any]:
         if not os.path.exists(self.desktop_path):
             return {"success": False, "error": "Desktop path not found"}
@@ -290,11 +307,24 @@ class DesktopAgent:
 
         try:
             resolved_path = self._resolve_path(path)
+            if not os.path.exists(resolved_path):
+                return {"success": False, "error": f"File or folder '{resolved_path}' does not exist."}
+
+            if sys.platform == "win32":
+                # Safe Recycle Bin deletion on Windows
+                escaped = resolved_path.replace("'", "''")
+                is_dir = os.path.isdir(resolved_path)
+                cmd_method = "DeleteDirectory" if is_dir else "DeleteFile"
+                ps_cmd = f"Add-Type -AssemblyName Microsoft.VisualBasic; [Microsoft.VisualBasic.FileIO.FileSystem]::{cmd_method}('{escaped}', 'OnlyErrorDialogs', 'SendToRecycleBin')"
+                res = subprocess.run(["powershell", "-Command", ps_cmd], capture_output=True, timeout=5)
+                if res.returncode == 0:
+                    return {"success": True, "path": resolved_path, "recycled": True, "message": "Moved to Windows Recycle Bin."}
+
             if os.path.isdir(resolved_path):
                 shutil.rmtree(resolved_path)
             else:
                 os.remove(resolved_path)
-            return {"success": True, "path": resolved_path}
+            return {"success": True, "path": resolved_path, "recycled": False}
         except Exception as e:
             return {"success": False, "error": str(e)}
 

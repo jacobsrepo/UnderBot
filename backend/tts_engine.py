@@ -4,7 +4,10 @@ import io
 import asyncio
 import base64
 from typing import Optional, Dict, List
-import edge_tts
+try:
+    import edge_tts
+except ImportError:
+    edge_tts = None
 
 class TTSEngine:
     """
@@ -80,7 +83,7 @@ class TTSEngine:
 
     async def synthesize_async(self, text: str, voice_key: Optional[str] = None) -> bytes:
         clean_text = self.clean_text_for_speech(text)
-        if not clean_text:
+        if not clean_text or not edge_tts:
             return b""
 
         voice_id = self.AVAILABLE_VOICES.get(voice_key, {}).get("id", self.current_voice_id)

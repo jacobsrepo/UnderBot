@@ -34,6 +34,17 @@ def test_subsystems():
     screen_txt = desktop.capture_screen_context()
     print(f"  [OK] capture_screen_context() active. Extracted text buffer (length: {len(screen_txt)} chars).")
 
+    # Test safe deletion and Recycle Bin handling on a scratch test file
+    import tempfile
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".tmp") as tmp:
+        tmp.write(b"contender test file")
+        tmp_path = tmp.name
+    tmp.close()
+
+    del_res = desktop.delete_file(tmp_path)
+    assert del_res["success"] == True
+    print("  [OK] DesktopAgent safe delete operational.")
+
     # 2. Embedded Hardware Engine & Reflection Loop
     print("\n[2/4] Testing Embedded Hardware & Reflection Loop...")
     embedded = EmbeddedAgent()

@@ -6,17 +6,20 @@ os.environ["OPENCV_LOG_LEVEL"] = "SILENT"
 os.environ["OPENCV_VIDEOIO_DEBUG"] = "0"
 os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
 
-import cv2
 try:
-    cv2.setLogLevel(0)
-except Exception:
-    pass
+    import cv2
+    try:
+        cv2.setLogLevel(0)
+    except Exception:
+        pass
+except ImportError:
+    cv2 = None
 
 import threading
 import time
 import base64
 import platform
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 class CameraManager:
     """
@@ -25,7 +28,7 @@ class CameraManager:
     """
     def __init__(self, device_index: int = 0):
         self.device_index = device_index
-        self.cap: Optional[cv2.VideoCapture] = None
+        self.cap: Optional[Any] = None
         self.latest_frame = None
         self.latest_jpeg = None
         self.latest_base64 = None
@@ -46,6 +49,10 @@ class CameraManager:
 
         self.stop()
         self.is_client_stream = False
+
+        if not cv2:
+            self.is_client_stream = True
+            return False
 
         backend = cv2.CAP_DSHOW if self.os_type == "Windows" else cv2.CAP_ANY
 
@@ -136,6 +143,8 @@ class CameraManager:
 
     @staticmethod
     def list_available_cameras() -> List[Dict]:
+        if not cv2:
+            return []
         found = []
         os_name = platform.system()
         backend = cv2.CAP_DSHOW if os_name == "Windows" else cv2.CAP_ANY

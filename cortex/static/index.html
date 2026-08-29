@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cortex</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- ── Collapsible Left Sidebar ─────────────────────────── -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-top">
+                <div class="brand">
+                    <div class="robot-avatar-badge">
+                        <span class="eye-mini left"></span>
+                        <span class="eye-mini right"></span>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">CORTEX</span>
+                    </div>
+                </div>
+                <button id="sidebar-collapse-btn" class="btn-icon-subtle" title="Collapse Sidebar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="11 17 6 12 11 7"/>
+                        <polyline points="18 17 13 12 18 7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        <span>Hardware</span>
+                        <div class="connection-badge" id="connection-badge">
+                            <span class="badge-dot"></span>
+                            <span class="badge-text">Offline</span>
+                        </div>
+                    </div>
+                    <div id="devices-list" class="devices-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="section-title">System Profile</div>
+                    <div class="spec-card">
+                        <div class="spec-row">
+                            <span class="spec-label">Model</span>
+                            <span class="spec-val">Qwen 2.5 7B</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">GPU</span>
+                            <span class="spec-val">RTX 3060 Ti</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Engine</span>
+                            <span class="spec-val">Ollama CUDA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="live-voice-btn" class="btn btn-voice">
+                    <span class="voice-pulse-dot"></span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                    <span>Start Live Talk</span>
+                </button>
+                <div class="viewport-buttons-grid">
+                    <button id="camera-trigger-btn" class="btn btn-camera">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                        <span>Camera</span>
+                    </button>
+                    <button id="browser-trigger-btn" class="btn btn-browser">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span>Browser</span>
+                    </button>
+                </div>
+                <button id="dual-view-trigger-btn" class="btn btn-dual">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="12" y1="3" x2="12" y2="21"/>
+                    </svg>
+                    <span>Dual Vision + Web</span>
+                </button>
+                <button id="cycle-btn" class="btn btn-secondary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <span>Cycle Expressions</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ── Main Stage ───────────────────────────────────────── -->
+        <main id="main" class="main-stage">
+            <!-- Sidebar Expand Button -->
+            <button id="sidebar-expand-btn" class="sidebar-expand-btn" title="Expand Sidebar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="9" y1="3" x2="9" y2="21"/>
+                    <polyline points="14 9 17 12 14 15"/>
+                </svg>
+            </button>
+
+            <!-- Center Stage: Dynamic Face, Camera Viewport & Web Browser Viewport -->
+            <div id="stage-viewport" class="stage-viewport">
+                <!-- ── Viewports Workspace Wrapper (Supports Single & Dual Split Modes) ── -->
+                <div id="workspace-container" class="workspace-container">
+                    <!-- ── 1. Camera Inspection Screen ──────────────────── -->
+                    <div id="camera-screen" class="viewport-screen camera-screen">
+                        <div class="screen-header">
+                            <div class="screen-status-pill">
+                                <span class="live-status-dot red"></span>
+                                <span class="live-status-title">CAMERA VISION</span>
+                            </div>
+                            <div class="screen-header-controls">
+                                <button id="cam-split-btn" class="btn-screen-tool" title="Toggle Dual Split Screen">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="12" y1="3" x2="12" y2="21"/>
+                                    </svg>
+                                </button>
+                                <button id="close-camera-btn" class="btn-close-screen" title="Dismiss Camera View">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="screen-body">
+                            <div class="camera-feed-container">
+                                <video id="camera-video" class="camera-video" autoplay playsinline muted></video>
+                                <canvas id="camera-snapshot-canvas" class="camera-snapshot-canvas" style="display:none;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── 2. Live Web Browser & Research Screen ────────────── -->
+                    <div id="browser-screen" class="viewport-screen browser-screen">
+                        <div class="screen-header browser-header">
+                            <div class="browser-nav-bar">
+                                <span class="live-status-dot cyan"></span>
+                                <a id="browser-url-pill" class="browser-url-pill" href="https://en.wikipedia.org" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org</a>
+                            </div>
+                            <div class="screen-header-controls">
+                                <button id="browser-split-btn" class="btn-screen-tool" title="Toggle Dual Split Screen">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="12" y1="3" x2="12" y2="21"/>
+                                    </svg>
+                                </button>
+                                <button id="close-browser-btn" class="btn-close-screen" title="Dismiss Browser View">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="screen-body browser-body">
+                            <div class="browser-content-mock">
+                                <div class="browser-scan-laser"></div>
+                                <div class="webpage-preview">
+                                    <div class="webpage-header">
+                                        <h3 class="webpage-title" id="web-page-title">Live Web Research</h3>
+                                        <span class="webpage-badge" id="webpage-badge">OFFICIAL DATA</span>
+                                    </div>
+
+                                    <!-- Live Image Preview Container -->
+                                    <div id="web-media-container" class="web-media-container" style="display: none;">
+                                        <img id="web-media-img" class="web-media-img" src="" alt="Web media preview">
+                                    </div>
+
+                                    <div id="webpage-cards-grid" class="webpage-cards-grid">
+                                        <!-- Dynamically populated cards -->
+                                    </div>
+
+                                    <div class="web-snippet-box">
+                                        <span class="snippet-header">CORTEX LIVE SYNTHESIS:</span>
+                                        <p id="web-summary-text" class="snippet-text">Ready to search documentation, datasheets, or web knowledge.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── 3. Animated Robot Face (Avatar) ──────────────────── -->
+                <div id="face-wrapper" class="face-wrapper">
+                    <div id="robot-face-hardware" class="robot-face-hardware">
+                        <div id="robot-screen" class="robot-screen">
+                            <div id="eye-left" class="robot-eye eye-left"></div>
+                            <div id="eye-right" class="robot-eye eye-right"></div>
+                        </div>
+                    </div>
+
+                    <div class="status-header">
+                        <h2 id="status-title" class="status-title">Ready</h2>
+                        <p id="status-subtitle" class="status-subtitle">Standing by</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat & Interaction Console -->
+            <section id="chat-section">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message system">
+                        <div class="message-bubble">Cortex initialized. Inspect camera, browse the web, or open Dual Mode (Vision + Web) simultaneously.</div>
+                    </div>
+                </div>
+
+                <!-- Morphing Bottom Input / Live Waveform Bar -->
+                <div id="input-bar" class="input-bar">
+                    <button id="mic-btn" class="btn-tool btn-mic" title="Start Live Talk">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                    </button>
+                    <input
+                        type="text"
+                        id="chat-input"
+                        placeholder="Ask Cortex or give a command…"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button id="send-btn" class="btn-tool btn-send" title="Send">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                    </button>
+
+                    <!-- Morphing Live Voice Waveform HUD -->
+                    <div id="waveform-container" class="waveform-container">
+                        <div class="voice-status-badge">
+                            <span class="voice-live-dot"></span>
+                            <span id="voice-status-label" class="voice-status-label">LIVE TALK</span>
+                        </div>
+                        <canvas id="live-audio-canvas" class="live-audio-canvas" width="300" height="28"></canvas>
+                        <div class="voice-controls">
+                            <button id="voice-mute-btn" class="btn-voice-pill" title="Mute Microphone">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                    <line x1="12" y1="19" x2="12" y2="23"/>
+                                    <line x1="8" y1="23" x2="16" y2="23"/>
+                                </svg>
+                            </button>
+                            <button id="voice-end-btn" class="btn-voice-pill end" title="End Live Talk">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                <span>End</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>

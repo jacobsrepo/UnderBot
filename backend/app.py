@@ -52,9 +52,12 @@ async def add_no_cache_headers(request: Request, call_next):
         response.headers["Expires"] = "0"
     return response
 
+from model_manager import ModelManager
+
 # Subsystems
 camera = CameraManager(device_index=0)
 primary_brain = Brain()
+model_manager = ModelManager(default_api_base=primary_brain.api_base)
 vision_engine = VisionEngine()
 tts = TTSEngine(default_voice_key="guy")
 stt = STTEngine(model_size="small.en", device="cpu", compute_type="int8")
@@ -62,6 +65,20 @@ desktop = DesktopAgent()
 embedded = EmbeddedAgent()
 router = IntentRouter()
 core = CognitiveCore(desktop, embedded, primary_brain, vision_engine)
+
+connected_websockets = set()
+
+async def broadcast_ws_message(msg: dict):
+    for ws in list(connected_websockets):
+        try:
+            await ws.send_json(msg)
+        except Exception:
+            pass
+
+model_manager.add_listener(lambda evt: asyncio.create_task(broadcast_ws_message({
+    "type": "model_download_progress",
+    "data": evt
+})))
 
 @app.on_event("startup")
 async def startup_event():
@@ -96,18 +113,98 @@ async def get_system_status():
 
 @app.get("/api/diagnostics")
 async def get_diagnostics():
+    certs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "certs")
+    is_https = os.path.exists(os.path.join(certs_dir, "cert.pem"))
     return {
         "brain": primary_brain.get_status(),
         "active_engine": core.active_mode,
         "camera": camera.get_stats(),
-        "network": get_network_details(8000, is_https=os.path.exists("certs/cert.pem")),
+        "network": get_network_details(8000, is_https=is_https),
         "metrics": desktop.get_system_metrics(),
         "voice": tts.default_voice_key
     }
 
+# ==================== MODEL MANAGEMENT & AUTO-DOWNLOAD APIS ====================
+
+@app.get("/api/models/catalog")
+async def get_model_catalog():
+    return await model_manager.get_catalog_with_status_async(
+        api_base=primary_brain.api_base,
+        active_model=primary_brain.model_name
+    )
+
+class PullModelRequest(BaseModel):
+    model_name: str
+
+@app.post("/api/models/pull")
+async def pull_model(req: PullModelRequest):
+    clean_name = req.model_name.strip()
+    if not clean_name:
+        raise HTTPException(status_code=400, detail="model_name is required")
+    task = model_manager.start_pull_task(clean_name, primary_brain.api_base)
+    return {"success": True, "message": f"Started pulling '{clean_name}' in background.", "model": clean_name}
+
+@app.get("/api/models/progress")
+def get_download_progress(model_name: Optional[str] = None):
+    return model_manager.get_download_progress(model_name)
+
+class SelectModelRequest(BaseModel):
+    model_name: str
+    auto_pull: bool = True
+
+@app.post("/api/models/select")
+async def select_model(req: SelectModelRequest):
+    clean_name = req.model_name.strip()
+    if not clean_name:
+        raise HTTPException(status_code=400, detail="model_name is required")
+    
+    primary_brain.configure(model_name=clean_name)
+    
+    if req.auto_pull:
+        installed = await model_manager.list_installed_models_async(primary_brain.api_base)
+        if not any(clean_name.lower() in m.lower() for m in installed):
+            model_manager.start_pull_task(clean_name, primary_brain.api_base)
+
+    return {
+        "success": True,
+        "active_model": primary_brain.model_name,
+        "status": primary_brain.get_status()
+    }
+
+class LLMConfigRequest(BaseModel):
+    model_name: Optional[str] = None
+    api_base: Optional[str] = None
+    api_key: Optional[str] = None
+    auto_pull: Optional[bool] = False
+
+@app.get("/api/config/llm")
+def get_llm_config():
+    return {
+        "model_name": primary_brain.model_name,
+        "api_base": primary_brain.api_base,
+        "api_key": "***" if primary_brain.api_key else "",
+        "status": primary_brain.get_status()
+    }
+
+@app.post("/api/config/llm")
+async def update_llm_config(req: LLMConfigRequest):
+    primary_brain.configure(
+        model_name=req.model_name,
+        api_base=req.api_base,
+        api_key=req.api_key
+    )
+    if req.api_base:
+        model_manager.default_api_base = req.api_base
+    if req.auto_pull and req.model_name:
+        installed = await model_manager.list_installed_models_async(primary_brain.api_base)
+        if not any(req.model_name.lower() in m.lower() for m in installed):
+            model_manager.start_pull_task(req.model_name, primary_brain.api_base)
+    return {"success": True, "config": get_llm_config()}
+
 @app.get("/api/network/info")
 def get_network_info():
-    is_https = os.path.exists("certs/cert.pem")
+    certs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "certs")
+    is_https = os.path.exists(os.path.join(certs_dir, "cert.pem"))
     details = get_network_details(8000, is_https=is_https)
     
     qr_b64 = ""
@@ -274,6 +371,7 @@ async def speak_text(req: TTSRequest):
 @app.websocket("/ws/live")
 async def websocket_live_endpoint(websocket: WebSocket):
     await websocket.accept()
+    connected_websockets.add(websocket)
 
     async def push_serial_telemetry(line: str):
         try:
@@ -285,7 +383,8 @@ async def websocket_live_endpoint(websocket: WebSocket):
         except Exception:
             pass
 
-    embedded.add_serial_listener(lambda line: asyncio.create_task(push_serial_telemetry(line)))
+    serial_listener = lambda line: asyncio.create_task(push_serial_telemetry(line))
+    embedded.add_serial_listener(serial_listener)
 
     async def send_progress_update(message: str):
         try:
@@ -348,7 +447,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
                     "auto_vision": dispatch_res.get("active_vision", "screen"),
                     "active_engine": dispatch_res.get("active_engine", "CODER_ENGINE"),
                     "requires_confirmation": dispatch_res.get("requires_confirmation", False),
-                    "model": "Qwen2.5-Coder Engine",
+                    "model": primary_brain.model_name,
                     "speech": speech_data
                 })
 
@@ -399,7 +498,7 @@ async def websocket_live_endpoint(websocket: WebSocket):
                         "auto_vision": dispatch_res.get("active_vision", "screen"),
                         "active_engine": dispatch_res.get("active_engine", "CODER_ENGINE"),
                         "requires_confirmation": dispatch_res.get("requires_confirmation", False),
-                        "model": "Qwen2.5-Coder Engine",
+                        "model": primary_brain.model_name,
                         "speech": speech_data
                     })
                 else:
@@ -414,6 +513,9 @@ async def websocket_live_endpoint(websocket: WebSocket):
         pass
     except Exception:
         pass
+    finally:
+        connected_websockets.discard(websocket)
+        embedded.remove_serial_listener(serial_listener)
 
 # Mount frontend
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend")

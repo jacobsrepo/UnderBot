@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import json
+import asyncio
 from typing import Dict, Any, Optional, Tuple, Callable
 
 class CognitiveCore:
@@ -194,11 +195,40 @@ class CognitiveCore:
     def _reflect_and_repair_firmware(self, prompt: str, current_code: str, compiler_stderr: str) -> str:
         """
         Compiler Reflection Loop:
-        Analyzes compilation stderr, identifies missing semicolons/variables/includes,
-        and produces corrected C++ sketch code.
+        1. Attempts deep semantic repair using the active LLM Brain.
+        2. Falls back to deterministic heuristic repair if LLM is offline.
         """
         print(f"[CognitiveCore/Reflector] Reflecting on compiler diagnostics:\n{compiler_stderr[:200]}")
         
+        # 1. Try LLM reflection if brain is available
+        if self.brain and hasattr(self.brain, "repair_code_with_llm"):
+            try:
+                loop = None
+                try:
+                    loop = asyncio.get_event_loop()
+                except Exception:
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+
+                if loop.is_running():
+                    import concurrent.futures
+                    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                        future = executor.submit(
+                            lambda: asyncio.run(self.brain.repair_code_with_llm(prompt, current_code, compiler_stderr))
+                        )
+                        llm_repaired = future.result(timeout=10.0)
+                else:
+                    llm_repaired = loop.run_until_complete(
+                        self.brain.repair_code_with_llm(prompt, current_code, compiler_stderr)
+                    )
+
+                if llm_repaired and "void loop" in llm_repaired:
+                    print("[CognitiveCore/Reflector] Successfully repaired firmware via LLM Brain.")
+                    return llm_repaired
+            except Exception as e:
+                print(f"[CognitiveCore/Reflector] LLM repair notice: {e}")
+
+        # 2. Deterministic Heuristic Fallback
         repaired = current_code
 
         if "was not declared in this scope" in compiler_stderr:

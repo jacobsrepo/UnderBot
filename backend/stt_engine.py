@@ -2,31 +2,54 @@ import io
 import os
 import tempfile
 from typing import Optional, Dict
-from faster_whisper import WhisperModel
+try:
+    from faster_whisper import WhisperModel
+except ImportError:
+    WhisperModel = None
 
 class STTEngine:
     """
     High-accuracy Speech-To-Text engine using Faster-Whisper small.en.
     Optimized for low-latency conversational speech recognition.
     """
-    def __init__(self, model_size: str = "small.en", device: str = "cpu", compute_type: str = "int8"):
+    def __init__(self, model_size: str = "small.en", device: Optional[str] = None, compute_type: Optional[str] = None):
         self.model_size = model_size
-        self.device = device
-        self.compute_type = compute_type
+        
+        # Auto-detect CUDA capability if not explicitly passed
+        if device is None:
+            try:
+                import torch
+                self.device = "cuda" if torch.cuda.is_available() else "cpu"
+            except Exception:
+                self.device = "cpu"
+        else:
+            self.device = device
+
+        if compute_type is None:
+            self.compute_type = "float16" if self.device == "cuda" else "int8"
+        else:
+            self.compute_type = compute_type
+
         self.model: Optional[WhisperModel] = None
         self._init_model()
 
     def _init_model(self):
+        if not WhisperModel:
+            print("[STTEngine] faster-whisper package not installed. Speech-to-text standing by.")
+            return
+
         print(f"[STTEngine] Initializing Faster-Whisper ({self.model_size}, {self.device}, {self.compute_type})...")
         try:
             self.model = WhisperModel(self.model_size, device=self.device, compute_type=self.compute_type)
-            print(f"[STTEngine] Faster-Whisper ({self.model_size}) loaded successfully.")
+            print(f"[STTEngine] Faster-Whisper ({self.model_size}) loaded on {self.device}.")
         except Exception as e:
-            print(f"[STTEngine] Warning: Failed loading {self.model_size} ({e}). Falling back to base.en...")
+            print(f"[STTEngine] Warning: Failed loading on {self.device} ({e}). Falling back to cpu int8 base.en...")
             try:
                 self.model_size = "base.en"
+                self.device = "cpu"
+                self.compute_type = "int8"
                 self.model = WhisperModel("base.en", device="cpu", compute_type="int8")
-                print("[STTEngine] Faster-Whisper (base.en) loaded.")
+                print("[STTEngine] Faster-Whisper (base.en) loaded on CPU.")
             except Exception as fallback_e:
                 print(f"[STTEngine] Critical STT error: {fallback_e}")
 

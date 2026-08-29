@@ -29,6 +29,8 @@ test_voice.mp3
 # Python cache
 .pytest_cache/
 *.log
+*.db
+window_state.json
 
 # Environment
 .env

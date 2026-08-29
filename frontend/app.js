@@ -72,6 +72,7 @@ class ContenderStudioApp {
         this.hardwareDrawer = document.getElementById('hardware-drawer');
         this.btnToggleHardware = document.getElementById('btn-toggle-hardware');
         this.selectComPorts = document.getElementById('select-com-ports');
+        this.selectBaudRate = document.getElementById('select-baud-rate');
         this.btnRefreshPorts = document.getElementById('btn-refresh-ports');
         this.btnConnectPort = document.getElementById('btn-connect-port');
         this.serialConsole = document.getElementById('serial-console');
@@ -93,6 +94,17 @@ class ContenderStudioApp {
         this.btnModalCancel = document.getElementById('btn-modal-cancel');
         this.btnModalSave = document.getElementById('btn-modal-save');
         this.voiceSelect = document.getElementById('voice-select');
+        this.llmEndpointInput = document.getElementById('llm-endpoint-input');
+        this.llmModelInput = document.getElementById('llm-model-input');
+        this.modelCardsContainer = document.getElementById('model-cards-container');
+        this.downloadProgressBox = document.getElementById('download-progress-box');
+        this.progressModelName = document.getElementById('progress-model-name');
+        this.progressPercent = document.getElementById('progress-percent');
+        this.progressBarFill = document.getElementById('progress-bar-fill');
+        this.progressStatusMsg = document.getElementById('progress-status-msg');
+        this.customPullInput = document.getElementById('custom-pull-input');
+        this.btnPullCustom = document.getElementById('btn-pull-custom');
+        this.btnRefreshModels = document.getElementById('btn-refresh-models');
         this.btnStopSystem = document.getElementById('btn-stop-system');
         this.modalShutdown = document.getElementById('modal-shutdown');
         this.btnNetworkConnect = document.getElementById('btn-network-connect');
@@ -108,6 +120,7 @@ class ContenderStudioApp {
 
     async init() {
         console.log('[Contender Studio] Initializing dual-engine tactical assistant...');
+        window.contenderApp = this;
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
@@ -416,6 +429,8 @@ class ContenderStudioApp {
         } else if (data.type === 'progress_update') {
             this.showProcessing(data.message);
             this.appendSerialLine(`[Contender] ${data.message}`);
+        } else if (data.type === 'model_download_progress') {
+            this.updateDownloadProgress(data.data);
         } else if (data.type === 'stt_result') {
             if (data.auto_vision) {
                 this.switchVisionSource(data.auto_vision);
@@ -656,14 +671,50 @@ class ContenderStudioApp {
             setTimeout(() => { this.btnCopyNetworkUrl.textContent = 'Copy'; }, 2000);
         });
 
-        this.btnOpenSettings.addEventListener('click', () => { this.modalPreferences.style.display = 'flex'; });
+        this.btnOpenSettings.addEventListener('click', async () => {
+            try {
+                const res = await fetch('/api/config/llm');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (this.llmEndpointInput) this.llmEndpointInput.value = data.api_base || '';
+                    if (this.llmModelInput) this.llmModelInput.value = data.model_name || '';
+                }
+            } catch (e) {}
+            this.modalPreferences.style.display = 'flex';
+            this.loadModelCatalog();
+        });
         this.btnModalClose.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
         this.btnModalCancel.addEventListener('click', () => { this.modalPreferences.style.display = 'none'; });
-        this.btnModalSave.addEventListener('click', () => {
+        
+        if (this.btnRefreshModels) {
+            this.btnRefreshModels.addEventListener('click', () => this.loadModelCatalog());
+        }
+        if (this.btnPullCustom) {
+            this.btnPullCustom.addEventListener('click', () => this.pullCustomModel());
+        }
+        if (this.customPullInput) {
+            this.customPullInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') this.pullCustomModel();
+            });
+        }
+
+        this.btnModalSave.addEventListener('click', async () => {
             const voice = this.voiceSelect.value;
             localStorage.setItem('vla_voice', voice);
             if (this.ws && this.ws.readyState === WebSocket.OPEN) {
                 this.ws.send(JSON.stringify({ type: 'set_voice', voice_key: voice }));
+            }
+            if (this.llmEndpointInput && this.llmModelInput) {
+                try {
+                    await fetch('/api/config/llm', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            api_base: this.llmEndpointInput.value.trim(),
+                            model_name: this.llmModelInput.value.trim()
+                        })
+                    });
+                } catch (e) {}
             }
             this.modalPreferences.style.display = 'none';
         });
@@ -714,17 +765,18 @@ class ContenderStudioApp {
     async togglePortConnection() {
         const port = this.selectComPorts.value;
         if (!port) return;
+        const baud = parseInt(this.selectBaudRate ? this.selectBaudRate.value : '115200', 10) || 115200;
         if (this.btnConnectPort.textContent === 'Connect') {
             const res = await fetch('/api/embedded/serial/connect', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ port: port, baudrate: 115200 })
+                body: JSON.stringify({ port: port, baudrate: baud })
             });
             const data = await res.json();
             if (data.success) {
                 this.btnConnectPort.textContent = 'Disconnect';
                 this.btnConnectPort.className = 'control-btn btn-danger';
-                this.appendSerialLine(`[Contender] Connected to ${port} @ 115200 baud.`);
+                this.appendSerialLine(`[Contender] Connected to ${port} @ ${baud} baud.`);
             }
         } else {
             await fetch('/api/embedded/serial/disconnect', { method: 'POST' });
@@ -768,6 +820,162 @@ class ContenderStudioApp {
             this.networkUrlInput.value = window.location.href;
         }
         this.modalNetwork.style.display = 'flex';
+    }
+
+    // ==================== NEURAL MODEL HUB & DOWNLOADER ====================
+
+    async loadModelCatalog() {
+        if (!this.modelCardsContainer) return;
+        this.modelCardsContainer.innerHTML = '<div class="model-loading-placeholder">Scanning local AI models...</div>';
+        try {
+            const res = await fetch('/api/models/catalog');
+            if (res.ok) {
+                const data = await res.json();
+                this.renderModelCards(data);
+            } else {
+                this.modelCardsContainer.innerHTML = '<div class="model-loading-placeholder">Ollama endpoint unreachable. Verify local server.</div>';
+            }
+        } catch (e) {
+            this.modelCardsContainer.innerHTML = '<div class="model-loading-placeholder">Unable to fetch model catalog.</div>';
+        }
+    }
+
+    renderModelCards(data) {
+        if (!this.modelCardsContainer) return;
+        this.modelCardsContainer.innerHTML = '';
+        const catalog = data.catalog || [];
+        const customModels = data.custom_models || [];
+        const allModels = [...catalog, ...customModels];
+
+        if (allModels.length === 0) {
+            this.modelCardsContainer.innerHTML = '<div class="model-loading-placeholder">No models found in catalog.</div>';
+            return;
+        }
+
+        allModels.forEach(m => {
+            const card = document.createElement('div');
+            card.className = `model-card-item ${m.is_active ? 'active' : ''}`;
+
+            const badgeClass = m.recommended ? 'model-card-badge rec' : 'model-card-badge';
+            const actionBtnHtml = m.is_active
+                ? '<button class="control-btn btn-xs" style="background: var(--accent-green); color: #fff; cursor: default;">Active</button>'
+                : m.downloading
+                ? '<button class="control-btn btn-xs btn-danger" style="cursor: progress;">Downloading...</button>'
+                : m.is_installed
+                ? `<button class="control-btn btn-xs btn-primary btn-select-model" data-id="${m.id}">Select</button>`
+                : `<button class="control-btn btn-xs btn-pull-model" data-id="${m.id}">⬇ Pull</button>`;
+
+            card.innerHTML = `
+                <div class="model-card-top">
+                    <span class="model-card-name">${m.name}</span>
+                    <span class="${badgeClass}">${m.badge || (m.is_installed ? 'Installed' : 'Ready')}</span>
+                </div>
+                <div class="model-card-desc">${m.description || m.category}</div>
+                <div class="model-card-bottom">
+                    <span class="model-card-meta">${m.size} | ${m.vram}</span>
+                    <div class="model-card-actions">${actionBtnHtml}</div>
+                </div>
+            `;
+
+            const btnSelect = card.querySelector('.btn-select-model');
+            if (btnSelect) {
+                btnSelect.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectModel(m.id);
+                });
+            }
+
+            const btnPull = card.querySelector('.btn-pull-model');
+            if (btnPull) {
+                btnPull.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.pullModel(m.id);
+                });
+            }
+
+            this.modelCardsContainer.appendChild(card);
+        });
+    }
+
+    async pullModel(modelId) {
+        if (!modelId) return;
+        this.showDownloadProgress(modelId, 'Initiating model pull...', 0);
+        try {
+            const res = await fetch('/api/models/pull', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model_name: modelId })
+            });
+            if (res.ok) {
+                this.appendSerialLine(`[ModelHub] Started autonomous download for '${modelId}'.`);
+                this.loadModelCatalog();
+            }
+        } catch (e) {
+            this.showDownloadProgress(modelId, 'Failed to start download.', 0);
+        }
+    }
+
+    async pullCustomModel() {
+        if (!this.customPullInput) return;
+        const modelName = this.customPullInput.value.trim();
+        if (!modelName) return;
+        this.customPullInput.value = '';
+        await this.pullModel(modelName);
+    }
+
+    async selectModel(modelId) {
+        if (!modelId) return;
+        try {
+            const res = await fetch('/api/models/select', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model_name: modelId, auto_pull: true })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (this.llmModelInput) this.llmModelInput.value = data.active_model;
+                this.statusModelName.textContent = data.active_model;
+                this.appendSerialLine(`[ModelHub] Switched active model to '${data.active_model}'.`);
+                this.loadModelCatalog();
+            }
+        } catch (e) {}
+    }
+
+    showDownloadProgress(modelName, status, percent) {
+        if (!this.downloadProgressBox) return;
+        this.downloadProgressBox.style.display = 'flex';
+        this.progressModelName.textContent = `Pulling: ${modelName}`;
+        this.progressPercent.textContent = `${percent}%`;
+        this.progressBarFill.style.width = `${percent}%`;
+        this.progressStatusMsg.textContent = status;
+    }
+
+    updateDownloadProgress(progress) {
+        if (!progress || !this.downloadProgressBox) return;
+        const model = progress.model || 'Model';
+        const percent = progress.percent || 0.0;
+        const status = progress.status || 'Downloading...';
+        const isDone = progress.is_done || false;
+        const error = progress.error;
+
+        if (error) {
+            this.showDownloadProgress(model, `Error: ${error}`, percent);
+            setTimeout(() => {
+                this.downloadProgressBox.style.display = 'none';
+                this.loadModelCatalog();
+            }, 4000);
+            return;
+        }
+
+        this.showDownloadProgress(model, status, percent);
+
+        if (isDone) {
+            this.progressStatusMsg.textContent = 'Download complete! Model ready for activation.';
+            setTimeout(() => {
+                this.downloadProgressBox.style.display = 'none';
+                this.loadModelCatalog();
+            }, 2500);
+        }
     }
 
     async confirmShutdown() {

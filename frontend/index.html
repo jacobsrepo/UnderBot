@@ -135,6 +135,12 @@
                             <select id="select-com-ports" class="dropdown-clean">
                                 <option value="">Scanning COM ports...</option>
                             </select>
+                            <select id="select-baud-rate" class="dropdown-clean" title="Select Baud Rate">
+                                <option value="115200" selected>115200 Baud</option>
+                                <option value="57600">57600 Baud</option>
+                                <option value="19200">19200 Baud</option>
+                                <option value="9600">9600 Baud</option>
+                            </select>
                             <button class="control-btn" id="btn-refresh-ports">Rescan</button>
                             <button class="control-btn btn-primary" id="btn-connect-port">Connect</button>
                         </div>
@@ -280,8 +286,47 @@
                         </select>
                     </div>
                     <div class="form-field">
+                        <label class="form-label">LLM API Endpoint</label>
+                        <input type="text" id="llm-endpoint-input" class="text-input full" placeholder="http://localhost:11434/v1" style="font-family: var(--font-mono); font-size: 0.82rem;">
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">LLM Model Name</label>
+                        <input type="text" id="llm-model-input" class="text-input full" placeholder="qwen2.5-coder:7b" style="font-family: var(--font-mono); font-size: 0.82rem;">
+                    </div>
+
+                    <!-- Neural Model Hub (Visual Coder & Automation Master) -->
+                    <div class="form-field model-hub-section">
+                        <div class="section-title-row">
+                            <label class="form-label" style="margin-bottom: 0;">Neural Model Hub (Visual Coder & Automation Models)</label>
+                            <button class="control-btn btn-xs" id="btn-refresh-models" title="Refresh local models">Rescan</button>
+                        </div>
+                        <div class="model-cards-grid" id="model-cards-container">
+                            <!-- Populated dynamically via app.js -->
+                            <div class="model-loading-placeholder">Scanning local AI models...</div>
+                        </div>
+
+                        <!-- Live Download Progress Bar -->
+                        <div class="download-progress-box" id="download-progress-box" style="display: none;">
+                            <div class="progress-info-row">
+                                <span class="progress-model-name" id="progress-model-name">Pulling model...</span>
+                                <span class="progress-percent" id="progress-percent">0%</span>
+                            </div>
+                            <div class="progress-bar-track">
+                                <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="progress-status-msg" id="progress-status-msg">Downloading layers from repository...</div>
+                        </div>
+
+                        <!-- Custom Model Pull Input -->
+                        <div class="custom-pull-row">
+                            <input type="text" id="custom-pull-input" class="text-input" placeholder="Pull custom model (e.g. codellama, mistral:7b)...">
+                            <button class="control-btn btn-primary" id="btn-pull-custom">Pull</button>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
                         <label class="form-label">Cognitive Pipeline</label>
-                        <input type="text" class="text-input full" value="Decoupled Tool Coder + On-Demand Vision" readonly>
+                        <input type="text" class="text-input full" value="Decoupled Visual Tool Coder + On-Demand Multimodal Eyes" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">

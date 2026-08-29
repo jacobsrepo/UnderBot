@@ -901,6 +901,168 @@ body {
     line-height: 1.5;
 }
 
+/* ==================== NEURAL MODEL HUB & DOWNLOADER ==================== */
+.model-hub-section {
+    background: var(--bg-base);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    gap: 10px;
+}
+
+.section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-xs {
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    height: 22px;
+}
+
+.model-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+    max-height: 230px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.model-card-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.15s ease;
+}
+
+.model-card-item:hover {
+    border-color: var(--border-medium);
+    background: var(--bg-surface-elevated);
+}
+
+.model-card-item.active {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 1px var(--accent-blue);
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.model-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.model-card-name {
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--text-high);
+}
+
+.model-card-badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background: var(--bg-surface-hover);
+    color: var(--text-medium);
+}
+
+.model-card-badge.rec {
+    background: rgba(59, 130, 246, 0.18);
+    color: #60a5fa;
+}
+
+.model-card-desc {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+    flex: 1;
+}
+
+.model-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.model-card-meta {
+    font-size: 0.7rem;
+    color: var(--text-low);
+    font-family: var(--font-mono);
+}
+
+.download-progress-box {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--accent-blue);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.progress-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.76rem;
+    font-weight: 500;
+}
+
+.progress-model-name {
+    color: var(--accent-blue);
+}
+
+.progress-percent {
+    color: var(--text-high);
+    font-family: var(--font-mono);
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-base);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--accent-blue);
+    transition: width 0.2s ease;
+}
+
+.progress-status-msg {
+    font-size: 0.7rem;
+    color: var(--text-medium);
+}
+
+.custom-pull-row {
+    display: flex;
+    gap: 6px;
+}
+
+.custom-pull-row input {
+    flex: 1;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+}
+
+.model-loading-placeholder {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding: 12px;
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
 @media (max-width: 900px) {
     .app-main {
         grid-template-columns: 1fr;

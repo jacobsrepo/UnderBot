@@ -195,6 +195,24 @@ class EmbeddedAgent:
 
     # ==================== DETERMINISTIC COMPILATION & REFLECTION LOOP ====================
 
+    def _ensure_core_installed(self, fqbn: str):
+        """Auto-installs required core if missing in arduino-cli."""
+        if not os.path.exists(self.arduino_cli_path):
+            return
+        core_name = "arduino:avr"
+        if "esp32" in fqbn.lower():
+            core_name = "esp32:esp32"
+        elif "esp8266" in fqbn.lower():
+            core_name = "esp8266:esp8266"
+
+        try:
+            print(f"[EmbeddedAgent] Ensuring board core '{core_name}' is installed...")
+            subprocess.run([self.arduino_cli_path, "core", "update-index"], capture_output=True, timeout=15)
+            subprocess.run([self.arduino_cli_path, "core", "install", core_name], capture_output=True, timeout=60)
+            print(f"[EmbeddedAgent] Core '{core_name}' ready.")
+        except Exception as e:
+            print(f"[EmbeddedAgent] Core install notice: {e}")
+
     def compile_and_flash(self, fqbn: str, port: str, sketch_path: str) -> Dict[str, Any]:
         """
         Executes: arduino-cli compile --fqbn <fqbn> --upload -p <port> <sketch_path> --format json
@@ -209,6 +227,13 @@ class EmbeddedAgent:
             comp_res = subprocess.run(comp_cmd, capture_output=True, text=True, timeout=25)
             comp_stdout = comp_res.stdout.strip()
             comp_stderr = comp_res.stderr.strip()
+
+            # If core not installed, auto-install and retry compile
+            if "Platform 'arduino:avr' not installed" in comp_stderr or "Platform 'arduino:avr' not installed" in comp_stdout or "Platform not installed" in (comp_stderr + comp_stdout):
+                self._ensure_core_installed(fqbn)
+                comp_res = subprocess.run(comp_cmd, capture_output=True, text=True, timeout=30)
+                comp_stdout = comp_res.stdout.strip()
+                comp_stderr = comp_res.stderr.strip()
 
             comp_diag = []
             if comp_stdout:

@@ -19,17 +19,19 @@ A fully self-contained, local multimodal assistant featuring continuous screen p
 ## 2. Directory Structure
 
 ```
-local-robot-brain/
+UnderBot/
 |-- backend/
 |   |-- app.py              # FastAPI server & WebSocket action coordinator
-|   |-- vision_brain.py     # Contender neural core (Qwen2.5-VL GPU 4-bit)
-|   |-- desktop_agent.py    # Desktop OS automation, file ops & app launcher
+|   |-- brain.py            # Primary Coder Brain (Async aiohttp, Qwen2.5-Coder / OpenAI API)
+|   |-- cognitive_core.py   # Dual-Engine Router, Safety Interceptor & C++ Reflector
+|   |-- vision_engine.py    # Secondary Perception Engine (RapidOCR & Visual Snapshots)
+|   |-- desktop_agent.py    # Desktop OS automation, Recycle Bin ops & window focus
 |   |-- embedded_agent.py   # Arduino/ESP port detection, flashing & serial monitor
 |   |-- intent_router.py    # Directed speech & wake-word analyzer
 |   |-- camera_stream.py    # DirectShow / WebRTC video pipeline
 |   |-- ssl_helper.py       # Local LAN TLS certificate manager
 |   |-- tts_engine.py       # Male neural speech synthesizer
-|   |-- stt_engine.py       # Faster-Whisper small.en speech-to-text
+|   |-- stt_engine.py       # Faster-Whisper GPU/CPU speech-to-text
 |   `-- requirements.txt
 |-- frontend/               # Contender Tactical Studio & Mini HUD
 |   |-- index.html
@@ -38,7 +40,7 @@ local-robot-brain/
 |   `-- audio_visualizer.js
 |-- desktop_shell.py        # Native Windows WebView2 shell & Mini HUD manager
 |-- test_desktop_agent.py   # Subsystem verification suite
-|-- test_pipeline.py        # Multimodal pipeline test suite
+|-- test_pipeline.py        # Full multimodal pipeline test suite
 `-- start_brain.bat         # One-click launcher
 ```
 
