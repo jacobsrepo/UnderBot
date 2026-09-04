@@ -4,16 +4,16 @@
 
 export const SCREEN_THEMES = {
     idle: {
-        screenBg:    '#090d16',  // Deep cybernetic obsidian
-        accentColor: '#38bdf8',  // Electric cyan
-        glowColor:   'rgba(56, 189, 248, 0.4)',
+        screenBg:    '#4a5f3a',  // Olive sage green
+        accentColor: '#86efac',  // Soft sage green
+        glowColor:   'rgba(134, 239, 172, 0.4)',
         label:       'Ready',
         subtext:     'Standing by',
     },
     browsing: {
-        screenBg:    '#071322',  // Deep cyber ocean midnight
-        accentColor: '#00e5ff',  // Electric neon cyan
-        glowColor:   'rgba(0, 229, 255, 0.55)',
+        screenBg:    '#254b42',  // Deep pine / sage emerald intelligence
+        accentColor: '#6ee7b7',  // Soft mint / emerald
+        glowColor:   'rgba(110, 231, 183, 0.45)',
         label:       'Browsing Web…',
         subtext:     'Scanning live intelligence feeds',
     },
