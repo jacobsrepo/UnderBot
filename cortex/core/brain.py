@@ -592,25 +592,19 @@ class CortexBrain:
                 search_query = text_clean
             doc = await execute_tool("search_or_browse_web", {"query_or_url": search_query})
 
+            briefing_text = doc.get("briefing") or doc.get("summary") or doc.get("title", "")
+            synth_prompt = (
+                f"{full_system_prompt}\n\n"
+                f"[LIVE RESEARCH BRIEFING FOR: '{search_query}']\n"
+                f"- Headline: {doc.get('headline') or doc.get('title')}\n"
+                f"- Source: {doc.get('publisher') or doc.get('domain')}\n"
+                f"- Published: {doc.get('published_date', 'Today')}\n"
+                f"- Key Summary: {briefing_text[:2500]}\n\n"
+                f"TASK: Provide a concise, calm, and articulate spoken summary of this live research to the user. Do not recite raw URLs or brackets."
+            )
             dialogue = [
-                {"role": "system", "content": full_system_prompt},
-                {"role": "user", "content": text_clean},
-                {
-                    "role": "assistant",
-                    "content": None,
-                    "tool_calls": [{
-                        "id": "call_live_search",
-                        "type": "function",
-                        "function": {
-                            "name": "search_or_browse_web",
-                            "arguments": json.dumps({"query_or_url": search_query})
-                        }
-                    }]
-                },
-                {
-                    "role": "tool",
-                    "content": json.dumps(doc)
-                }
+                {"role": "system", "content": synth_prompt},
+                {"role": "user", "content": text_clean}
             ]
             resp_chat = await self.agent.client.chat(dialogue, tools=None, task_type="dialogue")
             response = resp_chat.get("message", {}).get("content", "I have retrieved the latest intelligence briefing.")
