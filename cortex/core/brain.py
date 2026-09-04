@@ -28,7 +28,7 @@ BASE_SYSTEM_PROMPT = """You are Cortex, an intelligent, calm, and articulate AI 
 ACTION-FIRST EXECUTION MANDATE (CRITICAL):
 1. IMMEDIATE ACTION: When the user requests an action (compile code, upload/flash firmware, install software/packages, search the web, check hardware, list files, run a command), CALL THE APPROPRIATE TOOL IMMEDIATELY.
 2. NEVER STALL OR ASK FOR REPETITIVE PERMISSION: If the user gave an objective or goal, you have full authorization to execute all required sub-steps (searching, installing missing dependencies, compiling, testing, flashing). DO NOT ask "Would you like to proceed?", "Shall I start?", or "Do you want me to install this?". Take the action immediately and report the actual result.
-3. NEVER SIMULATE OR GUESS: Never pretend to upload, flash, or test. Always invoke the real tool (`compile_and_upload_sketch`, `run_cli_command`, `install_package_or_tool`, `check_hardware_connection`).
+3. NEVER SIMULATE OR GUESS: Never pretend to upload, flash, or test. Always invoke the real tool (`build_and_flash_sketch`, `compile_and_upload_sketch`, `run_cli_command`, `install_package_or_tool`, `check_hardware_connection`).
 
 LIVE STATE VERIFICATION (NEVER RELY ON STALE MEMORY):
 1. USB & MICROCONTROLLERS: Always call `check_hardware_connection` live whenever asked about connected devices, USB ports, or Arduino status. Never answer from previous conversation memory.
@@ -38,8 +38,15 @@ LIVE STATE VERIFICATION (NEVER RELY ON STALE MEMORY):
 2. FILES, FOLDERS & DIRECTORIES: Always verify files live on the host filesystem using `run_cli_command` with PowerShell (`Test-Path`, `Get-ChildItem`) or search tools. Never assume a file exists or doesn't exist without checking.
 
 ARDUINO & FIRMWARE AUTOMATION:
-1. When asked to upload, flash, or push code/sketches to Arduino (e.g. "push binary_RTConly", "upload sketch"), immediately call `compile_and_upload_sketch`.
-2. Missing libraries will automatically be resolved and installed. Serial port locks are safely handled.
+1. CREATING, TESTING, OR RUNNING CODE (e.g. "run a basic test script on all pins", "blink LED", "write a test sketch", "test pins"):
+   - ALWAYS invoke `build_and_flash_sketch` with your generated Arduino C++ code!
+   - NEVER search for non-existent files in Documents or hallucinate file paths! Build the code and flash it directly with `build_and_flash_sketch`.
+2. EXISTING SKETCHES ON DISK:
+   - Only call `compile_and_upload_sketch` if the user gave a specific existing file path (e.g. "push binary_RTConly.ino").
+3. CONVERSATIONAL SPEECH & CODE RULES (CRITICAL):
+   - NEVER recite, output, or dump raw C++ or PowerShell code into your speech or conversational assistant response!
+   - Your speech will be read aloud by TTS. Do NOT read code syntax aloud.
+   - Speak ONLY a concise, natural, human-friendly summary of what was accomplished (e.g. "I built and flashed a pin test sketch to the Arduino Nano on COM4. All digital pins are now cycling through test states.").
 
 POWERSHELL & PACKAGE INSTALLATION:
 1. Use `install_package_or_tool` to install Python packages (pip), Arduino libraries (arduino-cli), Windows utilities (winget), or Node packages (npm) autonomously.
@@ -47,9 +54,7 @@ POWERSHELL & PACKAGE INSTALLATION:
 
 NEWS & WEB INTELLIGENCE RULES:
 1. When asked for the latest news, breaking news, or what is happening (e.g. "what is the latest news from Nepal?", "latest news about SpaceX"), call `search_or_browse_web`.
-2. When reporting news from search results, present the ACTUAL FACTUAL NEWS STORIES, HEADLINES, DATES, and DEVELOPMENTS.
-   - Example format: "1. [Publisher] Headline: Summary of the news event. 2. [Publisher] Headline: Summary..."
-   - NEVER give generic website titles or meta descriptions like "The Himalayan Times - Nepal's No.1 English Daily Newspaper... Would you like to read?". Report what is actually occurring in the world.
+2. The UI automatically displays the full Reader View briefing in the browser screen. In your chat/spoken reply, provide a crisp, spoken overview of the headline and key developments. Never recite links or URLs.
 
 GENERAL CAPABILITIES:
 1. Date & Time: Always rely on your LIVE SYSTEM GROUNDING or `Get-Date`. Never emit placeholders like '[insert current time here]'.
@@ -84,15 +89,29 @@ class CortexBrain:
 
     def _sanitize_for_tts(self, text: str) -> str:
         """
-        Hardening Check 4: Strips inline mood and metadata tags before audio synthesis
-        so bracketed formatting like [mood:curious;eye:inquiring;glow:#38bdf8] is never spoken out loud.
+        Hardening Check 4: Strips inline mood, metadata tags, raw code blocks, markdown tables,
+        and syntax before audio synthesis so Cortex never reads code or formatting syntax out loud.
         """
+        # Strip all markdown code blocks completely
+        clean = re.sub(r'```[a-zA-Z0-9_\-\.]*[\s\S]*?```', '', text)
+        # Strip inline code backticks and code snippets
+        clean = re.sub(r'`[^`\n]+`', '', clean)
+        # Strip markdown links: [Text](url) -> Text
+        clean = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', clean)
         # Strip [mood:...] tags
-        clean = re.sub(r'\[mood:[^\]]+\]', '', text, flags=re.IGNORECASE)
+        clean = re.sub(r'\[mood:[^\]]+\]', '', clean, flags=re.IGNORECASE)
         # Strip generic bracketed metadata like [insert ...] or [SYSTEM ...]
         clean = re.sub(r'\[(?:insert|system|hardware|vision)[^\]]*\]', '', clean, flags=re.IGNORECASE)
+        # Strip URLs
+        clean = re.sub(r'https?://\S+', '', clean)
+        # Strip raw file paths like C:\Users\... so it doesn't read long backslashes
+        clean = re.sub(r'[A-Za-z]:\\(?:[\w\.-]+\\)*([\w\.-]+)', r'\1', clean)
+        # Strip curly brace blocks if any code leaked
+        clean = re.sub(r'\{[^\}]{8,}\}', '', clean)
         # Clean excessive whitespace
         clean = re.sub(r'\s+', ' ', clean).strip()
+        if not clean or len(clean) < 3:
+            clean = "Task completed."
         return clean
 
     def _extract_and_dispatch_mood_tags(self, text: str) -> Optional[Dict[str, Any]]:
@@ -243,6 +262,134 @@ class CortexBrain:
                 q = args.get("query", "")
                 return {"results": self.knowledge.search_facts(q)}
 
+            elif name == "build_and_flash_sketch":
+                sketch_code = args.get("sketch_code", "").strip()
+                sketch_name = args.get("sketch_name", "cortex_pin_test").strip()
+                sketch_name = re.sub(r'[^a-zA-Z0-9_]', '_', sketch_name) or "cortex_sketch"
+                port = args.get("port", "").strip()
+                fqbn = args.get("fqbn", "arduino:avr:nano").strip()
+
+                if not sketch_code:
+                    return {"status": "error", "error": "No sketch code provided to build."}
+
+                await broadcast({"type": "state_change", "state": "programming"})
+                await broadcast({"type": "facial_expression", "mood": "focused", "eye_shape": "narrow", "glow_color": "#a855f7"})
+
+                # Locate or create build directory: cortex/scratch/sketches/<sketch_name>/
+                cortex_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                build_dir = os.path.join(cortex_dir, "scratch", "sketches", sketch_name)
+                os.makedirs(build_dir, exist_ok=True)
+                sketch_file = os.path.join(build_dir, f"{sketch_name}.ino")
+
+                with open(sketch_file, "w", encoding="utf-8") as f:
+                    f.write(sketch_code)
+
+                await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Created '{sketch_name}.ino'. Building for {fqbn}..."})
+
+                # Locate arduino-cli
+                bin_dir = os.path.join(cortex_dir, "bin")
+                arduino_cli = os.path.join(bin_dir, "arduino-cli.exe")
+                if not os.path.exists(arduino_cli):
+                    arduino_cli = "arduino-cli"
+
+                # Auto-detect target port
+                target_port = port
+                if not target_port:
+                    if self.device.port_name:
+                        target_port = self.device.port_name
+                    else:
+                        avail = self.device.worker.scan_available_ports()
+                        for p in avail:
+                            if "com1" not in p["port"].lower():
+                                target_port = p["port"]
+                                break
+                if not target_port:
+                    target_port = "COM4"
+
+                # Compile with auto-library installation retry loop
+                compile_success = False
+                compile_stdout = ""
+                compile_stderr = ""
+
+                for attempt in range(4):
+                    comp_proc = await asyncio.create_subprocess_exec(
+                        arduino_cli, "compile", "--fqbn", fqbn, sketch_file,
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                    )
+                    out_b, err_b = await comp_proc.communicate()
+                    compile_stdout = out_b.decode('utf-8', errors='replace').strip()
+                    compile_stderr = err_b.decode('utf-8', errors='replace').strip()
+
+                    if comp_proc.returncode == 0:
+                        compile_success = True
+                        break
+
+                    combined_err = f"{compile_stdout}\n{compile_stderr}"
+                    lib_match = re.search(r'fatal error:\s*([a-zA-Z0-9_\-]+)\.h:\s*No such file', combined_err, re.IGNORECASE)
+                    if lib_match:
+                        missing_lib = lib_match.group(1)
+                        await broadcast({"type": "chat_message", "role": "system", "content": f"Dependency Resolver: Installing '{missing_lib}'..."})
+                        install_proc = await asyncio.create_subprocess_exec(
+                            arduino_cli, "lib", "install", missing_lib,
+                            stdout=asyncio.subprocess.PIPE,
+                            stderr=asyncio.subprocess.PIPE
+                        )
+                        await install_proc.communicate()
+                        continue
+                    else:
+                        break
+
+                if not compile_success:
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler Error:\n{compile_stderr or compile_stdout}"})
+                    await broadcast({"type": "facial_expression", "mood": "skeptical", "eye_shape": "squint", "glow_color": "#ef4444"})
+                    return {"status": "compile_failed", "stdout": compile_stdout, "stderr": compile_stderr}
+
+                await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash: Flashing build to microcontroller on {target_port}..."})
+
+                # Safely pause serial worker
+                await self.device.pause_serial()
+                await asyncio.sleep(0.3)
+
+                upload_stdout = ""
+                upload_stderr = ""
+                upload_success = False
+
+                try:
+                    upload_proc = await asyncio.create_subprocess_exec(
+                        arduino_cli, "upload", "-p", target_port, "--fqbn", fqbn, sketch_file,
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                    )
+                    out_b, err_b = await asyncio.wait_for(upload_proc.communicate(), timeout=45.0)
+                    upload_stdout = out_b.decode('utf-8', errors='replace').strip()
+                    upload_stderr = err_b.decode('utf-8', errors='replace').strip()
+                    upload_success = (upload_proc.returncode == 0)
+                except asyncio.TimeoutError:
+                    upload_stderr = "Flash upload timed out after 45 seconds."
+                finally:
+                    await asyncio.sleep(0.5)
+                    await self.device.resume_serial()
+
+                if upload_success:
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash: Successfully flashed to {target_port}!"})
+                    await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
+                    return {
+                        "status": "success",
+                        "sketch_name": sketch_name,
+                        "port": target_port,
+                        "fqbn": fqbn,
+                        "detail": upload_stdout or "Flash verified 100%."
+                    }
+                else:
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash Error: {upload_stderr or upload_stdout}"})
+                    await broadcast({"type": "facial_expression", "mood": "alert", "eye_shape": "wide", "glow_color": "#ef4444"})
+                    return {
+                        "status": "upload_failed",
+                        "port": target_port,
+                        "error": upload_stderr or upload_stdout
+                    }
+
             elif name == "compile_and_upload_sketch":
                 sketch_path = args.get("sketch_path", "").strip().strip('\'"')
                 port = args.get("port", "").strip()
@@ -258,7 +405,7 @@ class CortexBrain:
                     arduino_cli = "arduino-cli"
 
                 if not os.path.exists(sketch_path):
-                    err_msg = f"Sketch file not found at '{sketch_path}'."
+                    err_msg = f"Sketch file not found at '{sketch_path}'. If you want to create or test a new sketch, invoke build_and_flash_sketch with the sketch code instead of looking for an existing file."
                     await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash Error: {err_msg}"})
                     return {"status": "error", "error": err_msg}
 

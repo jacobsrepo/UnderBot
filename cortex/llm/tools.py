@@ -229,18 +229,47 @@ CORTEX_TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "build_and_flash_sketch",
+            "description": "Write, compile, and physically flash NEW or custom Arduino sketch code to the connected microcontroller. Use this whenever asked to create, write, run, or flash a new script, test pins with code, or program the board. Writes code to a scratch sketch folder, compiles with arduino-cli, installs missing libraries, pauses serial, flashes over COM4, and resumes serial.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sketch_code": {
+                        "type": "string",
+                        "description": "The complete Arduino C++ code (including setup and loop functions)"
+                    },
+                    "sketch_name": {
+                        "type": "string",
+                        "description": "Descriptive folder/file name for the sketch (e.g. 'pin_test_sequence', 'rtc_sync')"
+                    },
+                    "port": {
+                        "type": "string",
+                        "description": "Optional COM port (e.g. 'COM4'). If omitted, uses active port."
+                    },
+                    "fqbn": {
+                        "type": "string",
+                        "description": "Board architecture FQBN (defaults to 'arduino:avr:nano')"
+                    }
+                },
+                "required": ["sketch_code"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "compile_and_upload_sketch",
-            "description": "Compile and physically flash an Arduino sketch (.ino) to the connected microcontroller using arduino-cli. Automatically detects and installs any missing libraries required by the sketch, safely pauses the serial port, and uploads at 115200 baud.",
+            "description": "Compile and flash an ALREADY EXISTING Arduino sketch file (.ino) from disk. ONLY use if the user gives a specific existing file path. If creating or testing new code, use build_and_flash_sketch instead.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "sketch_path": {
                         "type": "string",
-                        "description": "The file path to the .ino sketch (e.g. 'C:\\Users\\Athul C S\\Documents\\binary_RTConly\\binary_RTConly.ino')"
+                        "description": "The file path to the existing .ino sketch (e.g. 'C:\\Users\\Athul C S\\Documents\\binary_RTConly\\binary_RTConly.ino')"
                     },
                     "port": {
                         "type": "string",
-                        "description": "Optional COM port (e.g. 'COM4'). If omitted, uses the currently active or detected port."
+                        "description": "Optional COM port (e.g. 'COM4'). If omitted, uses active port."
                     },
                     "fqbn": {
                         "type": "string",

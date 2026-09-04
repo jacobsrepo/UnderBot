@@ -178,34 +178,44 @@
                         </div>
 
                         <div class="screen-body browser-body">
-                            <div class="browser-content-mock">
+                            <div class="browser-reader-container">
                                 <div class="browser-scan-laser"></div>
-                                <div class="webpage-preview">
-                                    <div class="webpage-header">
-                                        <h3 class="webpage-title" id="web-page-title">Live Web Research</h3>
-                                        <span class="webpage-badge" id="webpage-badge">OFFICIAL DATA</span>
+                                <div class="reader-document">
+                                    <!-- Reader Meta Bar -->
+                                    <div class="reader-meta-bar">
+                                        <div class="reader-meta-left">
+                                            <span class="reader-badge" id="reader-category-badge">LIVE INTEL</span>
+                                            <span class="reader-source" id="reader-source-badge">NEWS WIRE</span>
+                                            <span class="reader-timestamp" id="reader-timestamp">TODAY</span>
+                                        </div>
+                                        <div class="reader-meta-right">
+                                            <span class="reader-mode-indicator">READER VIEW</span>
+                                        </div>
                                     </div>
 
-                                    <!-- Live Image Preview Container -->
+                                    <!-- Headline -->
+                                    <h2 class="reader-headline" id="reader-headline">Web Intelligence Briefing</h2>
+
+                                    <!-- Media / Image if available -->
                                     <div id="web-media-container" class="web-media-container" style="display: none;">
                                         <img id="web-media-img" class="web-media-img" src="" alt="Web media preview">
                                     </div>
 
-                                    <!-- Cortex Condensed Live Synthesis at TOP -->
-                                    <div class="web-snippet-box" id="web-snippet-box">
-                                        <div class="snippet-header-row">
-                                            <span class="snippet-header">CORTEX LIVE INTEL SYNTHESIS</span>
-                                            <span class="snippet-meta-badge" id="web-meta-badge">CONDENSED REPORT</span>
-                                        </div>
-                                        <div id="web-summary-text" class="snippet-text">Ready to search documentation, datasheets, or web knowledge.</div>
+                                    <!-- Executive Narrative / Lead Briefing -->
+                                    <div class="reader-content-body" id="reader-content-body">
+                                        <p class="reader-paragraph">Ready to search live web intelligence, news, documentation, or datasheets.</p>
                                     </div>
 
-                                    <!-- Sources Section with Compact Badges below synthesis -->
-                                    <div class="webpage-sources-container">
-                                        <div class="sources-section-title">VERIFIED SOURCES & HEADLINES</div>
-                                        <div id="webpage-cards-grid" class="webpage-cards-grid">
-                                            <!-- Dynamically populated compact cards -->
-                                        </div>
+                                    <!-- Key Developments / Factual Highlights -->
+                                    <div class="reader-takeaways-box" id="reader-takeaways-box">
+                                        <div class="takeaways-header">KEY DEVELOPMENTS & HIGHLIGHTS</div>
+                                        <div class="takeaways-list" id="reader-takeaways-list"></div>
+                                    </div>
+
+                                    <!-- Discreet Citations Bar at Bottom -->
+                                    <div class="reader-sources-bar" id="reader-sources-bar">
+                                        <span class="sources-label">Sources:</span>
+                                        <div class="sources-pill-row" id="reader-sources-pill-row"></div>
                                     </div>
                                 </div>
                             </div>

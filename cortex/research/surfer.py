@@ -1,7 +1,7 @@
 """
-Cortex Hardened Web Surfer & Content Extraction Engine
-Uses DuckDuckGo HTML search + Trafilatura publication-grade reader with BM25/keyword density windowing.
-Enforces a hard 4,000-character ceiling to prevent prompt context bloat.
+Cortex Intelligence Surfer & Real-Time News Engine
+Features dedicated live news extraction via Google News RSS for fresh breaking stories and headlines,
+combined with DuckDuckGo + Trafilatura publication-grade article reading with BM25 windowing.
 """
 
 import re
@@ -9,7 +9,7 @@ import math
 import asyncio
 import urllib.request
 import urllib.parse
-import json
+import xml.etree.ElementTree as ET
 from typing import Dict, Any, List, Optional
 from bs4 import BeautifulSoup
 
@@ -27,12 +27,112 @@ class WebSurfer:
             "Accept-Language": "en-US,en;q=0.9",
         }
 
+    def _is_news_intent(self, query: str) -> bool:
+        """Detect if user query is seeking current news or breaking updates."""
+        q = query.lower()
+        news_keywords = [
+            "news", "latest", "breaking", "headline", "headlines", "update", "updates",
+            "what happened", "today", "current events", "whats new", "what's new",
+            "new in", "happening in", "going on in", "situation in"
+        ]
+        return any(k in q for k in news_keywords)
+
+    def _fetch_live_news_rss(self, topic: str) -> Dict[str, Any]:
+        """
+        Fetches real-time breaking news headlines, sources, and publication dates
+        directly from live Google News RSS feed.
+        """
+        try:
+            encoded = urllib.parse.quote(topic)
+            url = f"https://news.google.com/rss/search?q={encoded}&hl=en-US&gl=US&ceid=US:en"
+            req = urllib.request.Request(url, headers=self.headers)
+            with urllib.request.urlopen(req, timeout=7) as resp:
+                xml_data = resp.read()
+
+            root = ET.fromstring(xml_data)
+            items = root.findall(".//item")[:6]
+
+            if not items:
+                return {}
+
+            news_results = []
+            cards = []
+            summary_lines = [f"[LIVE BREAKING NEWS INTEL: '{topic.upper()}']"]
+
+            for idx, item in enumerate(items, 1):
+                title = (item.find("title").text or "").strip()
+                link = (item.find("link").text or "").strip()
+                pub_date = (item.find("pubDate").text or "").strip()
+                source_elem = item.find("source")
+                source = (source_elem.text or "News Source").strip() if source_elem is not None else "News Source"
+
+                # Clean title if publisher name is appended
+                clean_title = title
+                if " - " in title:
+                    clean_title = title.rsplit(" - ", 1)[0].strip()
+
+                news_results.append({
+                    "title": clean_title,
+                    "url": link,
+                    "source": source,
+                    "published": pub_date,
+                    "snippet": f"Reported by {source} on {pub_date}"
+                })
+
+                cards.append({
+                    "label": source[:18],
+                    "val": clean_title[:50]
+                })
+
+                summary_lines.append(f"{idx}. [{source}] \"{clean_title}\"\n   Published: {pub_date}\n   Link: {link}")
+
+            summary_text = "\n\n".join(summary_lines)
+
+            lead_headline = news_results[0]["title"] if news_results else f"Updates on {topic.title()}"
+            top_publisher = news_results[0]["source"] if news_results else "Global News Wire"
+            top_pub_date = news_results[0]["published"] if news_results else "Today"
+
+            source_names = list(dict.fromkeys(r["source"] for r in news_results))
+            narrative = f"Active news reporting across {', '.join(source_names[:3])} confirms breaking developments in {topic.title()}.\n\n" + \
+                        "\n".join([f"• {r['title']} ({r['source']})" for r in news_results[:3]])
+
+            developments = [
+                {
+                    "text": r["title"],
+                    "source": r["source"],
+                    "published": r["published"],
+                    "url": r["url"]
+                }
+                for r in news_results
+            ]
+
+            sources_list = [
+                {"name": r["source"], "url": r["url"]}
+                for r in news_results
+            ]
+
+            return {
+                "url": items[0].find("link").text if items else "",
+                "title": lead_headline,
+                "headline": lead_headline,
+                "publisher": top_publisher,
+                "published_date": top_pub_date,
+                "domain": top_publisher,
+                "topic": topic.title(),
+                "category": "BREAKING NEWS",
+                "briefing": narrative,
+                "developments": developments,
+                "sources": sources_list,
+                "summary": summary_text[:4000],
+                "results": news_results,
+                "cards": cards,
+                "is_news": True
+            }
+        except Exception as e:
+            print(f"[WebSurfer] News RSS error for '{topic}': {e}")
+            return {}
+
     def _score_and_window_content(self, text: str, query: str, max_chars: int = 4000) -> str:
-        """
-        BM25-style keyword density windowing:
-        Splits extracted markdown into paragraphs, scores relevance to query terms,
-        and selects top paragraphs within max_chars ceiling.
-        """
         if not text or len(text) <= max_chars:
             return text
 
@@ -40,7 +140,6 @@ class WebSurfer:
         if not paragraphs:
             return text[:max_chars]
 
-        # Extract search terms
         terms = set(re.findall(r"\w{3,}", query.lower()))
         if not terms:
             return "\n\n".join(paragraphs)[:max_chars]
@@ -55,14 +154,11 @@ class WebSurfer:
             for t in terms:
                 count = p_lower.count(t)
                 if count > 0:
-                    # Term frequency with diminishing returns
                     tf = math.sqrt(count)
                     score += tf / (1.0 + 0.1 * total_words)
 
             scored.append((score, idx, p))
 
-        # Sort paragraphs by score, keeping the most relevant
-        # Favor early paragraphs slightly
         scored_sorted = sorted(scored, key=lambda x: (x[0] + (0.5 if x[1] < 3 else 0.0)), reverse=True)
 
         selected_indices = set()
@@ -73,19 +169,14 @@ class WebSurfer:
                 selected_indices.add(idx)
                 current_len += len(p) + 2
             elif current_len < max_chars // 2:
-                # Add truncated
-                remaining = max_chars - current_len - 5
-                if remaining > 100:
-                    selected_indices.add(idx)
+                selected_indices.add(idx)
                 break
 
-        # Re-assemble in original document order
         ordered_paragraphs = [paragraphs[i] for i in sorted(selected_indices)]
         res_text = "\n\n".join(ordered_paragraphs)
         return res_text[:max_chars]
 
     async def _fetch_and_extract_page(self, url: str, query: str = "") -> Dict[str, Any]:
-        """Fetches raw HTML and extracts clean publication-grade Markdown using trafilatura."""
         loop = asyncio.get_running_loop()
 
         def _fetch_sync():
@@ -94,7 +185,6 @@ class WebSurfer:
                 with urllib.request.urlopen(req, timeout=8) as resp:
                     raw_html = resp.read().decode('utf-8', errors='replace')
                     
-                    # Primary: Trafilatura reader
                     extracted_md = None
                     if trafilatura:
                         extracted_md = trafilatura.extract(
@@ -104,7 +194,6 @@ class WebSurfer:
                             output_format='markdown'
                         )
 
-                    # Fallback: BeautifulSoup text extraction
                     if not extracted_md:
                         soup = BeautifulSoup(raw_html, 'html.parser')
                         for tag in soup(["script", "style", "nav", "footer", "header", "noscript", "aside", "form"]):
@@ -122,12 +211,10 @@ class WebSurfer:
 
                     return title, extracted_md or ""
             except Exception as e:
-                print(f"[WebSurfer] Fetch error for {url}: {e}")
-                return "Error Fetching URL", f"Could not read content from {url}: {e}"
+                return "Web Page", f"Could not read content from {url}: {e}"
 
         title, raw_content = await loop.run_in_executor(None, _fetch_sync)
         windowed_content = self._score_and_window_content(raw_content, query, max_chars=4000)
-
         domain = urllib.parse.urlparse(url).netloc.replace("www.", "")
 
         return {
@@ -140,7 +227,7 @@ class WebSurfer:
                     "title": title,
                     "url": url,
                     "domain": domain,
-                    "snippet": windowed_content[:200]
+                    "snippet": windowed_content[:250]
                 }
             ],
             "cards": [
@@ -171,7 +258,6 @@ class WebSurfer:
                 for r in soup.find_all("div", class_="result"):
                     title_elem = r.find("a", class_="result__a")
                     snippet_elem = r.find("a", class_="result__snippet") or r.find("div", class_="result__snippet")
-                    url_elem = r.find("a", class_="result__url")
 
                     if title_elem and title_elem.get_text():
                         title = title_elem.get_text().strip()
@@ -206,18 +292,36 @@ class WebSurfer:
         return await loop.run_in_executor(None, _search_sync)
 
     async def surf(self, query: str) -> Dict[str, Any]:
-        """Search the live web, fetch top result with trafilatura, window content, and return structured intel."""
+        """
+        Intelligently search the live web:
+        - If query is seeking news: retrieves real-time headlines and publisher briefings via Google News RSS.
+        - If query is general / URL: fetches and windows article markdown via Trafilatura.
+        """
         query_clean = query.strip()
         lower_q = query_clean.lower()
 
         clean_topic = re.sub(
-            r'^(search for|search|browse|lookup|what is|who is|tell me about|find|look up)\s+',
+            r'^(search for|search|browse|lookup|what is|who is|tell me about|find|look up|whats the|what are the)\s+',
             '', query_clean, flags=re.IGNORECASE
         ).strip() or query_clean
 
+        # 1. Direct URL
         if lower_q.startswith("http://") or lower_q.startswith("https://"):
             return await self._fetch_and_extract_page(query_clean, query=clean_topic)
 
+        # 2. News intent: dedicated real-time news extraction
+        if self._is_news_intent(query_clean):
+            # Strip words like "latest news from", "whats new in", "news about"
+            topic = re.sub(r'\b(latest|breaking|news|updates|from|about|today|whats|what\'s|new|in|the|happening)\b', '', clean_topic, flags=re.IGNORECASE).strip()
+            if not topic:
+                topic = clean_topic
+
+            loop = asyncio.get_running_loop()
+            news_data = await loop.run_in_executor(None, self._fetch_live_news_rss, topic)
+            if news_data and news_data.get("results"):
+                return news_data
+
+        # 3. General web search via DuckDuckGo + Trafilatura
         search_results = await self._ddg_html_search(clean_topic)
 
         if not search_results:
@@ -230,14 +334,19 @@ class WebSurfer:
                 "cards": []
             }
 
-        top_result = search_results[0]
-        top_url = top_result["url"]
+        # Pick best article URL (avoid root homepages when specific articles exist)
+        target_result = search_results[0]
+        for r in search_results:
+            # If URL has path segments, it's an article rather than a homepage
+            path = urllib.parse.urlparse(r["url"]).path
+            if len(path) > 3 and not path.endswith("/"):
+                target_result = r
+                break
 
-        # Extract top page text using trafilatura
+        top_url = target_result["url"]
         page_data = await self._fetch_and_extract_page(top_url, query=clean_topic)
         page_summary = page_data.get("summary", "")
 
-        # Assemble search summary
         snippet_lines = []
         for r in search_results[:3]:
             if r.get("snippet"):
@@ -248,10 +357,33 @@ class WebSurfer:
 
         combined_summary = "\n".join(snippet_lines)
 
+        developments = [
+            {
+                "text": f"{r['title']}: {r.get('snippet', '')}",
+                "source": r.get("domain", "WEB"),
+                "published": "Recent",
+                "url": r["url"]
+            }
+            for r in search_results[:4]
+            if r.get("snippet")
+        ]
+
+        sources_list = [
+            {"name": r.get("domain", "WEB"), "url": r["url"]}
+            for r in search_results[:6]
+        ]
+
         return {
             "url": top_url,
-            "title": top_result["title"],
-            "domain": top_result.get("domain", "WEB"),
+            "title": target_result["title"],
+            "headline": target_result["title"],
+            "publisher": target_result.get("domain", "WEB"),
+            "published_date": "Live Web Data",
+            "domain": target_result.get("domain", "WEB"),
+            "category": "WEB RESEARCH",
+            "briefing": page_summary or (target_result.get("snippet", "") + "\n\n" + "\n".join([r.get("snippet", "") for r in search_results[1:3]])),
+            "developments": developments,
+            "sources": sources_list,
             "summary": combined_summary[:4000],
             "results": search_results,
             "cards": [

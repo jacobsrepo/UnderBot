@@ -45,11 +45,15 @@ class CortexApp {
             cameraScreen:        document.getElementById('camera-screen'),
             browserScreen:       document.getElementById('browser-screen'),
             browserUrlPill:      document.getElementById('browser-url-pill'),
-            webPageTitle:        document.getElementById('web-page-title'),
-            webpageBadge:        document.getElementById('webpage-badge'),
-            webMetaBadge:        document.getElementById('web-meta-badge'),
-            webSummaryText:      document.getElementById('web-summary-text'),
-            webCardsGrid:        document.getElementById('webpage-cards-grid'),
+            readerCategoryBadge: document.getElementById('reader-category-badge'),
+            readerSourceBadge:   document.getElementById('reader-source-badge'),
+            readerTimestamp:     document.getElementById('reader-timestamp'),
+            readerHeadline:      document.getElementById('reader-headline'),
+            readerContentBody:   document.getElementById('reader-content-body'),
+            readerTakeawaysBox:  document.getElementById('reader-takeaways-box'),
+            readerTakeawaysList: document.getElementById('reader-takeaways-list'),
+            readerSourcesBar:    document.getElementById('reader-sources-bar'),
+            readerSourcesPillRow:document.getElementById('reader-sources-pill-row'),
             webMediaContainer:   document.getElementById('web-media-container'),
             webMediaImg:         document.getElementById('web-media-img'),
             // Camera video elements
@@ -306,40 +310,31 @@ class CortexApp {
     updateBrowserContent(data) {
         if (!data) return;
 
+        // 1. Browser address bar URL
         if (data.url && this.dom.browserUrlPill) {
             this.dom.browserUrlPill.textContent = data.url;
             this.dom.browserUrlPill.href = data.url;
         }
 
-        if (data.title && this.dom.webPageTitle) {
-            this.dom.webPageTitle.textContent = data.title;
+        // 2. Category badge
+        if (this.dom.readerCategoryBadge) {
+            this.dom.readerCategoryBadge.textContent = data.category || (data.is_news ? 'BREAKING NEWS' : 'WEB INTEL');
         }
 
-        if (data.badge && this.dom.webpageBadge) {
-            this.dom.webpageBadge.textContent = data.badge;
+        // 3. Source badge & timestamp
+        if (this.dom.readerSourceBadge) {
+            this.dom.readerSourceBadge.textContent = (data.publisher || data.domain || 'LIVE WIRE').toUpperCase();
+        }
+        if (this.dom.readerTimestamp) {
+            this.dom.readerTimestamp.textContent = data.published_date || 'TODAY';
         }
 
-        if (this.dom.webMetaBadge) {
-            if (data.is_news) {
-                this.dom.webMetaBadge.textContent = 'BREAKING NEWS';
-            } else if (data.results && data.results.length > 0) {
-                this.dom.webMetaBadge.textContent = `${data.results.length} SOURCES`;
-            } else {
-                this.dom.webMetaBadge.textContent = 'CONDENSED INTEL';
-            }
+        // 4. Headline
+        if (this.dom.readerHeadline) {
+            this.dom.readerHeadline.textContent = data.headline || data.title || 'Web Intelligence Briefing';
         }
 
-        if (data.summary && this.dom.webSummaryText) {
-            let text = this._esc(data.summary);
-            // Format bracketed headers and numbered bullets
-            let formatted = text
-                .replace(/^\[(.*?)\]/gm, '<strong style="color:#c084fc;">[$1]</strong>')
-                .replace(/^(\d+\.\s+\[.*?\])/gm, '<strong style="color:#38bdf8;">$1</strong>')
-                .replace(/\n/g, '<br>');
-            this.dom.webSummaryText.innerHTML = formatted;
-        }
-
-        // Handle Image preview
+        // 5. Image preview
         if (data.image_url && this.dom.webMediaContainer && this.dom.webMediaImg) {
             this.dom.webMediaImg.src = data.image_url;
             this.dom.webMediaContainer.style.display = 'flex';
@@ -347,35 +342,69 @@ class CortexApp {
             this.dom.webMediaContainer.style.display = 'none';
         }
 
-        // Render search results or spec cards
-        if (this.dom.webCardsGrid) {
-            this.dom.webCardsGrid.innerHTML = '';
+        // 6. Narrative content body (Actual synthesized story / article content)
+        if (this.dom.readerContentBody) {
+            let bodyText = data.briefing || data.summary || '';
+            // Strip out [LIVE BREAKING NEWS ...] or raw bracket headers if any
+            bodyText = bodyText.replace(/^\[LIVE BREAKING NEWS INTEL:[^\]]+\]\s*/i, '');
+            // Format markdown headers, bold, bullets
+            let formatted = this._esc(bodyText)
+                .replace(/^###\s*(.*$)/gm, '<h4 style="color:#c084fc;margin:8px 0 4px;">$1</h4>')
+                .replace(/^##\s*(.*$)/gm, '<h3 style="color:#38bdf8;margin:10px 0 6px;">$1</h3>')
+                .replace(/^•\s*(.*$)/gm, '<div style="margin:4px 0 4px 8px;"><span style="color:#38bdf8;font-weight:bold;">•</span> $1</div>')
+                .replace(/^(\d+\.\s+\[.*?\])/gm, '<strong style="color:#38bdf8;">$1</strong>')
+                .replace(/\n\n/g, '</p><p class="reader-paragraph">')
+                .replace(/\n/g, '<br>');
+            this.dom.readerContentBody.innerHTML = `<p class="reader-paragraph">${formatted}</p>`;
+        }
 
-            // If we have organic search results, render them as compact clickable search cards
-            if (data.results && Array.isArray(data.results) && data.results.length > 0) {
-                for (const r of data.results) {
-                    const card = document.createElement('div');
-                    card.className = 'web-card search-result-card';
-                    card.innerHTML = `
-                        <div class="search-card-header">
-                            <span class="web-card-label">${this._esc(r.domain || r.source || 'INTEL')}</span>
-                            <a href="${this._esc(r.url)}" target="_blank" rel="noopener noreferrer" class="search-card-link">Visit ↗</a>
+        // 7. Key developments / highlights list
+        if (this.dom.readerTakeawaysBox && this.dom.readerTakeawaysList) {
+            const devs = data.developments || [];
+            if (Array.isArray(devs) && devs.length > 0) {
+                this.dom.readerTakeawaysList.innerHTML = '';
+                for (const d of devs.slice(0, 6)) {
+                    const text = typeof d === 'string' ? d : d.text;
+                    const source = typeof d === 'object' ? d.source : null;
+                    const item = document.createElement('div');
+                    item.className = 'takeaway-item';
+                    item.innerHTML = `
+                        <span class="takeaway-bullet">›</span>
+                        <div class="takeaway-text">
+                            ${this._esc(text)}
+                            ${source ? `<span class="takeaway-source-pill">${this._esc(source)}</span>` : ''}
                         </div>
-                        <a href="${this._esc(r.url)}" target="_blank" rel="noopener noreferrer" class="search-card-title">${this._esc(r.title)}</a>
-                        ${r.snippet ? `<div class="search-card-snippet">${this._esc(r.snippet)}</div>` : ''}
                     `;
-                    this.dom.webCardsGrid.appendChild(card);
+                    this.dom.readerTakeawaysList.appendChild(item);
                 }
-            } else if (data.cards && Array.isArray(data.cards)) {
-                for (const c of data.cards) {
-                    const card = document.createElement('div');
-                    card.className = 'web-card';
-                    card.innerHTML = `
-                        <span class="web-card-label">${this._esc(c.label)}</span>
-                        <span class="web-card-val">${this._esc(c.val)}</span>
-                    `;
-                    this.dom.webCardsGrid.appendChild(card);
+                this.dom.readerTakeawaysBox.style.display = 'flex';
+            } else {
+                this.dom.readerTakeawaysBox.style.display = 'none';
+            }
+        }
+
+        // 8. Discreet Citations Bar at Bottom (Pills only, not giant link cards)
+        if (this.dom.readerSourcesBar && this.dom.readerSourcesPillRow) {
+            const sources = data.sources || (data.results ? data.results.map(r => ({ name: r.source || r.domain || 'Source', url: r.url })) : []);
+            if (Array.isArray(sources) && sources.length > 0) {
+                this.dom.readerSourcesPillRow.innerHTML = '';
+                const seen = new Set();
+                for (const s of sources) {
+                    const name = (s.name || s.domain || 'Source').trim();
+                    if (seen.has(name) || !s.url) continue;
+                    seen.add(name);
+                    const pill = document.createElement('a');
+                    pill.className = 'source-chip';
+                    pill.href = s.url;
+                    pill.target = '_blank';
+                    pill.rel = 'noopener noreferrer';
+                    pill.textContent = `${name} ↗`;
+                    this.dom.readerSourcesPillRow.appendChild(pill);
+                    if (seen.size >= 6) break;
                 }
+                this.dom.readerSourcesBar.style.display = 'flex';
+            } else {
+                this.dom.readerSourcesBar.style.display = 'none';
             }
         }
     }
