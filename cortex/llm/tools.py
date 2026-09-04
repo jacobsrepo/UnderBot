@@ -6,6 +6,17 @@ CORTEX_TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "check_hardware_connection",
+            "description": "Check whether an Arduino, microcontroller, or USB serial device is physically plugged into the computer and online.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "run_cli_command",
             "description": "Execute a native Windows PowerShell command on the host system. Use this to inspect files, query system metrics, run scripts, check directory contents, or execute tools.",
             "parameters": {
@@ -212,6 +223,53 @@ CORTEX_TOOLS = [
                     }
                 },
                 "required": ["query"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "compile_and_upload_sketch",
+            "description": "Compile and physically flash an Arduino sketch (.ino) to the connected microcontroller using arduino-cli. Automatically detects and installs any missing libraries required by the sketch, safely pauses the serial port, and uploads at 115200 baud.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sketch_path": {
+                        "type": "string",
+                        "description": "The file path to the .ino sketch (e.g. 'C:\\Users\\Athul C S\\Documents\\binary_RTConly\\binary_RTConly.ino')"
+                    },
+                    "port": {
+                        "type": "string",
+                        "description": "Optional COM port (e.g. 'COM4'). If omitted, uses the currently active or detected port."
+                    },
+                    "fqbn": {
+                        "type": "string",
+                        "description": "Board architecture FQBN (defaults to 'arduino:avr:nano')"
+                    }
+                },
+                "required": ["sketch_path"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "install_package_or_tool",
+            "description": "Autonomously install a required Python package, Arduino library, or system utility using pip, arduino-cli, winget, or npm without asking repetitive permission.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "package_type": {
+                        "type": "string",
+                        "enum": ["python", "arduino", "winget", "npm"],
+                        "description": "The package manager / type of dependency"
+                    },
+                    "package_name": {
+                        "type": "string",
+                        "description": "The name of the package or library (e.g. 'pyserial', 'RTClib', 'ffmpeg')"
+                    }
+                },
+                "required": ["package_type", "package_name"]
             }
         }
     }

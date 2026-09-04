@@ -47,6 +47,7 @@ class CortexApp {
             browserUrlPill:      document.getElementById('browser-url-pill'),
             webPageTitle:        document.getElementById('web-page-title'),
             webpageBadge:        document.getElementById('webpage-badge'),
+            webMetaBadge:        document.getElementById('web-meta-badge'),
             webSummaryText:      document.getElementById('web-summary-text'),
             webCardsGrid:        document.getElementById('webpage-cards-grid'),
             webMediaContainer:   document.getElementById('web-media-container'),
@@ -318,8 +319,24 @@ class CortexApp {
             this.dom.webpageBadge.textContent = data.badge;
         }
 
+        if (this.dom.webMetaBadge) {
+            if (data.is_news) {
+                this.dom.webMetaBadge.textContent = 'BREAKING NEWS';
+            } else if (data.results && data.results.length > 0) {
+                this.dom.webMetaBadge.textContent = `${data.results.length} SOURCES`;
+            } else {
+                this.dom.webMetaBadge.textContent = 'CONDENSED INTEL';
+            }
+        }
+
         if (data.summary && this.dom.webSummaryText) {
-            this.dom.webSummaryText.textContent = data.summary;
+            let text = this._esc(data.summary);
+            // Format bracketed headers and numbered bullets
+            let formatted = text
+                .replace(/^\[(.*?)\]/gm, '<strong style="color:#c084fc;">[$1]</strong>')
+                .replace(/^(\d+\.\s+\[.*?\])/gm, '<strong style="color:#38bdf8;">$1</strong>')
+                .replace(/\n/g, '<br>');
+            this.dom.webSummaryText.innerHTML = formatted;
         }
 
         // Handle Image preview
@@ -334,18 +351,18 @@ class CortexApp {
         if (this.dom.webCardsGrid) {
             this.dom.webCardsGrid.innerHTML = '';
 
-            // If we have organic search results, render them as rich clickable search cards
+            // If we have organic search results, render them as compact clickable search cards
             if (data.results && Array.isArray(data.results) && data.results.length > 0) {
                 for (const r of data.results) {
                     const card = document.createElement('div');
                     card.className = 'web-card search-result-card';
                     card.innerHTML = `
                         <div class="search-card-header">
-                            <span class="web-card-label">${this._esc(r.domain || 'WEB INTEL')}</span>
+                            <span class="web-card-label">${this._esc(r.domain || r.source || 'INTEL')}</span>
                             <a href="${this._esc(r.url)}" target="_blank" rel="noopener noreferrer" class="search-card-link">Visit ↗</a>
                         </div>
                         <a href="${this._esc(r.url)}" target="_blank" rel="noopener noreferrer" class="search-card-title">${this._esc(r.title)}</a>
-                        <p class="search-card-snippet">${this._esc(r.snippet)}</p>
+                        ${r.snippet ? `<div class="search-card-snippet">${this._esc(r.snippet)}</div>` : ''}
                     `;
                     this.dom.webCardsGrid.appendChild(card);
                 }

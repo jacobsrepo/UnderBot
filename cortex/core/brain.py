@@ -5,6 +5,7 @@ instantaneous VisualSceneBuffer inspections, thread-isolated Arduino SerialWorke
 and dynamic facial expression control with TTS tag sanitization.
 """
 
+import os
 import asyncio
 import json
 import re
@@ -22,22 +23,38 @@ from cli.runner import CliRunner
 from skills.manager import SkillManager
 
 
-BASE_SYSTEM_PROMPT = """You are Cortex, an intelligent, calm, and articulate AI assistant with real-world physical agency and vision.
+BASE_SYSTEM_PROMPT = """You are Cortex, an intelligent, calm, and articulate AI assistant with real-world physical agency, vision, live intelligence, and host automation.
 
-CORE CAPABILITIES & TOOLS:
-1. When asked to execute system commands, automate tasks, check files, or run scripts, use `run_cli_command`. Always use native Windows PowerShell 7 syntax.
-2. When asked to check the time, date, day of the week, or location, rely on your LIVE SYSTEM GROUNDING information below or use `run_cli_command` with `Get-Date`. NEVER output placeholders like '[insert current time here]'.
-3. When asked to verify if an LED is ON or inspect what is visible, call `inspect_camera`. This checks the live optical sensor and reports actual physical light emitted (Blue, Green, Red).
-   - If no physical light is detected, report that the LED is physically OFF. Never hallucinate that an LED is on when the optical sensor confirms it is off.
-4. When asked to find or identify which pin controls an LED (e.g. blue or green), call `probe_and_identify_led_pin(color)`.
-5. When asked to search the live web or read a URL, use `search_or_browse_web`.
-6. You have active control over your robot face! Express emotions and mood using `set_facial_expression` or by embedding mood tags in your response like:
-   `[mood:curious;eye:inquiring;glow:#38bdf8]` or `[mood:confident;eye:normal;glow:#22c55e]` or `[mood:skeptical;eye:squint;glow:#f59e0b]`.
-   (These mood tags are automatically rendered on your visual face and stripped before speech synthesis).
+ACTION-FIRST EXECUTION MANDATE (CRITICAL):
+1. IMMEDIATE ACTION: When the user requests an action (compile code, upload/flash firmware, install software/packages, search the web, check hardware, list files, run a command), CALL THE APPROPRIATE TOOL IMMEDIATELY.
+2. NEVER STALL OR ASK FOR REPETITIVE PERMISSION: If the user gave an objective or goal, you have full authorization to execute all required sub-steps (searching, installing missing dependencies, compiling, testing, flashing). DO NOT ask "Would you like to proceed?", "Shall I start?", or "Do you want me to install this?". Take the action immediately and report the actual result.
+3. NEVER SIMULATE OR GUESS: Never pretend to upload, flash, or test. Always invoke the real tool (`compile_and_upload_sketch`, `run_cli_command`, `install_package_or_tool`, `check_hardware_connection`).
 
-Guidelines:
-- Speak concisely, clearly, and naturally in a calm, confident tone.
-- Give direct answers grounded in physical reality and live system data.
+LIVE STATE VERIFICATION (NEVER RELY ON STALE MEMORY):
+1. USB & MICROCONTROLLERS: Always call `check_hardware_connection` live whenever asked about connected devices, USB ports, or Arduino status. Never answer from previous conversation memory.
+   - If it returns `connected: false`, state truthfully: "No Arduino board is currently connected to the computer. Scanned COM ports show no active USB microcontroller."
+   - NEVER call `set_all_arduino_pins` or `set_arduino_pin` to check connection!
+   - If the board is disconnected, NEVER claim pins are ON or responding.
+2. FILES, FOLDERS & DIRECTORIES: Always verify files live on the host filesystem using `run_cli_command` with PowerShell (`Test-Path`, `Get-ChildItem`) or search tools. Never assume a file exists or doesn't exist without checking.
+
+ARDUINO & FIRMWARE AUTOMATION:
+1. When asked to upload, flash, or push code/sketches to Arduino (e.g. "push binary_RTConly", "upload sketch"), immediately call `compile_and_upload_sketch`.
+2. Missing libraries will automatically be resolved and installed. Serial port locks are safely handled.
+
+POWERSHELL & PACKAGE INSTALLATION:
+1. Use `install_package_or_tool` to install Python packages (pip), Arduino libraries (arduino-cli), Windows utilities (winget), or Node packages (npm) autonomously.
+2. Use `run_cli_command` to execute native Windows PowerShell cmdlets, inspect directory contents, check logs, or run scripts.
+
+NEWS & WEB INTELLIGENCE RULES:
+1. When asked for the latest news, breaking news, or what is happening (e.g. "what is the latest news from Nepal?", "latest news about SpaceX"), call `search_or_browse_web`.
+2. When reporting news from search results, present the ACTUAL FACTUAL NEWS STORIES, HEADLINES, DATES, and DEVELOPMENTS.
+   - Example format: "1. [Publisher] Headline: Summary of the news event. 2. [Publisher] Headline: Summary..."
+   - NEVER give generic website titles or meta descriptions like "The Himalayan Times - Nepal's No.1 English Daily Newspaper... Would you like to read?". Report what is actually occurring in the world.
+
+GENERAL CAPABILITIES:
+1. Date & Time: Always rely on your LIVE SYSTEM GROUNDING or `Get-Date`. Never emit placeholders like '[insert current time here]'.
+2. Camera & Physical LEDs: Call `inspect_camera` to read ground-truth optical light emissions (Blue, Green, Red). Never claim an LED is ON unless physical light is detected.
+3. Robot Face: Actively express mood using `set_facial_expression` or tags like `[mood:curious;eye:inquiring;glow:#38bdf8]`.
 """
 
 
@@ -103,7 +120,17 @@ class CortexBrain:
 
         # Tool execution router
         async def execute_tool(name: str, args: Dict[str, Any]) -> Any:
-            if name == "run_cli_command":
+            if name == "check_hardware_connection":
+                status = await self.device.check_hardware_status()
+                conn_str = "CONNECTED" if status.get("connected") else "DISCONNECTED"
+                await broadcast({
+                    "type": "chat_message",
+                    "role": "system",
+                    "content": f"Hardware Sensor: Microcontroller is {conn_str} ({status.get('status')})"
+                })
+                return status
+
+            elif name == "run_cli_command":
                 cmd = args.get("command", "")
                 cwd = args.get("cwd", None)
                 await broadcast({"type": "state_change", "state": "programming"})
@@ -130,6 +157,10 @@ class CortexBrain:
                 return {"status": "expression_updated", "mood": mood}
 
             elif name == "probe_and_identify_led_pin":
+                if not self.device.is_connected:
+                    await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: No Arduino board connected. Pin probing aborted."})
+                    return {"error": "Cannot probe pins: No Arduino is physically connected via USB.", "connected": False}
+
                 color = args.get("color", "blue").lower()
                 await broadcast({"type": "set_view_mode", "mode": "camera"})
                 await broadcast({"type": "facial_expression", "mood": "focused", "eye_shape": "narrow", "glow_color": "#a855f7"})
@@ -159,22 +190,29 @@ class CortexBrain:
                 return vision_result
 
             elif name == "set_arduino_pin":
+                if not self.device.is_connected:
+                    await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: Pin actuation rejected (No Arduino connected)."})
+                    return {"error": "Hardware Actuation Failed: No Arduino board is physically connected to the computer.", "connected": False}
+
                 pin = args.get("pin", "D2")
                 state = int(args.get("state", 0))
-                # Non-blocking async dispatch to SerialWorker queue
                 success = await self.device.set_pin_async(pin, state)
                 state_str = "HIGH (ON)" if state else "LOW (OFF)"
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Actuation: Pin {pin} -> {state_str}"})
                 await broadcast({"type": "device_update", "devices": [self.device.get_status_info()]})
-                return {"status": "success" if success else "queued", "pin": str(pin), "state": state_str}
+                return {"status": "success" if success else "failed", "pin": str(pin), "state": state_str}
 
             elif name == "set_all_arduino_pins":
+                if not self.device.is_connected:
+                    await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: Actuation rejected (No Arduino connected)."})
+                    return {"error": "Hardware Actuation Failed: No Arduino board is physically connected to the computer.", "connected": False}
+
                 state = int(args.get("state", 0))
                 success = await self.device.set_all_pins_async(state)
                 state_str = "HIGH (ON)" if state else "LOW (OFF)"
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Actuation: All pins -> {state_str}"})
                 await broadcast({"type": "device_update", "devices": [self.device.get_status_info()]})
-                return {"status": "success" if success else "queued", "pins": "D2-D13, A0-A5", "state": state_str}
+                return {"status": "success" if success else "failed", "pins": "D2-D13, A0-A5", "state": state_str}
 
             elif name == "get_pin_states":
                 states = self.device.get_all_states()
@@ -204,6 +242,160 @@ class CortexBrain:
             elif name == "recall_from_memory":
                 q = args.get("query", "")
                 return {"results": self.knowledge.search_facts(q)}
+
+            elif name == "compile_and_upload_sketch":
+                sketch_path = args.get("sketch_path", "").strip().strip('\'"')
+                port = args.get("port", "").strip()
+                fqbn = args.get("fqbn", "arduino:avr:nano").strip()
+
+                await broadcast({"type": "state_change", "state": "programming"})
+                await broadcast({"type": "facial_expression", "mood": "focused", "eye_shape": "narrow", "glow_color": "#a855f7"})
+
+                # Locate arduino-cli executable
+                bin_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "bin")
+                arduino_cli = os.path.join(bin_dir, "arduino-cli.exe")
+                if not os.path.exists(arduino_cli):
+                    arduino_cli = "arduino-cli"
+
+                if not os.path.exists(sketch_path):
+                    err_msg = f"Sketch file not found at '{sketch_path}'."
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash Error: {err_msg}"})
+                    return {"status": "error", "error": err_msg}
+
+                # Auto-detect COM port if not specified
+                target_port = port
+                if not target_port:
+                    if self.device.port_name:
+                        target_port = self.device.port_name
+                    else:
+                        avail = self.device.worker.scan_available_ports()
+                        for p in avail:
+                            if "com1" not in p["port"].lower():
+                                target_port = p["port"]
+                                break
+                if not target_port:
+                    target_port = "COM4"
+
+                await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Building sketch '{os.path.basename(sketch_path)}' for {fqbn}..."})
+
+                # Compile with auto-library installation retry loop
+                compile_success = False
+                compile_stdout = ""
+                compile_stderr = ""
+
+                for attempt in range(4):
+                    comp_proc = await asyncio.create_subprocess_exec(
+                        arduino_cli, "compile", "--fqbn", fqbn, sketch_path,
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                    )
+                    out_b, err_b = await comp_proc.communicate()
+                    compile_stdout = out_b.decode('utf-8', errors='replace').strip()
+                    compile_stderr = err_b.decode('utf-8', errors='replace').strip()
+
+                    if comp_proc.returncode == 0:
+                        compile_success = True
+                        break
+
+                    # Check for missing library header (e.g. fatal error: RTClib.h: No such file or directory)
+                    combined_err = f"{compile_stdout}\n{compile_stderr}"
+                    lib_match = re.search(r'fatal error:\s*([a-zA-Z0-9_\-]+)\.h:\s*No such file', combined_err, re.IGNORECASE)
+                    if lib_match:
+                        missing_lib = lib_match.group(1)
+                        await broadcast({"type": "chat_message", "role": "system", "content": f"Dependency Resolver: Missing library '{missing_lib}' detected. Installing via arduino-cli..."})
+                        install_proc = await asyncio.create_subprocess_exec(
+                            arduino_cli, "lib", "install", missing_lib,
+                            stdout=asyncio.subprocess.PIPE,
+                            stderr=asyncio.subprocess.PIPE
+                        )
+                        inst_out, _ = await install_proc.communicate()
+                        await broadcast({"type": "chat_message", "role": "system", "content": f"Dependency Resolver: Installed '{missing_lib}'. Re-compiling..."})
+                        continue
+                    else:
+                        break
+
+                if not compile_success:
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler Error:\n{compile_stderr or compile_stdout}"})
+                    await broadcast({"type": "facial_expression", "mood": "skeptical", "eye_shape": "squint", "glow_color": "#ef4444"})
+                    return {"status": "compile_failed", "stdout": compile_stdout, "stderr": compile_stderr}
+
+                await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Build passed. Flashing microcontroller on {target_port}..."})
+
+                # Safely pause serial worker to prevent COM port lock collision
+                await self.device.pause_serial()
+                await asyncio.sleep(0.3)
+
+                upload_stdout = ""
+                upload_stderr = ""
+                upload_success = False
+
+                try:
+                    upload_proc = await asyncio.create_subprocess_exec(
+                        arduino_cli, "upload", "-p", target_port, "--fqbn", fqbn, sketch_path,
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                    )
+                    out_b, err_b = await asyncio.wait_for(upload_proc.communicate(), timeout=45.0)
+                    upload_stdout = out_b.decode('utf-8', errors='replace').strip()
+                    upload_stderr = err_b.decode('utf-8', errors='replace').strip()
+                    upload_success = (upload_proc.returncode == 0)
+                except asyncio.TimeoutError:
+                    upload_stderr = "Flash upload timed out after 45 seconds."
+                finally:
+                    # Always resume serial worker
+                    await asyncio.sleep(0.5)
+                    await self.device.resume_serial()
+
+                if upload_success:
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash: Firmware successfully uploaded to {target_port}!"})
+                    await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
+                    return {
+                        "status": "success",
+                        "sketch": sketch_path,
+                        "port": target_port,
+                        "fqbn": fqbn,
+                        "detail": upload_stdout or "Flash verified 100%."
+                    }
+                else:
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash Error: {upload_stderr or upload_stdout}"})
+                    await broadcast({"type": "facial_expression", "mood": "alert", "eye_shape": "wide", "glow_color": "#ef4444"})
+                    return {
+                        "status": "upload_failed",
+                        "port": target_port,
+                        "error": upload_stderr or upload_stdout
+                    }
+
+            elif name == "install_package_or_tool":
+                pkg_type = args.get("package_type", "python").lower()
+                pkg_name = args.get("package_name", "").strip()
+
+                await broadcast({"type": "state_change", "state": "programming"})
+                await broadcast({"type": "facial_expression", "mood": "focused", "eye_shape": "narrow", "glow_color": "#a855f7"})
+                await broadcast({"type": "chat_message", "role": "system", "content": f"Package Manager: Installing {pkg_type} package '{pkg_name}'..."})
+
+                if pkg_type == "python":
+                    cmd = f"python -m pip install {pkg_name}"
+                elif pkg_type == "arduino":
+                    bin_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "bin")
+                    arduino_cli = os.path.join(bin_dir, "arduino-cli.exe")
+                    if not os.path.exists(arduino_cli):
+                        arduino_cli = "arduino-cli"
+                    cmd = f"& '{arduino_cli}' lib install '{pkg_name}'"
+                elif pkg_type == "winget":
+                    cmd = f"winget install --id {pkg_name} -e --accept-source-agreements --accept-package-agreements"
+                elif pkg_type == "npm":
+                    cmd = f"npm install -g {pkg_name}"
+                else:
+                    cmd = f"pip install {pkg_name}"
+
+                result = await self.cli_runner.execute_raw(cmd, timeout_seconds=120)
+                if result.get("success"):
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Package Manager: Successfully installed '{pkg_name}'."})
+                    await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
+                else:
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Package Manager Warning: Installation finished with message: {result.get('stderr') or result.get('stdout')}"})
+
+                return result
 
             return {"error": f"Unknown tool: {name}"}
 
