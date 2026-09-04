@@ -1,9 +1,9 @@
 @echo off
-title Contender - Tactical Desktop Studio
+title Cortex - AI Studio
 color 0b
 
 echo ======================================================================
-echo                 CONTENDER // TACTICAL DESKTOP ASSISTANT
+echo                 CORTEX // AI ASSISTANT
 echo        Continuous Screen Perception, Hardware ^& Desktop Automation
 echo ======================================================================
 echo.
@@ -23,7 +23,7 @@ if exist ".venv\Scripts\python.exe" (
 :: Generate SSL certs if missing
 "%PYTHON_EXE%" -c "from backend.ssl_helper import ensure_ssl_certificates; ensure_ssl_certificates('certs')" >nul 2>&1
 
-echo [3/3] Launching Contender Native Tactical Studio...
+echo [3/3] Launching Cortex Native Tactical Studio...
 echo.
 echo ----------------------------------------------------------------------
 echo  Desktop Studio:     http://localhost:8000

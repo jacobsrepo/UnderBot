@@ -25,7 +25,7 @@ except ImportError:
 
 class EmbeddedAgent:
     """
-    Deterministic Embedded Hardware & Reflection Engine for Contender.
+    Deterministic Embedded Hardware & Reflection Engine for Cortex.
     Provides structured JSON hardware discovery, automated compilation-error reflection loops,
     esptool flashing, and a thread-safe non-blocking serial telemetry queue.
     """
@@ -332,9 +332,9 @@ class EmbeddedAgent:
         sketch_code = gen_result["code"]
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            sketch_folder = os.path.join(tmpdir, "contender_firmware")
+            sketch_folder = os.path.join(tmpdir, "cortex_firmware")
             os.makedirs(sketch_folder, exist_ok=True)
-            sketch_file = os.path.join(sketch_folder, "contender_firmware.ino")
+            sketch_file = os.path.join(sketch_folder, "cortex_firmware.ino")
 
             # Reflection Loop
             for attempt in range(max_reflection_retries + 1):
@@ -396,33 +396,33 @@ class EmbeddedAgent:
         pin = 2 if "esp" in board.lower() else 13
 
         if "blink" in lower or "led" in lower or "13" in lower:
-            code = f"""// Contender Autonomous Firmware: LED Controller
+            code = f"""// Cortex Autonomous Firmware: LED Controller
 #define LED_PIN {pin}
 
 void setup() {{
   Serial.begin(115200);
   pinMode(LED_PIN, OUTPUT);
-  Serial.println("[Contender] Microcontroller online. LED Blink sequence initialized.");
+  Serial.println("[Cortex] Microcontroller online. LED Blink sequence initialized.");
 }}
 
 void loop() {{
   digitalWrite(LED_PIN, HIGH);
-  Serial.println("[Contender] LED ON");
+  Serial.println("[Cortex] LED ON");
   delay(1000);
   digitalWrite(LED_PIN, LOW);
-  Serial.println("[Contender] LED OFF");
+  Serial.println("[Cortex] LED OFF");
   delay(1000);
 }}
 """
         elif "relay" in lower or "motor" in lower:
-            code = """// Contender Autonomous Firmware: Relay / Motor Actuator
+            code = """// Cortex Autonomous Firmware: Relay / Motor Actuator
 #define RELAY_PIN 7
 
 void setup() {
   Serial.begin(115200);
   pinMode(RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, LOW);
-  Serial.println("[Contender] Relay Actuator Ready. Awaiting commands (ON/OFF).");
+  Serial.println("[Cortex] Relay Actuator Ready. Awaiting commands (ON/OFF).");
 }
 
 void loop() {
@@ -431,16 +431,16 @@ void loop() {
     cmd.trim();
     if (cmd.equalsIgnoreCase("ON")) {
       digitalWrite(RELAY_PIN, HIGH);
-      Serial.println("[Contender] RELAY ACTIVATED");
+      Serial.println("[Cortex] RELAY ACTIVATED");
     } else if (cmd.equalsIgnoreCase("OFF")) {
       digitalWrite(RELAY_PIN, LOW);
-      Serial.println("[Contender] RELAY DEACTIVATED");
+      Serial.println("[Cortex] RELAY DEACTIVATED");
     }
   }
 }
 """
         elif "servo" in lower:
-            code = """// Contender Autonomous Firmware: Servo Controller
+            code = """// Cortex Autonomous Firmware: Servo Controller
 #include <Servo.h>
 
 Servo myServo;
@@ -449,7 +449,7 @@ Servo myServo;
 void setup() {
   Serial.begin(115200);
   myServo.attach(SERVO_PIN);
-  Serial.println("[Contender] Servo Controller Online.");
+  Serial.println("[Cortex] Servo Controller Online.");
 }
 
 void loop() {
@@ -457,17 +457,17 @@ void loop() {
     int angle = Serial.parseInt();
     if (angle >= 0 && angle <= 180) {
       myServo.write(angle);
-      Serial.print("[Contender] Angle set to: ");
+      Serial.print("[Cortex] Angle set to: ");
       Serial.println(angle);
     }
   }
 }
 """
         else:
-            code = f"""// Contender Autonomous Firmware for {board.upper()}
+            code = f"""// Cortex Autonomous Firmware for {board.upper()}
 void setup() {{
   Serial.begin(115200);
-  Serial.println("[Contender] Microcontroller online and awaiting instructions.");
+  Serial.println("[Cortex] Microcontroller online and awaiting instructions.");
 }}
 
 void loop() {{
@@ -484,7 +484,7 @@ void loop() {{
             "success": True,
             "board": board,
             "code": code,
-            "filename": f"contender_{board}_sketch.ino"
+            "filename": f"cortex_{board}_sketch.ino"
         }
 
     # ==================== NON-BLOCKING QUEUE-BASED SERIAL MONITOR ====================
@@ -506,7 +506,7 @@ void loop() {{
 
             for cb in self.serial_listeners:
                 try:
-                    cb(f"[Contender] Connected to {port} @ {baudrate} baud.")
+                    cb(f"[Cortex] Connected to {port} @ {baudrate} baud.")
                 except Exception:
                     pass
 

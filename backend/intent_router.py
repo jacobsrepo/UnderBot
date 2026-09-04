@@ -4,12 +4,12 @@ from typing import Dict, Any, Tuple
 
 class IntentRouter:
     """
-    Directed Speech, Fuzzy Wake-Word, and Sensory Routing Analyzer for Contender.
+    Directed Speech, Fuzzy Wake-Word, and Sensory Routing Analyzer for Cortex.
     Strictly prevents self-hearing and ambient noise loops by requiring explicit wake-word
     or active multi-turn context.
     """
 
-    WAKE_TRIGGERS = ["contender", "hey contender", "ok contender", "okay contender", "computer", "assistant"]
+    WAKE_TRIGGERS = ["Cortex", "hey cortex", "ok cortex", "okay cortex", "computer", "assistant"]
 
     HARDWARE_PATTERNS = [
         r"ardui", r"arudi", r"ardun", r"nano", r"uno", r"mega", r"esp32", r"esp8266",

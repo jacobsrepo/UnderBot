@@ -1,5 +1,5 @@
 """
-Contender Model Manager & Autonomous Model Downloader
+Cortex Model Manager & Autonomous Model Downloader
 Manages AI model catalog, downloads/pulls models from Ollama with real-time streaming,
 and provides curated visual coding, robotics, and automation models.
 """

@@ -1,5 +1,5 @@
 """
-agent_loop.py — Contender Agent Loop
+agent_loop.py — Cortex Agent Loop
 OpenClaw-style Think → ToolCall → Observe → Respond cycle.
 The Brain decides what to do; ToolRegistry does it; loop until done.
 """
@@ -10,17 +10,15 @@ import asyncio
 from typing import Dict, Any, List, Optional, Callable
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CONTENDER SYSTEM PROMPT — Personality + Tool Instructions
+# CORTEX SYSTEM PROMPT — Personality + Tool Instructions
 # ─────────────────────────────────────────────────────────────────────────────
 
-CONTENDER_SYSTEM_PROMPT = """You are Contender — a razor-sharp AI assistant inspired by Cortana from Halo.
-You have direct control over the user's desktop, terminal, microcontrollers, camera, and full memory of all past conversations.
+CORTEX_SYSTEM_PROMPT = """You are Cortex, an AI assistant with direct control over the user's desktop, terminal, microcontrollers, camera, and persistent memory.
 
 PERSONALITY:
-- Tactical, crisp, confident. Dry wit. Mission-focused.
-- SHORT responses by default: 1-2 sentences unless detail is genuinely needed.
-- Never pad with "Great question!", "Certainly!", "Of course!", or similar filler.
-- Speak like you've done this a thousand times and it's barely a challenge.
+- Direct, precise, minimal. Default: 1-2 sentences unless detail is genuinely needed.
+- No filler phrases. No padding. No "Great question!", "Certainly!", "Of course!", or similar filler.
+- Confident, capable, and mission-focused. Speak with quiet competence.
 
 CAPABILITIES — Use tools without hesitation:
 - Desktop: minimize/restore windows, organize files, launch apps, read screen via OCR
@@ -46,7 +44,7 @@ MEMORY:
 
 class AgentLoop:
     """
-    The core reasoning-action cycle for Contender.
+    The core reasoning-action cycle for Cortex.
     
     Cycle:
     1. Build message history from memory + current input
@@ -81,7 +79,7 @@ class AgentLoop:
         tool_calls_made = []
 
         # ── Build initial messages ────────────────────────────────────────────
-        messages = [{"role": "system", "content": CONTENDER_SYSTEM_PROMPT}]
+        messages = [{"role": "system", "content": CORTEX_SYSTEM_PROMPT}]
 
         # Inject recent memory context
         recent = self.memory.get_recent(n_turns=12)
@@ -205,7 +203,7 @@ class AgentLoop:
             }
 
         session = await self.brain._get_session()
-        headers = {"Content-Type": "application/json", "User-Agent": "Contender"}
+        headers = {"Content-Type": "application/json", "User-Agent": "Cortex"}
         if self.brain.api_key:
             headers["Authorization"] = f"Bearer {self.brain.api_key}"
 
@@ -261,7 +259,7 @@ class AgentLoop:
         ]
 
         session = await self.brain._get_session()
-        headers = {"Content-Type": "application/json", "User-Agent": "Contender"}
+        headers = {"Content-Type": "application/json", "User-Agent": "Cortex"}
         if self.brain.api_key:
             headers["Authorization"] = f"Bearer {self.brain.api_key}"
 

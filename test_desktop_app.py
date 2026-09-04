@@ -7,11 +7,11 @@ _ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 if _ROOT_DIR not in sys.path:
     sys.path.insert(0, _ROOT_DIR)
 
-from desktop_shell import WindowStateManager, ContenderNativeAPI, check_single_instance
+from desktop_shell import WindowStateManager, CortexNativeAPI, check_single_instance
 
 def run_desktop_app_tests():
     print("=" * 60)
-    print("   CONTENDER - DEDICATED DESKTOP APP VERIFICATION")
+    print("   Cortex - DEDICATED DESKTOP APP VERIFICATION")
     print("=" * 60)
 
     # 1. State Persistence
@@ -36,7 +36,7 @@ def run_desktop_app_tests():
     print("  [OK] Mutex initialized. Single-instance enforcement active.")
 
     # 3. Native API Mock Bridge
-    print("\n[3/3] Testing ContenderNativeAPI Bridge...")
+    print("\n[3/3] Testing CortexNativeAPI Bridge...")
     class MockWindow:
         def __init__(self):
             self.w, self.h = 1180, 780
@@ -60,7 +60,7 @@ def run_desktop_app_tests():
             self.is_destroyed = True
 
     mock_win = MockWindow()
-    api = ContenderNativeAPI(mock_win, WindowStateManager(), reloaded)
+    api = CortexNativeAPI(mock_win, WindowStateManager(), reloaded)
 
     is_mini = api.toggle_mini_mode()
     assert is_mini == True

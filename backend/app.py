@@ -33,7 +33,7 @@ from tool_registry import ToolRegistry
 from agent_loop import AgentLoop
 
 app = FastAPI(
-    title="Contender AI Assistant",
+    title="Cortex AI Assistant",
     description="Dual-Engine Tactical Assistant with Decoupled Qwen2.5-Coder Engine & On-Demand Vision.",
     version="6.0.0"
 )
@@ -100,12 +100,12 @@ model_manager.add_listener(lambda evt: asyncio.create_task(broadcast_ws_message(
 @app.on_event("startup")
 async def startup_event():
     mem_stats = memory.get_stats()
-    print(f"[Contender] Agent Loop + Tool Registry + Persistent Memory online.")
-    print(f"[Contender] Memory: {mem_stats['total_messages']} messages across {mem_stats['total_sessions']} sessions.")
+    print(f"[Cortex] Agent Loop + Tool Registry + Persistent Memory online.")
+    print(f"[Cortex] Memory: {mem_stats['total_messages']} messages across {mem_stats['total_sessions']} sessions.")
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    print("[Contender] Powering down subsystems...")
+    print("[Cortex] Powering down subsystems...")
     camera.stop()
     embedded.disconnect_serial()
     primary_brain.shutdown()
@@ -285,7 +285,7 @@ async def shutdown_system(background_tasks: BackgroundTasks):
         os.kill(os.getpid(), signal.SIGTERM if sys.platform != "win32" else signal.SIGINT)
 
     background_tasks.add_task(kill_process)
-    return {"success": True, "message": "Contender powered down."}
+    return {"success": True, "message": "Cortex powered down."}
 
 # ==================== DESKTOP AUTOMATION APIS ====================
 

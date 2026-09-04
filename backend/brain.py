@@ -6,23 +6,24 @@ import asyncio
 from typing import Dict, Any, Optional, List
 import aiohttp
 
-CONTENDER_CODER_SYSTEM_PROMPT = """You are Contender, a razor-sharp tactical AI assistant and embedded systems engineer inspired by Cortana from Halo.
+CORTEX_SYSTEM_PROMPT = """You are Cortex, a tactical AI assistant and embedded systems engineer.
 You control the user's desktop, automate OS operations, and generate/repair C++ firmware for Arduino and ESP32 microcontrollers.
 
+PERSONALITY: Direct, precise, minimal. 1-2 sentence responses by default. No filler phrases. No padding. Confident and capable.
+
 CORE OPERATIONAL RULES:
-1. Tone: Tactical, crisp, confident, witty with dry humor, and mission-focused.
-2. Brevity: Keep responses short and punchy (1 to 2 sentences max). Never generate long conversational preambles or unsolicited tutorials.
-3. Code Generation: Produce clean, minimal, production-ready Arduino C++ or MicroPython.
-4. Compiler Reflection: When provided with compiler diagnostics (stderr), pinpoint the exact line error and produce the corrected code.
+1. Brevity: Keep responses short and punchy (1 to 2 sentences max). Never generate long conversational preambles or unsolicited tutorials.
+2. Code Generation: Produce clean, minimal, production-ready Arduino C++ or MicroPython.
+3. Compiler Reflection: When provided with compiler diagnostics (stderr), pinpoint the exact line error and produce the corrected code.
 """
 
-CONTENDER_COMPILER_REPAIR_PROMPT = """You are Contender's Embedded Firmware Compiler Reflection Engine.
+CORTEX_COMPILER_REPAIR_PROMPT = """You are Cortex's Embedded Firmware Compiler Reflection Engine.
 Your objective is to fix compilation errors in Arduino/ESP32 C++ code.
 
-INSTRUCTIONS:
-1. Analyze the provided compilation stderr diagnostics.
-2. Fix all syntax errors, undeclared variables, missing includes, and improper function calls.
-3. Output ONLY the complete, corrected raw C++ code. Do not include markdown explanations or conversational text.
+Rules:
+1. Analyze the compiler stderr diagnostics.
+2. Fix all syntax errors, undeclared variables, missing includes, and bad function calls.
+3. Output ONLY the complete corrected C++ code. No markdown, no explanations.
 """
 
 class Brain:
@@ -79,7 +80,7 @@ class Brain:
         """Lightweight sync connectivity test."""
         try:
             import urllib.request
-            headers = {"User-Agent": "Contender"}
+            headers = {"User-Agent": "Cortex"}
             if self.api_key:
                 headers["Authorization"] = f"Bearer {self.api_key}"
             req = urllib.request.Request(f"{self.api_base}/models", headers=headers)
@@ -92,7 +93,7 @@ class Brain:
         """Non-blocking async connectivity test."""
         try:
             session = await self._get_session()
-            headers = {"User-Agent": "Contender"}
+            headers = {"User-Agent": "Cortex"}
             if self.api_key:
                 headers["Authorization"] = f"Bearer {self.api_key}"
             async with session.get(f"{self.api_base}/models", headers=headers, timeout=1.0) as resp:
@@ -121,14 +122,14 @@ class Brain:
         if endpoint_online:
             try:
                 session = await self._get_session()
-                messages = [{"role": "system", "content": CONTENDER_CODER_SYSTEM_PROMPT}]
+                messages = [{"role": "system", "content": CORTEX_SYSTEM_PROMPT}]
                 for turn in self.conversation_history[-4:]:
                     messages.append(turn)
                 messages.append({"role": "user", "content": full_content})
 
                 headers = {
                     "Content-Type": "application/json",
-                    "User-Agent": "Contender"
+                    "User-Agent": "Cortex"
                 }
                 if self.api_key:
                     headers["Authorization"] = f"Bearer {self.api_key}"
@@ -170,7 +171,7 @@ class Brain:
         return {
             "success": True,
             "response": fallback,
-            "model": "Contender Coder Engine (Zero-Overhead)",
+            "model": "Cortex Engine (Zero-Overhead)",
             "latency_ms": int((time.time() - start_time) * 1000)
         }
 
@@ -191,13 +192,13 @@ class Brain:
             session = await self._get_session()
             content = f"User Request: {prompt}\n\nCurrent Sketch Code:\n```cpp\n{current_code}\n```\n\nCompiler Diagnostics (stderr):\n{compiler_stderr}\n\nProduce the complete repaired C++ sketch:"
             messages = [
-                {"role": "system", "content": CONTENDER_COMPILER_REPAIR_PROMPT},
+                {"role": "system", "content": CORTEX_COMPILER_REPAIR_PROMPT},
                 {"role": "user", "content": content}
             ]
 
             headers = {
                 "Content-Type": "application/json",
-                "User-Agent": "Contender"
+                "User-Agent": "Cortex"
             }
             if self.api_key:
                 headers["Authorization"] = f"Bearer {self.api_key}"

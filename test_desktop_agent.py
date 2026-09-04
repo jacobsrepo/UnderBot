@@ -15,7 +15,7 @@ from cognitive_core import CognitiveCore
 
 def test_subsystems():
     print("=" * 60)
-    print("   CONTENDER DECOUPLED DUAL-ENGINE TEST SUITE")
+    print("   Cortex DECOUPLED DUAL-ENGINE TEST SUITE")
     print("   Primary: Qwen2.5-Coder | Secondary: On-Demand Vision")
     print("=" * 60)
 
@@ -37,7 +37,7 @@ def test_subsystems():
     # Test safe deletion and Recycle Bin handling on a scratch test file
     import tempfile
     with tempfile.NamedTemporaryFile(delete=False, suffix=".tmp") as tmp:
-        tmp.write(b"contender test file")
+        tmp.write(b"Cortex test file")
         tmp_path = tmp.name
     tmp.close()
 
@@ -75,7 +75,7 @@ def test_subsystems():
     # 4. Intent Router
     print("\n[4/4] Testing Fast-Path Sensory Router...")
     router = IntentRouter()
-    r1 = router.process_utterance("Contender, minimize all windows")
+    r1 = router.process_utterance("Cortex, minimize all windows")
     print(f"  [OK] Prompt: '{r1['prompt']}' -> Intent: {r1['intent']}")
     assert r1["intent"] == "DESKTOP_APP"
 

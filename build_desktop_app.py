@@ -1,6 +1,6 @@
 """
-Contender Dedicated Desktop Application Packager
-Compiles Contender into a standalone Windows executable using PyInstaller.
+Cortex Dedicated Desktop Application Packager
+Compiles Cortex into a standalone Windows executable using PyInstaller.
 """
 
 import os
@@ -19,14 +19,14 @@ def check_pyinstaller():
 
 def build_executable():
     print("=" * 60)
-    print("   CONTENDER - DEDICATED DESKTOP APPLICATION BUILDER")
+    print("   CORTEX - DESKTOP APPLICATION BUILDER")
     print("=" * 60)
 
     if not check_pyinstaller():
         print("\n[Build] PyInstaller not detected in current environment.")
         print("        To compile standalone .exe, install pyinstaller via:")
         print("        uv pip install pyinstaller (or pip install pyinstaller)")
-        print("\n[Build] Generating PyInstaller specification file (Contender.spec)...")
+        print("\n[Build] Generating PyInstaller specification file (Cortex.spec)...")
 
     # Generate PyInstaller Spec
     spec_content = f"""# -*- mode: python ; coding: utf-8 -*-
@@ -85,7 +85,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='Contender',
+    name='Cortex',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -100,21 +100,21 @@ exe = EXE(
     entitlements_file=None,
 )
 """
-    spec_path = os.path.join(_ROOT_DIR, "Contender.spec")
+    spec_path = os.path.join(_ROOT_DIR, "Cortex.spec")
     with open(spec_path, "w", encoding="utf-8") as f:
         f.write(spec_content)
     print(f"  [OK] Generated '{spec_path}'.")
 
     if check_pyinstaller():
-        print("\n[Build] Compiling standalone Contender.exe with PyInstaller...")
+        print("\n[Build] Compiling standalone Cortex.exe with PyInstaller...")
         res = subprocess.run(["pyinstaller", "--clean", spec_path], cwd=_ROOT_DIR)
         if res.returncode == 0:
-            exe_path = os.path.join(_ROOT_DIR, "dist", "Contender.exe")
+            exe_path = os.path.join(_ROOT_DIR, "dist", "Cortex.exe")
             print(f"\n[OK] Build complete! Executable located at:\n     {exe_path}")
         else:
             print("\n[ERROR] PyInstaller compilation encountered an error.")
     else:
-        print("\n[Info] Ready to build. Run: pyinstaller Contender.spec")
+        print("\n[Info] Ready to build. Run: pyinstaller Cortex.spec")
 
 if __name__ == "__main__":
     build_executable()

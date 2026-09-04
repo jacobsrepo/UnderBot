@@ -19,7 +19,7 @@ from cognitive_core import CognitiveCore
 
 def run_tests():
     print("=" * 60)
-    print("   CONTENDER - FULL MULTIMODAL PIPELINE VERIFICATION")
+    print("   Cortex - FULL MULTIMODAL PIPELINE VERIFICATION")
     print("   Decoupled Coder Brain | RapidOCR | Embedded & OS Core")
     print("=" * 60)
 
@@ -42,11 +42,11 @@ def run_tests():
     # 2. Audio Pipeline (TTS & STT)
     print("\n[2/5] Testing Speech Pipeline (TTS & STT)...")
     tts = TTSEngine(default_voice_key="guy")
-    clean_speech = tts.clean_text_for_speech("Hello `world`! **Contender** online. Visit http://example.com")
+    clean_speech = tts.clean_text_for_speech("Hello `world`! **Cortex** online. Visit http://example.com")
     assert "`" not in clean_speech and "*" not in clean_speech and "http" not in clean_speech
     print(f"  [OK] TTS Clean Text: '{clean_speech}'")
 
-    audio_bytes = tts.synthesize_sync("Contender pipeline verified.")
+    audio_bytes = tts.synthesize_sync("Cortex pipeline verified.")
     if audio_bytes and len(audio_bytes) > 200:
         print(f"  [OK] TTS Synthesized: {len(audio_bytes)} bytes (voice: {tts.default_voice_key}).")
     else:
@@ -90,9 +90,9 @@ def run_tests():
 
     # Run cognitive dispatch async
     async def test_dispatch():
-        intent_info = router.process_utterance("Contender, check system metrics")
+        intent_info = router.process_utterance("Cortex, check system metrics")
         res = await core.process_user_directive(
-            text="Contender, check system metrics",
+            text="Cortex, check system metrics",
             intent_info=intent_info
         )
         return res
@@ -104,7 +104,7 @@ def run_tests():
     primary_brain.shutdown()
 
     print("\n" + "=" * 60)
-    print("   ALL CONTENDER PIPELINE SUBSYSTEMS VERIFIED SUCCESSFULLY")
+    print("   ALL Cortex PIPELINE SUBSYSTEMS VERIFIED SUCCESSFULLY")
     print("=" * 60)
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 """
-memory.py — Contender Persistent Memory Engine
+memory.py — Cortex Persistent Memory Engine
 SQLite-backed long-term conversation store.
 Every exchange is recorded permanently and recalled on startup.
 """
@@ -12,12 +12,12 @@ import json
 import threading
 from typing import List, Dict, Any, Optional
 
-_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "contender_memory.db")
+_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cortex_memory.db")
 
 
 class Memory:
     """
-    Persistent long-term memory for Contender.
+    Persistent long-term memory for Cortex.
     - Stores every user/assistant exchange permanently to SQLite.
     - Provides recent history for conversation context (rolling window).
     - Provides semantic recall: keyword search over all past interactions.
@@ -51,7 +51,7 @@ class Memory:
             """)
             conn.execute("""
                 CREATE VIRTUAL TABLE IF NOT EXISTS conversations_fts
-                USING fts5(content, session_id UNINDEXED, rowid UNINDEXED)
+                USING fts5(content, session_id UNINDEXED)
             """)
         return conn
 

@@ -10,7 +10,7 @@ from model_manager import ModelManager
 
 async def test_model_manager():
     print("=" * 60)
-    print("   CONTENDER - NEURAL MODEL HUB & AUTO-DOWNLOADER TEST")
+    print("   Cortex - NEURAL MODEL HUB & AUTO-DOWNLOADER TEST")
     print("   Visual Coder | Multimodal Vision | Deep Automation")
     print("=" * 60)
 

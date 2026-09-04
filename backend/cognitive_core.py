@@ -1,5 +1,5 @@
 """
-cognitive_core.py — Contender Cognitive Dispatch Core (v2)
+cognitive_core.py — Cortex Cognitive Dispatch Core (v2)
 Thin orchestrator: routes user directives through the AgentLoop.
 Falls back to keyword-based fast-path if Brain is offline.
 """
@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional, Callable
 
 class CognitiveCore:
     """
-    Decoupled Cognitive Core for Contender.
+    Decoupled Cognitive Core for Cortex.
     Primary path: AgentLoop (LLM tool-calling).
     Fast fallback: keyword-based direct dispatch (0ms, no LLM required).
     """

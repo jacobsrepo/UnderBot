@@ -1,9 +1,9 @@
 /**
- * Contender Dual-Engine Tactical Studio - Client Controller
+ * Cortex Dual-Engine Tactical Studio - Client Controller
  * Decoupled Architecture, Event-Driven Snapshotting, Reflection HUD & Safety Guardrails
  */
 
-class ContenderStudioApp {
+class CortexStudioApp {
     constructor() {
         this.ws = null;
         this.isRecording = false;
@@ -119,8 +119,8 @@ class ContenderStudioApp {
     }
 
     async init() {
-        console.log('[Contender Studio] Initializing dual-engine tactical assistant...');
-        window.contenderApp = this;
+        console.log('[Cortex Studio] Initializing dual-engine tactical assistant...');
+        window.cortexApp = this;
         this.visualizer = new AudioSpectrumVisualizer('audio-waveform-canvas');
 
         const savedVoice = localStorage.getItem('vla_voice') || 'guy';
@@ -164,7 +164,7 @@ class ContenderStudioApp {
             this.labelMuteState.textContent = 'Mute';
             this.audioStatusLabel.textContent = 'Hands-Free (Active)';
             this.audioStatusLabel.className = 'audio-label active';
-            this.pttLabel.textContent = 'Hands-Free Listening ("Contender...")';
+            this.pttLabel.textContent = 'Hands-Free Listening ("Cortex...")';
             this.btnPtt.classList.remove('muted');
             if (this.isHandsFreeActive && this.speechRecognizer && !this.isAssistantSpeaking) {
                 try { this.speechRecognizer.start(); } catch (e) {}
@@ -403,7 +403,7 @@ class ContenderStudioApp {
         if (!overrideText) this.textInput.value = '';
 
         this.appendMessage('user', text);
-        this.showProcessing('Contender executing directive...');
+        this.showProcessing('Cortex executing directive...');
 
         // Event-driven frame capture only when dispatching!
         const screenB64 = this.captureFrameBase64(this.screenVideo);
@@ -428,7 +428,7 @@ class ContenderStudioApp {
             else if (data.state === 'idle') this.hideProcessing();
         } else if (data.type === 'progress_update') {
             this.showProcessing(data.message);
-            this.appendSerialLine(`[Contender] ${data.message}`);
+            this.appendSerialLine(`[Cortex] ${data.message}`);
         } else if (data.type === 'model_download_progress') {
             this.updateDownloadProgress(data.data);
         } else if (data.type === 'stt_result') {
@@ -543,7 +543,7 @@ class ContenderStudioApp {
 
         const author = document.createElement('span');
         author.className = 'bubble-author';
-        author.textContent = role === 'user' ? 'Operator' : 'Contender';
+        author.textContent = role === 'user' ? 'Operator' : 'Cortex';
 
         const timeSpan = document.createElement('span');
         timeSpan.className = 'bubble-time';
@@ -658,7 +658,7 @@ class ContenderStudioApp {
         });
 
         this.btnInspectFrame.addEventListener('click', () => {
-            this.sendTextMessage("Contender, inspect the visual context and report key status.");
+            this.sendTextMessage("Cortex, inspect the visual context and report key status.");
         });
 
         // Preferences & Network
@@ -776,13 +776,13 @@ class ContenderStudioApp {
             if (data.success) {
                 this.btnConnectPort.textContent = 'Disconnect';
                 this.btnConnectPort.className = 'control-btn btn-danger';
-                this.appendSerialLine(`[Contender] Connected to ${port} @ ${baud} baud.`);
+                this.appendSerialLine(`[Cortex] Connected to ${port} @ ${baud} baud.`);
             }
         } else {
             await fetch('/api/embedded/serial/disconnect', { method: 'POST' });
             this.btnConnectPort.textContent = 'Connect';
             this.btnConnectPort.className = 'control-btn btn-primary';
-            this.appendSerialLine(`[Contender] Disconnected from serial port.`);
+            this.appendSerialLine(`[Cortex] Disconnected from serial port.`);
         }
     }
 
@@ -979,7 +979,7 @@ class ContenderStudioApp {
     }
 
     async confirmShutdown() {
-        const confirmed = confirm("Power down Contender tactical core and shut down server?");
+        const confirmed = confirm("Power down Cortex and shut down server?");
         if (!confirmed) return;
 
         this.modalShutdown.style.display = 'flex';
@@ -1027,5 +1027,5 @@ class ContenderStudioApp {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    window.contenderStudio = new ContenderStudioApp();
+    window.cortexStudio = new CortexStudioApp();
 });

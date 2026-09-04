@@ -20,7 +20,7 @@ except Exception:
 
 class DesktopAgent:
     """
-    Windows Desktop OS Automation & Screen OCR Engine for Contender.
+    Windows Desktop OS Automation & Screen OCR Engine for Cortex.
     Provides Win32/PowerShell window management, application execution,
     file operations with safety guardrails, system telemetry, and fast local OCR.
     """

@@ -1,5 +1,5 @@
 """
-tool_registry.py — Contender Unified Tool Registry
+tool_registry.py — Cortex Unified Tool Registry
 OpenClaw-style JSON-schema tool definitions wrapping every subsystem.
 The Brain picks tools by name; this module executes them safely.
 """
@@ -214,7 +214,7 @@ def _is_safe_command(cmd: str) -> tuple[bool, str]:
 
 class ToolRegistry:
     """
-    Unified tool registry for Contender.
+    Unified tool registry for Cortex.
     Wraps desktop, embedded, vision, memory, and terminal subsystems
     as named, schema-validated async callables.
     """

@@ -59,7 +59,7 @@ class WindowStateManager:
         except Exception:
             pass
 
-class ContenderNativeAPI:
+class CortexNativeAPI:
     """Native Python bridge exposed to JavaScript in the desktop shell."""
     def __init__(self, window, state_manager: WindowStateManager, initial_state: Dict[str, Any]):
         self._window = window
@@ -136,7 +136,7 @@ class ContenderNativeAPI:
         self.state_mgr.save_state(self.state)
 
     def close_app(self):
-        """Terminates Contender and all background worker threads."""
+        """Terminates Cortex and all background worker threads."""
         if self._window:
             self._window.destroy()
         os._exit(0)
@@ -158,10 +158,10 @@ class GlobalHotkeyManager:
     def _hotkey_loop(self):
         user32 = ctypes.windll.user32
         
-        # Register Ctrl + Alt + C (Summon / Toggle Contender)
+        # Register Ctrl + Alt + C (Summon / Toggle Cortex)
         res_toggle = user32.RegisterHotKey(None, HOTKEY_TOGGLE_ID, MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, VK_C)
         if res_toggle:
-            print("[DesktopApp] Registered Global Hotkey: Ctrl+Alt+C (Summon Contender)")
+            print("[DesktopApp] Registered Global Hotkey: Ctrl+Alt+C (Summon Cortex)")
 
         # Register Ctrl + Alt + M (Toggle Mute)
         res_mute = user32.RegisterHotKey(None, HOTKEY_MUTE_ID, MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, VK_M)
@@ -186,18 +186,18 @@ class GlobalHotkeyManager:
         self.is_running = False
 
 def check_single_instance() -> bool:
-    """Ensures only one instance of Contender runs at a time."""
+    """Ensures only one instance of Cortex runs at a time."""
     if sys.platform == "win32":
         kernel32 = ctypes.windll.kernel32
-        mutex_name = "Local\\ContenderTacticalStudioMutex"
+        mutex_name = "Local\\CortexStudioMutex"
         mutex = kernel32.CreateMutexW(None, True, mutex_name)
         last_error = kernel32.GetLastError()
         ERROR_ALREADY_EXISTS = 183
         if last_error == ERROR_ALREADY_EXISTS:
-            print("[DesktopApp] Contender is already running. Focusing existing instance...")
+            print("[DesktopApp] Cortex is already running. Focusing existing instance...")
             # Try to find and bring existing window to foreground
             user32 = ctypes.windll.user32
-            hwnd = user32.FindWindowW(None, "Contender // Tactical Studio")
+            hwnd = user32.FindWindowW(None, "Cortex // AI Studio")
             if hwnd:
                 user32.ShowWindow(hwnd, 9)  # SW_RESTORE
                 user32.SetForegroundWindow(hwnd)
@@ -232,7 +232,7 @@ def main():
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
 
-    print("[Contender] Initializing Dedicated Desktop Application...")
+    print("[Cortex] Initializing Dedicated Desktop Application...")
     wait_for_server(8000)
 
     state_mgr = WindowStateManager()
@@ -247,7 +247,7 @@ def main():
 
     # 2. Create native WebView2 window
     window = webview.create_window(
-        title="Contender // Tactical Studio",
+        title="Cortex // AI Studio",
         url="http://127.0.0.1:8000",
         width=init_w,
         height=init_h,
@@ -260,7 +260,7 @@ def main():
         background_color="#0b0c0e"
     )
 
-    api = ContenderNativeAPI(window, state_mgr, initial_state)
+    api = CortexNativeAPI(window, state_mgr, initial_state)
     window.expose(
         api.toggle_mini_mode,
         api.expand_studio_mode,
@@ -274,13 +274,13 @@ def main():
     # 3. Setup Win32 Global Hotkeys (Ctrl+Alt+C to summon/toggle)
     def on_global_toggle():
         try:
-            window.evaluate_js("if (window.contenderApp) window.contenderApp.toggleMiniHud();")
+            window.evaluate_js("if (window.cortexApp) window.cortexApp.toggleMiniHud();")
         except Exception:
             api.toggle_mini_mode()
 
     def on_global_mute():
         try:
-            window.evaluate_js("if (window.contenderApp) window.contenderApp.toggleMute();")
+            window.evaluate_js("if (window.cortexApp) window.cortexApp.toggleMute();")
         except Exception:
             pass
 
