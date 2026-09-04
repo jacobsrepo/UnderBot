@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cortex</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=3.4">
+    <link rel="stylesheet" href="/static/css/style.css?v=3.5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -158,8 +158,14 @@
                     <div id="browser-screen" class="viewport-screen browser-screen">
                         <div class="screen-header browser-header">
                             <div class="browser-nav-bar">
-                                <span class="live-status-dot cyan"></span>
-                                <a id="browser-url-pill" class="browser-url-pill" href="https://en.wikipedia.org" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org</a>
+                                <span class="badge-dot" style="background: var(--theme-accent, #86efac); box-shadow: 0 0 6px var(--theme-accent, #86efac);"></span>
+                                <a id="browser-url-pill" class="browser-url-pill" href="https://en.wikipedia.org" target="_blank" rel="noopener noreferrer">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.75;flex-shrink:0;">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                    <span class="url-text">https://en.wikipedia.org</span>
+                                </a>
                             </div>
                             <div class="screen-header-controls">
                                 <button id="browser-split-btn" class="btn-screen-tool" title="Toggle Dual Split Screen">
@@ -204,7 +210,27 @@
                                     </div>
                                 </div>
 
-                                <div class="reader-document" id="reader-document">
+                                <!-- Terminal Idle State (Shown when browser is open but before query) -->
+                                <div class="reader-empty-card" id="reader-empty-card">
+                                    <div class="reader-empty-icon">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <line x1="2" y1="12" x2="22" y2="12"/>
+                                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="reader-empty-title">Web Intelligence Terminal</h3>
+                                    <p class="reader-empty-desc">Ask Cortex any news query, live topic, or technical question to search and synthesize live editorial intelligence.</p>
+                                    <div class="reader-empty-tags">
+                                        <span class="empty-tag">Live News Wire</span>
+                                        <span class="empty-tag">Wikipedia Intel</span>
+                                        <span class="empty-tag">Technical Specs</span>
+                                        <span class="empty-tag">API Docs</span>
+                                    </div>
+                                </div>
+
+                                <!-- Reader Document Card (Populated dynamically upon search) -->
+                                <div class="reader-document" id="reader-document" style="display: none;">
                                     <!-- Reader Meta Bar -->
                                     <div class="reader-meta-bar">
                                         <div class="reader-meta-left">
@@ -226,18 +252,19 @@
                                     </div>
 
                                     <!-- Executive Narrative / Lead Briefing -->
-                                    <div class="reader-content-body" id="reader-content-body">
-                                        <p class="reader-paragraph">Ready to search live web intelligence, news, documentation, or datasheets.</p>
-                                    </div>
+                                    <div class="reader-content-body" id="reader-content-body"></div>
 
                                     <!-- Key Developments / Factual Highlights -->
-                                    <div class="reader-takeaways-box" id="reader-takeaways-box">
-                                        <div class="takeaways-header">KEY DEVELOPMENTS & HIGHLIGHTS</div>
+                                    <div class="reader-takeaways-box" id="reader-takeaways-box" style="display: none;">
+                                        <div class="takeaways-header">
+                                            <span class="badge-dot" style="background:var(--theme-accent, #86efac);box-shadow:0 0 6px var(--theme-accent, #86efac);"></span>
+                                            <span>KEY DEVELOPMENTS & HIGHLIGHTS</span>
+                                        </div>
                                         <div class="takeaways-list" id="reader-takeaways-list"></div>
                                     </div>
 
                                     <!-- Discreet Citations Bar at Bottom -->
-                                    <div class="reader-sources-bar" id="reader-sources-bar">
+                                    <div class="reader-sources-bar" id="reader-sources-bar" style="display: none;">
                                         <span class="sources-label">Sources:</span>
                                         <div class="sources-pill-row" id="reader-sources-pill-row"></div>
                                     </div>
@@ -325,6 +352,6 @@
         </main>
     </div>
 
-    <script type="module" src="/static/js/app.js?v=3.4"></script>
+    <script type="module" src="/static/js/app.js?v=3.5"></script>
 </body>
 </html>

@@ -59,6 +59,7 @@ class CortexApp {
             readerSearchingHud:  document.getElementById('reader-searching-hud'),
             searchingHudQuery:   document.getElementById('searching-hud-query'),
             searchingHudStream:  document.getElementById('searching-hud-stream'),
+            readerEmptyCard:     document.getElementById('reader-empty-card'),
             readerDocument:      document.getElementById('reader-document'),
             // Camera video elements
             cameraVideo:         document.getElementById('camera-video'),
@@ -216,6 +217,9 @@ class CortexApp {
         }
         this.dom.readerSearchingHud.style.display = 'flex';
         this.dom.readerSearchingHud.style.opacity = '1';
+        if (this.dom.readerEmptyCard) {
+            this.dom.readerEmptyCard.style.display = 'none';
+        }
         if (this.dom.readerDocument) {
             this.dom.readerDocument.style.opacity = '0';
         }
@@ -360,9 +364,17 @@ class CortexApp {
         this.hideBrowserSearchingHud();
         if (!data) return;
 
+        if (this.dom.readerEmptyCard) {
+            this.dom.readerEmptyCard.style.display = 'none';
+        }
+        if (this.dom.readerDocument) {
+            this.dom.readerDocument.style.display = 'flex';
+        }
+
         // 1. Browser address bar URL
         if (data.url && this.dom.browserUrlPill) {
-            this.dom.browserUrlPill.textContent = data.url;
+            const textEl = this.dom.browserUrlPill.querySelector('.url-text') || this.dom.browserUrlPill;
+            textEl.textContent = data.url;
             this.dom.browserUrlPill.href = data.url;
         }
 
@@ -416,10 +428,10 @@ class CortexApp {
                 p.style.animationDelay = `${0.12 + idx * 0.09}s`;
                 
                 let formatted = this._esc(pText)
-                    .replace(/^###\s*(.*$)/gm, '<h4 style="color:#c084fc;margin:8px 0 4px;">$1</h4>')
-                    .replace(/^##\s*(.*$)/gm, '<h3 style="color:#38bdf8;margin:10px 0 6px;">$1</h3>')
-                    .replace(/^•\s*(.*$)/gm, '<div style="margin:4px 0 4px 8px;"><span style="color:#38bdf8;font-weight:bold;">•</span> $1</div>')
-                    .replace(/^(\d+\.\s+\[.*?\])/gm, '<strong style="color:#38bdf8;">$1</strong>')
+                    .replace(/^###\s*(.*$)/gm, '<h4 class="reader-subheading">$1</h4>')
+                    .replace(/^##\s*(.*$)/gm, '<h3 class="reader-heading">$1</h3>')
+                    .replace(/^•\s*(.*$)/gm, '<div class="reader-bullet-row"><span class="bullet-dot"></span><span>$1</span></div>')
+                    .replace(/^(\d+\.\s+\[.*?\])/gm, '<strong class="reader-highlight">$1</strong>')
                     .replace(/\n/g, '<br>');
                 p.innerHTML = formatted;
                 this.dom.readerContentBody.appendChild(p);
