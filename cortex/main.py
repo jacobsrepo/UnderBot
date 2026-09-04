@@ -21,6 +21,11 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 # ── Instantiate Core Brain ───────────────────────────────────────────
 brain = CortexBrain()
 
+
+@app.on_event("startup")
+async def on_startup():
+    brain.camera.start_background_daemon()
+
 # ── Connected clients ────────────────────────────────────────────────
 clients: set[WebSocket] = set()
 
