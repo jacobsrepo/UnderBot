@@ -582,12 +582,45 @@ class CortexBrain:
 
         history = self.conv_memory.get_recent_history(limit=8)
 
-        # Run ReAct agent loop
-        response = await self.agent.run(
-            messages=history,
-            system_prompt=full_system_prompt,
-            tool_executor=execute_tool
-        )
+        # Check for direct web research / live news intent
+        is_search = any(text_clean.lower().startswith(p) for p in ("search ", "web search ", "google ", "browse ", "lookup "))
+        is_news = self.surfer._is_news_intent(text_clean) and not any(k in text_clean.lower() for k in ("arduino", "board", "microcontroller", "pin", "led", "com4", "usb"))
+
+        if is_search or is_news:
+            search_query = re.sub(r'^(search for|web search for|google|browse|lookup|search)\s+', '', text_clean, flags=re.IGNORECASE).strip()
+            if not search_query:
+                search_query = text_clean
+            doc = await execute_tool("search_or_browse_web", {"query_or_url": search_query})
+
+            dialogue = [
+                {"role": "system", "content": full_system_prompt},
+                {"role": "user", "content": text_clean},
+                {
+                    "role": "assistant",
+                    "content": None,
+                    "tool_calls": [{
+                        "id": "call_live_search",
+                        "type": "function",
+                        "function": {
+                            "name": "search_or_browse_web",
+                            "arguments": json.dumps({"query_or_url": search_query})
+                        }
+                    }]
+                },
+                {
+                    "role": "tool",
+                    "content": json.dumps(doc)
+                }
+            ]
+            resp_chat = await self.agent.client.chat(dialogue, tools=None, task_type="dialogue")
+            response = resp_chat.get("message", {}).get("content", "I have retrieved the latest intelligence briefing.")
+        else:
+            # Run ReAct agent loop
+            response = await self.agent.run(
+                messages=history,
+                system_prompt=full_system_prompt,
+                tool_executor=execute_tool
+            )
 
         # Process any embedded facial mood tags
         mood_tag = self._extract_and_dispatch_mood_tags(response)
