@@ -112,6 +112,7 @@ class CortexBrain:
         return {
             "device": hw_info.get("name", "Arduino Nano"),
             "port": hw_info.get("port", "COM4"),
+            "fqbn": self.active_sketch.get("fqbn", "arduino:avr:uno"),
             "connected": hw_info.get("connected", False),
             "status": hw_info.get("status", "Unknown"),
             "sketch": self.active_sketch,
@@ -160,6 +161,16 @@ class CortexBrain:
                 "intensity": float(intensity) if intensity else 1.0
             }
         return None
+
+    def _detect_direct_flash_intent(self, text: str) -> bool:
+        t = text.strip().lower()
+        phrases = (
+            "flash it", "flash", "you didn't flash yet", "you didnt flash yet",
+            "you didn't flash", "you didnt flash", "upload it", "upload", "reflash",
+            "flash the code", "flash the sketch", "flash now", "upload the sketch",
+            "flash to arduino", "upload to arduino", "burn sketch"
+        )
+        return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
 
     async def process_user_message(self, text: str, broadcast_cb: Optional[Callable[[Dict[str, Any]], Any]] = None) -> str:
         text_clean = text.strip()
@@ -735,18 +746,10 @@ class CortexBrain:
                 except Exception as e:
                     print(f"[Brain] Error reading .ino: {e}")
 
-        # Check for direct flash / upload directive
-        is_direct_flash = any(text_clean.lower() == p or text_clean.lower().startswith(p + " ") for p in (
-            "flash it", "flash", "you didn't flash yet", "you didnt flash yet",
-            "you didn't flash", "you didnt flash", "upload it", "upload", "reflash",
-            "flash the code", "flash the sketch", "flash now"
-        ))
-
         # Check for direct web research / live news intent
-        is_search = any(text_clean.lower().startswith(p) for p in ("search ", "web search ", "google ", "browse ", "lookup "))
         is_news = self.surfer._is_news_intent(text_clean) and not any(k in text_clean.lower() for k in ("arduino", "board", "microcontroller", "pin", "led", "com4", "usb"))
 
-        if is_direct_flash:
+        if self._detect_direct_flash_intent(text_clean):
             target_code = self.active_sketch.get("code", "").strip()
             target_path = self.active_sketch.get("path", "").strip()
             target_name = self.active_sketch.get("name", "cortex_sketch")
