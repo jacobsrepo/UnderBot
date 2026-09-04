@@ -31,8 +31,12 @@ ACTION-FIRST EXECUTION MANDATE (CRITICAL):
 3. NEVER SIMULATE OR GUESS: Never pretend to upload, flash, or test. Always invoke the real tool (`build_and_flash_sketch`, `compile_and_upload_sketch`, `run_cli_command`, `install_package_or_tool`, `check_hardware_connection`).
 
 LIVE STATE VERIFICATION (NEVER RELY ON STALE MEMORY):
-1. USB & MICROCONTROLLERS: Always call `check_hardware_connection` live whenever asked about connected devices, USB ports, or Arduino status. Never answer from previous conversation memory.
-   - If it returns `connected: false`, state truthfully: "No Arduino board is currently connected to the computer. Scanned COM ports show no active USB microcontroller."
+1. USB & MICROCONTROLLERS (CRITICAL GROUND TRUTH):
+   - ALWAYS consult the [LIVE SYSTEM GROUNDING] header for the real-time physical hardware connection status.
+   - If LIVE SYSTEM GROUNDING states 'CONNECTED (ONLINE)', the Arduino Nano on COM4 is physically connected RIGHT NOW. NEVER claim it is disconnected or say 'no Arduino board is connected' when the grounding header shows CONNECTED!
+   - If the user asks 'what is the status of the arduino', 'are you sure?', 'verify', or 'is it connected', ALWAYS confirm the live status truthfully from LIVE SYSTEM GROUNDING and call `check_hardware_connection` live so telemetry is broadcast to the UI.
+   - Prior conversation turns are historical. DO NOT repeat stale disconnected claims from past turns when LIVE SYSTEM GROUNDING shows the board is now CONNECTED.
+   - If LIVE SYSTEM GROUNDING states 'DISCONNECTED', state truthfully that no board is connected.
    - NEVER call `set_all_arduino_pins` or `set_arduino_pin` to check connection!
    - If the board is disconnected, NEVER claim pins are ON or responding.
 2. FILES, FOLDERS & DIRECTORIES: Always verify files live on the host filesystem using `run_cli_command` with PowerShell (`Test-Path`, `Get-ChildItem`) or search tools. Never assume a file exists or doesn't exist without checking.
@@ -79,6 +83,7 @@ class CortexBrain:
         # Start camera background daemon for instant VisualSceneBuffer updates
         self.camera.start_background_daemon()
 
+        self.active_view_mode = "none"
         self.name = "Cortex"
 
     def get_hardware_status(self) -> Dict[str, Any]:
@@ -137,8 +142,12 @@ class CortexBrain:
 
         await broadcast({"type": "state_change", "state": "thinking"})
 
+        used_web_search = False
+        used_camera = False
+
         # Tool execution router
         async def execute_tool(name: str, args: Dict[str, Any]) -> Any:
+            nonlocal used_web_search, used_camera
             if name == "check_hardware_connection":
                 status = await self.device.check_hardware_status()
                 conn_str = "CONNECTED" if status.get("connected") else "DISCONNECTED"
@@ -176,6 +185,8 @@ class CortexBrain:
                 return {"status": "expression_updated", "mood": mood}
 
             elif name == "probe_and_identify_led_pin":
+                used_camera = True
+                self.active_view_mode = "camera"
                 if not self.device.is_connected:
                     await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: No Arduino board connected. Pin probing aborted."})
                     return {"error": "Cannot probe pins: No Arduino is physically connected via USB.", "connected": False}
@@ -198,6 +209,8 @@ class CortexBrain:
                 return probe_result
 
             elif name == "inspect_camera":
+                used_camera = True
+                self.active_view_mode = "camera"
                 target = args.get("focus_target", "circuit board LEDs")
                 await broadcast({"type": "set_view_mode", "mode": "camera"})
                 await broadcast({"type": "state_change", "state": "seeing"})
@@ -238,13 +251,24 @@ class CortexBrain:
                 return {"pin_states": states, "device": self.device.device_name}
 
             elif name == "search_or_browse_web":
+                used_web_search = True
+                self.active_view_mode = "browser"
                 query = args.get("query_or_url", "")
                 await broadcast({"type": "state_change", "state": "thinking"})
                 await broadcast({"type": "facial_expression", "mood": "curious", "eye_shape": "inquiring", "glow_color": "#38bdf8"})
+                # Immediately open browser viewport with active radar searching HUD animation
+                await broadcast({"type": "set_view_mode", "mode": "browser", "searching": True, "query": query})
                 doc = await self.surfer.surf(query)
-                await broadcast({"type": "set_view_mode", "mode": "browser", "data": doc})
+                # Stream sanitized document content with word/card flow animation
+                await broadcast({"type": "set_view_mode", "mode": "browser", "data": doc, "searching": False})
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Web Research: {doc['title']}"})
                 return doc
+
+            elif name == "set_display_view":
+                target_mode = args.get("mode", "none")
+                self.active_view_mode = target_mode
+                await broadcast({"type": "set_view_mode", "mode": target_mode})
+                return {"status": "view_updated", "mode": target_mode}
 
             elif name == "get_live_weather":
                 city = args.get("city", "")
@@ -547,7 +571,9 @@ class CortexBrain:
             return {"error": f"Unknown tool: {name}"}
 
         # Dynamically build system prompt with live grounding context & skills catalog
-        grounding_hdr = self.conv_memory.get_grounding_context()
+        # Probe physical hardware status live on EVERY turn for absolute ground truth
+        hw_stat = await self.device.check_hardware_status()
+        grounding_hdr = self.conv_memory.get_grounding_context(hw_status=hw_stat)
         skills_hdr = self.skill_manager.get_skill_catalog_prompt()
         full_system_prompt = f"{BASE_SYSTEM_PROMPT}\n\n{grounding_hdr}\n\n{skills_hdr}"
 
@@ -584,6 +610,14 @@ class CortexBrain:
                 "audio": audio_uri,
                 "text": tts_text
             })
+
+        # Auto-dismiss viewports if user shifted topic away from web or camera
+        if self.active_view_mode == "browser" and not used_web_search:
+            await broadcast({"type": "set_view_mode", "mode": "none"})
+            self.active_view_mode = "none"
+        elif self.active_view_mode == "camera" and not used_camera:
+            await broadcast({"type": "set_view_mode", "mode": "none"})
+            self.active_view_mode = "none"
 
         await broadcast({"type": "state_change", "state": "idle"})
         return tts_text

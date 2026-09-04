@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cortex</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=3.1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -178,9 +178,32 @@
                         </div>
 
                         <div class="screen-body browser-body">
-                            <div class="browser-reader-container">
                                 <div class="browser-scan-laser"></div>
-                                <div class="reader-document">
+                                
+                                <!-- Live Radar Searching HUD Overlay -->
+                                <div class="reader-searching-hud" id="reader-searching-hud" style="display: none;">
+                                    <div class="radar-scanner">
+                                        <div class="radar-pulse"></div>
+                                        <div class="radar-sweep"></div>
+                                        <div class="radar-center">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="searching-hud-badge">LIVE INTEL STREAM</div>
+                                    <div class="searching-hud-query" id="searching-hud-query">"Searching open web..."</div>
+                                    <div class="searching-hud-stream" id="searching-hud-stream">
+                                        <span class="stream-line">Intercepting live news channels...</span>
+                                    </div>
+                                    <div class="searching-hud-progress">
+                                        <div class="progress-bar-fill"></div>
+                                    </div>
+                                </div>
+
+                                <div class="reader-document" id="reader-document">
                                     <!-- Reader Meta Bar -->
                                     <div class="reader-meta-bar">
                                         <div class="reader-meta-left">
@@ -301,6 +324,6 @@
         </main>
     </div>
 
-    <script type="module" src="/static/js/app.js"></script>
+    <script type="module" src="/static/js/app.js?v=3.1"></script>
 </body>
 </html>

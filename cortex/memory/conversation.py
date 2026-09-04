@@ -37,22 +37,42 @@ class ConversationMemory:
             conn.commit()
 
     @staticmethod
-    def get_grounding_context() -> str:
+    def get_grounding_context(hw_status: Optional[Dict[str, Any]] = None) -> str:
         """
-        Dynamically returns current real-world timestamp, day, timezone, and OS context.
-        Injected into the agent prompt on every turn to prevent time/date hallucinations.
+        Dynamically returns current real-world timestamp, day, timezone, OS context,
+        and real-time physical hardware connection status.
+        Injected into the agent prompt on every turn to prevent time/date/hardware hallucinations.
         """
         now = datetime.datetime.now()
         day_name = now.strftime("%A")
         date_str = now.strftime("%Y-%m-%d")
         time_str = now.strftime("%H:%M:%S")
         tz_str = time.tzname[time.daylight] if time.daylight else time.tzname[0]
-        
+
+        hw_lines = ""
+        if hw_status:
+            is_conn = hw_status.get("connected", False)
+            port = hw_status.get("port") or "COM4"
+            dev = hw_status.get("device", "Arduino Nano")
+            detail = hw_status.get("status", "Online" if is_conn else "Offline")
+            if is_conn:
+                hw_lines = (
+                    f"- Physical Hardware Status: CONNECTED (ONLINE)\n"
+                    f"- Active Microcontroller: {dev} on {port}\n"
+                    f"- Hardware Connection Detail: {detail}\n"
+                )
+            else:
+                hw_lines = (
+                    f"- Physical Hardware Status: DISCONNECTED (No USB microcontroller detected)\n"
+                    f"- Scanned Ports: None active\n"
+                )
+
         return (
             f"[LIVE SYSTEM GROUNDING]\n"
             f"- Current Date: {date_str} ({day_name})\n"
             f"- Current Time: {time_str} ({tz_str})\n"
             f"- Host OS: {platform.system()} {platform.release()} (Windows PowerShell 7 / Desktop)\n"
+            f"{hw_lines}"
             f"- Working Directory: {os.path.abspath(os.path.dirname(os.path.dirname(__file__)))}\n"
         )
 

@@ -818,6 +818,168 @@ body {
     opacity: 0.8;
 }
 
+/* ── Reader Live Radar Searching HUD ──────────────────────────────── */
+.reader-searching-hud {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 10;
+    background: radial-gradient(circle at 50% 45%, rgba(14, 165, 233, 0.08) 0%, rgba(8, 10, 15, 0.96) 75%);
+    backdrop-filter: blur(8px);
+    transition: opacity 0.4s ease;
+}
+
+.radar-scanner {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+}
+
+.radar-pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgba(56, 189, 248, 0.6);
+    animation: radarPulseAnim 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.radar-sweep {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(56, 189, 248, 0.4) 0deg, transparent 60deg, transparent 360deg);
+    animation: radarSweepAnim 2.2s linear infinite;
+}
+
+.radar-center {
+    position: relative;
+    z-index: 2;
+    color: #38bdf8;
+    filter: drop-shadow(0 0 8px #38bdf8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searching-hud-badge {
+    font-size: 8.5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.searching-hud-query {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #f8fafc;
+    letter-spacing: -0.2px;
+    max-width: 480px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 16px;
+}
+
+.searching-hud-stream {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #94a3b8;
+    letter-spacing: 0.2px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searching-hud-stream .stream-line {
+    animation: streamFade 0.4s ease;
+}
+
+.searching-hud-progress {
+    width: 200px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.searching-hud-progress .progress-bar-fill {
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    border-radius: 2px;
+    animation: progressLoop 1.6s ease-in-out infinite;
+}
+
+@keyframes radarPulseAnim {
+    0% {
+        transform: scale(0.6);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+@keyframes radarSweepAnim {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes streamFade {
+    0% { opacity: 0; transform: translateY(4px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progressLoop {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(120%); }
+    100% { transform: translateX(250%); }
+}
+
+/* ── Fluid Word Flow Animations ────────────────────────────────────── */
+@keyframes wordFlowIn {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+.flow-in {
+    opacity: 0;
+    animation: wordFlowIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.flow-word {
+    display: inline-block;
+    opacity: 0;
+    animation: wordFlowIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .reader-document {
     max-width: 720px;
     width: 100%;
@@ -825,6 +987,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    transition: opacity 0.3s ease;
 }
 
 .reader-meta-bar {

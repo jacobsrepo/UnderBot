@@ -56,6 +56,10 @@ class CortexApp {
             readerSourcesPillRow:document.getElementById('reader-sources-pill-row'),
             webMediaContainer:   document.getElementById('web-media-container'),
             webMediaImg:         document.getElementById('web-media-img'),
+            readerSearchingHud:  document.getElementById('reader-searching-hud'),
+            searchingHudQuery:   document.getElementById('searching-hud-query'),
+            searchingHudStream:  document.getElementById('searching-hud-stream'),
+            readerDocument:      document.getElementById('reader-document'),
             // Camera video elements
             cameraVideo:         document.getElementById('camera-video'),
             cameraCanvas:        document.getElementById('camera-snapshot-canvas'),
@@ -205,7 +209,46 @@ class CortexApp {
         }
     }
 
-    async setViewMode(mode, data = null) {
+    showBrowserSearchingHud(query = '') {
+        if (!this.dom.readerSearchingHud) return;
+        if (this.dom.searchingHudQuery) {
+            this.dom.searchingHudQuery.textContent = query ? `"${query}"` : '"Scanning live feeds..."';
+        }
+        this.dom.readerSearchingHud.style.display = 'flex';
+        this.dom.readerSearchingHud.style.opacity = '1';
+        if (this.dom.readerDocument) {
+            this.dom.readerDocument.style.opacity = '0';
+        }
+
+        const phrases = [
+            'Connecting to real-time search channels...',
+            'Querying verified open-web sources...',
+            'Extracting clean editorial narrative...',
+            'Cross-referencing breaking developments...',
+            'Synthesizing executive briefing & takeaways...'
+        ];
+        let pIdx = 0;
+        clearInterval(this.searchingPhraseTimer);
+        this.searchingPhraseTimer = setInterval(() => {
+            pIdx = (pIdx + 1) % phrases.length;
+            if (this.dom.searchingHudStream) {
+                this.dom.searchingHudStream.innerHTML = `<span class="stream-line">${phrases[pIdx]}</span>`;
+            }
+        }, 900);
+    }
+
+    hideBrowserSearchingHud() {
+        clearInterval(this.searchingPhraseTimer);
+        this.searchingPhraseTimer = null;
+        if (this.dom.readerSearchingHud) {
+            this.dom.readerSearchingHud.style.display = 'none';
+        }
+        if (this.dom.readerDocument) {
+            this.dom.readerDocument.style.opacity = '1';
+        }
+    }
+
+    async setViewMode(mode, data = null, msg = null) {
         this.viewMode = mode;
 
         this.dom.mainStage.classList.remove('camera-active', 'browser-active', 'dual-active');
@@ -213,8 +256,14 @@ class CortexApp {
         this.dom.browserTriggerBtn.classList.remove('active');
         this.dom.dualViewTriggerBtn.classList.remove('active');
 
-        if (data && (mode === 'browser' || mode === 'dual')) {
-            this.updateBrowserContent(data);
+        if (mode === 'browser' || mode === 'dual') {
+            if (msg && msg.searching) {
+                this.showBrowserSearchingHud(msg.query || '');
+            } else if (data) {
+                this.updateBrowserContent(data);
+            }
+        } else {
+            this.hideBrowserSearchingHud();
         }
 
         const isCameraNeeded = (mode === 'camera' || mode === 'dual');
@@ -308,6 +357,7 @@ class CortexApp {
     }
 
     updateBrowserContent(data) {
+        this.hideBrowserSearchingHud();
         if (!data) return;
 
         // 1. Browser address bar URL
@@ -329,45 +379,64 @@ class CortexApp {
             this.dom.readerTimestamp.textContent = data.published_date || 'TODAY';
         }
 
-        // 4. Headline
+        // 4. Headline with flow-in animation
         if (this.dom.readerHeadline) {
             this.dom.readerHeadline.textContent = data.headline || data.title || 'Web Intelligence Briefing';
+            this.dom.readerHeadline.classList.remove('flow-in');
+            void this.dom.readerHeadline.offsetWidth;
+            this.dom.readerHeadline.classList.add('flow-in');
+            this.dom.readerHeadline.style.animationDelay = '0.04s';
         }
 
         // 5. Image preview
         if (data.image_url && this.dom.webMediaContainer && this.dom.webMediaImg) {
             this.dom.webMediaImg.src = data.image_url;
             this.dom.webMediaContainer.style.display = 'flex';
+            this.dom.webMediaContainer.classList.add('flow-in');
+            this.dom.webMediaContainer.style.animationDelay = '0.10s';
         } else if (this.dom.webMediaContainer) {
             this.dom.webMediaContainer.style.display = 'none';
         }
 
-        // 6. Narrative content body (Actual synthesized story / article content)
+        // 6. Narrative content body (Staggered paragraph flow-in animation)
         if (this.dom.readerContentBody) {
             let bodyText = data.briefing || data.summary || '';
-            // Strip out [LIVE BREAKING NEWS ...] or raw bracket headers if any
             bodyText = bodyText.replace(/^\[LIVE BREAKING NEWS INTEL:[^\]]+\]\s*/i, '');
-            // Format markdown headers, bold, bullets
-            let formatted = this._esc(bodyText)
-                .replace(/^###\s*(.*$)/gm, '<h4 style="color:#c084fc;margin:8px 0 4px;">$1</h4>')
-                .replace(/^##\s*(.*$)/gm, '<h3 style="color:#38bdf8;margin:10px 0 6px;">$1</h3>')
-                .replace(/^•\s*(.*$)/gm, '<div style="margin:4px 0 4px 8px;"><span style="color:#38bdf8;font-weight:bold;">•</span> $1</div>')
-                .replace(/^(\d+\.\s+\[.*?\])/gm, '<strong style="color:#38bdf8;">$1</strong>')
-                .replace(/\n\n/g, '</p><p class="reader-paragraph">')
-                .replace(/\n/g, '<br>');
-            this.dom.readerContentBody.innerHTML = `<p class="reader-paragraph">${formatted}</p>`;
+            
+            const rawParagraphs = bodyText.split(/\n\s*\n/).filter(p => p.trim());
+            this.dom.readerContentBody.innerHTML = '';
+            
+            if (rawParagraphs.length === 0 && bodyText) {
+                rawParagraphs.push(bodyText);
+            }
+
+            rawParagraphs.forEach((pText, idx) => {
+                const p = document.createElement('p');
+                p.className = 'reader-paragraph flow-in';
+                p.style.animationDelay = `${0.12 + idx * 0.09}s`;
+                
+                let formatted = this._esc(pText)
+                    .replace(/^###\s*(.*$)/gm, '<h4 style="color:#c084fc;margin:8px 0 4px;">$1</h4>')
+                    .replace(/^##\s*(.*$)/gm, '<h3 style="color:#38bdf8;margin:10px 0 6px;">$1</h3>')
+                    .replace(/^•\s*(.*$)/gm, '<div style="margin:4px 0 4px 8px;"><span style="color:#38bdf8;font-weight:bold;">•</span> $1</div>')
+                    .replace(/^(\d+\.\s+\[.*?\])/gm, '<strong style="color:#38bdf8;">$1</strong>')
+                    .replace(/\n/g, '<br>');
+                p.innerHTML = formatted;
+                this.dom.readerContentBody.appendChild(p);
+            });
         }
 
-        // 7. Key developments / highlights list
+        // 7. Key developments / highlights list (Staggered flow-in animation)
         if (this.dom.readerTakeawaysBox && this.dom.readerTakeawaysList) {
             const devs = data.developments || [];
             if (Array.isArray(devs) && devs.length > 0) {
                 this.dom.readerTakeawaysList.innerHTML = '';
-                for (const d of devs.slice(0, 6)) {
+                devs.slice(0, 6).forEach((d, idx) => {
                     const text = typeof d === 'string' ? d : d.text;
                     const source = typeof d === 'object' ? d.source : null;
                     const item = document.createElement('div');
-                    item.className = 'takeaway-item';
+                    item.className = 'takeaway-item flow-in';
+                    item.style.animationDelay = `${0.28 + idx * 0.07}s`;
                     item.innerHTML = `
                         <span class="takeaway-bullet">›</span>
                         <div class="takeaway-text">
@@ -376,33 +445,40 @@ class CortexApp {
                         </div>
                     `;
                     this.dom.readerTakeawaysList.appendChild(item);
-                }
+                });
                 this.dom.readerTakeawaysBox.style.display = 'flex';
+                this.dom.readerTakeawaysBox.classList.add('flow-in');
+                this.dom.readerTakeawaysBox.style.animationDelay = '0.24s';
             } else {
                 this.dom.readerTakeawaysBox.style.display = 'none';
             }
         }
 
-        // 8. Discreet Citations Bar at Bottom (Pills only, not giant link cards)
+        // 8. Discreet Citations Bar at Bottom with flow-in
         if (this.dom.readerSourcesBar && this.dom.readerSourcesPillRow) {
             const sources = data.sources || (data.results ? data.results.map(r => ({ name: r.source || r.domain || 'Source', url: r.url })) : []);
             if (Array.isArray(sources) && sources.length > 0) {
                 this.dom.readerSourcesPillRow.innerHTML = '';
                 const seen = new Set();
+                let sIdx = 0;
                 for (const s of sources) {
                     const name = (s.name || s.domain || 'Source').trim();
                     if (seen.has(name) || !s.url) continue;
                     seen.add(name);
                     const pill = document.createElement('a');
-                    pill.className = 'source-chip';
+                    pill.className = 'source-chip flow-in';
+                    pill.style.animationDelay = `${0.45 + sIdx * 0.05}s`;
                     pill.href = s.url;
                     pill.target = '_blank';
                     pill.rel = 'noopener noreferrer';
                     pill.textContent = `${name} ↗`;
                     this.dom.readerSourcesPillRow.appendChild(pill);
+                    sIdx++;
                     if (seen.size >= 6) break;
                 }
                 this.dom.readerSourcesBar.style.display = 'flex';
+                this.dom.readerSourcesBar.classList.add('flow-in');
+                this.dom.readerSourcesBar.style.animationDelay = '0.40s';
             } else {
                 this.dom.readerSourcesBar.style.display = 'none';
             }
@@ -450,7 +526,7 @@ class CortexApp {
                 this._setState(msg.state);
                 break;
             case 'set_view_mode':
-                this.setViewMode(msg.mode, msg.data);
+                this.setViewMode(msg.mode, msg.data, msg);
                 break;
             case 'chat_message':
                 this._addMessage(msg.role, msg.content);

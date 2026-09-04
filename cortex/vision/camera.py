@@ -48,8 +48,13 @@ class Camera:
 
     def start_background_daemon(self):
         """Starts the asynchronous frame difference and background vision daemon."""
-        if self._bg_task is None or self._bg_task.done():
-            self._bg_task = asyncio.create_task(self._vision_daemon_loop())
+        try:
+            loop = asyncio.get_running_loop()
+            if self._bg_task is None or self._bg_task.done():
+                self._bg_task = loop.create_task(self._vision_daemon_loop())
+        except RuntimeError:
+            # Event loop not yet running; will start on first async call or app startup
+            pass
 
     def update_frame(self, frame_b64: str):
         """Update latest JPEG snapshot received from the live webcam."""

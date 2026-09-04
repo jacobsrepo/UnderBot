@@ -301,5 +301,23 @@ CORTEX_TOOLS = [
                 "required": ["package_type", "package_name"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "set_display_view",
+            "description": "Explicitly switch or dismiss the active UI screen on the stage ('none' to close screens and return to the animated robot face avatar, 'browser' to show the web reader, 'camera' for camera inspection, or 'dual' for split screen).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "enum": ["none", "browser", "camera", "dual"],
+                        "description": "The target display mode"
+                    }
+                },
+                "required": ["mode"]
+            }
+        }
     }
 ]

@@ -51,8 +51,11 @@ class CliRunner:
         if not os.path.exists(work_dir):
             work_dir = self.default_cwd
 
-        # Trap non-terminating errors and explicit exit codes
+        # Prepend cortex/bin to PATH and trap non-terminating errors and explicit exit codes
+        bin_dir = os.path.join(self.default_cwd, "bin")
         wrapped_script = (
+            f"$binDir = '{bin_dir}'; "
+            "if (Test-Path $binDir) { $env:PATH = \"$binDir;$env:PATH\" }; "
             "$ErrorActionPreference = 'Stop'; "
             f"try {{ {command} }} catch {{ Write-Error $_.Exception.Message; exit 1 }}; "
             "if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { exit $LASTEXITCODE }"
