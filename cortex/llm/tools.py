@@ -144,7 +144,7 @@ CORTEX_TOOLS = [
         "type": "function",
         "function": {
             "name": "inspect_camera",
-            "description": "Instant optical light emission check and scene view from the VisualSceneBuffer. Verifies physical light reality without stalling.",
+            "description": "Inspect the physical webcam optical feed to see if an external physical LED on a circuit board or breadboard is glowing. ONLY call this when the camera feed is ACTIVE and the user explicitly asks to look through the camera, inspect the physical video feed, or visually check the circuit board. NEVER call this when the camera is offline or for general questions.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -171,7 +171,7 @@ CORTEX_TOOLS = [
         "type": "function",
         "function": {
             "name": "search_or_browse_web",
-            "description": "CRITICAL MANDATORY TOOL: Call this immediately whenever the user asks for news, latest developments, current events, or web search (e.g. 'whats the latest news from Nepal', 'what happened to X', 'search web for Y'). You do NOT have live news in memory; you must call this tool to fetch live intelligence.",
+            "description": "CRITICAL MANDATORY TOOL: Search the web, Google, DuckDuckGo, and read documentation or online knowledge. Call this whenever the user asks to look online, find info, search the web, check facts, look up technical documentation, or when asked what a hardware component/pin/LED does (e.g. 'what does RX, TX and PO LED on arduino nano do', 'look online and find info', 'search web for X', 'whats the latest news').",
             "parameters": {
                 "type": "object",
                 "properties": {

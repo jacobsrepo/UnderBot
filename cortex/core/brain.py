@@ -65,7 +65,7 @@ NEWS & LIVE WEB SEARCH MANDATE (CRITICAL):
 
 GENERAL CAPABILITIES:
 1. Date & Time: Always rely on your LIVE SYSTEM GROUNDING or `Get-Date`. Never emit placeholders like '[insert current time here]'.
-2. Camera & Physical LEDs: Call `inspect_camera` to read ground-truth optical light emissions (Blue, Green, Red). Never claim an LED is ON unless physical light is detected.
+2. Camera & Vision: Call `inspect_camera` ONLY if the user explicitly asks to visually check or inspect through the camera AND the camera is active. Never call `inspect_camera` for general conceptual or documentation questions, and NEVER claim to see physical objects when the camera is off.
 3. Robot Face: Actively express mood using `set_facial_expression` or tags like `[mood:curious;eye:inquiring;glow:#38bdf8]`.
 """
 
@@ -315,12 +315,16 @@ class CortexBrain:
 
             elif name == "inspect_camera":
                 used_camera = True
-                self.active_view_mode = "camera"
                 target = args.get("focus_target", "circuit board LEDs")
-                await broadcast({"type": "set_view_mode", "mode": "camera"})
-                await broadcast({"type": "state_change", "state": "seeing"})
-                await broadcast({"type": "facial_expression", "mood": "curious", "eye_shape": "inquiring", "glow_color": "#38bdf8"})
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Vision Sensor: Reading live VisualSceneBuffer ({target})..."})
+                cam_active = self.camera.is_camera_active()
+                if cam_active:
+                    self.active_view_mode = "camera"
+                    await broadcast({"type": "set_view_mode", "mode": "camera"})
+                    await broadcast({"type": "state_change", "state": "seeing"})
+                    await broadcast({"type": "facial_expression", "mood": "curious", "eye_shape": "inquiring", "glow_color": "#38bdf8"})
+                    await broadcast({"type": "chat_message", "role": "system", "content": f"Vision Sensor: Reading live VisualSceneBuffer ({target})..."})
+                else:
+                    await broadcast({"type": "chat_message", "role": "system", "content": "Vision Sensor: Camera feed is currently OFF / inactive."})
 
                 # Zero-latency inspection from VisualSceneBuffer
                 vision_result = await self.camera.inspect(target)
@@ -790,7 +794,7 @@ class CortexBrain:
         # Dynamically build system prompt with live grounding context & skills catalog
         # Probe physical hardware status live on EVERY turn for absolute ground truth
         hw_stat = await self.device.check_hardware_status()
-        grounding_hdr = self.conv_memory.get_grounding_context(hw_status=hw_stat)
+        grounding_hdr = self.conv_memory.get_grounding_context(hw_status=hw_stat, camera_active=self.camera.is_camera_active())
         skills_hdr = self.skill_manager.get_skill_catalog_prompt()
         full_system_prompt = f"{BASE_SYSTEM_PROMPT}\n\n{grounding_hdr}\n\n{skills_hdr}"
 
@@ -813,9 +817,12 @@ class CortexBrain:
                 except Exception as e:
                     print(f"[Brain] Error reading .ino: {e}")
 
-        # Check for direct web research / live news intent
-        is_search = any(text_clean.lower().startswith(p) for p in ("search ", "web search ", "google ", "browse ", "lookup "))
-        is_news = self.surfer._is_news_intent(text_clean) and not any(k in text_clean.lower() for k in ("arduino", "board", "microcontroller", "pin", "led", "com4", "usb"))
+        # Check for direct web research / live news / online documentation intent
+        is_search = any(k in text_clean.lower() for k in (
+            "look online", "find info", "search online", "search web", "google ", "browse ", "lookup ",
+            "search the web", "look up on google", "search for "
+        )) or any(text_clean.lower().startswith(p) for p in ("search ", "web search ", "google ", "browse ", "lookup ", "find info "))
+        is_news = self.surfer._is_news_intent(text_clean) and not any(k in text_clean.lower() for k in ("arduino", "board", "microcontroller", "pin", "com4", "usb"))
 
         if self._detect_direct_flash_intent(text_clean):
             target_code = self.active_sketch.get("code", "").strip()
@@ -908,7 +915,7 @@ class CortexBrain:
                     response = "No active COM ports detected. Please ensure the Arduino Nano is plugged into USB."
 
         elif is_search or is_news:
-            search_query = re.sub(r'^(search for|web search for|google|browse|lookup|search)\s+', '', text_clean, flags=re.IGNORECASE).strip()
+            search_query = re.sub(r'^(search for|web search for|google|browse|lookup|search|look online and find info about|look online and find info on|look online for|look online|find info about|find info on|find info)\s+', '', text_clean, flags=re.IGNORECASE).strip()
             if not search_query:
                 search_query = text_clean
             doc = await execute_tool("search_or_browse_web", {"query_or_url": search_query})

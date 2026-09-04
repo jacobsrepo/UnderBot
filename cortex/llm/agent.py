@@ -13,9 +13,14 @@ from typing import List, Dict, Any, Optional, Callable
 from .tools import CORTEX_TOOLS
 from .client import LLMClient
 
-# Patterns for detecting user action requests and assistant hallucinated actions
+# Patterns for detecting informational questions vs imperative action requests
+QUESTION_OR_INFO_REGEX = re.compile(
+    r'(^(what|why|how|who|where|when|can you explain|explain|describe|tell me about|meaning of|difference between|look online|find info|search|lookup)\b|\?$|what does\b|what is\b|what are\b|look online|find info)',
+    re.IGNORECASE
+)
+
 ACTION_USER_REGEX = re.compile(
-    r'\b(flash|upload|compile|build|turn on|turn off|set pin|pins?|leds?|ports?|com\s*ports?|serial(\s*com)?\s*output|serial\s*monitor|read\s*serial|serial\s*com|show\s*serial|check\s*(connection|hardware|arduino|board|port|ports|com|usb|led|serial)|status\s*(of|on)?\s*(the\s*)?(arduino|board|nano|led|connection|pins?|hardware|serial)|hardware|nano|arduino|run cli|execute|command)\b',
+    r'\b(flash(\s+the|\s+to|\s+code|\s+sketch)?|upload(\s+the|\s+to|\s+sketch|\s+code)?|compile|build\s+sketch|turn\s+(on|off)|switch\s+(on|off)|set\s+(pin|all\s+pins|d\d+|a\d+)|toggle\s+(pin|led)|actuate|run\s+cli|execute\s+command|check\s+(connection|hardware|arduino|board|port|ports|com|usb|serial)|scan\s+ports?|status\s+of\s+(the\s+)?(connection|hardware|board|port|serial)|read\s+serial|show\s+serial)\b',
     re.IGNORECASE
 )
 
@@ -63,9 +68,11 @@ class CortexAgent:
             if not tool_calls:
                 content = msg.get("content", "").strip()
 
-                # Action-Enforcement Guard: Prevent conversational hallucinations when tools were required
+                # Action-Enforcement Guard: Prevent conversational hallucinations when real actions were required
                 is_hallucinating = bool(HALLUCINATED_ACTION_REGEX.search(content))
-                is_unfulfilled_action = bool(ACTION_USER_REGEX.search(last_user_text)) and total_tools_executed == 0
+                is_question_or_info = bool(QUESTION_OR_INFO_REGEX.search(last_user_text.strip()))
+                is_action_request = bool(ACTION_USER_REGEX.search(last_user_text)) and not is_question_or_info
+                is_unfulfilled_action = is_action_request and total_tools_executed == 0
 
                 if (is_hallucinating or is_unfulfilled_action) and total_tools_executed == 0 and enforcement_retries < 2:
                     enforcement_retries += 1

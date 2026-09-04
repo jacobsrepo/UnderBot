@@ -21,14 +21,15 @@ OLLAMA_BASE = "http://127.0.0.1:11434"
 
 class VisualSceneBuffer:
     def __init__(self):
-        self.scene_description: str = "Circuit board view standing by."
+        self.scene_description: str = "Camera feed offline."
         self.optical_metrics: Dict[str, Any] = {
             "blue_glowing": False,
             "green_glowing": False,
-            "red_glowing": True,
+            "red_glowing": False,
             "blue_hotspot_pixels": 0,
             "green_hotspot_pixels": 0,
-            "red_hotspot_pixels": 120,
+            "red_hotspot_pixels": 0,
+            "camera_active": False,
         }
         self.last_updated: float = 0.0
         self.last_inference_timestamp: float = 0.0
@@ -45,6 +46,13 @@ class Camera:
         self.min_inference_interval = 4.0  # 4-second temporal debounce
         self.is_running = True
         self._bg_task: Optional[asyncio.Task] = None
+
+    def is_camera_active(self) -> bool:
+        """Returns True only if valid live camera frames have been received within 5 seconds."""
+        return (
+            self.latest_cv_img is not None
+            and (time.time() - self.last_frame_timestamp) < 5.0
+        )
 
     def start_background_daemon(self):
         """Starts the asynchronous frame difference and background vision daemon."""
@@ -75,8 +83,18 @@ class Camera:
 
     def analyze_optical_emissions(self) -> Dict[str, Any]:
         """Measure actual glowing/illuminated LEDs using HSV color emission thresholding."""
-        if self.latest_cv_img is None:
-            return self.buffer.optical_metrics
+        if not self.is_camera_active() or self.latest_cv_img is None:
+            metrics = {
+                "blue_glowing": False,
+                "green_glowing": False,
+                "red_glowing": False,
+                "blue_hotspot_pixels": 0,
+                "green_hotspot_pixels": 0,
+                "red_hotspot_pixels": 0,
+                "camera_active": False
+            }
+            self.buffer.optical_metrics = metrics
+            return metrics
 
         img = self.latest_cv_img
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -106,6 +124,7 @@ class Camera:
             "blue_hotspot_pixels": blue_core_pixels,
             "green_hotspot_pixels": green_core_pixels,
             "red_hotspot_pixels": red_core_pixels,
+            "camera_active": True
         }
         self.buffer.optical_metrics = metrics
         return metrics
@@ -177,6 +196,23 @@ class Camera:
         """
         Instant inspection: reads pre-computed VisualSceneBuffer without blocking the turn.
         """
+        if not self.is_camera_active():
+            return {
+                "camera_active": False,
+                "target": target,
+                "description": "The optical camera is currently OFF or inactive. No physical visual frames are available. The camera cannot see anything right now.",
+                "optical_metrics": {
+                    "camera_active": False,
+                    "blue_glowing": False,
+                    "green_glowing": False,
+                    "red_glowing": False,
+                    "blue_hotspot_pixels": 0,
+                    "green_hotspot_pixels": 0,
+                    "red_hotspot_pixels": 0
+                },
+                "buffer_age_seconds": 0.0
+            }
+
         optical = self.analyze_optical_emissions()
 
         optical_desc = []
@@ -198,6 +234,7 @@ class Camera:
         full_desc = f"{self.buffer.scene_description} Optical Ground Truth: {' '.join(optical_desc)}"
 
         return {
+            "camera_active": True,
             "target": target,
             "description": full_desc,
             "optical_metrics": optical,

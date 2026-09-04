@@ -37,7 +37,7 @@ class ConversationMemory:
             conn.commit()
 
     @staticmethod
-    def get_grounding_context(hw_status: Optional[Dict[str, Any]] = None) -> str:
+    def get_grounding_context(hw_status: Optional[Dict[str, Any]] = None, camera_active: bool = False) -> str:
         """
         Dynamically returns current real-world timestamp, day, timezone, OS context,
         and real-time physical hardware connection status.
@@ -67,12 +67,18 @@ class ConversationMemory:
                     f"- Scanned Ports: None active\n"
                 )
 
+        cam_line = (
+            f"- Camera Sensor Status: {'ACTIVE (Streaming)' if camera_active else 'OFF / INACTIVE (No video feed from user)'}\n"
+            f"- Camera Ground Truth: {'Webcam is active.' if camera_active else 'The webcam is currently turned OFF. You CANNOT see through the camera. Do NOT call inspect_camera or claim to see physical LEDs unless the user turns on the camera.'}\n"
+        )
+
         return (
             f"[LIVE SYSTEM GROUNDING]\n"
             f"- Current Date: {date_str} ({day_name})\n"
             f"- Current Time: {time_str} ({tz_str})\n"
             f"- Host OS: {platform.system()} {platform.release()} (Windows PowerShell 7 / Desktop)\n"
             f"{hw_lines}"
+            f"{cam_line}"
             f"- Working Directory: {os.path.abspath(os.path.dirname(os.path.dirname(__file__)))}\n"
         )
 
