@@ -172,6 +172,18 @@ class CortexBrain:
         )
         return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
 
+    def _detect_hardware_status_intent(self, text: str) -> bool:
+        t = text.strip().lower()
+        phrases = (
+            "check arduino", "check the arduino", "check hardware", "check usb",
+            "whats the status on the arduino", "whats the status of the arduino",
+            "what is the status of the arduino", "what is the status on the arduino",
+            "is arduino connected", "is the arduino connected", "status of the arduino",
+            "status on the arduino", "arduino status", "verify connection", "scan ports",
+            "check com4", "check connection"
+        )
+        return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
+
     async def process_user_message(self, text: str, broadcast_cb: Optional[Callable[[Dict[str, Any]], Any]] = None) -> str:
         text_clean = text.strip()
         self.conv_memory.add_message("user", text_clean)
@@ -191,6 +203,7 @@ class CortexBrain:
             nonlocal used_web_search, used_camera, used_arduino
             if name == "check_hardware_connection":
                 used_arduino = True
+                self.active_view_mode = "arduino"
                 status = await self.device.check_hardware_status()
                 conn_str = "CONNECTED" if status.get("connected") else "DISCONNECTED"
                 await broadcast({
@@ -198,6 +211,7 @@ class CortexBrain:
                     "role": "system",
                     "content": f"Hardware Sensor: Microcontroller is {conn_str} ({status.get('status')})"
                 })
+                await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
                 await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return status
 
@@ -747,6 +761,7 @@ class CortexBrain:
                     print(f"[Brain] Error reading .ino: {e}")
 
         # Check for direct web research / live news intent
+        is_search = any(text_clean.lower().startswith(p) for p in ("search ", "web search ", "google ", "browse ", "lookup "))
         is_news = self.surfer._is_news_intent(text_clean) and not any(k in text_clean.lower() for k in ("arduino", "board", "microcontroller", "pin", "led", "com4", "usb"))
 
         if self._detect_direct_flash_intent(text_clean):
@@ -795,6 +810,15 @@ class CortexBrain:
                 response = f"I have built and flashed '{target_name}' to the Arduino Nano on {target_port}. The upload is verified and running on the microcontroller."
             else:
                 response = f"Flash execution encountered an error: {flash_res.get('error') or flash_res.get('status')}."
+
+        elif self._detect_hardware_status_intent(text_clean):
+            stat = await execute_tool("check_hardware_connection", {})
+            if stat.get("connected"):
+                port_name = stat.get("port") or "COM4"
+                board_name = stat.get("name") or "Arduino Nano"
+                response = f"An {board_name} is connected and online via {port_name}. Hardware workbench is active."
+            else:
+                response = "No Arduino board is currently detected on the COM ports. Please verify the USB connection."
 
         elif is_search or is_news:
             search_query = re.sub(r'^(search for|web search for|google|browse|lookup|search)\s+', '', text_clean, flags=re.IGNORECASE).strip()
