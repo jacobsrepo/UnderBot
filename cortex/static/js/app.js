@@ -283,7 +283,7 @@ class CortexApp {
             case 'browser':
                 this.dom.mainStage.classList.add('browser-active');
                 this.dom.browserTriggerBtn.classList.add('active');
-                this._setState('thinking');
+                this._setState('browsing');
                 break;
 
             case 'dual':

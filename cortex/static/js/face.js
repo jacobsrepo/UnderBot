@@ -4,11 +4,18 @@
 
 export const SCREEN_THEMES = {
     idle: {
-        screenBg:    '#4a5f3a',  // Olive sage green
-        accentColor: '#86efac',  // Soft sage green
-        glowColor:   'rgba(134, 239, 172, 0.4)',
+        screenBg:    '#090d16',  // Deep cybernetic obsidian
+        accentColor: '#38bdf8',  // Electric cyan
+        glowColor:   'rgba(56, 189, 248, 0.4)',
         label:       'Ready',
         subtext:     'Standing by',
+    },
+    browsing: {
+        screenBg:    '#071322',  // Deep cyber ocean midnight
+        accentColor: '#00e5ff',  // Electric neon cyan
+        glowColor:   'rgba(0, 229, 255, 0.55)',
+        label:       'Browsing Web…',
+        subtext:     'Scanning live intelligence feeds',
     },
     listening: {
         screenBg:    '#2d4c63',  // Oceanic slate blue
@@ -109,6 +116,10 @@ export class RobotFace {
         const theme = SCREEN_THEMES[stateName];
         if (!theme) return;
         this.currentState = stateName;
+        // Reset transient mood modifiers on primary state transition
+        this.activeMood = null;
+        this.activeEyeShape = null;
+
         if (this.dom.faceHardware) {
             this.dom.faceHardware.style.setProperty('--screen-color', theme.screenBg);
             this.dom.faceHardware.style.background = theme.screenBg;
@@ -272,6 +283,30 @@ export class RobotFace {
                 break;
             }
 
+            case 'browsing': {
+                // Saccadic reading sweep across virtual lines of text
+                const readPeriod = 2.4;
+                const progress = (this.time % readPeriod) / readPeriod;
+                const lineScanX = -14 + progress * 28;
+                const microJitter = Math.sin(this.time * 24.0) * 0.5;
+                const lineIndex = Math.floor((this.time / readPeriod) % 3);
+                const lineY = (lineIndex - 1) * 3.2;
+
+                left.x  = -spacing + lineScanX + microJitter;
+                left.y  = lineY;
+                right.x =  spacing + lineScanX + microJitter;
+                right.y = lineY;
+
+                // Focused, intelligent, narrowed reading aperture
+                left.scaleX  = 1.10;
+                left.scaleY  = 0.74 * this.eyes.blink;
+                right.scaleX = 1.10;
+                right.scaleY = 0.74 * this.eyes.blink;
+                left.rot  = -0.03;
+                right.rot =  0.03;
+                break;
+            }
+
             case 'error': {
                 const shake = Math.sin(this.time * 22.0) * 3.5;
                 left.x  = -spacing + shake;
@@ -292,34 +327,46 @@ export class RobotFace {
         // Active Autonomous Mood Modifier with Spring Physics
         if (this.activeMood) {
             const intensity = this.activeIntensity || 1.0;
-            if (this.activeMood === 'curious' || this.activeEyeShape === 'inquiring') {
-                left.y -= 4 * intensity;
-                left.rot += 0.12 * intensity;
-                right.rot -= 0.05 * intensity;
-                left.scaleY *= (1.0 + 0.15 * intensity);
+            if (this.activeMood === 'browsing' || this.activeEyeShape === 'reading') {
+                const sweep = Math.sin(this.time * 5.0) * 6.0;
+                left.x += sweep;
+                right.x += sweep;
+                left.scaleY *= 0.80;
+                right.scaleY *= 0.80;
+                left.scaleX *= 1.08;
+                right.scaleX *= 1.08;
+            } else if (this.activeMood === 'curious' || this.activeEyeShape === 'inquiring') {
+                // Symmetrical curious tilt and lift without egg warping
+                left.y -= 3 * intensity;
+                right.y -= 3 * intensity;
+                left.rot += 0.08 * intensity;
+                right.rot -= 0.08 * intensity;
+                left.scaleY *= (1.0 + 0.06 * intensity);
+                right.scaleY *= (1.0 + 0.06 * intensity);
             } else if (this.activeMood === 'skeptical' || this.activeEyeShape === 'squint') {
-                left.scaleY *= 0.65;
-                right.scaleY *= 1.05;
-                left.rot -= 0.1 * intensity;
+                left.scaleY *= 0.76;
+                right.scaleY *= 0.84;
+                left.rot -= 0.06 * intensity;
+                right.rot += 0.06 * intensity;
             } else if (this.activeMood === 'analytical' || this.activeMood === 'focused') {
                 left.scaleY *= 0.75;
                 right.scaleY *= 0.75;
-                left.scaleX *= 1.1;
-                right.scaleX *= 1.1;
+                left.scaleX *= 1.10;
+                right.scaleX *= 1.10;
             } else if (this.activeMood === 'surprised' || this.activeEyeShape === 'wide') {
-                left.scaleX *= (1.25 * intensity);
-                left.scaleY *= (1.3 * intensity);
-                right.scaleX *= (1.25 * intensity);
-                right.scaleY *= (1.3 * intensity);
+                left.scaleX *= (1.20 * intensity);
+                left.scaleY *= (1.25 * intensity);
+                right.scaleX *= (1.20 * intensity);
+                right.scaleY *= (1.25 * intensity);
             } else if (this.activeMood === 'confident' || this.activeMood === 'pleased') {
                 left.rot += 0.08 * intensity;
                 right.rot -= 0.08 * intensity;
                 left.y -= 2 * intensity;
                 right.y -= 2 * intensity;
             } else if (this.activeMood === 'alert') {
-                const pulse = Math.sin(this.time * 8.0) * 0.15;
-                left.scaleX *= (1.15 + pulse);
-                right.scaleX *= (1.15 + pulse);
+                const pulse = Math.sin(this.time * 8.0) * 0.12;
+                left.scaleX *= (1.12 + pulse);
+                right.scaleX *= (1.12 + pulse);
             }
         }
     }

@@ -257,8 +257,8 @@ class CortexBrain:
                 used_web_search = True
                 self.active_view_mode = "browser"
                 query = args.get("query_or_url", "")
-                await broadcast({"type": "state_change", "state": "thinking"})
-                await broadcast({"type": "facial_expression", "mood": "curious", "eye_shape": "inquiring", "glow_color": "#38bdf8"})
+                await broadcast({"type": "state_change", "state": "browsing"})
+                await broadcast({"type": "facial_expression", "mood": "browsing", "eye_shape": "reading", "glow_color": "#00e5ff"})
                 # Immediately open browser viewport with active radar searching HUD animation
                 await broadcast({"type": "set_view_mode", "mode": "browser", "searching": True, "query": query})
                 doc = await self.surfer.surf(query)
