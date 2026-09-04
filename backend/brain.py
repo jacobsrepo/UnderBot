@@ -40,7 +40,7 @@ class Brain:
         self.model_name = model_name or os.environ.get("LLM_MODEL", "qwen2.5-coder:7b")
         self.api_base = (api_base or os.environ.get("LLM_API_BASE", "http://localhost:11434/v1")).rstrip("/")
         self.api_key = api_key or os.environ.get("LLM_API_KEY", "")
-        self.timeout_seconds = float(os.environ.get("LLM_TIMEOUT", "10.0"))
+        self.timeout_seconds = float(os.environ.get("LLM_TIMEOUT", "45.0"))
         self.is_server_ready = True
         self.conversation_history: List[Dict[str, str]] = []
         self.max_history_turns = 6

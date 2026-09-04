@@ -28,6 +28,9 @@ from desktop_agent import DesktopAgent
 from embedded_agent import EmbeddedAgent
 from intent_router import IntentRouter
 from cognitive_core import CognitiveCore
+from memory import Memory
+from tool_registry import ToolRegistry
+from agent_loop import AgentLoop
 
 app = FastAPI(
     title="Contender AI Assistant",
@@ -64,7 +67,21 @@ stt = STTEngine(model_size="small.en", device="cpu", compute_type="int8")
 desktop = DesktopAgent()
 embedded = EmbeddedAgent()
 router = IntentRouter()
-core = CognitiveCore(desktop, embedded, primary_brain, vision_engine)
+
+# Memory + Tool Registry + Agent Loop (OpenClaw-style integration)
+memory = Memory()
+tool_registry = ToolRegistry(desktop=desktop, embedded=embedded, vision=vision_engine, memory=memory, camera=camera)
+agent_loop = AgentLoop(brain=primary_brain, tool_registry=tool_registry, memory=memory)
+
+core = CognitiveCore(
+    desktop_agent=desktop,
+    embedded_agent=embedded,
+    primary_brain=primary_brain,
+    vision_engine=vision_engine,
+    tool_registry=tool_registry,
+    agent_loop=agent_loop,
+    memory=memory
+)
 
 connected_websockets = set()
 
@@ -82,7 +99,9 @@ model_manager.add_listener(lambda evt: asyncio.create_task(broadcast_ws_message(
 
 @app.on_event("startup")
 async def startup_event():
-    print("[Contender] Decoupled Coder-Brain & On-Demand Vision Core online.")
+    mem_stats = memory.get_stats()
+    print(f"[Contender] Agent Loop + Tool Registry + Persistent Memory online.")
+    print(f"[Contender] Memory: {mem_stats['total_messages']} messages across {mem_stats['total_sessions']} sessions.")
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -90,6 +109,7 @@ async def shutdown_event():
     camera.stop()
     embedded.disconnect_serial()
     primary_brain.shutdown()
+    memory.close()
 
 @app.get("/favicon.ico")
 def get_favicon():
@@ -108,7 +128,8 @@ async def get_system_status():
         "ports": embedded.detect_boards(),
         "metrics": desktop.get_system_metrics(),
         "selected_voice": tts.default_voice_key,
-        "active_voice_name": tts.AVAILABLE_VOICES.get(tts.default_voice_key, {}).get("name", "Guy")
+        "active_voice_name": tts.AVAILABLE_VOICES.get(tts.default_voice_key, {}).get("name", "Guy"),
+        "memory": memory.get_stats()
     }
 
 @app.get("/api/diagnostics")
@@ -121,10 +142,41 @@ async def get_diagnostics():
         "camera": camera.get_stats(),
         "network": get_network_details(8000, is_https=is_https),
         "metrics": desktop.get_system_metrics(),
-        "voice": tts.default_voice_key
+        "voice": tts.default_voice_key,
+        "memory": memory.get_stats()
     }
 
-# ==================== MODEL MANAGEMENT & AUTO-DOWNLOAD APIS ====================
+# ==================== MEMORY REST APIS ====================
+
+@app.get("/api/memory/stats")
+def get_memory_stats():
+    return memory.get_stats()
+
+@app.get("/api/memory/history")
+def get_memory_history(n: int = 20):
+    return {"messages": memory.get_recent(n_turns=n)}
+
+@app.get("/api/memory/recall")
+def recall_memory_endpoint(q: str, limit: int = 5):
+    results = memory.recall(q, limit=limit)
+    return {"query": q, "results": results}
+
+@app.get("/api/memory/sessions")
+def get_memory_sessions():
+    return {"sessions": memory.get_all_sessions()}
+
+class ClearHistoryRequest(BaseModel):
+    confirm: bool = False
+
+@app.post("/api/memory/clear")
+def clear_session_memory(req: ClearHistoryRequest):
+    if not req.confirm:
+        return {"success": False, "message": "Set confirm=true to clear this session's working memory."}
+    # Only clears in-memory brain context, NOT the persistent DB
+    primary_brain.clear_history()
+    return {"success": True, "message": "Working context cleared. Long-term memory preserved."}
+
+
 
 @app.get("/api/models/catalog")
 async def get_model_catalog():

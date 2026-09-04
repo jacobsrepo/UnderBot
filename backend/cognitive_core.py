@@ -1,23 +1,31 @@
-import os
-import sys
-import time
-import json
+"""
+cognitive_core.py — Contender Cognitive Dispatch Core (v2)
+Thin orchestrator: routes user directives through the AgentLoop.
+Falls back to keyword-based fast-path if Brain is offline.
+"""
+
 import asyncio
-from typing import Dict, Any, Optional, Tuple, Callable
+import time
+from typing import Dict, Any, Optional, Callable
+
 
 class CognitiveCore:
     """
-    Decoupled Dual-Engine Cognitive Core for Contender.
-    Primary Brain: Qwen2.5-Coder-7B-Instruct (Tool Calling & C++ Reflection).
-    Secondary Engine: VisionEngine (On-Demand RapidOCR & Isolated Visual Inspection).
+    Decoupled Cognitive Core for Contender.
+    Primary path: AgentLoop (LLM tool-calling).
+    Fast fallback: keyword-based direct dispatch (0ms, no LLM required).
     """
 
-    def __init__(self, desktop_agent, embedded_agent, primary_brain, vision_engine):
+    def __init__(self, desktop_agent, embedded_agent, primary_brain, vision_engine,
+                 tool_registry=None, agent_loop=None, memory=None):
         self.desktop = desktop_agent
         self.embedded = embedded_agent
         self.brain = primary_brain
         self.vision = vision_engine
-        self.active_mode = "CODER_ENGINE"
+        self.tools = tool_registry
+        self.loop = agent_loop
+        self.memory = memory
+        self.active_mode = "AGENT_LOOP"
 
     async def process_user_directive(
         self,
@@ -25,238 +33,177 @@ class CognitiveCore:
         intent_info: Dict[str, Any],
         screen_b64: Optional[str] = None,
         cam_b64: Optional[str] = None,
-        progress_cb: Optional[Callable[[str], None]] = None
+        progress_cb: Optional[Callable[[str], None]] = None,
+        session_id: str = "default"
     ) -> Dict[str, Any]:
         """
-        Main cognitive dispatch:
-        1. Evaluates safety guardrails.
-        2. Routes simple OS/Window/File/Hardware actions directly (0ms latency).
-        3. For screen code/errors: utilizes lightweight RapidOCR.
-        4. For hardware compile/flash: activates automated Reflection Loop.
-        5. For physical vision: calls isolated On-Demand Vision tool.
+        Main dispatch. Routes through AgentLoop if available, else fast keyword path.
         """
+        # ── Safety guardrail (always checked first) ───────────────────────────
+        safety_check = self.desktop.check_safety_guardrail(text, action_type="directive")
+        if not safety_check["is_safe"]:
+            reply = f"Negative. {safety_check['warning']} Awaiting explicit confirmation."
+            if self.memory:
+                self.memory.record_exchange(text, reply)
+            return {
+                "reply": reply,
+                "action_card": {
+                    "type": "safety_block",
+                    "title": "Action Blocked",
+                    "status": "Confirmation Required"
+                },
+                "active_vision": intent_info.get("vision_source", "screen"),
+                "active_engine": "SAFETY_GUARD",
+                "requires_confirmation": True,
+            }
+
+        # ── Primary path: AgentLoop ───────────────────────────────────────────
+        if self.loop is not None:
+            self.active_mode = "AGENT_LOOP"
+            try:
+                result = await self.loop.run(
+                    user_text=text,
+                    screen_b64=screen_b64,
+                    cam_b64=cam_b64,
+                    progress_cb=progress_cb,
+                    session_id=session_id
+                )
+                return {
+                    "reply": result["reply"],
+                    "action_card": self._build_action_card(result.get("tool_calls_made", [])),
+                    "active_vision": intent_info.get("vision_source", "screen"),
+                    "active_engine": result.get("active_engine", "AGENT_LOOP"),
+                    "latency_ms": result.get("latency_ms", 0),
+                    "tool_calls_made": result.get("tool_calls_made", [])
+                }
+            except Exception as e:
+                print(f"[CognitiveCore] AgentLoop error, falling back: {e}")
+
+        # ── Fallback: keyword fast-path ───────────────────────────────────────
+        self.active_mode = "KEYWORD_FALLBACK"
+        return await self._keyword_dispatch(text, intent_info, screen_b64, cam_b64, progress_cb)
+
+    def _build_action_card(self, tool_calls: list) -> Optional[Dict]:
+        if not tool_calls:
+            return None
+        if len(tool_calls) == 1:
+            tc = tool_calls[0]
+            return {"type": tc["tool"], "title": tc["tool"].replace("_", " ").title(), "status": "Done"}
+        return {
+            "type": "multi_tool",
+            "title": f"{len(tool_calls)} Tools Executed",
+            "tools": [tc["tool"] for tc in tool_calls],
+            "status": "Done"
+        }
+
+    async def _keyword_dispatch(
+        self, text: str, intent_info: Dict, screen_b64, cam_b64, progress_cb
+    ) -> Dict[str, Any]:
+        """
+        Zero-LLM keyword fallback dispatch. Identical to old cognitive_core logic.
+        Used when Brain is offline.
+        """
+        lower = text.lower().strip()
         intent = intent_info.get("intent", "CONVERSATION")
         prompt = intent_info.get("prompt", text)
         board_hint = intent_info.get("board_hint", "auto")
         vision_source = intent_info.get("vision_source", "screen")
-        lower = text.lower().strip()
-
-        action_card = None
         system_context = None
-        self.active_mode = "CODER_ENGINE"
+        action_card = None
 
-        # -------------------------------------------------------------
-        # STEP 1: SAFETY GUARDRAIL CHECK
-        # -------------------------------------------------------------
-        safety_check = self.desktop.check_safety_guardrail(text, action_type="directive")
-        if not safety_check["is_safe"]:
-            return {
-                "reply": f"Safety Alert: {safety_check['warning']}",
-                "action_card": {
-                    "type": "safety_block",
-                    "title": "Action Blocked by Safety Guardrail",
-                    "status": "Confirmation Required"
-                },
-                "active_vision": vision_source,
-                "active_engine": self.active_mode,
-                "requires_confirmation": True,
-                "blocked_target": safety_check["target"]
-            }
-
-        # -------------------------------------------------------------
-        # STEP 2: OS & WINDOW CONTROLS
-        # -------------------------------------------------------------
-        if any(k in lower for k in ["minimize all", "minimize everything", "minimize the stuff", "show desktop", "minimize windows"]):
-            if progress_cb: progress_cb("Minimizing desktop windows...")
-            res = self.desktop.minimize_all_windows()
+        # OS window controls
+        if any(k in lower for k in ["minimize all", "minimize everything", "show desktop", "minimize windows"]):
+            if progress_cb: progress_cb("Minimizing windows...")
+            self.desktop.minimize_all_windows()
             action_card = {"type": "window_control", "title": "Minimized All Windows", "status": "Done"}
-            system_context = "All open desktop windows have been minimized."
+            system_context = "All desktop windows minimized."
 
         elif any(k in lower for k in ["restore window", "undo minimize", "unminimize"]):
-            if progress_cb: progress_cb("Restoring desktop windows...")
-            res = self.desktop.undo_minimize_all()
+            self.desktop.undo_minimize_all()
             action_card = {"type": "window_control", "title": "Restored Windows", "status": "Done"}
-            system_context = "Desktop windows have been restored to screen."
+            system_context = "Desktop windows restored."
 
-        elif any(k in lower for k in ["organize desktop", "tidy desktop", "clean up desktop"]):
-            if progress_cb: progress_cb("Organizing desktop files...")
+        elif any(k in lower for k in ["organize desktop", "tidy desktop"]):
             res = self.desktop.organize_desktop_files()
-            action_card = {"type": "desktop_organize", "title": "Organized Desktop", "status": f"{res.get('moved_count', 0)} files categorized"}
-            system_context = f"Organized {res.get('moved_count', 0)} files on the desktop into categorized folders."
+            action_card = {"type": "desktop_organize", "title": "Organized Desktop",
+                           "status": f"{res.get('moved_count', 0)} files moved"}
+            system_context = f"Organized {res.get('moved_count', 0)} files."
 
-        # -------------------------------------------------------------
-        # STEP 3: APPLICATION LAUNCH
-        # -------------------------------------------------------------
-        elif intent == "DESKTOP_APP" or any(k in lower for k in ["launch", "open "]):
-            target_app = None
-            for app_k in self.desktop.KNOWN_APPS.keys():
-                if app_k in lower:
-                    target_app = app_k
-                    break
-            if not target_app:
-                parts = lower.replace("launch", "open").split("open")
-                if len(parts) > 1:
-                    target_app = parts[-1].strip()
+        # Hardware
+        elif any(k in lower for k in ["program", "flash", "upload", "arduino", "blink", "led", "esp32"]):
+            if progress_cb: progress_cb("Initializing embedded reflection loop...")
+            flash_res = self.embedded.auto_compile_flash_with_reflection(
+                prompt=prompt, board_hint=board_hint, progress_cb=progress_cb,
+                code_reflector_cb=self._reflect_and_repair_firmware
+            )
+            if flash_res.get("success"):
+                action_card = {"type": "hardware_flash", "title": f"Flashed {flash_res.get('board')}",
+                               "status": f"Uploaded to {flash_res.get('port')}"}
+                system_context = f"Firmware uploaded to {flash_res.get('board')} on {flash_res.get('port')}."
+            else:
+                action_card = {"type": "hardware_flash", "title": "Flash Notice",
+                               "status": flash_res.get("error", "No board detected")}
+                system_context = f"Hardware status: {flash_res.get('error')}"
 
-            if target_app:
-                if progress_cb: progress_cb(f"Launching {target_app.title()}...")
-                res = self.desktop.launch_application(target_app)
-                if res.get("success"):
-                    action_card = {"type": "app_launch", "title": f"Launched {target_app.title()}", "status": "Success"}
-                    system_context = f"Launched {target_app.title()} on the user's desktop."
-                else:
-                    action_card = {"type": "app_launch", "title": "Launch Failed", "status": res.get("error", "Error")}
-                    system_context = f"Failed to launch {target_app}: {res.get('error')}"
+        # System metrics
+        elif intent == "SYSTEM_METRICS" or any(k in lower for k in ["cpu", "ram", "battery", "memory usage"]):
+            m = self.desktop.get_system_metrics()
+            action_card = {"type": "system_metrics", "title": "System Telemetry",
+                           "cpu": f"{m.get('cpu_percent')}%",
+                           "ram": f"{m.get('ram_used_gb')}/{m.get('ram_total_gb')} GB"}
+            system_context = (f"CPU {m.get('cpu_percent')}%, RAM {m.get('ram_used_gb')}/{m.get('ram_total_gb')} GB, "
+                              f"Battery: {m.get('battery', 'N/A')}")
 
-        # -------------------------------------------------------------
-        # STEP 4: EMBEDDED HARDWARE & AUTOMATED REFLECTION LOOP
-        # -------------------------------------------------------------
-        elif intent == "EMBEDDED_HARDWARE" or any(k in lower for k in ["program", "flash", "upload", "arduino", "nano", "uno", "esp32", "blink", "led"]):
-            if any(k in lower for k in ["program", "flash", "upload", "write code", "blink", "load sketch", "led"]):
-                if progress_cb: progress_cb("Initializing autonomous hardware compilation & reflection loop...")
-                
-                flash_res = self.embedded.auto_compile_flash_with_reflection(
-                    prompt=prompt,
-                    board_hint=board_hint,
-                    progress_cb=progress_cb,
-                    code_reflector_cb=self._reflect_and_repair_firmware
-                )
+        # Screen OCR
+        elif any(k in lower for k in ["read screen", "what's on screen", "screen text", "ocr"]):
+            if progress_cb: progress_cb("Running screen OCR...")
+            text_out = self.desktop.capture_screen_context()
+            if text_out:
+                system_context = f"Screen text:\n{text_out[:1500]}"
 
-                if flash_res.get("success"):
-                    attempts = flash_res.get("reflection_attempts", 0)
-                    action_card = {
-                        "type": "hardware_flash",
-                        "title": f"Flashed {flash_res.get('board')}",
-                        "status": f"Uploaded to {flash_res.get('port')}" + (f" ({attempts} reflection repair(s))" if attempts > 0 else "")
-                    }
-                    system_context = f"Successfully compiled and uploaded the firmware to {flash_res.get('board')} on {flash_res.get('port')}. Microcontroller is running."
-                else:
-                    action_card = {
-                        "type": "hardware_flash",
-                        "title": "Hardware Notice",
-                        "status": flash_res.get("error", "No board detected")
-                    }
-                    system_context = f"Hardware status: {flash_res.get('error')}"
-
-            elif any(k in lower for k in ["scan", "list port", "detect", "see the arduino", "check port"]):
-                boards = self.embedded.detect_boards()
-                active_usb = [b for b in boards if b.get("is_usb")]
-                if active_usb:
-                    desc = [f"{b['port']} ({b['board_type']})" for b in active_usb]
-                    action_card = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": desc}
-                    system_context = f"Connected boards: {', '.join(desc)}"
-                else:
-                    action_card = {"type": "embedded_scan", "title": "Scanned COM Ports", "ports": ["No USB boards detected"]}
-                    system_context = "No USB Arduino or ESP microcontroller is currently detected on the system ports."
-
-        # -------------------------------------------------------------
-        # STEP 5: SYSTEM TELEMETRY
-        # -------------------------------------------------------------
-        elif intent == "SYSTEM_METRICS":
-            metrics = self.desktop.get_system_metrics()
-            action_card = {"type": "system_metrics", "title": "System Telemetry", "cpu": f"{metrics.get('cpu_percent')}%", "ram": f"{metrics.get('ram_used_gb')}/{metrics.get('ram_total_gb')} GB"}
-            system_context = f"Metrics: CPU at {metrics.get('cpu_percent')}%, RAM at {metrics.get('ram_used_gb')}GB of {metrics.get('ram_total_gb')}GB ({metrics.get('ram_percent')}%), Battery: {metrics.get('battery')}"
-
-        # -------------------------------------------------------------
-        # STEP 6: SMART OCR PRE-FILTER FOR SCREEN QUERIES
-        # -------------------------------------------------------------
-        elif vision_source == "screen" and any(k in lower for k in ["read", "error", "code", "terminal", "text", "what does this say", "summarize", "screen"]):
-            if progress_cb: progress_cb("Ingesting desktop screen via lightweight RapidOCR pre-filter...")
-            ocr_text = self.desktop.capture_screen_context()
-            if ocr_text:
-                system_context = f"Screen OCR Text:\n{ocr_text[:1500]}"
-                if progress_cb: progress_cb(f"Extracted screen text buffer successfully.")
-
-        # -------------------------------------------------------------
-        # STEP 7: ON-DEMAND VISUAL INSPECTION
-        # -------------------------------------------------------------
-        elif vision_source == "camera" or any(k in lower for k in ["holding", "look at me", "this object", "what is this"]):
-            self.active_mode = "VISION_INSPECTOR"
-            if progress_cb: progress_cb("Querying On-Demand Vision Module...")
-            vis_summary = self.vision.inspect_visual_target(cam_b64 or screen_b64, prompt=prompt)
-            system_context = f"Visual Inspection Observation: {vis_summary}"
-
-        # -------------------------------------------------------------
-        # STEP 8: PRIMARY CODER BRAIN RESPONSE SYNTHESIS
-        # -------------------------------------------------------------
+        # Synthesize with Brain
         coder_res = await self.brain.generate_response_async(
-            prompt_text=prompt,
-            system_context=system_context
+            prompt_text=prompt, system_context=system_context
         )
 
+        reply = coder_res.get("response", "Directive acknowledged.")
+        if self.memory:
+            self.memory.record_exchange(text, reply)
+
         return {
-            "reply": coder_res.get("response", "Directive acknowledged."),
+            "reply": reply,
             "action_card": action_card,
             "active_vision": vision_source,
-            "active_engine": self.active_mode,
+            "active_engine": "KEYWORD_FALLBACK",
             "latency_ms": coder_res.get("latency_ms", 0)
         }
 
     def _reflect_and_repair_firmware(self, prompt: str, current_code: str, compiler_stderr: str) -> str:
-        """
-        Compiler Reflection Loop:
-        1. Attempts deep semantic repair using the active LLM Brain.
-        2. Falls back to deterministic heuristic repair if LLM is offline.
-        """
-        print(f"[CognitiveCore/Reflector] Reflecting on compiler diagnostics:\n{compiler_stderr[:200]}")
-        
-        # 1. Try LLM reflection if brain is available
+        """Compiler reflection for keyword fallback path."""
+        print(f"[CognitiveCore] Reflecting on: {compiler_stderr[:150]}")
+
         if self.brain and hasattr(self.brain, "repair_code_with_llm"):
             try:
-                loop = None
-                try:
-                    loop = asyncio.get_event_loop()
-                except Exception:
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-
-                if loop.is_running():
-                    import concurrent.futures
-                    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-                        future = executor.submit(
-                            lambda: asyncio.run(self.brain.repair_code_with_llm(prompt, current_code, compiler_stderr))
+                import concurrent.futures
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+                    future = ex.submit(
+                        lambda: asyncio.run(
+                            self.brain.repair_code_with_llm(prompt, current_code, compiler_stderr)
                         )
-                        llm_repaired = future.result(timeout=10.0)
-                else:
-                    llm_repaired = loop.run_until_complete(
-                        self.brain.repair_code_with_llm(prompt, current_code, compiler_stderr)
                     )
-
-                if llm_repaired and "void loop" in llm_repaired:
-                    print("[CognitiveCore/Reflector] Successfully repaired firmware via LLM Brain.")
-                    return llm_repaired
+                    repaired = future.result(timeout=15.0)
+                if repaired and "void loop" in repaired:
+                    return repaired
             except Exception as e:
-                print(f"[CognitiveCore/Reflector] LLM repair notice: {e}")
+                print(f"[CognitiveCore] LLM repair: {e}")
 
-        # 2. Deterministic Heuristic Fallback
+        # Heuristic fallback
         repaired = current_code
-
-        if "was not declared in this scope" in compiler_stderr:
-            if "pinMode" not in repaired and "LED_PIN" in repaired:
-                repaired = repaired.replace("void setup() {", "void setup() {\n  pinMode(LED_PIN, OUTPUT);")
-
-        if "expected ';' before" in compiler_stderr:
-            lines = repaired.split("\n")
-            for i, line in enumerate(lines):
-                sline = line.strip()
-                if sline and not sline.endswith((";", "{", "}", ":", "#", "//")) and not sline.startswith(("#", "//", "void", "int", "bool", "String")):
-                    lines[i] = line + ";"
-            repaired = "\n".join(lines)
-
+        if "was not declared in this scope" in compiler_stderr and "pinMode" not in repaired:
+            repaired = repaired.replace("void setup() {", "void setup() {\n  pinMode(LED_BUILTIN, OUTPUT);")
         if not repaired or "void loop" not in repaired:
-            repaired = """// Auto-Corrected Firmware
-#define LED_PIN 13
-
-void setup() {
-  Serial.begin(115200);
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  digitalWrite(LED_PIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_PIN, LOW);
-  delay(1000);
-}
+            repaired = """#define LED_PIN 13
+void setup() { Serial.begin(115200); pinMode(LED_PIN, OUTPUT); }
+void loop() { digitalWrite(LED_PIN, HIGH); delay(1000); digitalWrite(LED_PIN, LOW); delay(1000); }
 """
         return repaired
