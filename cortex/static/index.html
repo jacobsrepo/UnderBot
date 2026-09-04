@@ -390,7 +390,11 @@
                                     <div class="workbench-card log-card">
                                         <div class="workbench-card-header">
                                             <span class="workbench-card-title">COMPILER & SYSTEM LOG</span>
-                                            <span class="terminal-pulse-badge">LIVE TTY</span>
+                                            <div class="log-controls">
+                                                <button id="btn-read-serial" class="wb-mini-btn" title="Read live serial COM output">[READ SERIAL]</button>
+                                                <button id="btn-clear-log" class="wb-mini-btn" title="Clear console">[CLEAR]</button>
+                                                <span class="terminal-pulse-badge">LIVE TTY</span>
+                                            </div>
                                         </div>
                                         <div class="compiler-console-wrapper">
                                             <pre class="compiler-log-terminal" id="arduino-compiler-log">[INIT] Arduino Workbench Ready.
@@ -482,6 +486,6 @@
         </main>
     </div>
 
-    <script type="module" src="/static/js/app.js?v=3.7"></script>
+    <script type="module" src="/static/js/app.js?v=3.8"></script>
 </body>
 </html>

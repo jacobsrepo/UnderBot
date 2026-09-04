@@ -117,6 +117,7 @@ class CortexBrain:
             "status": hw_info.get("status", "Unknown"),
             "sketch": self.active_sketch,
             "pins": pin_states,
+            "serial_log": hw_info.get("serial_log", "")
         }
 
     def receive_camera_frame(self, frame_b64: str):
@@ -172,6 +173,23 @@ class CortexBrain:
         )
         return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
 
+    def _detect_serial_output_intent(self, text: str) -> bool:
+        t = text.strip().lower()
+        phrases = (
+            "show serial com output", "show serial output", "show serial",
+            "show serial com", "show the serial com output", "show the serial output",
+            "show the serial com output show here", "show serial com output show here",
+            "show serial com output here", "show serial output here", "show com output",
+            "show com port output", "serial com output", "serial output", "serial monitor",
+            "read serial", "read serial port", "read com port", "read com4", "read com 4",
+            "whats the serial output", "what is the serial output", "whats on serial",
+            "what is on the serial port", "check serial output", "check serial com",
+            "check serial", "display serial output", "view serial output", "open serial monitor",
+            "print serial output", "show serial log", "serial log", "serial data", "com output",
+            "show com port", "show serial monitor"
+        )
+        return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
+
     def _detect_hardware_status_intent(self, text: str) -> bool:
         t = text.strip().lower()
         phrases = (
@@ -220,6 +238,28 @@ class CortexBrain:
                 await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
                 await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return status
+
+            elif name == "read_serial_output":
+                used_arduino = True
+                self.active_view_mode = "arduino"
+                lines_count = args.get("lines", 40)
+                serial_log = await self.device.get_serial_output(lines=lines_count)
+                self.active_sketch["log"] = serial_log
+                await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
+                await broadcast({
+                    "type": "arduino_serial_output",
+                    "content": serial_log,
+                    "replace": True
+                })
+                await broadcast({
+                    "type": "arduino_telemetry",
+                    "data": self.get_arduino_workbench_state()
+                })
+                return {
+                    "connected": self.device.is_connected,
+                    "port": self.device.port_name or "COM4",
+                    "output": serial_log
+                }
 
             elif name == "run_cli_command":
                 cmd = args.get("command", "")
@@ -678,6 +718,13 @@ class CortexBrain:
                 finally:
                     await asyncio.sleep(0.5)
                     await self.device.resume_serial()
+                    sketch_text = self.active_sketch.get("code", "")
+                    m_baud = re.search(r'Serial\.begin\s*\(\s*(\d+)\s*\)', sketch_text)
+                    if m_baud:
+                        try:
+                            await self.device.set_baudrate(int(m_baud.group(1)))
+                        except Exception:
+                            pass
 
                 if upload_success:
                     self.active_sketch["step"] = 5
@@ -816,6 +863,29 @@ class CortexBrain:
                 response = f"I have built and flashed '{target_name}' to the Arduino Nano on {target_port}. The upload is verified and running on the microcontroller."
             else:
                 response = f"Flash execution encountered an error: {flash_res.get('error') or flash_res.get('status')}."
+
+        elif self._detect_serial_output_intent(text_clean):
+            used_arduino = True
+            self.active_view_mode = "arduino"
+            stat = await execute_tool("check_hardware_connection", {})
+            serial_log = await self.device.get_serial_output(lines=40)
+            self.active_sketch["log"] = serial_log
+            await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
+            await broadcast({
+                "type": "arduino_serial_output",
+                "content": serial_log,
+                "replace": True
+            })
+            await broadcast({
+                "type": "arduino_telemetry",
+                "data": self.get_arduino_workbench_state()
+            })
+            if stat.get("connected"):
+                port_name = stat.get("port") or "COM4"
+                board_name = stat.get("name") or "Arduino Nano"
+                response = f"Connected to {board_name} on {port_name}. Showing live serial COM output in the Compiler & System Log terminal:\n\n```text\n{serial_log}\n```"
+            else:
+                response = "No Arduino board is currently detected on the COM ports. Please connect the microcontroller via USB to stream serial COM output."
 
         elif self._detect_hardware_status_intent(text_clean):
             stat = await execute_tool("check_hardware_connection", {})

@@ -5,6 +5,7 @@ Connects the UI to the Core Cortex Brain (Multimodal Vision, Web Research, Persi
 
 import asyncio
 import json
+import queue
 from pathlib import Path
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -22,9 +23,32 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 brain = CortexBrain()
 
 
+async def serial_stream_broadcaster():
+    """Continuously flush real-time incoming and outgoing serial lines to WebSocket clients."""
+    while True:
+        try:
+            lines = []
+            while not brain.device.worker.new_logs_queue.empty():
+                try:
+                    lines.append(brain.device.worker.new_logs_queue.get_nowait())
+                except queue.Empty:
+                    break
+            if lines and clients:
+                combined = "\n".join(lines)
+                await broadcast({
+                    "type": "arduino_serial_output",
+                    "content": combined,
+                    "replace": False
+                })
+        except Exception:
+            pass
+        await asyncio.sleep(0.1)
+
+
 @app.on_event("startup")
 async def on_startup():
     brain.camera.start_background_daemon()
+    asyncio.create_task(serial_stream_broadcaster())
 
 # ── Connected clients ────────────────────────────────────────────────
 clients: set[WebSocket] = set()
@@ -153,6 +177,22 @@ async def handle_message(ws: WebSocket, message: dict):
             "type": "chat_message",
             "role": "system",
             "content": f"Hardware Switch: Pin {pin_key} set to {state_str}."
+        })
+
+    elif msg_type == "get_serial_output":
+        output = brain.device.get_serial_output_sync(lines=50)
+        await ws.send_json({
+            "type": "arduino_serial_output",
+            "content": output,
+            "replace": True
+        })
+
+    elif msg_type == "clear_serial_log":
+        await brain.device.clear_serial_output()
+        await ws.send_json({
+            "type": "arduino_serial_output",
+            "content": "[INIT] Serial log cleared.",
+            "replace": True
         })
 
     elif msg_type == "demo_cycle":

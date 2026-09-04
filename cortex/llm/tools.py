@@ -17,6 +17,22 @@ CORTEX_TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "read_serial_output",
+            "description": "Read live serial COM port output and communication logs from the connected Arduino microcontroller (COM4). Call this whenever asked to show serial com output, read serial port, monitor serial output, or inspect incoming serial messages.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "lines": {
+                        "type": "integer",
+                        "description": "Number of recent lines to retrieve (default: 40)"
+                    }
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "run_cli_command",
             "description": "Execute a native Windows PowerShell command on the host system. Use this to inspect files, query system metrics, run scripts, check directory contents, or execute tools.",
             "parameters": {

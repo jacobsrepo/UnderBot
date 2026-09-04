@@ -9,6 +9,7 @@ import time
 import threading
 import queue
 import asyncio
+from collections import deque
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 import serial
@@ -32,6 +33,7 @@ class SerialWorker(threading.Thread):
         self.port_name: Optional[str] = None
         self.serial: Optional[serial.Serial] = None
         self.is_connected = False
+        self.is_paused = False
 
         self.cmd_queue: queue.Queue = queue.Queue()
         self.running = True
@@ -41,9 +43,21 @@ class SerialWorker(threading.Thread):
         self.device_name = "Arduino Nano"
         self.device_detail = "Scanning for physical USB connection..."
 
+        # Serial Monitor buffer and streaming
+        self.serial_history: deque = deque(maxlen=500)
+        self.serial_history.append("[INIT] Arduino Workbench Ready.")
+        self.serial_history.append(f"[INFO] Monitoring COM4 @ {self.baudrate} baud.")
+        self.serial_history.append("[STATUS] Live Serial TTY online.")
+        self._rx_line_buffer: str = ""
+        self.new_logs_queue: queue.Queue = queue.Queue()
+
         # Reconnection backoff state
         self.backoff_delay = 1.0
         self.last_heartbeat = time.time()
+
+    def _log_serial_event(self, msg: str):
+        self.serial_history.append(msg)
+        self.new_logs_queue.put(msg)
 
     def scan_available_ports(self) -> List[Dict[str, str]]:
         """Active probe of all physical COM ports currently attached."""
@@ -96,15 +110,16 @@ class SerialWorker(threading.Thread):
             self.serial = serial.Serial(
                 port=target_port,
                 baudrate=self.baudrate,
-                timeout=0.3,
+                timeout=0.2,
                 write_timeout=0.3
             )
-            time.sleep(0.5)
+            time.sleep(0.4)
             self.port_name = target_port
             self.is_connected = True
             self.device_detail = f"Online ({target_port} @ {self.baudrate} baud)"
             self.backoff_delay = 1.0
             print(f"[SerialWorker] Successfully connected to {self.device_name} on {target_port}")
+            self._log_serial_event(f"[SYSTEM] Connected to {self.device_name} on {target_port} @ {self.baudrate} baud.")
             return True
         except Exception as e:
             self.is_connected = False
@@ -113,6 +128,8 @@ class SerialWorker(threading.Thread):
             return False
 
     def _safe_disconnect(self):
+        was_conn = self.is_connected
+        prev_port = self.port_name
         self.is_connected = False
         self.port_name = None
         if self.serial:
@@ -123,15 +140,24 @@ class SerialWorker(threading.Thread):
                 pass
             self.serial = None
         self.device_detail = "Disconnected (USB connection lost)"
+        if was_conn:
+            self._log_serial_event(f"[SYSTEM] Disconnected from {prev_port or 'microcontroller'}.")
 
     def _execute_hardware_set_pin(self, pin_num: int, state: int) -> bool:
         if not (self.is_connected and self.serial and self.serial.is_open):
             return False
         try:
             cmd_str = f"SET {pin_num} {state}\n".encode('ascii')
+            self._log_serial_event(f"[TX {self.port_name or 'COM4'}] SET {pin_num} {state}")
             self.serial.write(cmd_str)
             self.serial.flush()
-            self.serial.readline()
+            time.sleep(0.02)
+            if self.serial.in_waiting > 0:
+                resp = self.serial.readline()
+                if resp:
+                    resp_text = resp.decode("utf-8", errors="replace").strip()
+                    if resp_text:
+                        self._log_serial_event(f"[RX {self.port_name or 'COM4'}] {resp_text}")
             return True
         except serial.SerialException as e:
             print(f"[SerialWorker] Hardware error: {e}")
@@ -143,14 +169,47 @@ class SerialWorker(threading.Thread):
             return False
         try:
             cmd_str = f"ALL {state}\n".encode('ascii')
+            self._log_serial_event(f"[TX {self.port_name or 'COM4'}] ALL {state}")
             self.serial.write(cmd_str)
             self.serial.flush()
-            self.serial.readline()
+            time.sleep(0.02)
+            if self.serial.in_waiting > 0:
+                resp = self.serial.readline()
+                if resp:
+                    resp_text = resp.decode("utf-8", errors="replace").strip()
+                    if resp_text:
+                        self._log_serial_event(f"[RX {self.port_name or 'COM4'}] {resp_text}")
             return True
         except serial.SerialException as e:
             print(f"[SerialWorker] Hardware error: {e}")
             self._safe_disconnect()
             return False
+
+    def _read_incoming_serial(self):
+        if not (self.is_connected and self.serial and self.serial.is_open and not getattr(self, "is_paused", False)):
+            return
+        try:
+            waiting = self.serial.in_waiting
+            if waiting > 0:
+                raw_bytes = self.serial.read(min(waiting, 2048))
+                if raw_bytes:
+                    text = raw_bytes.decode("utf-8", errors="replace")
+                    self._rx_line_buffer += text
+                    while "\n" in self._rx_line_buffer:
+                        line, self._rx_line_buffer = self._rx_line_buffer.split("\n", 1)
+                        line = line.strip("\r").strip()
+                        if line:
+                            self._log_serial_event(f"[{self.port_name or 'COM4'}] {line}")
+                    if len(self._rx_line_buffer) > 1024:
+                        line = self._rx_line_buffer.strip()
+                        if line:
+                            self._log_serial_event(f"[{self.port_name or 'COM4'}] {line}")
+                        self._rx_line_buffer = ""
+        except serial.SerialException as e:
+            print(f"[SerialWorker] Read error: {e}")
+            self._safe_disconnect()
+        except Exception:
+            pass
 
     def _execute_heartbeat(self):
         if not self.is_connected or not self.serial or not self.serial.is_open:
@@ -169,9 +228,12 @@ class SerialWorker(threading.Thread):
             try:
                 task: Optional[SerialTask] = None
                 try:
-                    task = self.cmd_queue.get(timeout=0.5)
+                    task = self.cmd_queue.get(timeout=0.05)
                 except queue.Empty:
                     pass
+
+                # Actively read any pending bytes from COM port
+                self._read_incoming_serial()
 
                 if task:
                     result = False
@@ -195,11 +257,13 @@ class SerialWorker(threading.Thread):
 
                     elif task.action == "pause":
                         self.is_paused = True
+                        self._log_serial_event("[SYSTEM] Serial port paused for firmware flashing.")
                         self._safe_disconnect()
                         result = True
 
                     elif task.action == "resume":
                         self.is_paused = False
+                        self._log_serial_event("[SYSTEM] Serial port resuming after flash.")
                         self._attempt_connect()
                         result = self.is_connected
 
@@ -216,6 +280,24 @@ class SerialWorker(threading.Thread):
 
                     elif task.action == "get_states":
                         result = dict(self.pin_states)
+
+                    elif task.action == "get_serial_log":
+                        n_lines = task.data.get("lines", 50)
+                        history = list(self.serial_history)
+                        result = history[-n_lines:] if n_lines > 0 else history
+
+                    elif task.action == "clear_serial_log":
+                        self.serial_history.clear()
+                        self.serial_history.append("[INIT] Serial log cleared.")
+                        result = True
+
+                    elif task.action == "set_baudrate":
+                        new_baud = task.data.get("baudrate", 115200)
+                        if new_baud != self.baudrate:
+                            self.baudrate = new_baud
+                            self._log_serial_event(f"[SYSTEM] Baud rate updated to {new_baud}. Reconnecting...")
+                            self._attempt_connect()
+                        result = True
 
                     # Return result to caller via event or future
                     if task.result_holder is not None:
@@ -236,7 +318,7 @@ class SerialWorker(threading.Thread):
 
             except Exception as e:
                 print(f"[SerialWorker] Worker exception: {e}")
-                time.sleep(0.5)
+                time.sleep(0.1)
 
 
 class SerialDevice:
@@ -316,6 +398,45 @@ class SerialDevice:
         self.worker.cmd_queue.put(task)
         return await future
 
+    async def get_serial_output(self, lines: int = 50) -> str:
+        """Retrieve recent serial COM output lines from the device buffer."""
+        loop = asyncio.get_running_loop()
+        future = loop.create_future()
+        task = SerialTask(
+            action="get_serial_log",
+            data={"lines": lines},
+            result_future=future
+        )
+        self.worker.cmd_queue.put(task)
+        history_list = await future
+        if isinstance(history_list, list):
+            return "\n".join(history_list) if history_list else f"[INFO] Monitoring {self.port_name or 'COM4'} @ {self.worker.baudrate} baud. Waiting for serial data..."
+        return str(history_list)
+
+    def get_serial_output_sync(self, lines: int = 50) -> str:
+        """Synchronous retrieval of serial output for state broadcasts."""
+        history = list(self.worker.serial_history)
+        recent = history[-lines:] if lines > 0 else history
+        if not recent:
+            return f"[INFO] Monitoring {self.port_name or 'COM4'} @ {self.worker.baudrate} baud. Waiting for serial data..."
+        return "\n".join(recent)
+
+    async def clear_serial_output(self) -> bool:
+        """Clear serial monitor buffer."""
+        loop = asyncio.get_running_loop()
+        future = loop.create_future()
+        task = SerialTask(action="clear_serial_log", data={}, result_future=future)
+        self.worker.cmd_queue.put(task)
+        return await future
+
+    async def set_baudrate(self, baudrate: int) -> bool:
+        """Change serial baud rate and reconnect."""
+        loop = asyncio.get_running_loop()
+        future = loop.create_future()
+        task = SerialTask(action="set_baudrate", data={"baudrate": baudrate}, result_future=future)
+        self.worker.cmd_queue.put(task)
+        return await future
+
     async def set_pin_async(self, pin: Any, state: int) -> bool:
         pin_num = self._parse_pin(pin)
         state = 1 if state else 0
@@ -391,6 +512,8 @@ class SerialDevice:
             "name": self.device_name,
             "port": self.port_name or "None (Disconnected)",
             "connected": self.is_connected,
+            "baudrate": self.worker.baudrate,
             "detail": self.device_detail,
-            "pins": self.get_all_states() if self.is_connected else {}
+            "pins": self.get_all_states() if self.is_connected else {},
+            "serial_log": self.get_serial_output_sync(lines=40)
         }

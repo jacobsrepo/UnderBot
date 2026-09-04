@@ -54,6 +54,8 @@ class CortexApp {
             digitalPinGrid:      document.getElementById('digital-pin-grid'),
             analogPinGrid:       document.getElementById('analog-pin-grid'),
             arduinoCompilerLog:  document.getElementById('arduino-compiler-log'),
+            btnReadSerial:       document.getElementById('btn-read-serial'),
+            btnClearLog:         document.getElementById('btn-clear-log'),
             actionTestPins:      document.getElementById('action-test-pins'),
             actionClearPins:     document.getElementById('action-clear-pins'),
             actionCheckHw:       document.getElementById('action-check-hw'),
@@ -203,6 +205,16 @@ class CortexApp {
 
         this.dom.actionCheckHw?.addEventListener('click', () => {
             this._wsSend({ type: 'arduino_quick_action', action: 'check_hardware' });
+        });
+
+        this.dom.btnReadSerial?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this._wsSend({ type: 'get_serial_output' });
+        });
+
+        this.dom.btnClearLog?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this._wsSend({ type: 'clear_serial_log' });
         });
 
         this.dom.liveVoiceBtn.addEventListener('click', () => this.toggleLiveVoice());
@@ -656,9 +668,17 @@ class CortexApp {
         }
 
         // Compiler / System Log Feed
-        if (this.dom.arduinoCompilerLog && sketch.log) {
-            this.dom.arduinoCompilerLog.textContent = sketch.log;
-            this.dom.arduinoCompilerLog.scrollTop = this.dom.arduinoCompilerLog.scrollHeight;
+        if (this.dom.arduinoCompilerLog) {
+            const curText = this.dom.arduinoCompilerLog.textContent.trim();
+            const isInitial = !curText || curText.includes('[INIT] Arduino Workbench Ready.');
+            if (isInitial) {
+                if (data.serial_log) {
+                    this.dom.arduinoCompilerLog.textContent = data.serial_log;
+                } else if (sketch && sketch.log) {
+                    this.dom.arduinoCompilerLog.textContent = sketch.log;
+                }
+                this.dom.arduinoCompilerLog.scrollTop = this.dom.arduinoCompilerLog.scrollHeight;
+            }
         }
     }
 
@@ -725,7 +745,29 @@ class CortexApp {
             case 'arduino_telemetry':
                 this.updateArduinoWorkbench(msg.data);
                 break;
+            case 'arduino_serial_output':
+                this.appendArduinoSerialOutput(msg.content, msg.replace === true);
+                break;
         }
+    }
+
+    appendArduinoSerialOutput(content, replace = false) {
+        if (!this.dom.arduinoCompilerLog || !content) return;
+        if (replace) {
+            this.dom.arduinoCompilerLog.textContent = content;
+        } else {
+            const current = this.dom.arduinoCompilerLog.textContent;
+            if (current && !current.endsWith('\n')) {
+                this.dom.arduinoCompilerLog.textContent += '\n' + content;
+            } else {
+                this.dom.arduinoCompilerLog.textContent += content;
+            }
+            const lines = this.dom.arduinoCompilerLog.textContent.split('\n');
+            if (lines.length > 500) {
+                this.dom.arduinoCompilerLog.textContent = lines.slice(-400).join('\n');
+            }
+        }
+        this.dom.arduinoCompilerLog.scrollTop = this.dom.arduinoCompilerLog.scrollHeight;
     }
 
     _setState(state) {
