@@ -36,14 +36,27 @@ class CortexApp {
             // Viewport buttons
             cameraTriggerBtn:    document.getElementById('camera-trigger-btn'),
             browserTriggerBtn:   document.getElementById('browser-trigger-btn'),
+            arduinoTriggerBtn:   document.getElementById('arduino-trigger-btn'),
             dualViewTriggerBtn:  document.getElementById('dual-view-trigger-btn'),
             // Screen Controls
             closeCameraBtn:      document.getElementById('close-camera-btn'),
             closeBrowserBtn:     document.getElementById('close-browser-btn'),
+            closeArduinoBtn:     document.getElementById('close-arduino-btn'),
             camSplitBtn:         document.getElementById('cam-split-btn'),
             browserSplitBtn:     document.getElementById('browser-split-btn'),
             cameraScreen:        document.getElementById('camera-screen'),
             browserScreen:       document.getElementById('browser-screen'),
+            arduinoScreen:       document.getElementById('arduino-screen'),
+            workbenchPortBadge:  document.getElementById('workbench-port-badge'),
+            workbenchFqbnBadge:  document.getElementById('workbench-fqbn-badge'),
+            workbenchSketchName: document.getElementById('workbench-sketch-name'),
+            workbenchStatusBadge:document.getElementById('workbench-status-badge'),
+            digitalPinGrid:      document.getElementById('digital-pin-grid'),
+            analogPinGrid:       document.getElementById('analog-pin-grid'),
+            arduinoCompilerLog:  document.getElementById('arduino-compiler-log'),
+            actionTestPins:      document.getElementById('action-test-pins'),
+            actionClearPins:     document.getElementById('action-clear-pins'),
+            actionCheckHw:       document.getElementById('action-check-hw'),
             browserUrlPill:      document.getElementById('browser-url-pill'),
             readerCategoryBadge: document.getElementById('reader-category-badge'),
             readerSourceBadge:   document.getElementById('reader-source-badge'),
@@ -148,6 +161,14 @@ class CortexApp {
             this.setViewMode(this.viewMode === 'browser' ? 'none' : 'browser');
         });
 
+        this.dom.arduinoTriggerBtn?.addEventListener('click', () => {
+            const nextMode = this.viewMode === 'arduino' ? 'none' : 'arduino';
+            this.setViewMode(nextMode);
+            if (nextMode === 'arduino') {
+                this._wsSend({ type: 'get_arduino_state' });
+            }
+        });
+
         this.dom.dualViewTriggerBtn.addEventListener('click', () => {
             this.setViewMode(this.viewMode === 'dual' ? 'none' : 'dual');
         });
@@ -166,6 +187,22 @@ class CortexApp {
 
         this.dom.closeBrowserBtn.addEventListener('click', () => {
             this.setViewMode(this.viewMode === 'dual' ? 'camera' : 'none');
+        });
+
+        this.dom.closeArduinoBtn?.addEventListener('click', () => {
+            this.setViewMode('none');
+        });
+
+        this.dom.actionTestPins?.addEventListener('click', () => {
+            this._wsSend({ type: 'arduino_quick_action', action: 'test_pins' });
+        });
+
+        this.dom.actionClearPins?.addEventListener('click', () => {
+            this._wsSend({ type: 'arduino_quick_action', action: 'clear_pins' });
+        });
+
+        this.dom.actionCheckHw?.addEventListener('click', () => {
+            this._wsSend({ type: 'arduino_quick_action', action: 'check_hardware' });
         });
 
         this.dom.liveVoiceBtn.addEventListener('click', () => this.toggleLiveVoice());
@@ -255,9 +292,10 @@ class CortexApp {
     async setViewMode(mode, data = null, msg = null) {
         this.viewMode = mode;
 
-        this.dom.mainStage.classList.remove('camera-active', 'browser-active', 'dual-active');
+        this.dom.mainStage.classList.remove('camera-active', 'browser-active', 'arduino-active', 'dual-active');
         this.dom.cameraTriggerBtn.classList.remove('active');
         this.dom.browserTriggerBtn.classList.remove('active');
+        this.dom.arduinoTriggerBtn?.classList.remove('active');
         this.dom.dualViewTriggerBtn.classList.remove('active');
 
         if (mode === 'browser' || mode === 'dual') {
@@ -268,6 +306,14 @@ class CortexApp {
             }
         } else {
             this.hideBrowserSearchingHud();
+        }
+
+        if (mode === 'arduino') {
+            if (data) {
+                this.updateArduinoWorkbench(data);
+            } else {
+                this._wsSend({ type: 'get_arduino_state' });
+            }
         }
 
         const isCameraNeeded = (mode === 'camera' || mode === 'dual');
@@ -288,6 +334,12 @@ class CortexApp {
                 this.dom.mainStage.classList.add('browser-active');
                 this.dom.browserTriggerBtn.classList.add('active');
                 this._setState('browsing');
+                break;
+
+            case 'arduino':
+                this.dom.mainStage.classList.add('arduino-active');
+                this.dom.arduinoTriggerBtn?.classList.add('active');
+                this._setState('programming');
                 break;
 
             case 'dual':
@@ -497,6 +549,91 @@ class CortexApp {
         }
     }
 
+    updateArduinoWorkbench(data) {
+        if (!data) return;
+        const sketch = data.sketch || {};
+        const pins = data.pins || {};
+
+        if (this.dom.workbenchPortBadge) {
+            this.dom.workbenchPortBadge.textContent = data.port || 'COM4';
+        }
+        if (this.dom.workbenchFqbnBadge) {
+            this.dom.workbenchFqbnBadge.textContent = data.fqbn || 'arduino:avr:uno';
+        }
+        if (this.dom.workbenchSketchName) {
+            this.dom.workbenchSketchName.textContent = sketch.name || 'active_sketch.ino';
+        }
+        if (this.dom.workbenchStatusBadge) {
+            const st = (sketch.status || (data.connected ? 'ONLINE' : 'DISCONNECTED')).toUpperCase();
+            this.dom.workbenchStatusBadge.textContent = st;
+            this.dom.workbenchStatusBadge.className = 'pipeline-status-badge';
+            if (st === 'VERIFIED' || st === 'ONLINE' || st === 'READY') {
+                this.dom.workbenchStatusBadge.classList.add('success');
+            } else if (st === 'COMPILING') {
+                this.dom.workbenchStatusBadge.classList.add('compiling');
+            } else if (st === 'FLASHING') {
+                this.dom.workbenchStatusBadge.classList.add('flashing');
+            } else if (st === 'FAILED' || st === 'DISCONNECTED') {
+                this.dom.workbenchStatusBadge.classList.add('error');
+            }
+        }
+
+        // Update 4 Pipeline Steps
+        const currentStep = sketch.step || 0;
+        for (let s = 1; s <= 4; s++) {
+            const el = document.getElementById(`pipe-step-${s}`);
+            if (!el) continue;
+            el.classList.remove('active', 'done');
+            if (s < currentStep) {
+                el.classList.add('done');
+            } else if (s === currentStep) {
+                el.classList.add('active');
+            }
+        }
+
+        // Render Pin Matrix: Digital D2 - D13
+        if (this.dom.digitalPinGrid) {
+            const digitalPins = ['D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12','D13'];
+            this.dom.digitalPinGrid.innerHTML = '';
+            digitalPins.forEach(pin => {
+                const val = pins[pin] ?? 0;
+                const isHigh = val === 1 || val === 'HIGH' || val === true;
+                const chip = document.createElement('div');
+                chip.className = `pin-chip ${isHigh ? 'high' : ''}`;
+                chip.innerHTML = `
+                    <span class="pin-chip-id">${pin}</span>
+                    <span class="pin-chip-dot"></span>
+                    <span class="pin-chip-val">${isHigh ? 'HIGH' : 'LOW'}</span>
+                `;
+                this.dom.digitalPinGrid.appendChild(chip);
+            });
+        }
+
+        // Render Pin Matrix: Analog A0 - A5
+        if (this.dom.analogPinGrid) {
+            const analogPins = ['A0','A1','A2','A3','A4','A5'];
+            this.dom.analogPinGrid.innerHTML = '';
+            analogPins.forEach(pin => {
+                const val = pins[pin] ?? 0;
+                const isHigh = val === 1 || val === 'HIGH' || val === true;
+                const chip = document.createElement('div');
+                chip.className = `pin-chip ${isHigh ? 'high' : ''}`;
+                chip.innerHTML = `
+                    <span class="pin-chip-id">${pin}</span>
+                    <span class="pin-chip-dot"></span>
+                    <span class="pin-chip-val">${isHigh ? 'HIGH' : 'LOW'}</span>
+                `;
+                this.dom.analogPinGrid.appendChild(chip);
+            });
+        }
+
+        // Compiler / System Log Feed
+        if (this.dom.arduinoCompilerLog && sketch.log) {
+            this.dom.arduinoCompilerLog.textContent = sketch.log;
+            this.dom.arduinoCompilerLog.scrollTop = this.dom.arduinoCompilerLog.scrollHeight;
+        }
+    }
+
     _connectWS() {
         const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
         this.ws = new WebSocket(`${proto}//${location.host}/ws`);
@@ -556,6 +693,9 @@ class CortexApp {
                 break;
             case 'device_update':
                 this._renderDevices(msg.devices);
+                break;
+            case 'arduino_telemetry':
+                this.updateArduinoWorkbench(msg.data);
                 break;
         }
     }

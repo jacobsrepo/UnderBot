@@ -336,7 +336,7 @@ body {
 
 .viewport-buttons-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 6px;
 }
 
@@ -375,6 +375,25 @@ body {
 .btn-browser.active {
     background: rgba(56, 189, 248, 0.35);
     border-color: #38bdf8;
+    color: #ffffff;
+}
+
+.btn-arduino {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #6ee7b7;
+}
+
+.btn-arduino:hover {
+    background: rgba(16, 185, 129, 0.28);
+    border-color: rgba(16, 185, 129, 0.6);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}
+
+.btn-arduino.active {
+    background: rgba(16, 185, 129, 0.35);
+    border-color: #34d399;
     color: #ffffff;
 }
 
@@ -621,6 +640,26 @@ body {
     pointer-events: auto;
     clip-path: circle(120% at 50% 50%);
     transform: scale(1.0);
+}
+
+/* ── 2b. Single Arduino Active State ───────────────────────────────── */
+.main-stage.arduino-active:not(.dual-active) .face-wrapper {
+    transform: translate(-390px, -170px) scale(0.36);
+}
+
+.main-stage.arduino-active:not(.dual-active) .status-header {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+.main-stage.arduino-active:not(.dual-active) #arduino-screen {
+    opacity: 1;
+    pointer-events: auto;
+    clip-path: circle(120% at 50% 50%);
+    transform: scale(1.0);
+    width: 860px;
+    height: 440px;
 }
 
 /* ── 3. Dual Split Mode (Vision + Web Simultaneously) ──────────────── */
@@ -1320,6 +1359,400 @@ body {
     background: var(--bg-card-hover);
     border-color: var(--theme-accent, #86efac);
     color: var(--theme-accent, #86efac);
+}
+
+/* ── Hardware Workbench & Arduino Viewport ─────────────────────────── */
+.arduino-header {
+    background: rgba(0, 0, 0, 0.55);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    padding: 10px 16px 10px 68px;
+}
+
+.arduino-nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.arduino-meta-pill {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 3px 10px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #38bdf8;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    user-select: none;
+}
+
+.arduino-port-text {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.arduino-divider {
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+.arduino-fqbn-text {
+    color: #7dd3fc;
+    font-size: 10px;
+}
+
+.arduino-body {
+    background: #080a0f;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.arduino-workbench-container {
+    width: 100%;
+    height: 100%;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.workbench-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.workbench-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.workbench-card-title {
+    font-size: 9.5px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 0.8px;
+}
+
+.workbench-sketch-name {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.pipeline-status-badge {
+    font-size: 9px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.pipeline-status-badge.success {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+.pipeline-status-badge.compiling {
+    background: rgba(234, 179, 8, 0.15);
+    color: #facc15;
+    border-color: rgba(234, 179, 8, 0.4);
+    animation: pipelinePulse 1.2s infinite;
+}
+
+.pipeline-status-badge.flashing {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    border-color: rgba(168, 85, 247, 0.4);
+    animation: pipelinePulse 1.2s infinite;
+}
+
+.pipeline-status-badge.error {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+@keyframes pipelinePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.65; transform: scale(0.97); }
+}
+
+/* 4-Step Pipeline HUD */
+.pipeline-steps-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 4px 2px 2px 2px;
+}
+
+.pipeline-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.45;
+    transition: all 0.3s ease;
+}
+
+.pipeline-step.active {
+    opacity: 1;
+    transform: scale(1.03);
+}
+
+.pipeline-step.done {
+    opacity: 0.95;
+}
+
+.step-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9.5px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    transition: all 0.25s ease;
+}
+
+.pipeline-step.active .step-circle {
+    border-color: #38bdf8;
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+}
+
+.pipeline-step.done .step-circle {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+}
+
+.step-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: color 0.25s ease;
+}
+
+.pipeline-step.active .step-label {
+    color: #ffffff;
+}
+
+.pipeline-step.done .step-label {
+    color: #4ade80;
+}
+
+.pipeline-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    margin: 0 4px;
+    transition: background 0.3s ease;
+}
+
+.pipeline-connector.active {
+    background: linear-gradient(90deg, #22c55e, #38bdf8);
+}
+
+/* Grid Row for Pin Matrix & Compiler Log */
+.workbench-grid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+}
+
+.pins-card, .log-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 220px;
+}
+
+.pin-quick-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-workbench-action {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-workbench-action:hover {
+    background: rgba(56, 189, 248, 0.16);
+    border-color: #38bdf8;
+    color: #ffffff;
+}
+
+.pins-matrix-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.pins-subgroup-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+
+.pin-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+}
+
+.pin-chip {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 4px 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.2s ease;
+    cursor: default;
+    user-select: none;
+}
+
+.pin-chip:hover {
+    border-color: var(--border-light);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.pin-chip.high {
+    border-color: rgba(34, 197, 94, 0.6);
+    background: rgba(34, 197, 94, 0.16);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.25);
+}
+
+.pin-chip-id {
+    font-size: 9.5px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-secondary);
+}
+
+.pin-chip.high .pin-chip-id {
+    color: #ffffff;
+}
+
+.pin-chip-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: all 0.2s ease;
+}
+
+.pin-chip.high .pin-chip-dot {
+    background: #4ade80;
+    box-shadow: 0 0 7px #4ade80;
+}
+
+.pin-chip-val {
+    font-size: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+}
+
+.pin-chip.high .pin-chip-val {
+    color: #4ade80;
+    font-weight: 700;
+}
+
+/* Terminal Log Feed */
+.compiler-console-wrapper {
+    flex: 1;
+    min-height: 0;
+    background: #06070a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+}
+
+.compiler-log-terminal {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 8px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    line-height: 1.45;
+    color: #a5f3fc;
+    background: transparent;
+    border: none;
+    resize: none;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    box-sizing: border-box;
+}
+
+.terminal-pulse-badge {
+    font-size: 8.5px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 1px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
 }
 
 /* ── Camera Screen Overlays ────────────────────────────────────────── */

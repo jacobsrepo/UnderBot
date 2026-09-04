@@ -89,8 +89,34 @@ class CortexBrain:
         self.active_view_mode = "none"
         self.name = "Cortex"
 
+        # Active Hardware / Arduino Context & Workbench State
+        self.active_sketch: Dict[str, Any] = {
+            "name": "cortex_sketch",
+            "code": "",
+            "path": "",
+            "port": "COM4",
+            "fqbn": "arduino:avr:nano",
+            "status": "ready",
+            "log": "Hardware workbench ready. Awaiting firmware synthesis or pin actuation.",
+            "step": 0,
+            "step_name": "idle",
+            "pin_map": {}
+        }
+
     def get_hardware_status(self) -> Dict[str, Any]:
         return self.device.get_status_info()
+
+    def get_arduino_workbench_state(self) -> Dict[str, Any]:
+        hw_info = self.device.get_status_info()
+        pin_states = self.device.get_all_states()
+        return {
+            "device": hw_info.get("name", "Arduino Nano"),
+            "port": hw_info.get("port", "COM4"),
+            "connected": hw_info.get("connected", False),
+            "status": hw_info.get("status", "Unknown"),
+            "sketch": self.active_sketch,
+            "pins": pin_states,
+        }
 
     def receive_camera_frame(self, frame_b64: str):
         self.camera.update_frame(frame_b64)
@@ -147,11 +173,13 @@ class CortexBrain:
 
         used_web_search = False
         used_camera = False
+        used_arduino = False
 
         # Tool execution router
         async def execute_tool(name: str, args: Dict[str, Any]) -> Any:
-            nonlocal used_web_search, used_camera
+            nonlocal used_web_search, used_camera, used_arduino
             if name == "check_hardware_connection":
+                used_arduino = True
                 status = await self.device.check_hardware_status()
                 conn_str = "CONNECTED" if status.get("connected") else "DISCONNECTED"
                 await broadcast({
@@ -159,6 +187,7 @@ class CortexBrain:
                     "role": "system",
                     "content": f"Hardware Sensor: Microcontroller is {conn_str} ({status.get('status')})"
                 })
+                await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return status
 
             elif name == "run_cli_command":
@@ -189,6 +218,7 @@ class CortexBrain:
 
             elif name == "probe_and_identify_led_pin":
                 used_camera = True
+                used_arduino = True
                 self.active_view_mode = "camera"
                 if not self.device.is_connected:
                     await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: No Arduino board connected. Pin probing aborted."})
@@ -209,6 +239,7 @@ class CortexBrain:
                 else:
                     await broadcast({"type": "facial_expression", "mood": "skeptical", "eye_shape": "squint", "glow_color": "#f59e0b"})
 
+                await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return probe_result
 
             elif name == "inspect_camera":
@@ -225,6 +256,8 @@ class CortexBrain:
                 return vision_result
 
             elif name == "set_arduino_pin":
+                used_arduino = True
+                self.active_view_mode = "arduino"
                 if not self.device.is_connected:
                     await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: Pin actuation rejected (No Arduino connected)."})
                     return {"error": "Hardware Actuation Failed: No Arduino board is physically connected to the computer.", "connected": False}
@@ -235,9 +268,12 @@ class CortexBrain:
                 state_str = "HIGH (ON)" if state else "LOW (OFF)"
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Actuation: Pin {pin} -> {state_str}"})
                 await broadcast({"type": "device_update", "devices": [self.device.get_status_info()]})
+                await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return {"status": "success" if success else "failed", "pin": str(pin), "state": state_str}
 
             elif name == "set_all_arduino_pins":
+                used_arduino = True
+                self.active_view_mode = "arduino"
                 if not self.device.is_connected:
                     await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: Actuation rejected (No Arduino connected)."})
                     return {"error": "Hardware Actuation Failed: No Arduino board is physically connected to the computer.", "connected": False}
@@ -247,10 +283,13 @@ class CortexBrain:
                 state_str = "HIGH (ON)" if state else "LOW (OFF)"
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Actuation: All pins -> {state_str}"})
                 await broadcast({"type": "device_update", "devices": [self.device.get_status_info()]})
+                await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return {"status": "success" if success else "failed", "pins": "D2-D13, A0-A5", "state": state_str}
 
             elif name == "get_pin_states":
+                used_arduino = True
                 states = self.device.get_all_states()
+                await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return {"pin_states": states, "device": self.device.device_name}
 
             elif name == "search_or_browse_web":
@@ -290,6 +329,8 @@ class CortexBrain:
                 return {"results": self.knowledge.search_facts(q)}
 
             elif name == "build_and_flash_sketch":
+                used_arduino = True
+                self.active_view_mode = "arduino"
                 sketch_code = args.get("sketch_code", "").strip()
                 sketch_name = args.get("sketch_name", "cortex_pin_test").strip()
                 sketch_name = re.sub(r'[^a-zA-Z0-9_]', '_', sketch_name) or "cortex_sketch"
@@ -311,14 +352,6 @@ class CortexBrain:
                 with open(sketch_file, "w", encoding="utf-8") as f:
                     f.write(sketch_code)
 
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Created '{sketch_name}.ino'. Building for {fqbn}..."})
-
-                # Locate arduino-cli
-                bin_dir = os.path.join(cortex_dir, "bin")
-                arduino_cli = os.path.join(bin_dir, "arduino-cli.exe")
-                if not os.path.exists(arduino_cli):
-                    arduino_cli = "arduino-cli"
-
                 # Auto-detect target port
                 target_port = port
                 if not target_port:
@@ -333,10 +366,37 @@ class CortexBrain:
                 if not target_port:
                     target_port = "COM4"
 
+                # Update active sketch context and open Hardware Workbench Viewport
+                self.active_sketch["name"] = sketch_name
+                self.active_sketch["code"] = sketch_code
+                self.active_sketch["path"] = sketch_file
+                self.active_sketch["port"] = target_port
+                self.active_sketch["fqbn"] = fqbn
+                self.active_sketch["step"] = 1
+                self.active_sketch["step_name"] = "synthesis"
+                self.active_sketch["status"] = "compiling"
+                self.active_sketch["log"] = f"Created '{sketch_name}.ino'. Building for {fqbn} on {target_port}."
+
+                await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
+                await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Created '{sketch_name}.ino'. Building for {fqbn}..."})
+
+                # Locate arduino-cli
+                bin_dir = os.path.join(cortex_dir, "bin")
+                arduino_cli = os.path.join(bin_dir, "arduino-cli.exe")
+                if not os.path.exists(arduino_cli):
+                    arduino_cli = "arduino-cli"
+
                 # Compile with auto-library installation retry loop
                 compile_success = False
                 compile_stdout = ""
                 compile_stderr = ""
+
+                self.active_sketch["step"] = 2
+                self.active_sketch["step_name"] = "compiling"
+                await broadcast({"type": "arduino_telemetry", "data": {
+                    **self.get_arduino_workbench_state(),
+                    "log": f"Invoking: arduino-cli compile --fqbn {fqbn} {sketch_file}..."
+                }})
 
                 for attempt in range(4):
                     comp_proc = await asyncio.create_subprocess_exec(
@@ -356,6 +416,12 @@ class CortexBrain:
                     lib_match = re.search(r'fatal error:\s*([a-zA-Z0-9_\-]+)\.h:\s*No such file', combined_err, re.IGNORECASE)
                     if lib_match:
                         missing_lib = lib_match.group(1)
+                        self.active_sketch["step"] = 3
+                        self.active_sketch["step_name"] = "library_resolution"
+                        await broadcast({"type": "arduino_telemetry", "data": {
+                            **self.get_arduino_workbench_state(),
+                            "log": f"Dependency Resolver: Missing library '{missing_lib}'. Installing via arduino-cli..."
+                        }})
                         await broadcast({"type": "chat_message", "role": "system", "content": f"Dependency Resolver: Installing '{missing_lib}'..."})
                         install_proc = await asyncio.create_subprocess_exec(
                             arduino_cli, "lib", "install", missing_lib,
@@ -368,10 +434,21 @@ class CortexBrain:
                         break
 
                 if not compile_success:
+                    self.active_sketch["status"] = "compile_failed"
+                    self.active_sketch["log"] = compile_stderr or compile_stdout
+                    await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                     await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler Error:\n{compile_stderr or compile_stdout}"})
                     await broadcast({"type": "facial_expression", "mood": "skeptical", "eye_shape": "squint", "glow_color": "#ef4444"})
                     return {"status": "compile_failed", "stdout": compile_stdout, "stderr": compile_stderr}
 
+                # Upload step
+                self.active_sketch["step"] = 4
+                self.active_sketch["step_name"] = "flashing"
+                self.active_sketch["status"] = "flashing"
+                await broadcast({"type": "arduino_telemetry", "data": {
+                    **self.get_arduino_workbench_state(),
+                    "log": f"Compilation passed. Uploading to {target_port} via avrdude..."
+                }})
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash: Flashing build to microcontroller on {target_port}..."})
 
                 # Safely pause serial worker
@@ -399,6 +476,11 @@ class CortexBrain:
                     await self.device.resume_serial()
 
                 if upload_success:
+                    self.active_sketch["step"] = 5
+                    self.active_sketch["step_name"] = "verified"
+                    self.active_sketch["status"] = "verified"
+                    self.active_sketch["log"] = upload_stdout or "Flash verified 100%. Firmware running on microcontroller."
+                    await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                     await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash: Successfully flashed to {target_port}!"})
                     await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
                     return {
@@ -409,6 +491,9 @@ class CortexBrain:
                         "detail": upload_stdout or "Flash verified 100%."
                     }
                 else:
+                    self.active_sketch["status"] = "upload_failed"
+                    self.active_sketch["log"] = upload_stderr or upload_stdout
+                    await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                     await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash Error: {upload_stderr or upload_stdout}"})
                     await broadcast({"type": "facial_expression", "mood": "alert", "eye_shape": "wide", "glow_color": "#ef4444"})
                     return {
@@ -418,6 +503,8 @@ class CortexBrain:
                     }
 
             elif name == "compile_and_upload_sketch":
+                used_arduino = True
+                self.active_view_mode = "arduino"
                 sketch_path = args.get("sketch_path", "").strip().strip('\'"')
                 port = args.get("port", "").strip()
                 fqbn = args.get("fqbn", "arduino:avr:nano").strip()
@@ -450,12 +537,38 @@ class CortexBrain:
                 if not target_port:
                     target_port = "COM4"
 
+                # Update active sketch context and open Hardware Workbench Viewport
+                sketch_name = os.path.splitext(os.path.basename(sketch_path))[0]
+                self.active_sketch["name"] = sketch_name
+                self.active_sketch["path"] = sketch_path
+                self.active_sketch["port"] = target_port
+                self.active_sketch["fqbn"] = fqbn
+                self.active_sketch["step"] = 1
+                self.active_sketch["step_name"] = "synthesis"
+                self.active_sketch["status"] = "compiling"
+                self.active_sketch["log"] = f"Located '{os.path.basename(sketch_path)}'. Building for {fqbn} on {target_port}."
+
+                # Try loading sketch code for future quick flashes
+                try:
+                    with open(sketch_path, "r", encoding="utf-8", errors="ignore") as f:
+                        self.active_sketch["code"] = f.read()
+                except Exception:
+                    pass
+
+                await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Building sketch '{os.path.basename(sketch_path)}' for {fqbn}..."})
 
                 # Compile with auto-library installation retry loop
                 compile_success = False
                 compile_stdout = ""
                 compile_stderr = ""
+
+                self.active_sketch["step"] = 2
+                self.active_sketch["step_name"] = "compiling"
+                await broadcast({"type": "arduino_telemetry", "data": {
+                    **self.get_arduino_workbench_state(),
+                    "log": f"Invoking arduino-cli compile --fqbn {fqbn} {sketch_path}..."
+                }})
 
                 for attempt in range(4):
                     comp_proc = await asyncio.create_subprocess_exec(
@@ -471,11 +584,16 @@ class CortexBrain:
                         compile_success = True
                         break
 
-                    # Check for missing library header (e.g. fatal error: RTClib.h: No such file or directory)
                     combined_err = f"{compile_stdout}\n{compile_stderr}"
                     lib_match = re.search(r'fatal error:\s*([a-zA-Z0-9_\-]+)\.h:\s*No such file', combined_err, re.IGNORECASE)
                     if lib_match:
                         missing_lib = lib_match.group(1)
+                        self.active_sketch["step"] = 3
+                        self.active_sketch["step_name"] = "library_resolution"
+                        await broadcast({"type": "arduino_telemetry", "data": {
+                            **self.get_arduino_workbench_state(),
+                            "log": f"Dependency Resolver: Missing library '{missing_lib}'. Installing via arduino-cli..."
+                        }})
                         await broadcast({"type": "chat_message", "role": "system", "content": f"Dependency Resolver: Missing library '{missing_lib}' detected. Installing via arduino-cli..."})
                         install_proc = await asyncio.create_subprocess_exec(
                             arduino_cli, "lib", "install", missing_lib,
@@ -489,10 +607,21 @@ class CortexBrain:
                         break
 
                 if not compile_success:
+                    self.active_sketch["status"] = "compile_failed"
+                    self.active_sketch["log"] = compile_stderr or compile_stdout
+                    await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                     await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler Error:\n{compile_stderr or compile_stdout}"})
                     await broadcast({"type": "facial_expression", "mood": "skeptical", "eye_shape": "squint", "glow_color": "#ef4444"})
                     return {"status": "compile_failed", "stdout": compile_stdout, "stderr": compile_stderr}
 
+                # Upload step
+                self.active_sketch["step"] = 4
+                self.active_sketch["step_name"] = "flashing"
+                self.active_sketch["status"] = "flashing"
+                await broadcast({"type": "arduino_telemetry", "data": {
+                    **self.get_arduino_workbench_state(),
+                    "log": f"Build passed. Uploading to {target_port} via avrdude..."
+                }})
                 await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Build passed. Flashing microcontroller on {target_port}..."})
 
                 # Safely pause serial worker to prevent COM port lock collision
@@ -516,11 +645,15 @@ class CortexBrain:
                 except asyncio.TimeoutError:
                     upload_stderr = "Flash upload timed out after 45 seconds."
                 finally:
-                    # Always resume serial worker
                     await asyncio.sleep(0.5)
                     await self.device.resume_serial()
 
                 if upload_success:
+                    self.active_sketch["step"] = 5
+                    self.active_sketch["step_name"] = "verified"
+                    self.active_sketch["status"] = "verified"
+                    self.active_sketch["log"] = upload_stdout or "Flash verified 100%. Firmware running on microcontroller."
+                    await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                     await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash: Firmware successfully uploaded to {target_port}!"})
                     await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
                     return {
@@ -531,6 +664,9 @@ class CortexBrain:
                         "detail": upload_stdout or "Flash verified 100%."
                     }
                 else:
+                    self.active_sketch["status"] = "upload_failed"
+                    self.active_sketch["log"] = upload_stderr or upload_stdout
+                    await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                     await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash Error: {upload_stderr or upload_stdout}"})
                     await broadcast({"type": "facial_expression", "mood": "alert", "eye_shape": "wide", "glow_color": "#ef4444"})
                     return {
@@ -582,11 +718,82 @@ class CortexBrain:
 
         history = self.conv_memory.get_recent_history(limit=8)
 
+        # Detect and auto-cache any referenced .ino sketch file from the user's prompt
+        ino_match = re.search(r'(?:file:///)?([a-zA-Z]:[\\/][^"\';\n\r]+\.ino)', text_clean)
+        if ino_match:
+            clean_ino_path = ino_match.group(1).replace('/', '\\')
+            if os.path.exists(clean_ino_path):
+                try:
+                    with open(clean_ino_path, 'r', encoding='utf-8', errors='ignore') as f:
+                        ino_content = f.read()
+                    self.active_sketch["path"] = clean_ino_path
+                    self.active_sketch["name"] = os.path.splitext(os.path.basename(clean_ino_path))[0]
+                    self.active_sketch["code"] = ino_content
+                    self.active_sketch["status"] = "loaded"
+                    self.active_sketch["log"] = f"Loaded '{os.path.basename(clean_ino_path)}' ({len(ino_content)} bytes). Ready to compile or flash."
+                    await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
+                except Exception as e:
+                    print(f"[Brain] Error reading .ino: {e}")
+
+        # Check for direct flash / upload directive
+        is_direct_flash = any(text_clean.lower() == p or text_clean.lower().startswith(p + " ") for p in (
+            "flash it", "flash", "you didn't flash yet", "you didnt flash yet",
+            "you didn't flash", "you didnt flash", "upload it", "upload", "reflash",
+            "flash the code", "flash the sketch", "flash now"
+        ))
+
         # Check for direct web research / live news intent
         is_search = any(text_clean.lower().startswith(p) for p in ("search ", "web search ", "google ", "browse ", "lookup "))
         is_news = self.surfer._is_news_intent(text_clean) and not any(k in text_clean.lower() for k in ("arduino", "board", "microcontroller", "pin", "led", "com4", "usb"))
 
-        if is_search or is_news:
+        if is_direct_flash:
+            target_code = self.active_sketch.get("code", "").strip()
+            target_path = self.active_sketch.get("path", "").strip()
+            target_name = self.active_sketch.get("name", "cortex_sketch")
+            target_port = self.active_sketch.get("port", "COM4")
+            target_fqbn = self.active_sketch.get("fqbn", "arduino:avr:nano")
+
+            if target_code:
+                flash_res = await execute_tool("build_and_flash_sketch", {
+                    "sketch_code": target_code,
+                    "sketch_name": target_name,
+                    "port": target_port,
+                    "fqbn": target_fqbn
+                })
+            elif target_path and os.path.exists(target_path):
+                flash_res = await execute_tool("compile_and_upload_sketch", {
+                    "sketch_path": target_path,
+                    "port": target_port,
+                    "fqbn": target_fqbn
+                })
+            else:
+                # Default pin cycle fallback sketch
+                default_pin_test = (
+                    "void setup() {\n"
+                    "  for(int p=2; p<=13; p++) pinMode(p, OUTPUT);\n"
+                    "}\n"
+                    "void loop() {\n"
+                    "  for(int p=2; p<=13; p++) {\n"
+                    "    digitalWrite(p, HIGH);\n"
+                    "    delay(100);\n"
+                    "    digitalWrite(p, LOW);\n"
+                    "  }\n"
+                    "}\n"
+                )
+                flash_res = await execute_tool("build_and_flash_sketch", {
+                    "sketch_code": default_pin_test,
+                    "sketch_name": "cortex_pin_cycle",
+                    "port": target_port,
+                    "fqbn": target_fqbn
+                })
+                target_name = "cortex_pin_cycle"
+
+            if flash_res.get("status") == "success":
+                response = f"I have built and flashed '{target_name}' to the Arduino Nano on {target_port}. The upload is verified and running on the microcontroller."
+            else:
+                response = f"Flash execution encountered an error: {flash_res.get('error') or flash_res.get('status')}."
+
+        elif is_search or is_news:
             search_query = re.sub(r'^(search for|web search for|google|browse|lookup|search)\s+', '', text_clean, flags=re.IGNORECASE).strip()
             if not search_query:
                 search_query = text_clean
@@ -641,13 +848,18 @@ class CortexBrain:
                 "text": tts_text
             })
 
-        # Auto-dismiss viewports if user shifted topic away from web or camera
+        # Auto-dismiss viewports if user shifted topic away
         if self.active_view_mode == "browser" and not used_web_search:
             await broadcast({"type": "set_view_mode", "mode": "none"})
             self.active_view_mode = "none"
         elif self.active_view_mode == "camera" and not used_camera:
             await broadcast({"type": "set_view_mode", "mode": "none"})
             self.active_view_mode = "none"
+        elif self.active_view_mode == "arduino" and not used_arduino:
+            # Only dismiss hardware workbench if user clearly changed topics to web search or vision
+            if is_search or is_news or used_camera:
+                await broadcast({"type": "set_view_mode", "mode": "none"})
+                self.active_view_mode = "none"
 
         await broadcast({"type": "state_change", "state": "idle"})
         return tts_text

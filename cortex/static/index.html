@@ -91,6 +91,21 @@
                         </svg>
                         <span>Browser</span>
                     </button>
+                    <button id="arduino-trigger-btn" class="btn btn-arduino">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <rect x="9" y="9" width="6" height="6"/>
+                            <line x1="9" y1="1" x2="9" y2="4"/>
+                            <line x1="15" y1="1" x2="15" y2="4"/>
+                            <line x1="9" y1="20" x2="9" y2="23"/>
+                            <line x1="15" y1="20" x2="15" y2="23"/>
+                            <line x1="20" y1="9" x2="23" y2="9"/>
+                            <line x1="20" y1="14" x2="23" y2="14"/>
+                            <line x1="1" y1="9" x2="4" y2="9"/>
+                            <line x1="1" y1="14" x2="4" y2="14"/>
+                        </svg>
+                        <span>Arduino</span>
+                    </button>
                 </div>
                 <button id="dual-view-trigger-btn" class="btn btn-dual">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -272,6 +287,118 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- ── 3. Live Arduino & Hardware Workbench Screen ─────── -->
+                    <div id="arduino-screen" class="viewport-screen arduino-screen">
+                        <div class="screen-header arduino-header">
+                            <div class="arduino-nav-bar">
+                                <span class="badge-dot" id="arduino-status-dot" style="background: var(--theme-accent, #38bdf8); box-shadow: 0 0 6px var(--theme-accent, #38bdf8);"></span>
+                                <div class="arduino-meta-pill">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;flex-shrink:0;">
+                                        <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                        <rect x="9" y="9" width="6" height="6"/>
+                                        <line x1="9" y1="1" x2="9" y2="4"/>
+                                        <line x1="15" y1="1" x2="15" y2="4"/>
+                                        <line x1="9" y1="20" x2="9" y2="23"/>
+                                        <line x1="15" y1="20" x2="15" y2="23"/>
+                                        <line x1="20" y1="9" x2="23" y2="9"/>
+                                        <line x1="20" y1="14" x2="23" y2="14"/>
+                                        <line x1="1" y1="9" x2="4" y2="9"/>
+                                        <line x1="1" y1="14" x2="4" y2="14"/>
+                                    </svg>
+                                    <span class="arduino-port-text" id="workbench-port-badge">COM4</span>
+                                    <span class="arduino-divider">|</span>
+                                    <span class="arduino-fqbn-text" id="workbench-fqbn-badge">arduino:avr:uno</span>
+                                </div>
+                            </div>
+                            <div class="screen-header-controls">
+                                <button id="action-check-hw" class="btn-screen-tool" title="Scan & Verify Hardware (COM4)">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                                    </svg>
+                                </button>
+                                <button id="close-arduino-btn" class="btn-close-screen" title="Dismiss Arduino Workbench">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="screen-body arduino-body">
+                            <div class="arduino-workbench-container">
+                                <!-- Top Status & Pipeline HUD -->
+                                <div class="workbench-card pipeline-card">
+                                    <div class="workbench-card-header">
+                                        <div class="card-title-group">
+                                            <span class="workbench-card-title">COMPILER & FLASH PIPELINE</span>
+                                            <span class="workbench-sketch-name" id="workbench-sketch-name">active_sketch.ino</span>
+                                        </div>
+                                        <span class="pipeline-status-badge" id="workbench-status-badge">READY</span>
+                                    </div>
+                                    <div class="pipeline-steps-row">
+                                        <div class="pipeline-step" id="pipe-step-1" data-step="1">
+                                            <div class="step-circle">1</div>
+                                            <span class="step-label">Synthesis</span>
+                                        </div>
+                                        <div class="pipeline-connector"></div>
+                                        <div class="pipeline-step" id="pipe-step-2" data-step="2">
+                                            <div class="step-circle">2</div>
+                                            <span class="step-label">Compiling</span>
+                                        </div>
+                                        <div class="pipeline-connector"></div>
+                                        <div class="pipeline-step" id="pipe-step-3" data-step="3">
+                                            <div class="step-circle">3</div>
+                                            <span class="step-label">Upload</span>
+                                        </div>
+                                        <div class="pipeline-connector"></div>
+                                        <div class="pipeline-step" id="pipe-step-4" data-step="4">
+                                            <div class="step-circle">4</div>
+                                            <span class="step-label">Verified</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Middle Split: Pin Matrix & Compiler Terminal -->
+                                <div class="workbench-grid-row">
+                                    <!-- 16-Pin Visual Matrix Card -->
+                                    <div class="workbench-card pins-card">
+                                        <div class="workbench-card-header">
+                                            <span class="workbench-card-title">GPIO PIN STATE MATRIX</span>
+                                            <div class="pin-quick-actions">
+                                                <button id="action-test-pins" class="btn-workbench-action" title="Cycle Digital Pins Test">Cycle High</button>
+                                                <button id="action-clear-pins" class="btn-workbench-action" title="Reset Pins to Low">Clear All</button>
+                                            </div>
+                                        </div>
+                                        <div class="pins-matrix-wrapper">
+                                            <div class="pins-subgroup">
+                                                <div class="pins-subgroup-label">DIGITAL I/O (D2 - D13)</div>
+                                                <div class="pin-grid" id="digital-pin-grid"></div>
+                                            </div>
+                                            <div class="pins-subgroup">
+                                                <div class="pins-subgroup-label">ANALOG / EXPANSION (A0 - A5)</div>
+                                                <div class="pin-grid" id="analog-pin-grid"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Real-time Compiler & Serial Monitor Output -->
+                                    <div class="workbench-card log-card">
+                                        <div class="workbench-card-header">
+                                            <span class="workbench-card-title">COMPILER & SYSTEM LOG</span>
+                                            <span class="terminal-pulse-badge">LIVE TTY</span>
+                                        </div>
+                                        <div class="compiler-console-wrapper">
+                                            <pre class="compiler-log-terminal" id="arduino-compiler-log">[INIT] Arduino Workbench Ready.
+[INFO] Monitoring COM4 @ 115200 baud.
+[STATUS] Ready for sketch compilation or pin actuation.</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- ── 3. Animated Robot Face (Avatar) ──────────────────── -->
@@ -352,6 +479,6 @@
         </main>
     </div>
 
-    <script type="module" src="/static/js/app.js?v=3.5"></script>
+    <script type="module" src="/static/js/app.js?v=3.6"></script>
 </body>
 </html>

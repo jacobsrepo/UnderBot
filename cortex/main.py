@@ -115,6 +115,21 @@ async def handle_message(ws: WebSocket, message: dict):
         if frame:
             brain.receive_camera_frame(frame)
 
+    elif msg_type == "get_arduino_state":
+        await ws.send_json({
+            "type": "arduino_telemetry",
+            "data": brain.get_arduino_workbench_state()
+        })
+
+    elif msg_type == "arduino_quick_action":
+        action = message.get("action")
+        if action == "test_pins":
+            await brain.process_user_message("test all digital and analog pins on the arduino", broadcast)
+        elif action == "clear_pins":
+            await brain.process_user_message("turn off all pins on the arduino", broadcast)
+        elif action == "check_hardware":
+            await brain.process_user_message("check hardware connection", broadcast)
+
     elif msg_type == "demo_cycle":
         states = [
             ("listening", "Listening to microphone audio stream…"),
