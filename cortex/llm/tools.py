@@ -155,7 +155,7 @@ CORTEX_TOOLS = [
         "type": "function",
         "function": {
             "name": "search_or_browse_web",
-            "description": "Search the live web or retrieve and extract publication-grade content from a webpage URL using Trafilatura.",
+            "description": "CRITICAL MANDATORY TOOL: Call this immediately whenever the user asks for news, latest developments, current events, or web search (e.g. 'whats the latest news from Nepal', 'what happened to X', 'search web for Y'). You do NOT have live news in memory; you must call this tool to fetch live intelligence.",
             "parameters": {
                 "type": "object",
                 "properties": {
