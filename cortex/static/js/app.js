@@ -600,11 +600,25 @@ class CortexApp {
                 const isHigh = val === 1 || val === 'HIGH' || val === true;
                 const chip = document.createElement('div');
                 chip.className = `pin-chip ${isHigh ? 'high' : ''}`;
+                chip.title = `Click to toggle ${pin} ${isHigh ? 'OFF (LOW)' : 'ON (HIGH)'}`;
                 chip.innerHTML = `
                     <span class="pin-chip-id">${pin}</span>
                     <span class="pin-chip-dot"></span>
                     <span class="pin-chip-val">${isHigh ? 'HIGH' : 'LOW'}</span>
                 `;
+                chip.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const nextState = isHigh ? 0 : 1;
+                    chip.classList.toggle('high', nextState === 1);
+                    const vEl = chip.querySelector('.pin-chip-val');
+                    if (vEl) vEl.textContent = nextState === 1 ? 'HIGH' : 'LOW';
+                    chip.title = `Click to toggle ${pin} ${nextState === 1 ? 'OFF (LOW)' : 'ON (HIGH)'}`;
+                    this._wsSend({
+                        type: 'arduino_set_pin',
+                        pin: pin,
+                        state: nextState
+                    });
+                });
                 this.dom.digitalPinGrid.appendChild(chip);
             });
         }
@@ -618,11 +632,25 @@ class CortexApp {
                 const isHigh = val === 1 || val === 'HIGH' || val === true;
                 const chip = document.createElement('div');
                 chip.className = `pin-chip ${isHigh ? 'high' : ''}`;
+                chip.title = `Click to toggle ${pin} ${isHigh ? 'OFF (LOW)' : 'ON (HIGH)'}`;
                 chip.innerHTML = `
                     <span class="pin-chip-id">${pin}</span>
                     <span class="pin-chip-dot"></span>
                     <span class="pin-chip-val">${isHigh ? 'HIGH' : 'LOW'}</span>
                 `;
+                chip.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const nextState = isHigh ? 0 : 1;
+                    chip.classList.toggle('high', nextState === 1);
+                    const vEl = chip.querySelector('.pin-chip-val');
+                    if (vEl) vEl.textContent = nextState === 1 ? 'HIGH' : 'LOW';
+                    chip.title = `Click to toggle ${pin} ${nextState === 1 ? 'OFF (LOW)' : 'ON (HIGH)'}`;
+                    this._wsSend({
+                        type: 'arduino_set_pin',
+                        pin: pin,
+                        state: nextState
+                    });
+                });
                 this.dom.analogPinGrid.appendChild(chip);
             });
         }

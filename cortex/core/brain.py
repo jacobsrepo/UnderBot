@@ -176,11 +176,17 @@ class CortexBrain:
         t = text.strip().lower()
         phrases = (
             "check arduino", "check the arduino", "check hardware", "check usb",
+            "check port", "check ports", "check com port", "check com ports", "check com4", "check com",
             "whats the status on the arduino", "whats the status of the arduino",
             "what is the status of the arduino", "what is the status on the arduino",
+            "whats the status on arduino", "whats the status of arduino",
+            "whats the status on the led", "whats the status of the led",
+            "what is the status of the led", "what is the status on the led",
+            "check led", "check the led", "status of led", "status on led", "status of the led",
             "is arduino connected", "is the arduino connected", "status of the arduino",
             "status on the arduino", "arduino status", "verify connection", "scan ports",
-            "check com4", "check connection"
+            "scan port", "list ports", "detect arduino", "find arduino", "is board connected",
+            "is the board connected", "check board", "check connection"
         )
         return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
 
@@ -813,12 +819,23 @@ class CortexBrain:
 
         elif self._detect_hardware_status_intent(text_clean):
             stat = await execute_tool("check_hardware_connection", {})
+            is_led_query = any(k in text_clean.lower() for k in ("led", "light", "d13", "pin 13"))
             if stat.get("connected"):
                 port_name = stat.get("port") or "COM4"
                 board_name = stat.get("name") or "Arduino Nano"
-                response = f"An {board_name} is connected and online via {port_name}. Hardware workbench is active."
+                if is_led_query:
+                    pin13_state = self.device.get_all_states().get("D13", 0)
+                    led_status = "ON (HIGH)" if pin13_state else "OFF (LOW)"
+                    response = f"The {board_name} is online on {port_name}. Built-in LED (pin D13) is currently {led_status}. The hardware workbench is active."
+                else:
+                    response = f"The {board_name} is connected and online on {port_name}. The hardware workbench is active."
             else:
-                response = "No Arduino board is currently detected on the COM ports. Please verify the USB connection."
+                avail_ports = stat.get("available_ports", [])
+                if avail_ports:
+                    port_list_str = ", ".join([p.get("port", "") for p in avail_ports if p.get("port")])
+                    response = f"Detected serial port(s): {port_list_str}. Checking microcontroller connection. Please ensure the Arduino Nano is firmly plugged in."
+                else:
+                    response = "No active COM ports detected. Please ensure the Arduino Nano is plugged into USB."
 
         elif is_search or is_news:
             search_query = re.sub(r'^(search for|web search for|google|browse|lookup|search)\s+', '', text_clean, flags=re.IGNORECASE).strip()

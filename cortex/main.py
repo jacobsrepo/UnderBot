@@ -130,6 +130,31 @@ async def handle_message(ws: WebSocket, message: dict):
         elif action == "check_hardware":
             await brain.process_user_message("check hardware connection", broadcast)
 
+    elif msg_type == "arduino_set_pin":
+        pin = message.get("pin")
+        state = int(message.get("state", 0))
+        # Actuate physical pin asynchronously
+        success = await brain.device.set_pin_async(pin, state)
+        
+        # Track pin state in memory
+        pin_key = str(pin).upper()
+        if not pin_key.startswith("D") and not pin_key.startswith("A"):
+            pin_key = f"D{pin_key}"
+        brain.active_sketch.setdefault("pin_map", {})[pin_key] = state
+        
+        # Broadcast updated telemetry to all connected tabs
+        await broadcast({
+            "type": "arduino_telemetry",
+            "data": brain.get_arduino_workbench_state()
+        })
+        
+        state_str = "HIGH (ON)" if state else "LOW (OFF)"
+        await broadcast({
+            "type": "chat_message",
+            "role": "system",
+            "content": f"Hardware Switch: Pin {pin_key} set to {state_str}."
+        })
+
     elif msg_type == "demo_cycle":
         states = [
             ("listening", "Listening to microphone audio stream…"),

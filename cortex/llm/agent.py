@@ -15,12 +15,12 @@ from .client import LLMClient
 
 # Patterns for detecting user action requests and assistant hallucinated actions
 ACTION_USER_REGEX = re.compile(
-    r'\b(flash|upload|compile|build|turn on|turn off|set pin|pins?|hours?|minutes?|blink|run test|test run|check connection|hardware|nano|arduino|run cli|execute|command)\b',
+    r'\b(flash|upload|compile|build|turn on|turn off|set pin|pins?|leds?|ports?|com\s*ports?|check\s*(connection|hardware|arduino|board|port|ports|com|usb|led)|status\s*(of|on)?\s*(the\s*)?(arduino|board|nano|led|connection|pins?|hardware)|hardware|nano|arduino|run cli|execute|command)\b',
     re.IGNORECASE
 )
 
 HALLUCINATED_ACTION_REGEX = re.compile(
-    r'(i have (compiled|flashed|uploaded|turned on|updated|set)|has been (compiled|flashed|uploaded)|the pin is\s*\.|led should now be illuminated|led is now on|pins are now configured|let\'s run a command)',
+    r'(i have (compiled|flashed|uploaded|turned on|updated|set)|has been (compiled|flashed|uploaded)|the pin is\s*\.|led should now be illuminated|led is now on|pins are now configured|let\'s run a command|checking the (available )?(com )?ports|scanned (the )?(available )?ports|no arduino (board )?is (currently )?detected|no microcontroller is connected)',
     re.IGNORECASE
 )
 

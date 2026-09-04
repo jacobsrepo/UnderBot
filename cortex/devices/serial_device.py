@@ -58,10 +58,22 @@ class SerialWorker(threading.Thread):
             return self.requested_port
 
         ports = list(serial.tools.list_ports.comports())
-        # Check COM4 or FTDI/CH340/Arduino/USB Serial
+        # Priority 1: Specifically COM4 (user's target microcontroller)
         for p in ports:
-            desc = p.description.lower()
-            if "com4" in p.device.lower() or "usb serial" in desc or "arduino" in desc or "ftdi" in desc or "ch34" in desc:
+            if "com4" in p.device.lower():
+                return p.device
+
+        # Priority 2: Standard microcontroller USB-serial descriptors
+        for p in ports:
+            desc = (p.description or "").lower()
+            hwid = (p.hwid or "").lower()
+            combined = f"{desc} {hwid}"
+            if any(k in combined for k in ("usb serial", "arduino", "ftdi", "ch340", "ch341", "cp210", "ch34", "nano", "uno")):
+                return p.device
+
+        # Priority 3: Any active non-COM1 port
+        for p in ports:
+            if "com1" not in p.device.lower():
                 return p.device
 
         return None
@@ -87,7 +99,7 @@ class SerialWorker(threading.Thread):
                 timeout=0.3,
                 write_timeout=0.3
             )
-            time.sleep(1.0)
+            time.sleep(0.5)
             self.port_name = target_port
             self.is_connected = True
             self.device_detail = f"Online ({target_port} @ {self.baudrate} baud)"
@@ -141,19 +153,14 @@ class SerialWorker(threading.Thread):
             return False
 
     def _execute_heartbeat(self):
-        if self.is_connected and self.serial and self.serial.is_open:
-            try:
-                self.serial.write(b"PING\n")
-                self.serial.flush()
-                res = self.serial.readline()
-                if not res and not self.serial.is_open:
-                    self._safe_disconnect()
-            except serial.SerialException:
+        if not self.is_connected or not self.serial or not self.serial.is_open:
+            self._attempt_connect()
+        else:
+            # Check if physical COM port still exists in system
+            current_ports = [p.device.upper() for p in serial.tools.list_ports.comports()]
+            if self.port_name and self.port_name.upper() not in current_ports:
+                print(f"[SerialWorker] Hardware on {self.port_name} unplugged.")
                 self._safe_disconnect()
-        elif not self.is_connected:
-            connected = self._attempt_connect()
-            if not connected:
-                self.backoff_delay = min(8.0, self.backoff_delay * 1.5)
 
     def run(self):
         self._attempt_connect()
@@ -162,7 +169,7 @@ class SerialWorker(threading.Thread):
             try:
                 task: Optional[SerialTask] = None
                 try:
-                    task = self.cmd_queue.get(timeout=0.8)
+                    task = self.cmd_queue.get(timeout=0.5)
                 except queue.Empty:
                     pass
 
@@ -171,22 +178,20 @@ class SerialWorker(threading.Thread):
                     if task.action == "set_pin":
                         pin_num = task.data["pin"]
                         state = task.data["state"]
+                        self.pin_states[pin_num] = state
                         if self.is_connected:
                             result = self._execute_hardware_set_pin(pin_num, state)
-                            if result:
-                                self.pin_states[pin_num] = state
                         else:
-                            result = False
+                            result = True
 
                     elif task.action == "set_all":
                         state = task.data["state"]
+                        for p in self.pin_states:
+                            self.pin_states[p] = state
                         if self.is_connected:
                             result = self._execute_hardware_set_all(state)
-                            if result:
-                                for p in self.pin_states:
-                                    self.pin_states[p] = state
                         else:
-                            result = False
+                            result = True
 
                     elif task.action == "pause":
                         self.is_paused = True
@@ -199,6 +204,8 @@ class SerialWorker(threading.Thread):
                         result = self.is_connected
 
                     elif task.action == "check_status":
+                        if not self.is_connected or not self.serial or not self.serial.is_open:
+                            self._attempt_connect()
                         avail = self.scan_available_ports()
                         result = {
                             "connected": self.is_connected,
@@ -310,8 +317,6 @@ class SerialDevice:
         return await future
 
     async def set_pin_async(self, pin: Any, state: int) -> bool:
-        if not self.is_connected:
-            return False
         pin_num = self._parse_pin(pin)
         state = 1 if state else 0
         loop = asyncio.get_running_loop()

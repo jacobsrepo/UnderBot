@@ -365,7 +365,10 @@
                                     <!-- 16-Pin Visual Matrix Card -->
                                     <div class="workbench-card pins-card">
                                         <div class="workbench-card-header">
-                                            <span class="workbench-card-title">GPIO PIN STATE MATRIX</span>
+                                            <div class="card-title-group">
+                                                <span class="workbench-card-title">GPIO PIN STATE MATRIX</span>
+                                                <span class="pin-click-hint" style="font-size: 8px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: #38bdf8; letter-spacing: 0.5px;">[CLICK TO TOGGLE]</span>
+                                            </div>
                                             <div class="pin-quick-actions">
                                                 <button id="action-test-pins" class="btn-workbench-action" title="Cycle Digital Pins Test">Cycle High</button>
                                                 <button id="action-clear-pins" class="btn-workbench-action" title="Reset Pins to Low">Clear All</button>
@@ -479,6 +482,6 @@
         </main>
     </div>
 
-    <script type="module" src="/static/js/app.js?v=3.6"></script>
+    <script type="module" src="/static/js/app.js?v=3.7"></script>
 </body>
 </html>
