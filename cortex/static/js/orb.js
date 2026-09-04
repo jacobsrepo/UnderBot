@@ -217,9 +217,9 @@ void main() {
     plasmaColor = mix(plasmaColor, u_coreColor, smoothstep(0.4, 0.9, plasmaDensity));
     plasmaColor += vec3(1.0, 1.0, 1.0) * pow(photonCenter, 2.2) * 1.35;
 
-    // Internal Soft Ethereal Glow inside the glass
-    float innerGlow = smoothstep(1.3, 0.1, r) * 0.45;
-    plasmaColor += u_glowColor * innerGlow;
+    // Internal Soft Ethereal Halo inside the glass
+    float innerHalo = smoothstep(1.3, 0.1, r) * 0.45;
+    plasmaColor += u_glowColor * innerHalo;
 
     // ── Delicate Orbital Micro-Sparkles / Stardust Ring ──────────────
     float ringR = length(coreUV);

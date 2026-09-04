@@ -1,13 +1,65 @@
 """
-Cortex Agent Tool Definitions for Ollama Function Calling
+Cortex Agent Tool Definitions with Host CLI & Active Facial Control
 """
 
 CORTEX_TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "run_cli_command",
+            "description": "Execute a native Windows PowerShell command on the host system. Use this to inspect files, query system metrics, run scripts, check directory contents, or execute tools.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "command": {
+                        "type": "string",
+                        "description": "The Windows PowerShell command line string (e.g. 'Get-ChildItem', 'Get-Date', 'Test-Path file.txt')"
+                    },
+                    "cwd": {
+                        "type": "string",
+                        "description": "Optional working directory path"
+                    }
+                },
+                "required": ["command"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "set_facial_expression",
+            "description": "Actively adjust your robot face's emotional expression, eye shape, and aura glow to reflect your internal thoughts, mood, and reactions.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "mood": {
+                        "type": "string",
+                        "enum": ["curious", "analytical", "confident", "surprised", "skeptical", "pleased", "alert", "calm"],
+                        "description": "Emotional mood"
+                    },
+                    "eye_shape": {
+                        "type": "string",
+                        "enum": ["normal", "wide", "narrow", "squint", "inquiring"],
+                        "description": "Geometry of eyes"
+                    },
+                    "glow_color": {
+                        "type": "string",
+                        "description": "Hex color code for face glow (e.g. '#38bdf8' cyan, '#a855f7' purple, '#22c55e' green, '#ef4444' red alert, '#f59e0b' amber)"
+                    },
+                    "intensity": {
+                        "type": "number",
+                        "description": "Expression intensity from 0.0 to 1.0"
+                    }
+                },
+                "required": ["mood"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "probe_and_identify_led_pin",
-            "description": "Autonomously test all Arduino pins one-by-one (D2 to D13, A0 to A5) while actively monitoring the live camera feed to physically discover which pin illuminates a specific LED color (e.g. 'blue', 'green', 'red'). Use this whenever asked to find or identify which pin controls an LED.",
+            "description": "Autonomously test Arduino pins one-by-one (D2 to D13, A0 to A5) while actively checking live optical camera feed to physically discover which pin illuminates a specific LED color (e.g. 'blue', 'green', 'red').",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -65,13 +117,13 @@ CORTEX_TOOLS = [
         "type": "function",
         "function": {
             "name": "inspect_camera",
-            "description": "Capture the real webcam video frame and perform optical emission analysis to check what is physically visible and which LEDs (Red, Green, Blue) are physically illuminated.",
+            "description": "Instant optical light emission check and scene view from the VisualSceneBuffer. Verifies physical light reality without stalling.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "focus_target": {
                         "type": "string",
-                        "description": "What specific item or color to verify (e.g. 'Blue LEDs', 'Hours column', 'circuit board overview')"
+                        "description": "What specific item or color to verify"
                     }
                 }
             }
@@ -92,13 +144,13 @@ CORTEX_TOOLS = [
         "type": "function",
         "function": {
             "name": "search_or_browse_web",
-            "description": "Search the live web or retrieve technical documentation, datasheets, pinouts, and circuit schematics.",
+            "description": "Search the live web or retrieve and extract publication-grade content from a webpage URL using Trafilatura.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "query_or_url": {
                         "type": "string",
-                        "description": "The search keywords or direct URL to surf"
+                        "description": "The search keywords or direct URL to read"
                     }
                 },
                 "required": ["query_or_url"]
@@ -124,26 +176,8 @@ CORTEX_TOOLS = [
     {
         "type": "function",
         "function": {
-            "name": "set_viewport_mode",
-            "description": "Change the visual display mode of the user interface.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "mode": {
-                        "type": "string",
-                        "enum": ["camera", "browser", "dual", "none"],
-                        "description": "The target viewport layout"
-                    }
-                },
-                "required": ["mode"]
-            }
-        }
-    },
-    {
-        "type": "function",
-        "function": {
             "name": "save_to_memory",
-            "description": "Save a learned fact, hardware pin mapping, or user preference into persistent long-term memory across restarts.",
+            "description": "Save a learned fact or hardware pin mapping into persistent long-term memory across restarts.",
             "parameters": {
                 "type": "object",
                 "properties": {

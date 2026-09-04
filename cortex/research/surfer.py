@@ -1,14 +1,22 @@
 """
-Cortex Live Web Surfer — Real-Time Search & Page Content Extraction
-Uses DuckDuckGo HTML Search + BeautifulSoup page scraping for fresh, live data.
+Cortex Hardened Web Surfer & Content Extraction Engine
+Uses DuckDuckGo HTML search + Trafilatura publication-grade reader with BM25/keyword density windowing.
+Enforces a hard 4,000-character ceiling to prevent prompt context bloat.
 """
 
-import json
 import re
+import math
+import asyncio
 import urllib.request
 import urllib.parse
+import json
 from typing import Dict, Any, List, Optional
 from bs4 import BeautifulSoup
+
+try:
+    import trafilatura
+except ImportError:
+    trafilatura = None
 
 
 class WebSurfer:
@@ -19,290 +27,263 @@ class WebSurfer:
             "Accept-Language": "en-US,en;q=0.9",
         }
 
+    def _score_and_window_content(self, text: str, query: str, max_chars: int = 4000) -> str:
+        """
+        BM25-style keyword density windowing:
+        Splits extracted markdown into paragraphs, scores relevance to query terms,
+        and selects top paragraphs within max_chars ceiling.
+        """
+        if not text or len(text) <= max_chars:
+            return text
+
+        paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+        if not paragraphs:
+            return text[:max_chars]
+
+        # Extract search terms
+        terms = set(re.findall(r"\w{3,}", query.lower()))
+        if not terms:
+            return "\n\n".join(paragraphs)[:max_chars]
+
+        scored = []
+        for idx, p in enumerate(paragraphs):
+            p_lower = p.lower()
+            score = 0.0
+            words = re.findall(r"\w+", p_lower)
+            total_words = max(len(words), 1)
+
+            for t in terms:
+                count = p_lower.count(t)
+                if count > 0:
+                    # Term frequency with diminishing returns
+                    tf = math.sqrt(count)
+                    score += tf / (1.0 + 0.1 * total_words)
+
+            scored.append((score, idx, p))
+
+        # Sort paragraphs by score, keeping the most relevant
+        # Favor early paragraphs slightly
+        scored_sorted = sorted(scored, key=lambda x: (x[0] + (0.5 if x[1] < 3 else 0.0)), reverse=True)
+
+        selected_indices = set()
+        current_len = 0
+
+        for score, idx, p in scored_sorted:
+            if current_len + len(p) + 2 <= max_chars:
+                selected_indices.add(idx)
+                current_len += len(p) + 2
+            elif current_len < max_chars // 2:
+                # Add truncated
+                remaining = max_chars - current_len - 5
+                if remaining > 100:
+                    selected_indices.add(idx)
+                break
+
+        # Re-assemble in original document order
+        ordered_paragraphs = [paragraphs[i] for i in sorted(selected_indices)]
+        res_text = "\n\n".join(ordered_paragraphs)
+        return res_text[:max_chars]
+
+    async def _fetch_and_extract_page(self, url: str, query: str = "") -> Dict[str, Any]:
+        """Fetches raw HTML and extracts clean publication-grade Markdown using trafilatura."""
+        loop = asyncio.get_running_loop()
+
+        def _fetch_sync():
+            try:
+                req = urllib.request.Request(url, headers=self.headers)
+                with urllib.request.urlopen(req, timeout=8) as resp:
+                    raw_html = resp.read().decode('utf-8', errors='replace')
+                    
+                    # Primary: Trafilatura reader
+                    extracted_md = None
+                    if trafilatura:
+                        extracted_md = trafilatura.extract(
+                            raw_html,
+                            include_links=True,
+                            include_images=False,
+                            output_format='markdown'
+                        )
+
+                    # Fallback: BeautifulSoup text extraction
+                    if not extracted_md:
+                        soup = BeautifulSoup(raw_html, 'html.parser')
+                        for tag in soup(["script", "style", "nav", "footer", "header", "noscript", "aside", "form"]):
+                            tag.decompose()
+                        extracted_md = soup.get_text(separator="\n", strip=True)
+
+                    title = "Web Resource"
+                    try:
+                        soup = BeautifulSoup(raw_html, 'html.parser')
+                        t_tag = soup.find('title')
+                        if t_tag:
+                            title = t_tag.get_text().strip()
+                    except Exception:
+                        pass
+
+                    return title, extracted_md or ""
+            except Exception as e:
+                print(f"[WebSurfer] Fetch error for {url}: {e}")
+                return "Error Fetching URL", f"Could not read content from {url}: {e}"
+
+        title, raw_content = await loop.run_in_executor(None, _fetch_sync)
+        windowed_content = self._score_and_window_content(raw_content, query, max_chars=4000)
+
+        domain = urllib.parse.urlparse(url).netloc.replace("www.", "")
+
+        return {
+            "url": url,
+            "title": title,
+            "domain": domain,
+            "summary": windowed_content,
+            "results": [
+                {
+                    "title": title,
+                    "url": url,
+                    "domain": domain,
+                    "snippet": windowed_content[:200]
+                }
+            ],
+            "cards": [
+                {"label": "SOURCE", "val": domain},
+                {"label": "STATUS", "val": "Extracted with Trafilatura"}
+            ]
+        }
+
+    async def _ddg_html_search(self, query: str) -> List[Dict[str, str]]:
+        loop = asyncio.get_running_loop()
+
+        def _search_sync():
+            results = []
+            try:
+                encoded = urllib.parse.urlencode({"q": query, "b": ""})
+                req = urllib.request.Request(
+                    "https://html.duckduckgo.com/html/",
+                    data=encoded.encode("utf-8"),
+                    headers={
+                        **self.headers,
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    }
+                )
+                with urllib.request.urlopen(req, timeout=7) as resp:
+                    html_text = resp.read().decode("utf-8", errors="replace")
+
+                soup = BeautifulSoup(html_text, "html.parser")
+                for r in soup.find_all("div", class_="result"):
+                    title_elem = r.find("a", class_="result__a")
+                    snippet_elem = r.find("a", class_="result__snippet") or r.find("div", class_="result__snippet")
+                    url_elem = r.find("a", class_="result__url")
+
+                    if title_elem and title_elem.get_text():
+                        title = title_elem.get_text().strip()
+                        raw_href = title_elem.get("href", "")
+
+                        parsed_url = raw_href
+                        if "uddg=" in raw_href:
+                            try:
+                                actual = urllib.parse.parse_qs(urllib.parse.urlparse(raw_href).query).get("uddg")
+                                if actual:
+                                    parsed_url = actual[0]
+                            except Exception:
+                                pass
+
+                        snippet = snippet_elem.get_text().strip() if snippet_elem else ""
+                        domain = urllib.parse.urlparse(parsed_url).netloc.replace("www.", "")
+
+                        if parsed_url.startswith("http") and domain:
+                            results.append({
+                                "title": title,
+                                "url": parsed_url,
+                                "snippet": snippet,
+                                "domain": domain
+                            })
+                            if len(results) >= 5:
+                                break
+            except Exception as e:
+                print(f"[WebSurfer] Search error: {e}")
+
+            return results
+
+        return await loop.run_in_executor(None, _search_sync)
+
     async def surf(self, query: str) -> Dict[str, Any]:
-        """Search the live web, fetch top result page content, and return structured data."""
+        """Search the live web, fetch top result with trafilatura, window content, and return structured intel."""
         query_clean = query.strip()
         lower_q = query_clean.lower()
 
-        # Strip common prefixes
         clean_topic = re.sub(
-            r'^(image of|picture of|photo of|search for|search|browse|lookup|what is|who is|tell me about|find|look up)\s+',
+            r'^(search for|search|browse|lookup|what is|who is|tell me about|find|look up)\s+',
             '', query_clean, flags=re.IGNORECASE
-        ).strip()
-        if not clean_topic:
-            clean_topic = query_clean
+        ).strip() or query_clean
 
-        # If it's a direct URL, fetch and parse that page
         if lower_q.startswith("http://") or lower_q.startswith("https://"):
-            return await self._fetch_and_extract_page(query_clean)
+            return await self._fetch_and_extract_page(query_clean, query=clean_topic)
 
-        # --- Step 1: Live web search via DuckDuckGo HTML ---
         search_results = await self._ddg_html_search(clean_topic)
 
         if not search_results:
-            # Fallback: try Wikipedia
-            wiki = await self._search_wikipedia(clean_topic)
-            if wiki:
-                return wiki
-            return self._fallback_result(clean_topic)
+            return {
+                "url": "",
+                "title": f"Search: {clean_topic}",
+                "domain": "WEB",
+                "summary": f"No immediate live web search results found for '{clean_topic}'.",
+                "results": [],
+                "cards": []
+            }
 
-        # --- Step 2: Fetch actual page content from top result ---
-        top_url = search_results[0]["url"]
-        page_content = await self._fetch_page_text(top_url)
+        top_result = search_results[0]
+        top_url = top_result["url"]
 
-        # Build rich cards from search results
-        cards = []
-        for r in search_results[:4]:
-            cards.append({
-                "label": r.get("domain", "WEB")[:22],
-                "val": r["title"][:55]
-            })
+        # Extract top page text using trafilatura
+        page_data = await self._fetch_and_extract_page(top_url, query=clean_topic)
+        page_summary = page_data.get("summary", "")
 
-        # Try to get a Wikipedia thumbnail image for the topic
-        image_url = None
-        wiki = await self._search_wikipedia(clean_topic)
-        if wiki and wiki.get("image_url"):
-            image_url = wiki["image_url"]
-
-        # Build combined summary: search snippets + extracted page content
+        # Assemble search summary
         snippet_lines = []
         for r in search_results[:3]:
             if r.get("snippet"):
                 snippet_lines.append(f"• {r['title']}: {r['snippet']}")
 
-        if page_content:
-            snippet_lines.append(f"\n--- Extracted from {top_url} ---\n{page_content}")
+        if page_summary:
+            snippet_lines.append(f"\n--- Grounded Content from {top_url} ---\n{page_summary}")
 
-        summary = "\n".join(snippet_lines) if snippet_lines else f"Searched the web for '{clean_topic}'."
+        combined_summary = "\n".join(snippet_lines)
 
         return {
             "url": top_url,
-            "title": search_results[0]["title"],
-            "badge": search_results[0].get("domain", "LIVE WEB"),
-            "image_url": image_url,
-            "results": search_results[:4],
-            "cards": cards,
-            "summary": summary
-        }
-
-    async def _ddg_html_search(self, query: str) -> List[Dict[str, Any]]:
-        """Search DuckDuckGo via its HTML endpoint (POST) — returns real organic results."""
-        try:
-            ddg_url = "https://html.duckduckgo.com/html/"
-            post_data = urllib.parse.urlencode({'q': query, 'b': ''}).encode('utf-8')
-            req = urllib.request.Request(ddg_url, data=post_data, headers={
-                **self.headers,
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Referer": "https://html.duckduckgo.com/",
-            })
-
-            with urllib.request.urlopen(req, timeout=6.0) as resp:
-                html = resp.read().decode('utf-8', errors='ignore')
-                soup = BeautifulSoup(html, 'html.parser')
-
-                title_links = soup.find_all('a', class_='result__a')
-                snippet_links = soup.find_all('a', class_='result__snippet')
-
-                results = []
-                for i, a_tag in enumerate(title_links[:6]):
-                    title = a_tag.get_text().strip()
-                    href = a_tag.get('href', '')
-
-                    # Decode DuckDuckGo redirect URL
-                    if 'uddg=' in href:
-                        m = re.search(r'uddg=([^&]+)', href)
-                        if m:
-                            href = urllib.parse.unquote(m.group(1))
-
-                    if not href.startswith('http'):
-                        continue
-
-                    snippet = ""
-                    if i < len(snippet_links):
-                        snippet = snippet_links[i].get_text().strip()
-
-                    domain = urllib.parse.urlparse(href).netloc.replace("www.", "").upper()
-
-                    results.append({
-                        "title": title,
-                        "url": href,
-                        "domain": domain,
-                        "snippet": snippet
-                    })
-
-                return results
-
-        except Exception as e:
-            print(f"DDG HTML search error: {e}")
-            return []
-
-    async def _fetch_page_text(self, url: str, max_chars: int = 1500) -> str:
-        """Fetch a URL and extract readable text content (stripped of boilerplate)."""
-        try:
-            req = urllib.request.Request(url, headers=self.headers)
-            with urllib.request.urlopen(req, timeout=6.0) as resp:
-                raw = resp.read()
-                html = raw.decode('utf-8', errors='ignore')
-                soup = BeautifulSoup(html, 'html.parser')
-
-                # Remove non-content elements
-                for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside',
-                                 'form', 'button', 'iframe', 'noscript']):
-                    tag.decompose()
-
-                # Try to find main content area
-                main = soup.find('main') or soup.find('article') or soup.find('div', role='main')
-                source = main if main else soup.body if soup.body else soup
-
-                text = source.get_text(separator='\n', strip=True)
-                # Filter to meaningful lines (>30 chars, no pure nav/menu lines)
-                lines = []
-                for line in text.split('\n'):
-                    line = line.strip()
-                    if len(line) > 30:
-                        lines.append(line)
-
-                content = '\n'.join(lines)
-                return content[:max_chars]
-
-        except Exception as e:
-            print(f"Page fetch error for {url}: {e}")
-            return ""
-
-    async def _fetch_and_extract_page(self, url: str) -> Dict[str, Any]:
-        """Directly fetch a URL and return structured data."""
-        try:
-            req = urllib.request.Request(url, headers=self.headers)
-            with urllib.request.urlopen(req, timeout=6.0) as resp:
-                html = resp.read().decode('utf-8', errors='ignore')
-                soup = BeautifulSoup(html, 'html.parser')
-
-                title = soup.title.string.strip() if soup.title and soup.title.string else url
-
-                # Extract og:image
-                og_img = None
-                img_meta = soup.find('meta', attrs={'property': 'og:image'})
-                if img_meta and img_meta.get('content'):
-                    og_img = img_meta['content']
-
-                # Extract meta description
-                meta_desc = ""
-                desc_meta = soup.find('meta', attrs={'name': 'description'}) or soup.find('meta', attrs={'property': 'og:description'})
-                if desc_meta and desc_meta.get('content'):
-                    meta_desc = desc_meta['content'].strip()
-
-                # Extract page text
-                for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
-                    tag.decompose()
-                main = soup.find('main') or soup.find('article') or soup.body or soup
-                text = main.get_text(separator='\n', strip=True)
-                lines = [l.strip() for l in text.split('\n') if len(l.strip()) > 30]
-                page_text = '\n'.join(lines[:30])
-
-                domain = urllib.parse.urlparse(url).netloc.upper()
-
-                summary = meta_desc if meta_desc else page_text[:500]
-
-                return {
-                    "url": url,
-                    "title": title,
-                    "badge": domain,
-                    "image_url": og_img,
-                    "results": [{"title": title, "url": url, "domain": domain, "snippet": summary[:200]}],
-                    "cards": [
-                        {"label": "HOST", "val": domain},
-                        {"label": "STATUS", "val": "HTTP 200 OK"},
-                    ],
-                    "summary": f"{summary}\n\n--- Page Content ---\n{page_text[:1200]}"
-                }
-        except Exception as e:
-            return {
-                "url": url,
-                "title": f"Error: {url}",
-                "badge": "HTTP ERROR",
-                "image_url": None,
-                "results": [],
-                "cards": [{"label": "ERROR", "val": str(e)[:50]}],
-                "summary": f"Could not fetch {url}: {e}"
-            }
-
-    async def _search_wikipedia(self, topic: str) -> Optional[Dict[str, Any]]:
-        """Query Wikipedia REST API for summary and thumbnail image."""
-        try:
-            search_url = f"https://en.wikipedia.org/w/api.php?action=opensearch&search={urllib.parse.quote(topic)}&limit=1&namespace=0&format=json"
-            req = urllib.request.Request(search_url, headers=self.headers)
-            with urllib.request.urlopen(req, timeout=4.0) as resp:
-                data = json.loads(resp.read().decode('utf-8'))
-                if len(data) >= 4 and data[1] and data[3]:
-                    page_title = data[1][0]
-                    page_url = data[3][0]
-
-                    summary_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(page_title)}"
-                    req2 = urllib.request.Request(summary_url, headers=self.headers)
-                    with urllib.request.urlopen(req2, timeout=4.0) as resp2:
-                        sdata = json.loads(resp2.read().decode('utf-8'))
-                        extract = sdata.get("extract", "")
-                        image_url = sdata.get("thumbnail", {}).get("source", None)
-                        description = sdata.get("description", "Wikipedia")
-
-                        return {
-                            "url": page_url,
-                            "title": page_title,
-                            "badge": description.upper()[:30],
-                            "image_url": image_url,
-                            "results": [{"title": page_title, "url": page_url, "domain": "WIKIPEDIA", "snippet": extract[:200]}],
-                            "cards": [
-                                {"label": "TOPIC", "val": page_title},
-                                {"label": "CATEGORY", "val": description[:35]},
-                                {"label": "SOURCE", "val": "Wikipedia"}
-                            ],
-                            "summary": extract
-                        }
-        except Exception as e:
-            print(f"Wikipedia error: {e}")
-        return None
-
-    def _fallback_result(self, topic: str) -> Dict[str, Any]:
-        return {
-            "url": f"https://html.duckduckgo.com/html/?q={urllib.parse.quote(topic)}",
-            "title": f"Web Search: {topic.title()}",
-            "badge": "SEARCH",
-            "image_url": None,
-            "results": [],
-            "cards": [{"label": "QUERY", "val": topic}, {"label": "STATUS", "val": "No results"}],
-            "summary": f"No results found for '{topic}'."
+            "title": top_result["title"],
+            "domain": top_result.get("domain", "WEB"),
+            "summary": combined_summary[:4000],
+            "results": search_results,
+            "cards": [
+                {"label": r.get("domain", "WEB")[:18], "val": r["title"][:45]}
+                for r in search_results[:4]
+            ]
         }
 
     async def get_live_weather(self, city: str = "") -> Dict[str, Any]:
-        """Fetch live weather from wttr.in."""
-        try:
-            url = f"https://wttr.in/{urllib.parse.quote(city)}?format=j1" if city else "https://wttr.in/?format=j1"
-            req = urllib.request.Request(url, headers=self.headers)
-            with urllib.request.urlopen(req, timeout=4.0) as resp:
-                data = json.loads(resp.read().decode('utf-8'))
-                current = data.get("current_condition", [{}])[0]
-                area = data.get("nearest_area", [{}])[0]
+        city_clean = city.strip() or "auto"
+        loop = asyncio.get_running_loop()
 
-                temp_c = current.get("temp_C", "--")
-                desc = current.get("weatherDesc", [{}])[0].get("value", "Clear")
-                humidity = current.get("humidity", "--")
-                wind_kmph = current.get("windspeedKmph", "--")
-                city_name = area.get("areaName", [{}])[0].get("value", "Local Area")
+        def _fetch_weather_sync():
+            try:
+                url = f"https://wttr.in/{urllib.parse.quote(city_clean)}?format=j1"
+                req = urllib.request.Request(url, headers={"User-Agent": "curl/7.68.0"})
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    curr = data.get("current_condition", [{}])[0]
+                    area = data.get("nearest_area", [{}])[0]
+                    loc = area.get("areaName", [{}])[0].get("value", city_clean)
+                    temp_c = curr.get("temp_C", "N/A")
+                    desc = curr.get("weatherDesc", [{}])[0].get("value", "Clear")
+                    humidity = curr.get("humidity", "N/A")
+                    return {
+                        "location": loc,
+                        "temperature_c": temp_c,
+                        "condition": desc,
+                        "humidity": f"{humidity}%",
+                        "summary": f"Current weather in {loc}: {temp_c}°C, {desc}, humidity {humidity}%."
+                    }
+            except Exception as e:
+                return {"summary": f"Could not retrieve weather: {e}"}
 
-                return {
-                    "city": city_name,
-                    "temp_c": temp_c,
-                    "desc": desc,
-                    "humidity": humidity,
-                    "wind_kmph": wind_kmph,
-                    "summary": f"Currently {desc.lower()} in {city_name} at {temp_c}°C with {humidity}% humidity and winds at {wind_kmph} km/h."
-                }
-        except Exception:
-            return {
-                "city": city or "Unknown",
-                "temp_c": "--",
-                "desc": "Unavailable",
-                "humidity": "--",
-                "wind_kmph": "--",
-                "summary": "Weather data temporarily unavailable."
-            }
+        return await loop.run_in_executor(None, _fetch_weather_sync)

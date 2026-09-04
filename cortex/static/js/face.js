@@ -94,6 +94,17 @@ export class RobotFace {
         this.eyes.audioVolume = vol;
     }
 
+    setExpression({ mood = 'calm', eye_shape = 'normal', glow_color = null, intensity = 1.0 }) {
+        this.activeMood = mood.toLowerCase();
+        this.activeEyeShape = eye_shape.toLowerCase();
+        this.activeIntensity = Math.max(0.1, Math.min(1.0, intensity));
+
+        if (glow_color) {
+            document.documentElement.style.setProperty('--theme-accent', glow_color);
+            document.documentElement.style.setProperty('--theme-glow', `${glow_color}66`);
+        }
+    }
+
     setState(stateName) {
         const theme = SCREEN_THEMES[stateName];
         if (!theme) return;
@@ -272,9 +283,43 @@ export class RobotFace {
                 left.scaleY  = 0.90;
                 right.scaleX = 0.90;
                 right.scaleY = 0.90;
-                left.rot  = -0.28;
-                right.rot =  0.28;
+                left.rot  = -0.15;
+                right.rot = -0.15;
                 break;
+            }
+        }
+
+        // Active Autonomous Mood Modifier with Spring Physics
+        if (this.activeMood) {
+            const intensity = this.activeIntensity || 1.0;
+            if (this.activeMood === 'curious' || this.activeEyeShape === 'inquiring') {
+                left.y -= 4 * intensity;
+                left.rot += 0.12 * intensity;
+                right.rot -= 0.05 * intensity;
+                left.scaleY *= (1.0 + 0.15 * intensity);
+            } else if (this.activeMood === 'skeptical' || this.activeEyeShape === 'squint') {
+                left.scaleY *= 0.65;
+                right.scaleY *= 1.05;
+                left.rot -= 0.1 * intensity;
+            } else if (this.activeMood === 'analytical' || this.activeMood === 'focused') {
+                left.scaleY *= 0.75;
+                right.scaleY *= 0.75;
+                left.scaleX *= 1.1;
+                right.scaleX *= 1.1;
+            } else if (this.activeMood === 'surprised' || this.activeEyeShape === 'wide') {
+                left.scaleX *= (1.25 * intensity);
+                left.scaleY *= (1.3 * intensity);
+                right.scaleX *= (1.25 * intensity);
+                right.scaleY *= (1.3 * intensity);
+            } else if (this.activeMood === 'confident' || this.activeMood === 'pleased') {
+                left.rot += 0.08 * intensity;
+                right.rot -= 0.08 * intensity;
+                left.y -= 2 * intensity;
+                right.y -= 2 * intensity;
+            } else if (this.activeMood === 'alert') {
+                const pulse = Math.sin(this.time * 8.0) * 0.15;
+                left.scaleX *= (1.15 + pulse);
+                right.scaleX *= (1.15 + pulse);
             }
         }
     }

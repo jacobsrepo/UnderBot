@@ -1,22 +1,21 @@
 """
-Cortex Autonomous ReAct Agent Loop
-Executes multi-step tool calls dynamically with Qwen 2.5 via Ollama.
+Cortex Autonomous ReAct Agent Loop with Dynamic Sampling Profiles
+Uses qwen2.5-coder:7b with:
+- Task-type 'tool' (T=0.1, top_p=0.9) during tool generation and parameter binding
+- Task-type 'dialogue' (T=0.65, top_p=0.95) for expressive, natural user dialogue
 """
 
 import json
-import urllib.request
-import urllib.error
 import asyncio
 from typing import List, Dict, Any, Optional, Callable
 
 from .tools import CORTEX_TOOLS
-
-OLLAMA_BASE = "http://127.0.0.1:11434"
+from .client import LLMClient
 
 
 class CortexAgent:
-    def __init__(self, model: str = "qwen2.5:7b-instruct-q4_K_M"):
-        self.model = model
+    def __init__(self, model: str = "qwen2.5-coder:7b"):
+        self.client = LLMClient(default_model=model)
 
     async def run(
         self,
@@ -26,49 +25,33 @@ class CortexAgent:
         on_state_change: Optional[Callable[[str], Any]] = None
     ) -> str:
         """
-        Execute full autonomous ReAct agent loop with multi-step tool calling.
+        Execute full autonomous ReAct agent loop with dynamic sampling profiles.
         """
         dialogue = [{"role": "system", "content": system_prompt}] + messages
 
-        # Up to 4 reasoning & tool execution iterations
-        for iteration in range(4):
-            payload = {
-                "model": self.model,
-                "messages": dialogue,
-                "tools": CORTEX_TOOLS,
-                "stream": False,
-                "options": {
-                    "temperature": 0.3,
-                }
-            }
-
-            req = urllib.request.Request(
-                f"{OLLAMA_BASE}/api/chat",
-                data=json.dumps(payload).encode('utf-8'),
-                headers={"Content-Type": "application/json"}
-            )
-
-            try:
-                with urllib.request.urlopen(req, timeout=25.0) as resp:
-                    data = json.loads(resp.read().decode('utf-8'))
-                    msg = data.get("message", {})
-            except Exception as e:
-                print(f"Agent inference error: {e}")
-                return "I encountered a communication interruption with my local neural core."
+        # Up to 5 reasoning & tool execution iterations
+        for iteration in range(5):
+            # Phase 1: Tool generation with rigid T=0.1 sampling
+            resp = await self.client.chat(dialogue, tools=CORTEX_TOOLS, task_type="tool")
+            msg = resp.get("message", {})
 
             tool_calls = msg.get("tool_calls", [])
 
             if not tool_calls:
-                # No tool calls: LLM returned its final conversational text
+                # No more tools needed: generate fluid, expressive dialogue with T=0.65
                 content = msg.get("content", "").strip()
                 if content:
                     return content
-                return "All requested tasks completed."
 
-            # Append the assistant's message with tool_calls to the dialogue history
+                # If empty, prompt for conversational wrap-up
+                wrapup_resp = await self.client.chat(dialogue, tools=None, task_type="dialogue")
+                wrap_msg = wrapup_resp.get("message", {})
+                return wrap_msg.get("content", "").strip() or "All requested actions have completed successfully."
+
+            # Append the assistant's tool-call response to dialogue
             dialogue.append(msg)
 
-            # Execute all requested tools
+            # Execute all tool calls
             for tc in tool_calls:
                 fn = tc.get("function", {})
                 fn_name = fn.get("name", "")
@@ -87,4 +70,6 @@ class CortexAgent:
                     "content": json.dumps(tool_output),
                 })
 
-        return "Task processed."
+        # Final response synthesis with T=0.65
+        final_resp = await self.client.chat(dialogue, tools=None, task_type="dialogue")
+        return final_resp.get("message", {}).get("content", "Task complete.")

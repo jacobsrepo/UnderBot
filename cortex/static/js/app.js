@@ -415,6 +415,11 @@ class CortexApp {
                     this.voice.playAudio(msg.audio, msg.text || '');
                 }
                 break;
+            case 'facial_expression':
+                if (this.face) {
+                    this.face.setExpression(msg);
+                }
+                break;
             case 'device_update':
                 this._renderDevices(msg.devices);
                 break;
