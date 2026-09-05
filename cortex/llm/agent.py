@@ -57,6 +57,7 @@ _PRIMARY_PARAM = {
     "list_directory": "path",
     "recall_from_memory": "query",
     "press_keys": "keys",
+    "create_and_open_document": "title",
 }
 
 
@@ -205,6 +206,13 @@ class CortexAgent:
         """
         dialogue = [{"role": "system", "content": system_prompt}] + messages
 
+        last_user_msg = ""
+        for m in reversed(messages):
+            if m.get("role") == "user":
+                last_user_msg = m.get("content", "").lower()
+                break
+
+        executed_tools_count = 0
         max_iterations = 10
 
         for iteration in range(max_iterations):
@@ -239,6 +247,22 @@ class CortexAgent:
                     tool_calls = [fallback_tc]
                     msg["tool_calls"] = tool_calls
                 elif content:
+                    # Anti-hallucination guard: if user requested an action and model claims it succeeded without executing any tool
+                    action_req = re.search(r'\b(open|launch|start|type|write|create|install|download|kill|close|mute|unmute|search|find|show)\b', last_user_msg)
+                    claim_done = re.search(r'\b(is now open|i have opened|i\'ve opened|i have typed|i\'ve typed|is launched|has been launched|is created|has been created|i typed|i created|i opened)\b', content.lower())
+                    if action_req and claim_done and executed_tools_count == 0 and iteration < 3:
+                        dialogue.append(msg)
+                        dialogue.append({
+                            "role": "user",
+                            "content": (
+                                "[SYSTEM ERROR: You responded claiming to have opened an app or performed an action, "
+                                "but NO tool was executed on the computer. The action did NOT happen! "
+                                "You MUST execute the corresponding tool (e.g. `create_and_open_document`, `launch_app`, `run_cli_command`) "
+                                "right now. Do NOT reply with text until you have called the tool.]"
+                            )
+                        })
+                        continue
+
                     if on_token_chunk:
                         for pt in pending_tokens:
                             await on_token_chunk(pt)
@@ -266,6 +290,7 @@ class CortexAgent:
                         fn_args = {}
 
                 tool_output = await tool_executor(fn_name, fn_args)
+                executed_tools_count += 1
 
                 dialogue.append({
                     "role": "tool",

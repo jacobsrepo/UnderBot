@@ -660,5 +660,21 @@ CORTEX_TOOLS = [
                 "required": ["app_name"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "create_and_open_document",
+            "description": "Create a document on the user's Desktop with specified title and content, and immediately open it in Notepad (or another app) in front of the user. Use this whenever the user asks to open notepad/editor and write, type, or put information into it.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Document title or filename (e.g. 'LHC_Information.txt')"},
+                    "content": {"type": "string", "description": "Full text content to write into the document"},
+                    "app": {"type": "string", "description": "Application to open with (default: 'notepad')"}
+                },
+                "required": ["title", "content"]
+            }
+        }
     }
 ]

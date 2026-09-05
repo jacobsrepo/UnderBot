@@ -786,6 +786,14 @@ class CortexBrain:
                 result = await self.pc.open_file(path)
                 return result
 
+            elif name == "create_and_open_document":
+                title = args.get("title", "Notes.txt")
+                content_text = args.get("content", "")
+                app = args.get("app", "notepad")
+                await broadcast({"type": "state_change", "state": "programming"})
+                result = await self.pc.create_and_open_document(title, content_text, app=app)
+                return result
+
             elif name == "list_windows":
                 return await self.pc.list_windows()
 
@@ -922,6 +930,8 @@ Core Directives:
             full_system_prompt += "\n[IMPERATIVE: The user is asking about prices or deals. You MUST invoke `search_prices` immediately. DO NOT answer with text alone.]"
         elif re.search(r'\b(show me cafes|show me restaurants|places to visit|cafes near|restaurants near|places near|show me places|map of|find hotels|find cafes|spots in)\b', lower_input):
             full_system_prompt += "\n[IMPERATIVE: The user is asking for places or maps. You MUST invoke `search_places_and_map` immediately. DO NOT answer with text alone.]"
+        elif re.search(r'\b(open|launch)\b.{0,30}\b(notepad|text editor|document|file)\b.{0,40}\b(type|write|put|info|about|notes)\b', lower_input) or re.search(r'\b(write|type|put)\b.{0,30}\b(in|into|on)\b.{0,20}\b(notepad|document)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user wants to create or open a document in Notepad with specific text. You MUST invoke `create_and_open_document(title=..., content=...)` immediately so the file is created and opened in Notepad directly on the user's screen. DO NOT answer with text alone without executing the tool.]"
         elif re.search(r'\b(open|launch|start)\b.{0,40}\b(microsoft store|discord|chrome|firefox|notepad|spotify|vscode|store|app|application|program)\b', lower_input):
             full_system_prompt += "\n[IMPERATIVE: The user wants to open an app. Call `launch_app` RIGHT NOW with the app name. Do NOT describe steps or write code blocks. Call the tool and report result in one line.]"
         elif re.search(r'\b(find|search|locate|where is|where are)\b.{0,30}\b(file|folder|document|pdf|cv|resume|download)\b', lower_input):
@@ -1061,9 +1071,13 @@ Core Directives:
                     {"role": "tool", "content": __import__("json").dumps(r)}
                 ]
 
-        # Open/launch app
-        elif re.search(r'\b(open|launch|start)\b', lower_input) and not install_m:
-            open_m = re.search(r'\b(?:open|launch|start)\s+(?:the\s+)?([a-z][a-z0-9 \-+]+?)(?:\s+(?:for me|please|app|application|program))?\s*$', lower_input)
+        # Open/launch app (ONLY for standalone single app launch requests, NOT compound instructions with and/type/write/search)
+        elif (
+            re.search(r'\b(open|launch|start)\b', lower_input)
+            and not install_m
+            and not re.search(r'\b(and|then|type|write|read|search|find|play|create|with|put|about)\b', lower_input)
+        ):
+            open_m = re.search(r'\b(?:open|launch|start)\s+(?:the\s+)?([a-z0-9\-_]+(?:\s+[a-z0-9\-_]+)?)(?:\s+(?:for me|please|app|application|program))?\s*$', lower_input)
             if open_m:
                 app_name = open_m.group(1).strip()
                 r = await _try_direct("launch_app", {"app_name": app_name})
