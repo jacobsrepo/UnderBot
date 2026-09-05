@@ -646,5 +646,19 @@ CORTEX_TOOLS = [
                 "required": ["root", "pattern"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "verify_app_running",
+            "description": "Verify whether an application is currently running. Call this after launch_app to confirm it actually started. Returns running=true/false and the matching process list.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "app_name": {"type": "string", "description": "App name to check (e.g. 'notepad', 'discord', 'chrome')"}
+                },
+                "required": ["app_name"]
+            }
+        }
     }
 ]

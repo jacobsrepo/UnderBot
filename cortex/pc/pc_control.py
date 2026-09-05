@@ -119,30 +119,224 @@ class PCController:
     # App launching                                                        #
     # ------------------------------------------------------------------ #
 
+    # Known app name -> executable / protocol mapping
+    _APP_MAP = {
+        "microsoft store": ("ms-windows-store:", "protocol"),
+        "store": ("ms-windows-store:", "protocol"),
+        "discord": ("discord:", "protocol"),
+        "notepad": ("notepad.exe", "exe"),
+        "notepad++": (r"C:\Program Files\Notepad++\notepad++.exe", "exe"),
+        "chrome": ("chrome.exe", "exe"),
+        "google chrome": ("chrome.exe", "exe"),
+        "firefox": ("firefox.exe", "exe"),
+        "edge": ("msedge.exe", "exe"),
+        "microsoft edge": ("msedge.exe", "exe"),
+        "explorer": ("explorer.exe", "exe"),
+        "file explorer": ("explorer.exe", "exe"),
+        "calculator": ("calc.exe", "exe"),
+        "spotify": ("spotify.exe", "exe"),
+        "vscode": ("code.exe", "exe"),
+        "visual studio code": ("code.exe", "exe"),
+        "teams": ("ms-teams:", "protocol"),
+        "microsoft teams": ("ms-teams:", "protocol"),
+        "paint": ("mspaint.exe", "exe"),
+        "powershell": ("powershell.exe", "exe"),
+        "cmd": ("cmd.exe", "exe"),
+        "task manager": ("taskmgr.exe", "exe"),
+        "settings": ("ms-settings:", "protocol"),
+        "control panel": ("control.exe", "exe"),
+        "steam": ("steam.exe", "exe"),
+    }
+
+    def _launch_exe(self, exe: str) -> bool:
+        strategies = [
+            lambda: subprocess.Popen([exe], creationflags=subprocess.CREATE_NEW_PROCESS_GROUP),
+            lambda: subprocess.Popen(exe, shell=False),
+            lambda: subprocess.Popen(["cmd", "/c", "start", "", exe], shell=False),
+            lambda: os.startfile(exe),
+        ]
+        for s in strategies:
+            try:
+                s()
+                return True
+            except Exception:
+                continue
+        return False
+
+    def _launch_protocol(self, protocol: str) -> bool:
+        try:
+            os.startfile(protocol)
+            return True
+        except Exception:
+            pass
+        try:
+            subprocess.Popen(["cmd", "/c", "start", "", protocol], shell=False)
+            return True
+        except Exception:
+            pass
+        return False
+
+    _APP_MAP = {
+        "microsoft store": ("ms-windows-store:", "protocol"),
+        "store":           ("ms-windows-store:", "protocol"),
+        "discord":         ("discord:", "protocol"),
+        "notepad":         ("notepad.exe", "exe"),
+        "chrome":          ("chrome.exe", "exe"),
+        "google chrome":   ("chrome.exe", "exe"),
+        "firefox":         ("firefox.exe", "exe"),
+        "edge":            ("msedge.exe", "exe"),
+        "microsoft edge":  ("msedge.exe", "exe"),
+        "explorer":        ("explorer.exe", "exe"),
+        "file explorer":   ("explorer.exe", "exe"),
+        "calculator":      ("calc.exe", "exe"),
+        "spotify":         ("spotify.exe", "exe"),
+        "vscode":          ("code.exe", "exe"),
+        "visual studio code": ("code.exe", "exe"),
+        "teams":           ("ms-teams:", "protocol"),
+        "microsoft teams": ("ms-teams:", "protocol"),
+        "paint":           ("mspaint.exe", "exe"),
+        "powershell":      ("powershell.exe", "exe"),
+        "cmd":             ("cmd.exe", "exe"),
+        "task manager":    ("taskmgr.exe", "exe"),
+        "settings":        ("ms-settings:", "protocol"),
+        "control panel":   ("control.exe", "exe"),
+        "steam":           ("steam.exe", "exe"),
+    }
+
+    def _launch_exe(self, exe: str) -> bool:
+        import subprocess as _sp
+        for strat in [
+            lambda: _sp.Popen([exe], creationflags=_sp.CREATE_NEW_PROCESS_GROUP),
+            lambda: _sp.Popen(exe, shell=False),
+            lambda: _sp.Popen(['cmd', '/c', 'start', '', exe], shell=False),
+            lambda: os.startfile(exe),
+        ]:
+            try:
+                strat()
+                return True
+            except Exception:
+                continue
+        return False
+
+    def _launch_protocol(self, protocol: str) -> bool:
+        import subprocess as _sp
+        try:
+            os.startfile(protocol)
+            return True
+        except Exception:
+            pass
+        try:
+            _sp.Popen(['cmd', '/c', 'start', '', protocol], shell=False)
+            return True
+        except Exception:
+            pass
+        return False
+
+    _APP_MAP = {
+        "microsoft store": ("ms-windows-store:", "protocol"),
+        "store":           ("ms-windows-store:", "protocol"),
+        "discord":         ("discord:", "protocol"),
+        "notepad":         ("notepad.exe", "exe"),
+        "chrome":          ("chrome.exe", "exe"),
+        "google chrome":   ("chrome.exe", "exe"),
+        "firefox":         ("firefox.exe", "exe"),
+        "edge":            ("msedge.exe", "exe"),
+        "microsoft edge":  ("msedge.exe", "exe"),
+        "explorer":        ("explorer.exe", "exe"),
+        "file explorer":   ("explorer.exe", "exe"),
+        "calculator":      ("calc.exe", "exe"),
+        "spotify":         ("spotify.exe", "exe"),
+        "vscode":          ("code.exe", "exe"),
+        "visual studio code": ("code.exe", "exe"),
+        "teams":           ("ms-teams:", "protocol"),
+        "microsoft teams": ("ms-teams:", "protocol"),
+        "paint":           ("mspaint.exe", "exe"),
+        "powershell":      ("powershell.exe", "exe"),
+        "cmd":             ("cmd.exe", "exe"),
+        "task manager":    ("taskmgr.exe", "exe"),
+        "settings":        ("ms-settings:", "protocol"),
+        "control panel":   ("control.exe", "exe"),
+        "steam":           ("steam.exe", "exe"),
+    }
+
+    def _launch_exe(self, exe: str) -> bool:
+        import subprocess as _sp
+        for strat in [
+            lambda: _sp.Popen([exe], creationflags=_sp.CREATE_NEW_PROCESS_GROUP),
+            lambda: _sp.Popen(exe, shell=False),
+            lambda: _sp.Popen(['cmd', '/c', 'start', '', exe], shell=False),
+            lambda: os.startfile(exe),
+        ]:
+            try:
+                strat()
+                return True
+            except Exception:
+                continue
+        return False
+
+    def _launch_protocol(self, protocol: str) -> bool:
+        import subprocess as _sp
+        try:
+            os.startfile(protocol)
+            return True
+        except Exception:
+            pass
+        try:
+            _sp.Popen(['cmd', '/c', 'start', '', protocol], shell=False)
+            return True
+        except Exception:
+            pass
+        return False
+
     async def launch_app(self, app_name: str) -> Dict[str, Any]:
-        """
-        Launch an application by name (uses AppOpener first, falls back to
-        subprocess.Popen for direct .exe paths or known system commands).
-        """
+        """Launch an application using the most reliable Windows method."""
         def _work():
-            # Direct .exe path
-            if app_name.lower().endswith(".exe") or os.path.sep in app_name:
-                subprocess.Popen([app_name], shell=True)
-                return {"status": "launched", "app": app_name}
-            # Try AppOpener (handles Chrome, Notepad, Spotify, etc. by name)
+            name_lower = app_name.strip().lower()
+            if name_lower in self._APP_MAP:
+                target, kind = self._APP_MAP[name_lower]
+                ok = self._launch_protocol(target) if kind == 'protocol' else self._launch_exe(target)
+                if ok:
+                    return {'status': 'launched', 'app': app_name, 'method': kind, 'target': target}
+            if app_name.lower().endswith('.exe') or os.path.sep in app_name:
+                ok = self._launch_exe(app_name)
+                return {'status': 'launched' if ok else 'launch_failed', 'app': app_name, 'method': 'direct_exe'}
+            if self._launch_exe(app_name + '.exe'):
+                return {'status': 'launched', 'app': app_name, 'method': 'exe_name'}
             try:
                 ao = _appopener()
-                ao.open(app_name, match_closest=True, output=False)
-                return {"status": "launched", "app": app_name}
+                ao.open(name_lower, match_closest=True, output=False)
+                return {'status': 'launched', 'app': app_name, 'method': 'appopener'}
             except Exception:
                 pass
-            # Fallback: shell start
-            subprocess.Popen(f'start "" "{app_name}"', shell=True)
-            return {"status": "launched", "app": app_name}
+            import subprocess as _sp
+            try:
+                _sp.Popen(['cmd', '/c', 'start', '', app_name], shell=False)
+                return {'status': 'launched', 'app': app_name, 'method': 'shell_start'}
+            except Exception as exc:
+                return {'status': 'launch_failed', 'app': app_name, 'error': str(exc)}
         try:
             return await asyncio.to_thread(_work)
-        except Exception as e:
-            return {"error": str(e)}
+        except Exception as exc:
+            return {'error': str(exc)}
+
+    async def verify_app_running(self, app_name: str) -> Dict[str, Any]:
+        """Check if an app is actually running after a launch attempt."""
+        def _work():
+            psutil = _psutil()
+            name_lower = app_name.lower().replace('.exe', '')
+            running = []
+            for p in psutil.process_iter(['pid', 'name']):
+                try:
+                    pn = p.info['name'].lower().replace('.exe', '')
+                    if name_lower in pn or pn in name_lower:
+                        running.append({'pid': p.pid, 'name': p.info['name']})
+                except Exception:
+                    pass
+            return {'running': len(running) > 0, 'processes': running[:5], 'app': app_name}
+        try:
+            return await asyncio.to_thread(_work)
+        except Exception as exc:
+            return {'error': str(exc)}
 
     async def open_file(self, path: str) -> Dict[str, Any]:
         """Open any file with its default application (os.startfile equivalent)."""

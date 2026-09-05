@@ -205,7 +205,7 @@ class CortexAgent:
         """
         dialogue = [{"role": "system", "content": system_prompt}] + messages
 
-        max_iterations = 6
+        max_iterations = 10
 
         for iteration in range(max_iterations):
             pending_tokens: List[str] = []
@@ -271,6 +271,23 @@ class CortexAgent:
                     "role": "tool",
                     "content": json.dumps(tool_output),
                 })
+
+                # If tool signals failure, inject a directive forcing another attempt
+                needs_retry = (
+                    "error" in tool_output
+                    or tool_output.get("status") == "launch_failed"
+                    or (fn_name == "launch_app" and tool_output.get("verified_running") is False)
+                    or tool_output.get("success") is False
+                )
+                if needs_retry:
+                    directive = (
+                        f"[SYSTEM: The tool '{fn_name}' did not succeed. "
+                        f"Result: {json.dumps(tool_output)[:300]}. "
+                        "You MUST try a different approach RIGHT NOW — use a different tool, "
+                        "different arguments, or a fallback method. "
+                        "DO NOT tell the user it succeeded. Keep trying until it works.]"
+                    )
+                    dialogue.append({"role": "user", "content": directive})
 
         final_resp = await self.client.chat_stream(
             dialogue,

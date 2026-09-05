@@ -754,6 +754,31 @@ class CortexBrain:
                 app_name = args.get("app_name", "")
                 await broadcast({"type": "state_change", "state": "programming"})
                 result = await self.pc.launch_app(app_name)
+                # Wait and verify the app actually started
+                await asyncio.sleep(2.0)
+                verify = await self.pc.verify_app_running(app_name)
+                result["verified_running"] = verify.get("running", False)
+                if not verify.get("running"):
+                    # Attempt winget install if launch failed (app might not be installed)
+                    winget_ids = {
+                        "discord": "Discord.Discord",
+                        "notepad++": "Notepad++.Notepad++",
+                        "vlc": "VideoLAN.VLC",
+                        "spotify": "Spotify.Spotify",
+                        "chrome": "Google.Chrome",
+                        "firefox": "Mozilla.Firefox",
+                        "vscode": "Microsoft.VisualStudioCode",
+                        "steam": "Valve.Steam",
+                    }
+                    wid = winget_ids.get(app_name.strip().lower())
+                    if wid:
+                        result["install_attempt"] = True
+                        result["note"] = f"App not found in running processes. Attempting winget install for {app_name}..."
+                        cmd = f"winget install --id {wid} -e --accept-source-agreements --accept-package-agreements"
+                        install_result = await self.cli_runner.execute_with_healing(cmd)
+                        result["install_result"] = install_result
+                    else:
+                        result["note"] = f"'{app_name}' did not appear in running processes after launch. It may not be installed or the name is incorrect."
                 return result
 
             elif name == "open_file":
@@ -769,6 +794,9 @@ class CortexBrain:
 
             elif name == "close_window":
                 return await self.pc.close_window(args.get("title", ""))
+
+            elif name == "verify_app_running":
+                return await self.pc.verify_app_running(args.get("app_name", ""))
 
             elif name == "take_screenshot":
                 result = await self.pc.take_screenshot()
