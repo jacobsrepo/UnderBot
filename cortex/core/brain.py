@@ -52,7 +52,7 @@ CORE OPERATIONAL PRINCIPLES:
    - When the Arduino is connected on COM4, execute physical actions with confidence.
 4. CONVERSATIONAL SPEECH:
    - Your speech will be synthesized aloud by TTS. Keep spoken summaries concise, natural, and helpful. Do not read raw blocks of C++ or PowerShell code syntax aloud.
-   - Express facial moods naturally using `set_facial_expression` or tags like `[mood:analytical]`.
+   - Express facial moods naturally using the `set_facial_expression` tool when relevant. Never emit inline mood or bracketed text tags.
 """
 
 
@@ -112,23 +112,34 @@ class CortexBrain:
     def receive_camera_frame(self, frame_b64: str):
         self.camera.update_frame(frame_b64)
 
+    @staticmethod
+    def _clean_text_artifacts(text: str) -> str:
+        """
+        Strips any stray LLM meta-tags, mood tags, lombok artifacts, or bracketed tag leftovers.
+        """
+        if not text:
+            return ""
+        # Remove any Lombok / ombok prefix variations
+        clean = re.sub(r'\[?[A-Za-z]*[Ll]ombok[A-Za-z0-9;:_<>#\s\-]*\]?>*', '', text)
+        clean = re.sub(r'ombok;>*(?:glow:[^>]+>)?(?:mood:[^;\n]+;)?', '', clean, flags=re.IGNORECASE)
+        # Remove any mood/glow bracket tags
+        clean = re.sub(r'\[[^\]]*(?:mood|glow|eye|intensity)[^\]]*\]', '', clean, flags=re.IGNORECASE)
+        clean = re.sub(r'\b(?:mood|glow):[a-zA-Z0-9_#]+;?', '', clean, flags=re.IGNORECASE)
+        clean = re.sub(r'\[(?:insert|system|hardware|vision)[^\]]*\]', '', clean, flags=re.IGNORECASE)
+        return clean.strip()
+
     def _sanitize_for_tts(self, text: str) -> str:
         """
         Hardening Check 4: Strips inline mood, metadata tags, raw code blocks, markdown tables,
         and syntax before audio synthesis so Cortex never reads code or formatting syntax out loud.
         """
+        clean = self._clean_text_artifacts(text)
         # Strip all markdown code blocks completely
-        clean = re.sub(r'```[a-zA-Z0-9_\-\.]*[\s\S]*?```', '', text)
+        clean = re.sub(r'```[a-zA-Z0-9_\-\.]*[\s\S]*?```', '', clean)
         # Strip inline code backticks and code snippets
         clean = re.sub(r'`[^`\n]+`', '', clean)
         # Strip markdown links: [Text](url) -> Text
         clean = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', clean)
-        # Strip [mood:...] tags and variations
-        clean = re.sub(r'\[[^\]]*mood:[^\]]*\]', '', clean, flags=re.IGNORECASE)
-        clean = re.sub(r'\[[^\]]*glow:[^\]]*\]', '', clean, flags=re.IGNORECASE)
-        clean = re.sub(r'\b(?:mood|glow):[a-zA-Z0-9_#]+;?', '', clean, flags=re.IGNORECASE)
-        # Strip generic bracketed metadata like [insert ...] or [SYSTEM ...]
-        clean = re.sub(r'\[(?:insert|system|hardware|vision)[^\]]*\]', '', clean, flags=re.IGNORECASE)
         # Strip URLs
         clean = re.sub(r'https?://\S+', '', clean)
         # Strip raw file paths like C:\Users\... so it doesn't read long backslashes
@@ -756,7 +767,7 @@ Long-Term Context Grounding (OpenClaw Root Knowledge):
 
 Operational Rules:
 1. Tool Syntheses must adhere to Windows PowerShell cmdlets (Select-String, Get-ChildItem, Get-Content).
-2. Express internal sentiment via inline streaming tags: [mood:<curious|analytical|confident|skeptical|alert>;glow:<HEX>]
+2. Speak naturally, cleanly, and directly without meta-tags, mood tags, bracketed prefixes, or robotic announcements.
 3. Never emit placeholder dates, simulated status checks, or generic meta-announcements.
 """
         skills_hdr = self.skill_manager.get_skill_catalog_prompt()
@@ -788,16 +799,49 @@ Operational Rules:
         tts_queue: asyncio.Queue = asyncio.Queue()
         tts_worker_task = asyncio.create_task(self._stream_tts_worker(tts_queue, broadcast))
 
+        tag_buffer = ""
+        in_tag = False
+
         async def on_token_chunk(token: str):
-            nonlocal chunk_idx
+            nonlocal chunk_idx, tag_buffer, in_tag
+            if not token:
+                return
+
+            if "ombok" in token.lower():
+                return
+
+            to_send = ""
+            for char in token:
+                if char == '[':
+                    in_tag = True
+                    tag_buffer = "["
+                elif in_tag:
+                    tag_buffer += char
+                    if char == ']':
+                        in_tag = False
+                        if re.match(r'\[(mood|glow|eye|intensity|lombok|insert|system)', tag_buffer, re.IGNORECASE):
+                            tag_buffer = ""
+                        else:
+                            to_send += tag_buffer
+                            tag_buffer = ""
+                    elif len(tag_buffer) > 40:
+                        in_tag = False
+                        to_send += tag_buffer
+                        tag_buffer = ""
+                else:
+                    to_send += char
+
+            if not to_send:
+                return
+
             # 1. Stream token to UI immediately
             await broadcast({
                 "type": "chat_stream_chunk",
                 "msg_id": msg_id,
-                "chunk": token
+                "chunk": to_send
             })
             # 2. Feed token into Sentence Chunker
-            sentences = self.sentence_chunker.append(token)
+            sentences = self.sentence_chunker.append(to_send)
             for s in sentences:
                 clean_s = self._sanitize_for_tts(s)
                 if clean_s:
@@ -836,7 +880,7 @@ Operational Rules:
             })
 
         # Finalize streaming message in chat UI
-        clean_content = re.sub(r'\[mood:[^\]]+\]', '', response).strip()
+        clean_content = self._clean_text_artifacts(response)
         tts_text = self._sanitize_for_tts(response)
         await broadcast({
             "type": "chat_stream_end",

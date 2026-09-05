@@ -1,4 +1,5 @@
 import os
+import re
 import sqlite3
 from datetime import datetime
 from pathlib import Path
@@ -65,12 +66,22 @@ class OpenClawMemory:
                 )
             conn.commit()
 
+    @staticmethod
+    def _sanitize_message(text: str) -> str:
+        if not text:
+            return ""
+        clean = re.sub(r'\[?[A-Za-z]*[Ll]ombok[A-Za-z0-9;:_<>#\s\-]*\]?>*', '', text)
+        clean = re.sub(r'ombok;>*(?:glow:[^>]+>)?(?:mood:[^;\n]+;)?', '', clean, flags=re.IGNORECASE)
+        clean = re.sub(r'\[[^\]]*(?:mood|glow|eye|intensity)[^\]]*\]', '', clean, flags=re.IGNORECASE)
+        return clean.strip()
+
     def append_daily_log(self, action: str, details: str) -> None:
         today_str = datetime.now().strftime("%Y-%m-%d")
         daily_file = self.daily_dir / f"{today_str}.md"
         timestamp = datetime.now().strftime("%H:%M:%S")
         
-        entry = f"\n### [{timestamp}] {action}\n{details}\n"
+        clean_details = self._sanitize_message(details)
+        entry = f"\n### [{timestamp}] {action}\n{clean_details}\n"
         with open(daily_file, "a", encoding="utf-8") as f:
             f.write(entry)
 
@@ -118,7 +129,7 @@ class OpenClawMemory:
         self.append_daily_log(f"Saved Fact: {category}/{key}", value)
 
     def add_message(self, role: str, content: str, session_id: str = "default"):
-        clean_content = content.strip()
+        clean_content = self._sanitize_message(content)
         if not clean_content:
             return
         with sqlite3.connect(self.db_path) as conn:
@@ -151,9 +162,12 @@ class OpenClawMemory:
 
         history: List[Dict[str, str]] = []
         for role, content in rows:
-            if history and history[-1]["role"] == role and history[-1]["content"] == content:
+            clean_c = self._sanitize_message(content)
+            if not clean_c:
                 continue
-            history.append({"role": role, "content": content})
+            if history and history[-1]["role"] == role and history[-1]["content"] == clean_c:
+                continue
+            history.append({"role": role, "content": clean_c})
         return history[-limit:]
 
     def clear_session(self, session_id: str = "default"):
