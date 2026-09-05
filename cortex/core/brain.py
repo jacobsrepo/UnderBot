@@ -155,6 +155,7 @@ class CortexBrain:
 
     async def process_user_message(self, text: str, broadcast_cb: Optional[Callable[[Dict[str, Any]], Any]] = None) -> str:
         text_clean = text.strip()
+        print(f"[Brain] Processing user message: \"{text_clean[:60]}\"")
         self.conv_memory.add_message("user", text_clean)
 
         async def broadcast(event_dict):
@@ -835,18 +836,19 @@ Operational Rules:
             })
 
         # Finalize streaming message in chat UI
+        clean_content = re.sub(r'\[mood:[^\]]+\]', '', response).strip()
         tts_text = self._sanitize_for_tts(response)
         await broadcast({
             "type": "chat_stream_end",
             "msg_id": msg_id,
-            "full_content": tts_text
+            "full_content": clean_content
         })
 
         # Save to OpenClaw short-term session and medium-term daily journal
-        self.openclaw_memory.add_message("assistant", tts_text)
+        self.openclaw_memory.add_message("assistant", clean_content)
         self.openclaw_memory.append_daily_log(
             action="Turn Complete",
-            details=f"**User**: {text_clean}\n**Cortex**: {tts_text}"
+            details=f"**User**: {text_clean}\n**Cortex**: {clean_content}"
         )
 
         # Auto-dismiss viewports if user shifted topic away

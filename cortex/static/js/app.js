@@ -2,8 +2,8 @@
  * Cortex UI Application — Integrated Camera, Voice, and Multi-View Sync
  */
 
-import { RobotFace } from './face.js';
-import { LiveVoiceEngine } from './voice.js';
+import { RobotFace } from './face.js?v=4.1';
+import { LiveVoiceEngine } from './voice.js?v=4.1';
 
 class CortexApp {
     constructor() {
@@ -11,6 +11,8 @@ class CortexApp {
         this.voice = null;
         this.ws = null;
         this.reconnectTimer = null;
+        this._pendingQueue = [];
+        this._lastLocalUserMessage = null;
 
         // Viewport mode: 'none' | 'camera' | 'browser' | 'dual'
         this.viewMode = 'none';
@@ -683,12 +685,22 @@ class CortexApp {
     }
 
     _connectWS() {
+        if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+            return;
+        }
         const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
         this.ws = new WebSocket(`${proto}//${location.host}/ws`);
 
         this.ws.onopen = () => {
             this._setOnline(true);
             this._addMessage('system', 'Connected to Cortex Core');
+            // Flush any messages that were queued while offline
+            if (this._pendingQueue && this._pendingQueue.length > 0) {
+                while (this._pendingQueue.length > 0) {
+                    const item = this._pendingQueue.shift();
+                    this._wsSend(item);
+                }
+            }
         };
 
         this.ws.onmessage = (e) => {
@@ -699,16 +711,22 @@ class CortexApp {
             }
         };
 
+        this.ws.onerror = (err) => {
+            console.warn('[WS] Socket error event:', err);
+        };
+
         this.ws.onclose = () => {
             this._setOnline(false);
             clearTimeout(this.reconnectTimer);
-            this.reconnectTimer = setTimeout(() => this._connectWS(), 3000);
+            this.reconnectTimer = setTimeout(() => this._connectWS(), 2000);
         };
     }
 
     _wsSend(data) {
-        if (this.ws?.readyState === WebSocket.OPEN) {
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify(data));
+        } else {
+            console.warn('[WS] Cannot send, socket not open (state: ' + this.ws?.readyState + ')');
         }
     }
 
@@ -726,6 +744,11 @@ class CortexApp {
                 this.setViewMode(msg.mode, msg.data, msg);
                 break;
             case 'chat_message':
+                // Deduplicate locally echoed user messages
+                if (msg.role === 'user' && this._lastLocalUserMessage === msg.content) {
+                    this._lastLocalUserMessage = null;
+                    break;
+                }
                 this._addMessage(msg.role, msg.content);
                 break;
             case 'chat_stream_chunk':
@@ -793,6 +816,14 @@ class CortexApp {
     _sendChat() {
         const text = this.dom.chatInput.value.trim();
         if (!text) return;
+
+        // Ensure Web Audio context is unlocked via user gesture
+        try {
+            if (this.voice?.voiceQueue?._ensureAudioContext) {
+                this.voice.voiceQueue._ensureAudioContext();
+            }
+        } catch (e) {}
+
         if (text.toLowerCase() === '/clear' || text.toLowerCase() === 'clear chat' || text.toLowerCase() === 'clear memory') {
             this._wsSend({ type: 'clear_memory' });
             this.dom.chatMessages.innerHTML = `
@@ -809,18 +840,43 @@ class CortexApp {
     }
 
     bargeIn() {
-        if (this.voice) {
-            this.voice.bargeIn();
+        try {
+            if (this.voice && typeof this.voice.bargeIn === 'function') {
+                this.voice.bargeIn();
+            }
+        } catch (e) {
+            console.warn('[Voice] bargeIn error:', e);
         }
         this._wsSend({ type: 'barge_in' });
     }
 
     _sendChatText(text) {
         if (!text) return;
-        // User spoke or typed — immediately interrupt any ongoing speech
+
+        // 1. Immediately display user message in chat UI for instant tactile feedback
+        this._lastLocalUserMessage = text;
+        this._addMessage('user', text);
+
+        // 2. Safely interrupt any ongoing speech
         this.bargeIn();
-        this._captureAndSendSnapshot();
-        this._wsSend({ type: 'chat_message', content: text });
+
+        // 3. Safely capture camera snapshot if active
+        try {
+            this._captureAndSendSnapshot();
+        } catch (e) {
+            console.warn('[Camera] Snapshot error:', e);
+        }
+
+        // 4. Send chat message to server or queue if reconnecting
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this._wsSend({ type: 'chat_message', content: text });
+        } else {
+            console.warn('[WS] Socket not open (state: ' + this.ws?.readyState + '), message queued');
+            if (!this._pendingQueue) this._pendingQueue = [];
+            this._pendingQueue.push({ type: 'chat_message', content: text });
+            this._addMessage('system', 'Reconnecting to Cortex Core...');
+            this._connectWS();
+        }
     }
 
     handleStreamChunk(msg) {
