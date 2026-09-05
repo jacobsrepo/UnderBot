@@ -144,13 +144,13 @@ CORTEX_TOOLS = [
         "type": "function",
         "function": {
             "name": "inspect_camera",
-            "description": "Inspect the physical webcam optical feed to see if an external physical LED on a circuit board or breadboard is glowing. ONLY call this when the camera feed is ACTIVE and the user explicitly asks to look through the camera, inspect the physical video feed, or visually check the circuit board. NEVER call this when the camera is offline or for general questions.",
+            "description": "Inspect the physical optical webcam feed to visually check the scene or see if an external physical LED or component on a circuit board is visible or illuminated. Only call this when the camera is active and visual inspection is needed.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "focus_target": {
                         "type": "string",
-                        "description": "What specific item or color to verify"
+                        "description": "What specific item, component, or color to verify"
                     }
                 }
             }
@@ -171,7 +171,7 @@ CORTEX_TOOLS = [
         "type": "function",
         "function": {
             "name": "search_or_browse_web",
-            "description": "CRITICAL MANDATORY TOOL: Search the web, Google, DuckDuckGo, and read documentation or online knowledge. Call this whenever the user asks to look online, find info, search the web, check facts, look up technical documentation, or when asked what a hardware component/pin/LED does (e.g. 'what does RX, TX and PO LED on arduino nano do', 'look online and find info', 'search web for X', 'whats the latest news').",
+            "description": "Search the web, Google, DuckDuckGo, and read documentation or online web pages. Use this to look up latest news, technical documentation, hardware pinouts, or current information.",
             "parameters": {
                 "type": "object",
                 "properties": {

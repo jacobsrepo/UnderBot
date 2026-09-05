@@ -25,48 +25,21 @@ from skills.manager import SkillManager
 
 BASE_SYSTEM_PROMPT = """You are Cortex, an intelligent, calm, and articulate AI assistant with real-world physical agency, vision, live intelligence, and host automation.
 
-ACTION-FIRST EXECUTION MANDATE (CRITICAL):
-1. IMMEDIATE ACTION: When the user requests an action (compile code, upload/flash firmware, install software/packages, search the web, check hardware, list files, run a command), CALL THE APPROPRIATE TOOL IMMEDIATELY.
-2. NEVER STALL OR ASK FOR REPETITIVE PERMISSION: If the user gave an objective or goal, you have full authorization to execute all required sub-steps (searching, installing missing dependencies, compiling, testing, flashing). DO NOT ask "Would you like to proceed?", "Shall I start?", or "Do you want me to install this?". Take the action immediately and report the actual result.
-3. NEVER SIMULATE OR GUESS: Never pretend to upload, flash, or test. Always invoke the real tool (`build_and_flash_sketch`, `compile_and_upload_sketch`, `run_cli_command`, `install_package_or_tool`, `check_hardware_connection`).
-
-LIVE STATE VERIFICATION (NEVER RELY ON STALE MEMORY):
-1. USB & MICROCONTROLLERS (CRITICAL GROUND TRUTH):
-   - ALWAYS consult the [LIVE SYSTEM GROUNDING] header for the real-time physical hardware connection status.
-   - If LIVE SYSTEM GROUNDING states 'CONNECTED (ONLINE)', the Arduino Nano on COM4 is physically connected RIGHT NOW. NEVER claim it is disconnected or say 'no Arduino board is connected' when the grounding header shows CONNECTED!
-   - If the user asks 'what is the status of the arduino', 'are you sure?', 'verify', or 'is it connected', ALWAYS confirm the live status truthfully from LIVE SYSTEM GROUNDING and call `check_hardware_connection` live so telemetry is broadcast to the UI.
-   - Prior conversation turns are historical. DO NOT repeat stale disconnected claims from past turns when LIVE SYSTEM GROUNDING shows the board is now CONNECTED.
-   - If LIVE SYSTEM GROUNDING states 'DISCONNECTED', state truthfully that no board is connected.
-   - NEVER call `set_all_arduino_pins` or `set_arduino_pin` to check connection!
-   - If the board is disconnected, NEVER claim pins are ON or responding.
-2. FILES, FOLDERS & DIRECTORIES: Always verify files live on the host filesystem using `run_cli_command` with PowerShell (`Test-Path`, `Get-ChildItem`) or search tools. Never assume a file exists or doesn't exist without checking.
-
-ARDUINO & FIRMWARE AUTOMATION:
-1. CREATING, TESTING, OR RUNNING CODE (e.g. "run a basic test script on all pins", "blink LED", "write a test sketch", "test pins"):
-   - ALWAYS invoke `build_and_flash_sketch` with your generated Arduino C++ code!
-   - NEVER search for non-existent files in Documents or hallucinate file paths! Build the code and flash it directly with `build_and_flash_sketch`.
-2. EXISTING SKETCHES ON DISK:
-   - Only call `compile_and_upload_sketch` if the user gave a specific existing file path (e.g. "push binary_RTConly.ino").
-3. CONVERSATIONAL SPEECH & CODE RULES (CRITICAL):
-   - NEVER recite, output, or dump raw C++ or PowerShell code into your speech or conversational assistant response!
-   - Your speech will be read aloud by TTS. Do NOT read code syntax aloud.
-   - Speak ONLY a concise, natural, human-friendly summary of what was accomplished (e.g. "I built and flashed a pin test sketch to the Arduino Nano on COM4. All digital pins are now cycling through test states.").
-
-POWERSHELL & PACKAGE INSTALLATION:
-1. Use `install_package_or_tool` to install Python packages (pip), Arduino libraries (arduino-cli), Windows utilities (winget), or Node packages (npm) autonomously.
-2. Use `run_cli_command` to execute native Windows PowerShell cmdlets, inspect directory contents, check logs, or run scripts.
-
-NEWS & LIVE WEB SEARCH MANDATE (CRITICAL):
-1. You have ZERO live news or real-time internet information in your model weights. NEVER guess, make up, or hallucinate news headlines from memory.
-2. WHENEVER the user asks for the latest news, breaking news, recent events, current updates, or what is happening (e.g. "what is the latest news from Nepal?", "whats new in AI", "search for X"):
-   - You MUST call `search_or_browse_web` IMMEDIATELY on your very first step.
-   - It is strictly forbidden to output conversational text or hallucinated news articles without calling `search_or_browse_web`.
-3. The UI automatically renders the publication-grade Reader View in the browser screen. In your spoken/chat reply, provide a crisp, calm summary of the main headline and key takeaways. Never recite raw URLs or links.
-
-GENERAL CAPABILITIES:
-1. Date & Time: Always rely on your LIVE SYSTEM GROUNDING or `Get-Date`. Never emit placeholders like '[insert current time here]'.
-2. Camera & Vision: Call `inspect_camera` ONLY if the user explicitly asks to visually check or inspect through the camera AND the camera is active. Never call `inspect_camera` for general conceptual or documentation questions, and NEVER claim to see physical objects when the camera is off.
-3. Robot Face: Actively express mood using `set_facial_expression` or tags like `[mood:curious;eye:inquiring;glow:#38bdf8]`.
+CORE OPERATIONAL PRINCIPLES:
+1. AUTONOMOUS TOOL USAGE: When the user asks you to perform an action (compile/flash firmware, read serial output, toggle pins, inspect hardware, search the web, run a PowerShell command, or install a tool), call the appropriate tool from your toolset. If the user is asking a general question, seeking an explanation, or having a conversation, answer them directly and articulately.
+2. SENSORY GROUNDING:
+   - Always refer to the [LIVE SYSTEM GROUNDING] section for the real-time physical state of the hardware (microcontroller connection, camera status) and system time.
+   - When the camera is OFF or inactive, you cannot see anything through it. Never claim to see physical objects unless the camera feed is streaming.
+   - When the Arduino is connected on COM4, you can actuate pins, flash code, or read serial communication.
+3. PHYSICAL ACTIONS & FIRMWARE:
+   - When asked to run or test code on the Arduino, use `build_and_flash_sketch` with complete Arduino C++ code.
+   - When asked to monitor or inspect the serial port, use `read_serial_output`.
+   - When asked to toggle or read pins, use `set_arduino_pin`, `set_all_arduino_pins`, or `get_pin_states`.
+4. WEB & LIVE RESEARCH:
+   - You do not have real-time internet data in your static training weights. If the user asks for breaking news, recent events, or online documentation, use `search_or_browse_web`.
+5. CONVERSATIONAL SUMMARY:
+   - Your speech is synthesized aloud via TTS. Keep spoken summaries concise, helpful, and natural. Do not dump raw blocks of C++ or PowerShell code into your speech.
+   - Express mood and facial animation naturally using `set_facial_expression` or inline tags like `[mood:confident]`.
 """
 
 
@@ -163,50 +136,6 @@ class CortexBrain:
             }
         return None
 
-    def _detect_direct_flash_intent(self, text: str) -> bool:
-        t = text.strip().lower()
-        phrases = (
-            "flash it", "flash", "you didn't flash yet", "you didnt flash yet",
-            "you didn't flash", "you didnt flash", "upload it", "upload", "reflash",
-            "flash the code", "flash the sketch", "flash now", "upload the sketch",
-            "flash to arduino", "upload to arduino", "burn sketch"
-        )
-        return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
-
-    def _detect_serial_output_intent(self, text: str) -> bool:
-        t = text.strip().lower()
-        phrases = (
-            "show serial com output", "show serial output", "show serial",
-            "show serial com", "show the serial com output", "show the serial output",
-            "show the serial com output show here", "show serial com output show here",
-            "show serial com output here", "show serial output here", "show com output",
-            "show com port output", "serial com output", "serial output", "serial monitor",
-            "read serial", "read serial port", "read com port", "read com4", "read com 4",
-            "whats the serial output", "what is the serial output", "whats on serial",
-            "what is on the serial port", "check serial output", "check serial com",
-            "check serial", "display serial output", "view serial output", "open serial monitor",
-            "print serial output", "show serial log", "serial log", "serial data", "com output",
-            "show com port", "show serial monitor"
-        )
-        return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
-
-    def _detect_hardware_status_intent(self, text: str) -> bool:
-        t = text.strip().lower()
-        phrases = (
-            "check arduino", "check the arduino", "check hardware", "check usb",
-            "check port", "check ports", "check com port", "check com ports", "check com4", "check com",
-            "whats the status on the arduino", "whats the status of the arduino",
-            "what is the status of the arduino", "what is the status on the arduino",
-            "whats the status on arduino", "whats the status of arduino",
-            "whats the status on the led", "whats the status of the led",
-            "what is the status of the led", "what is the status on the led",
-            "check led", "check the led", "status of led", "status on led", "status of the led",
-            "is arduino connected", "is the arduino connected", "status of the arduino",
-            "status on the arduino", "arduino status", "verify connection", "scan ports",
-            "scan port", "list ports", "detect arduino", "find arduino", "is board connected",
-            "is the board connected", "check board", "check connection"
-        )
-        return any(t == p or t.startswith(p + " ") or t.endswith(" " + p) or p in t for p in phrases)
 
     async def process_user_message(self, text: str, broadcast_cb: Optional[Callable[[Dict[str, Any]], Any]] = None) -> str:
         text_clean = text.strip()
@@ -817,132 +746,12 @@ class CortexBrain:
                 except Exception as e:
                     print(f"[Brain] Error reading .ino: {e}")
 
-        # Check for direct web research / live news / online documentation intent
-        is_search = any(k in text_clean.lower() for k in (
-            "look online", "find info", "search online", "search web", "google ", "browse ", "lookup ",
-            "search the web", "look up on google", "search for "
-        )) or any(text_clean.lower().startswith(p) for p in ("search ", "web search ", "google ", "browse ", "lookup ", "find info "))
-        is_news = self.surfer._is_news_intent(text_clean) and not any(k in text_clean.lower() for k in ("arduino", "board", "microcontroller", "pin", "com4", "usb"))
-
-        if self._detect_direct_flash_intent(text_clean):
-            target_code = self.active_sketch.get("code", "").strip()
-            target_path = self.active_sketch.get("path", "").strip()
-            target_name = self.active_sketch.get("name", "cortex_sketch")
-            target_port = self.active_sketch.get("port", "COM4")
-            target_fqbn = self.active_sketch.get("fqbn", "arduino:avr:nano")
-
-            if target_code:
-                flash_res = await execute_tool("build_and_flash_sketch", {
-                    "sketch_code": target_code,
-                    "sketch_name": target_name,
-                    "port": target_port,
-                    "fqbn": target_fqbn
-                })
-            elif target_path and os.path.exists(target_path):
-                flash_res = await execute_tool("compile_and_upload_sketch", {
-                    "sketch_path": target_path,
-                    "port": target_port,
-                    "fqbn": target_fqbn
-                })
-            else:
-                # Default pin cycle fallback sketch
-                default_pin_test = (
-                    "void setup() {\n"
-                    "  for(int p=2; p<=13; p++) pinMode(p, OUTPUT);\n"
-                    "}\n"
-                    "void loop() {\n"
-                    "  for(int p=2; p<=13; p++) {\n"
-                    "    digitalWrite(p, HIGH);\n"
-                    "    delay(100);\n"
-                    "    digitalWrite(p, LOW);\n"
-                    "  }\n"
-                    "}\n"
-                )
-                flash_res = await execute_tool("build_and_flash_sketch", {
-                    "sketch_code": default_pin_test,
-                    "sketch_name": "cortex_pin_cycle",
-                    "port": target_port,
-                    "fqbn": target_fqbn
-                })
-                target_name = "cortex_pin_cycle"
-
-            if flash_res.get("status") == "success":
-                response = f"I have built and flashed '{target_name}' to the Arduino Nano on {target_port}. The upload is verified and running on the microcontroller."
-            else:
-                response = f"Flash execution encountered an error: {flash_res.get('error') or flash_res.get('status')}."
-
-        elif self._detect_serial_output_intent(text_clean):
-            used_arduino = True
-            self.active_view_mode = "arduino"
-            stat = await execute_tool("check_hardware_connection", {})
-            serial_log = await self.device.get_serial_output(lines=40)
-            self.active_sketch["log"] = serial_log
-            await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
-            await broadcast({
-                "type": "arduino_serial_output",
-                "content": serial_log,
-                "replace": True
-            })
-            await broadcast({
-                "type": "arduino_telemetry",
-                "data": self.get_arduino_workbench_state()
-            })
-            if stat.get("connected"):
-                port_name = stat.get("port") or "COM4"
-                board_name = stat.get("name") or "Arduino Nano"
-                response = f"Connected to {board_name} on {port_name}. Showing live serial COM output in the Compiler & System Log terminal:\n\n```text\n{serial_log}\n```"
-            else:
-                response = "No Arduino board is currently detected on the COM ports. Please connect the microcontroller via USB to stream serial COM output."
-
-        elif self._detect_hardware_status_intent(text_clean):
-            stat = await execute_tool("check_hardware_connection", {})
-            is_led_query = any(k in text_clean.lower() for k in ("led", "light", "d13", "pin 13"))
-            if stat.get("connected"):
-                port_name = stat.get("port") or "COM4"
-                board_name = stat.get("name") or "Arduino Nano"
-                if is_led_query:
-                    pin13_state = self.device.get_all_states().get("D13", 0)
-                    led_status = "ON (HIGH)" if pin13_state else "OFF (LOW)"
-                    response = f"The {board_name} is online on {port_name}. Built-in LED (pin D13) is currently {led_status}. The hardware workbench is active."
-                else:
-                    response = f"The {board_name} is connected and online on {port_name}. The hardware workbench is active."
-            else:
-                avail_ports = stat.get("available_ports", [])
-                if avail_ports:
-                    port_list_str = ", ".join([p.get("port", "") for p in avail_ports if p.get("port")])
-                    response = f"Detected serial port(s): {port_list_str}. Checking microcontroller connection. Please ensure the Arduino Nano is firmly plugged in."
-                else:
-                    response = "No active COM ports detected. Please ensure the Arduino Nano is plugged into USB."
-
-        elif is_search or is_news:
-            search_query = re.sub(r'^(search for|web search for|google|browse|lookup|search|look online and find info about|look online and find info on|look online for|look online|find info about|find info on|find info)\s+', '', text_clean, flags=re.IGNORECASE).strip()
-            if not search_query:
-                search_query = text_clean
-            doc = await execute_tool("search_or_browse_web", {"query_or_url": search_query})
-
-            briefing_text = doc.get("briefing") or doc.get("summary") or doc.get("title", "")
-            synth_prompt = (
-                f"{full_system_prompt}\n\n"
-                f"[LIVE RESEARCH BRIEFING FOR: '{search_query}']\n"
-                f"- Headline: {doc.get('headline') or doc.get('title')}\n"
-                f"- Source: {doc.get('publisher') or doc.get('domain')}\n"
-                f"- Published: {doc.get('published_date', 'Today')}\n"
-                f"- Key Summary: {briefing_text[:2500]}\n\n"
-                f"TASK: Provide a concise, calm, and articulate spoken summary of this live research to the user. Do not recite raw URLs or brackets."
-            )
-            dialogue = [
-                {"role": "system", "content": synth_prompt},
-                {"role": "user", "content": text_clean}
-            ]
-            resp_chat = await self.agent.client.chat(dialogue, tools=None, task_type="dialogue")
-            response = resp_chat.get("message", {}).get("content", "I have retrieved the latest intelligence briefing.")
-        else:
-            # Run ReAct agent loop
-            response = await self.agent.run(
-                messages=history,
-                system_prompt=full_system_prompt,
-                tool_executor=execute_tool
-            )
+        # Run autonomous ReAct agent loop - let the AI freely decide!
+        response = await self.agent.run(
+            messages=history,
+            system_prompt=full_system_prompt,
+            tool_executor=execute_tool
+        )
 
         # Process any embedded facial mood tags
         mood_tag = self._extract_and_dispatch_mood_tags(response)
@@ -978,7 +787,7 @@ class CortexBrain:
             self.active_view_mode = "none"
         elif self.active_view_mode == "arduino" and not used_arduino:
             # Only dismiss hardware workbench if user clearly changed topics to web search or vision
-            if is_search or is_news or used_camera:
+            if used_web_search or used_camera:
                 await broadcast({"type": "set_view_mode", "mode": "none"})
                 self.active_view_mode = "none"
 

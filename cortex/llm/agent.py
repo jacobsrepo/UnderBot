@@ -1,33 +1,15 @@
 """
-Cortex Autonomous ReAct Agent Loop with Dynamic Sampling Profiles
-Uses qwen2.5-coder:7b with:
-- Task-type 'tool' (T=0.1, top_p=0.9) during tool generation and parameter binding
-- Task-type 'dialogue' (T=0.65, top_p=0.95) for expressive, natural user dialogue
+Cortex Autonomous ReAct Agent Loop
+Empowers the LLM to freely decide whether to call tools or respond directly with text.
+Zero regex interceptors, zero forced tool calling, zero canned action-enforcement blocks.
 """
 
 import json
-import re
 import asyncio
 from typing import List, Dict, Any, Optional, Callable
 
 from .tools import CORTEX_TOOLS
 from .client import LLMClient
-
-# Patterns for detecting informational questions vs imperative action requests
-QUESTION_OR_INFO_REGEX = re.compile(
-    r'(^(what|why|how|who|where|when|can you explain|explain|describe|tell me about|meaning of|difference between|look online|find info|search|lookup)\b|\?$|what does\b|what is\b|what are\b|look online|find info)',
-    re.IGNORECASE
-)
-
-ACTION_USER_REGEX = re.compile(
-    r'\b(flash(\s+the|\s+to|\s+code|\s+sketch)?|upload(\s+the|\s+to|\s+sketch|\s+code)?|compile|build\s+sketch|turn\s+(on|off)|switch\s+(on|off)|set\s+(pin|all\s+pins|d\d+|a\d+)|toggle\s+(pin|led)|actuate|run\s+cli|execute\s+command|check\s+(connection|hardware|arduino|board|port|ports|com|usb|serial)|scan\s+ports?|status\s+of\s+(the\s+)?(connection|hardware|board|port|serial)|read\s+serial|show\s+serial)\b',
-    re.IGNORECASE
-)
-
-HALLUCINATED_ACTION_REGEX = re.compile(
-    r'(i have (compiled|flashed|uploaded|turned on|updated|set)|has been (compiled|flashed|uploaded)|the pin is\s*\.|led should now be illuminated|led is now on|pins are now configured|let\'s run a command|checking the (available )?(com )?ports|scanned (the )?(available )?ports|no arduino (board )?is (currently )?detected|no microcontroller is connected|reading (the )?serial (com )?output)',
-    re.IGNORECASE
-)
 
 
 class CortexAgent:
@@ -42,62 +24,35 @@ class CortexAgent:
         on_state_change: Optional[Callable[[str], Any]] = None
     ) -> str:
         """
-        Execute full autonomous ReAct agent loop with dynamic sampling profiles
-        and strict Action-Enforcement guardrails.
+        Execute autonomous ReAct loop.
+        The AI model evaluates the dialogue and freely decides whether to invoke tools or answer with text.
         """
         dialogue = [{"role": "system", "content": system_prompt}] + messages
 
-        # Find latest user prompt to detect actionable commands
-        last_user_text = ""
-        for m in reversed(messages):
-            if m.get("role") == "user":
-                last_user_text = str(m.get("content", ""))
-                break
+        max_iterations = 6
 
-        total_tools_executed = 0
-        enforcement_retries = 0
-
-        # Up to 6 reasoning & tool execution iterations
-        for iteration in range(6):
-            # Phase 1: Tool generation with rigid T=0.1 sampling
+        for iteration in range(max_iterations):
+            # Query model with tool definitions
             resp = await self.client.chat(dialogue, tools=CORTEX_TOOLS, task_type="tool")
             msg = resp.get("message", {})
 
             tool_calls = msg.get("tool_calls", [])
 
+            # If the model chose not to invoke tools, it wants to respond directly
             if not tool_calls:
                 content = msg.get("content", "").strip()
-
-                # Action-Enforcement Guard: Prevent conversational hallucinations when real actions were required
-                is_hallucinating = bool(HALLUCINATED_ACTION_REGEX.search(content))
-                is_question_or_info = bool(QUESTION_OR_INFO_REGEX.search(last_user_text.strip()))
-                is_action_request = bool(ACTION_USER_REGEX.search(last_user_text)) and not is_question_or_info
-                is_unfulfilled_action = is_action_request and total_tools_executed == 0
-
-                if (is_hallucinating or is_unfulfilled_action) and total_tools_executed == 0 and enforcement_retries < 2:
-                    enforcement_retries += 1
-                    dialogue.append({
-                        "role": "user",
-                        "content": (
-                            "[SYSTEM ACTION ENFORCEMENT: You returned conversational text claiming an action or the user gave an explicit command, but ZERO tools were executed. "
-                            "Do NOT pretend or describe future actions. You MUST invoke the real tool immediately "
-                            "(e.g. build_and_flash_sketch, compile_and_upload_sketch, set_arduino_pin, set_all_arduino_pins, check_hardware_connection, or run_cli_command). Emit the tool call now.]"
-                        )
-                    })
-                    continue
-
                 if content:
                     return content
 
-                # If empty, prompt for conversational wrap-up
+                # If content is empty (e.g. model only generated whitespace), get conversational reply
                 wrapup_resp = await self.client.chat(dialogue, tools=None, task_type="dialogue")
                 wrap_msg = wrapup_resp.get("message", {})
-                return wrap_msg.get("content", "").strip() or "All requested actions have completed successfully."
+                return wrap_msg.get("content", "").strip() or "Task complete."
 
             # Append the assistant's tool-call response to dialogue
             dialogue.append(msg)
 
-            # Execute all tool calls
+            # Execute all tool calls requested by the model
             for tc in tool_calls:
                 fn = tc.get("function", {})
                 fn_name = fn.get("name", "")
@@ -110,13 +65,13 @@ class CortexAgent:
 
                 # Execute tool
                 tool_output = await tool_executor(fn_name, fn_args)
-                total_tools_executed += 1
 
                 dialogue.append({
                     "role": "tool",
                     "content": json.dumps(tool_output),
                 })
 
-        # Final response synthesis with T=0.65
+        # Final conversational synthesis after completing tool interactions
         final_resp = await self.client.chat(dialogue, tools=None, task_type="dialogue")
         return final_resp.get("message", {}).get("content", "Task complete.")
+
