@@ -74,7 +74,7 @@ async def websocket_endpoint(ws: WebSocket):
     await ws.accept()
     clients.add(ws)
     client_info = f"{ws.client.host}:{ws.client.port}" if ws.client else "unknown"
-    print(f"[WS] Client connected: {client_info}")
+    print(f"[WS] Client connected: {client_info}", flush=True)
     try:
         # Send initial state and connected device registry
         await ws.send_json({"type": "state_change", "state": "idle"})
@@ -105,14 +105,14 @@ async def websocket_endpoint(ws: WebSocket):
             try:
                 message = json.loads(data)
             except Exception as e:
-                print(f"[WS] Malformed JSON from {client_info}: {e}")
+                print(f"[WS] Malformed JSON from {client_info}: {e}", flush=True)
                 continue
             await handle_message(ws, message)
 
     except (WebSocketDisconnect, RuntimeError):
-        print(f"[WS] Client disconnected: {client_info}")
+        print(f"[WS] Client disconnected: {client_info}", flush=True)
     except Exception as e:
-        print(f"[WS] Error on connection {client_info}: {e}")
+        print(f"[WS] Error on connection {client_info}: {e}", flush=True)
     finally:
         clients.discard(ws)
 
@@ -122,7 +122,7 @@ async def handle_message(ws: WebSocket, message: dict):
     msg_type = message.get("type")
     if msg_type != "camera_frame":
         summary = str(message.get("content", message.get("action", "")))[:60]
-        print(f"[WS RX] type={msg_type}{f' content={summary}' if summary else ''}")
+        print(f"[WS RX] type={msg_type}{f' content={summary}' if summary else ''}", flush=True)
 
     if msg_type == "chat_message":
         content = message.get("content", "")
