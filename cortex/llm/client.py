@@ -15,23 +15,35 @@ OLLAMA_BASE = "http://127.0.0.1:11434"
 
 
 class LLMClient:
-    def __init__(self, default_model: str = "qwen2.5-coder:7b"):
+    def __init__(self, default_model: str = "qwen2.5:14b"):
         self.default_model = default_model
         self.active_model = None
         self._discover_model()
 
     def _discover_model(self):
-        """Find best available local model, prioritizing coder model."""
+        """Find best available local model, prioritizing 14B then 7B."""
         try:
             req = urllib.request.Request(f"{OLLAMA_BASE}/api/tags")
             with urllib.request.urlopen(req, timeout=3.0) as resp:
                 data = json.loads(resp.read().decode('utf-8'))
                 models = [m.get("name", "") for m in data.get("models", [])]
-                if self.default_model in models:
-                    self.active_model = self.default_model
-                elif "qwen2.5:7b-instruct-q4_K_M" in models:
-                    self.active_model = "qwen2.5:7b-instruct-q4_K_M"
-                elif models:
+                
+                # Priority preference list
+                preferences = [
+                    self.default_model,
+                    "qwen2.5:14b",
+                    "qwen2.5-coder:14b",
+                    "qwen2.5-coder:7b",
+                    "qwen2.5:7b-instruct-q4_K_M"
+                ]
+                for pref in preferences:
+                    for m in models:
+                        if pref in m or m.startswith(pref):
+                            self.active_model = m
+                            print(f"[LLMClient] Active model selected: {self.active_model}")
+                            return
+
+                if models:
                     self.active_model = models[0]
                 else:
                     self.active_model = self.default_model

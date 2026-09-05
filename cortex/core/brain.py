@@ -41,7 +41,7 @@ class CortexBrain:
         self.probe = HardwareVisionProbe(self.device, self.camera)
         self.surfer = WebSurfer()
         self.speaker = VoiceSpeaker()
-        self.agent = CortexAgent(model="qwen2.5-coder:7b")
+        self.agent = CortexAgent(model="qwen2.5:14b")
         self.cli_runner = PowerShellRunner()
         self.skill_manager = SkillManager()
         self.pc = PCController()

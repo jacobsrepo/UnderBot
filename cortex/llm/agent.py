@@ -62,7 +62,7 @@ _PRIMARY_PARAM = {
 
 
 class CortexAgent:
-    def __init__(self, model: str = "qwen2.5-coder:7b"):
+    def __init__(self, model: str = "qwen2.5:14b"):
         self.client = LLMClient(default_model=model)
 
     @staticmethod
