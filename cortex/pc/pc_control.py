@@ -1,4 +1,4 @@
-﻿"""
+"""
 Cortex PC Controller - Native Windows System Control
 Provides volume, app launching, window management, screen capture,
 mouse/keyboard input, process inspection, file operations, and clipboard.
@@ -65,12 +65,11 @@ class PCController:
     # ------------------------------------------------------------------ #
 
     def _get_volume_interface(self):
-        AudioUtilities, IAudioEndpointVolume, CLSCTX_ALL = _pycaw()
+        from pycaw.pycaw import AudioUtilities
         devices = AudioUtilities.GetSpeakers()
-        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-        from ctypes import cast, POINTER
-        vol = cast(interface, POINTER(IAudioEndpointVolume))
-        return vol
+        # AudioDevice.EndpointVolume is an IAudioEndpointVolume-like interface
+        return devices.EndpointVolume
+
 
     async def get_volume(self) -> Dict[str, Any]:
         """Return current system volume (0-100) and mute state."""
