@@ -52,6 +52,31 @@ class CortexAgent:
                         args = {"destination": val}
                     elif fn_name == "inspect_camera":
                         args = {"focus_target": val}
+                    elif fn_name == "launch_app":
+                        args = {"app_name": val}
+                    elif fn_name == "open_file":
+                        args = {"path": val}
+                    elif fn_name in ("focus_window", "close_window", "minimize_window", "maximize_window"):
+                        args = {"title": val}
+                    elif fn_name == "set_volume":
+                        args = {"level": int(val) if val.isdigit() else 50}
+                    elif fn_name == "kill_process":
+                        args = {"identifier": val}
+                    elif fn_name == "type_text":
+                        args = {"text": val}
+                    elif fn_name == "press_keys":
+                        args = {"keys": [k.strip() for k in val.split(",")]}
+                    elif fn_name == "write_clipboard":
+                        args = {"text": val}
+                    elif fn_name == "list_directory":
+                        args = {"path": val}
+                    elif fn_name == "find_files":
+                        parts = val.split("|")
+                        args = {"root": parts[0].strip(), "pattern": parts[1].strip() if len(parts) > 1 else "*"}
+                    elif fn_name == "recall_from_memory":
+                        args = {"query": val}
+                    elif fn_name == "save_to_memory":
+                        args = {"category": "notes", "key": "info", "value": val}
                 else:
                     m_kv = re.findall(r'([a-zA-Z0-9_]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s,]+))', raw_args)
                     if m_kv:

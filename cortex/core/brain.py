@@ -847,10 +847,13 @@ Long-Term Context Grounding (OpenClaw Root Knowledge):
 Core Directives:
 1. CONVERSATIONAL PARTNERSHIP & TONE:
    - Speak naturally, sharply, and concisely. Keep spoken/chat responses intelligent, helpful, and direct.
-   - Do NOT introduce yourself or recite boilerplate greetings ("Hello Athul, how can I help you today?") on every turn. Maintain natural dialogue flow.
-   - Do NOT give unprompted explanations of internal steps. If the user asks for a file, answer where it is or that it does not exist.
-   - NEVER narrate or announce commands or tools before running them (do NOT say "I will now search using PowerShell...", "Let me check the files...", "I am running a script..."). Run the tool silently in the background and report only the final direct answer.
-   - If asked where a file or directory is: inspect silently with `run_cli_command`. If found, state the exact path. If not found, say: "No such file located."
+   - Do NOT introduce yourself or recite boilerplate greetings. Maintain natural dialogue flow.
+   - NEVER produce numbered step lists or bullet-point how-to guides. You are an AI that ACTS, not a manual.
+   - NEVER write markdown code blocks showing tool names or shell commands as text. Call the tool, don't narrate it.
+   - NEVER say "Let me check...", "I will now run...", "Here are the steps...", or "You can try...". Just do it.
+   - NEVER narrate or announce commands before running them. Run the tool silently, report only the final direct answer.
+   - If asked where a file is: call `find_files` silently. If found, state the exact path. If not found, say "No such file located."
+   - If a problem needs diagnosing: call the relevant tools (get_running_processes, find_files, run_cli_command, launch_app) to actually fix it. Report what you found and did — not what the user should do themselves.
 
 2. PROACTIVE VISUAL PROJECTION AGENCY:
    - Whenever the user asks to see, show, look up, browse, search, compare prices, or plan a day:
@@ -883,16 +886,32 @@ Core Directives:
         if skills_hdr:
             full_system_prompt += f"\n\n{skills_hdr}"
 
-        # Dynamic Visual Intent Hinting: guarantees the local model executes visual browser tools instead of echoing plain text
+        # Dynamic Visual Intent Hinting: guarantees the local model executes tools instead of echoing plain text
         lower_input = text_clean.lower()
         if re.search(r'\b(daily plan|day plan|plan a day|plan my day|itinerary|day trip|schedule my day)\b', lower_input):
-            full_system_prompt += "\n[IMPERATIVE: The user is requesting a day plan or itinerary. You MUST invoke `plan_day_itinerary` immediately so the interactive visual blueprint opens in the browser. DO NOT answer with text alone without executing the tool.]"
+            full_system_prompt += "\n[IMPERATIVE: The user is requesting a day plan or itinerary. You MUST invoke `plan_day_itinerary` immediately. DO NOT answer with text alone.]"
         elif re.search(r'\b(price of|prices of|cost of|how much is|look up the price|check price|compare prices|pricing|deals on)\b', lower_input):
-            full_system_prompt += "\n[IMPERATIVE: The user is asking about prices or deals. You MUST invoke `search_prices` immediately so the live pricing comparison grid opens in the browser. DO NOT answer with text alone without executing the tool.]"
+            full_system_prompt += "\n[IMPERATIVE: The user is asking about prices or deals. You MUST invoke `search_prices` immediately. DO NOT answer with text alone.]"
         elif re.search(r'\b(show me cafes|show me restaurants|places to visit|cafes near|restaurants near|places near|show me places|map of|find hotels|find cafes|spots in)\b', lower_input):
-            full_system_prompt += "\n[IMPERATIVE: The user is asking for places, maps, or venues. You MUST invoke `search_places_and_map` immediately so the interactive Google Map and place cards open in the browser. DO NOT answer with text alone without executing the tool.]"
-        elif re.search(r'\b(show me|browse|search the web for|look up on web|search for)\b', lower_input) and not re.search(r'\b(camera|pin|arduino|port|com4)\b', lower_input):
-            full_system_prompt += "\n[IMPERATIVE: The user is asking to show or browse web content. You MUST invoke `search_or_browse_web` immediately so the visual browser viewport opens. DO NOT answer with text alone without executing the tool.]"
+            full_system_prompt += "\n[IMPERATIVE: The user is asking for places or maps. You MUST invoke `search_places_and_map` immediately. DO NOT answer with text alone.]"
+        elif re.search(r'\b(open|launch|start)\b.{0,40}\b(microsoft store|discord|chrome|firefox|notepad|spotify|vscode|store|app|application|program)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user wants to open an app. Call `launch_app` RIGHT NOW with the app name. Do NOT describe steps or write code blocks. Call the tool and report result in one line.]"
+        elif re.search(r'\b(find|search|locate|where is|where are)\b.{0,30}\b(file|folder|document|pdf|cv|resume|download)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user wants to find a file. Call `find_files` immediately. Report the result directly. Do NOT list steps.]"
+        elif re.search(r'\b(list|show|what.s in|contents of)\b.{0,20}\b(folder|directory|downloads|desktop|documents)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user wants directory contents. Call `list_directory` immediately. Report what is there. Do NOT write steps.]"
+        elif re.search(r'\b(volume|turn up|turn down|mute|unmute|louder|quieter|sound level)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user wants audio control. Call `set_volume`, `mute_audio`, or `unmute_audio` immediately. Report the result in one sentence.]"
+        elif re.search(r'\b(running processes|cpu usage|ram usage|memory usage|system info|performance|task manager)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user wants system stats. Call `get_system_info` or `get_running_processes` immediately and report the numbers directly.]"
+        elif re.search(r'\b(kill|stop|end|terminate)\b.{0,20}\b(process|task|discord|chrome)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user wants to kill a process. Call `kill_process` immediately. Report result directly. Do NOT list steps.]"
+        elif re.search(r'\b(screenshot|what.s on (my )?screen|what do you see on screen)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: Call `take_screenshot` immediately.]"
+        elif re.search(r'\b(not working|broken|fix|diagnose|troubleshoot|won.t open|can.t open|won.t run|can.t install|installer|reinstall)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user has a PC problem. You MUST use native PC tools (get_running_processes, find_files, kill_process, launch_app, run_cli_command) to actually investigate and fix it RIGHT NOW. DO NOT write a numbered list of manual steps for the user to follow. DO NOT narrate shell commands in markdown code blocks. Run the tools yourself, get real results, and report your findings in 1-3 direct sentences like JARVIS would.]"
+        elif re.search(r'\b(show me|browse|search the web for|look up on web|search for)\b', lower_input) and not re.search(r'\b(camera|pin|arduino|port|com4|file|folder|window|volume|app)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user is asking to browse web content. You MUST invoke `search_or_browse_web` immediately. DO NOT answer with text alone.]"
 
         history = self.openclaw_memory.get_recent_history(limit=8)
 
