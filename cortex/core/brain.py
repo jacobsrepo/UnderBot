@@ -987,6 +987,86 @@ Core Directives:
                     await tts_queue.put((chunk_idx, clean_s, False))
                     chunk_idx += 1
 
+
+        # ---------------------------------------------------------------
+        # Direct Pre-Execution Router
+        # For unambiguous PC commands, execute the tool immediately
+        # and inject the result into dialogue so the LLM just narrates.
+        # This bypasses the model's tendency to write steps instead of act.
+        # ---------------------------------------------------------------
+        direct_tool_result = None
+        direct_tool_name = None
+        direct_tool_injected = []
+
+        async def _try_direct(name, args):
+            nonlocal direct_tool_result, direct_tool_name
+            result = await execute_tool(name, args)
+            direct_tool_result = result
+            direct_tool_name = name
+            return result
+
+        # Install / download app
+        install_m = re.search(r'\b(install|download)\b.{0,40}\b(discord|chrome|firefox|vlc|spotify|vscode|steam|zoom|slack|teams|winrar|7zip|notepad\+\+)\b', lower_input)
+        if install_m:
+            app = install_m.group(2).strip()
+            winget_ids = {
+                "discord": "Discord.Discord",
+                "chrome": "Google.Chrome",
+                "firefox": "Mozilla.Firefox",
+                "vlc": "VideoLAN.VLC",
+                "spotify": "Spotify.Spotify",
+                "vscode": "Microsoft.VisualStudioCode",
+                "steam": "Valve.Steam",
+                "zoom": "Zoom.Zoom",
+                "slack": "SlackTechnologies.Slack",
+                "teams": "Microsoft.Teams",
+                "winrar": "RARLab.WinRAR",
+                "7zip": "7zip.7zip",
+                "notepad++": "Notepad++.Notepad++",
+            }
+            wid = winget_ids.get(app)
+            if wid:
+                cmd = f"winget install --id {wid} -e --accept-source-agreements --accept-package-agreements"
+                r = await _try_direct("run_cli_command", {"command": cmd})
+                direct_tool_injected = [
+                    {"role": "assistant", "content": f"[Executed winget install for {app}]", "tool_calls": [{"id": "direct_install", "type": "function", "function": {"name": "run_cli_command", "arguments": {"command": cmd}}}]},
+                    {"role": "tool", "content": __import__("json").dumps(r)}
+                ]
+
+        # Open/launch app
+        elif re.search(r'\b(open|launch|start)\b', lower_input) and not install_m:
+            open_m = re.search(r'\b(?:open|launch|start)\s+(?:the\s+)?([a-z][a-z0-9 \-+]+?)(?:\s+(?:for me|please|app|application|program))?\s*$', lower_input)
+            if open_m:
+                app_name = open_m.group(1).strip()
+                r = await _try_direct("launch_app", {"app_name": app_name})
+                direct_tool_injected = [
+                    {"role": "assistant", "content": f"[Launched {app_name}]", "tool_calls": [{"id": "direct_launch", "type": "function", "function": {"name": "launch_app", "arguments": {"app_name": app_name}}}]},
+                    {"role": "tool", "content": __import__("json").dumps(r)}
+                ]
+
+        # Find file
+        elif re.search(r'\b(find|search|locate|where is|where are)\b.{0,30}\b(file|folder|document|pdf|cv|resume|download|png|jpg|mp4|docx|xlsx)\b', lower_input):
+            # Extract pattern from text
+            pat_m = re.search(r'\b(?:named?|called?|like)\s+["\']?([a-zA-Z0-9_\-\.\*]+)["\']?', lower_input)
+            ext_m = re.search(r'\b(\*?\.[a-zA-Z0-9]{2,5})\b', lower_input)
+            if pat_m:
+                pattern = f"*{pat_m.group(1)}*"
+            elif ext_m:
+                pattern = f"*{ext_m.group(1)}"
+            else:
+                # generic search
+                pattern = "*"
+            root = r"C:\Users\Athul C S"
+            r = await _try_direct("find_files", {"root": root, "pattern": pattern})
+            direct_tool_injected = [
+                {"role": "assistant", "content": f"[Searched for {pattern}]", "tool_calls": [{"id": "direct_find", "type": "function", "function": {"name": "find_files", "arguments": {"root": root, "pattern": pattern}}}]},
+                {"role": "tool", "content": __import__("json").dumps(r)}
+            ]
+
+        # Inject pre-executed tool results into history so LLM narrates real output
+        if direct_tool_injected:
+            history = history + direct_tool_injected
+
         # Run autonomous ReAct agent loop with real-time streaming
         response = await self.agent.run(
             messages=history,

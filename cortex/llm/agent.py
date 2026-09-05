@@ -1,7 +1,6 @@
 """
 Cortex Autonomous ReAct Agent Loop
 Empowers the LLM to freely decide whether to call tools or respond directly with text.
-Zero regex interceptors, zero forced tool calling, zero canned action-enforcement blocks.
 """
 
 import json
@@ -13,76 +12,185 @@ from .tools import CORTEX_TOOLS
 from .client import LLMClient
 
 
+# Map of parameter aliases that the model tends to use (PowerShell-ish names -> canonical)
+_PARAM_ALIASES = {
+    "app_name": "app_name", "app": "app_name", "name": "app_name",
+    "query_or_url": "query_or_url", "url": "query_or_url", "query": "query",
+    "command": "command", "cmd": "command",
+    "path": "path", "file": "path", "filepath": "path",
+    "title": "title", "window": "title",
+    "level": "level", "volume": "level",
+    "identifier": "identifier", "process": "identifier", "pid": "identifier",
+    "text": "text", "content": "text",
+    "keys": "keys", "key": "keys",
+    "destination": "destination", "dest": "destination",
+    "limit": "limit",
+    "root": "root", "pattern": "pattern",
+    "category": "category", "key_name": "key", "value": "value",
+    "focus_target": "focus_target", "target": "focus_target",
+    "city": "city",
+    "mode": "mode",
+    "state": "state",
+    "pin": "pin",
+    "sketch_code": "sketch_code", "sketch_name": "sketch_name",
+}
+
+# Tool -> primary parameter (for single positional arg fallback)
+_PRIMARY_PARAM = {
+    "run_cli_command": "command",
+    "search_or_browse_web": "query_or_url",
+    "get_live_weather": "city",
+    "search_prices": "query",
+    "search_places_and_map": "query",
+    "plan_day_itinerary": "destination",
+    "inspect_camera": "focus_target",
+    "launch_app": "app_name",
+    "open_file": "path",
+    "focus_window": "title",
+    "close_window": "title",
+    "minimize_window": "title",
+    "maximize_window": "title",
+    "set_volume": "level",
+    "kill_process": "identifier",
+    "type_text": "text",
+    "write_clipboard": "text",
+    "list_directory": "path",
+    "recall_from_memory": "query",
+    "press_keys": "keys",
+}
+
+
 class CortexAgent:
     def __init__(self, model: str = "qwen2.5-coder:7b"):
         self.client = LLMClient(default_model=model)
 
     @staticmethod
     def _parse_text_tool_call(content: str) -> Optional[Dict[str, Any]]:
+        """
+        Robustly parse tool calls from model text output in multiple formats:
+          1. Native JSON tool call (handled upstream by Ollama)
+          2. fn({"key": "val"}) - JSON object arg
+          3. fn("value") or fn('value') - positional single string
+          4. fn -param 'value' -param2 'value2' - PowerShell-style (most common failure mode)
+          5. fn -param value - unquoted PowerShell-style
+          6. fn(param=value) - keyword-equals style
+        """
         if not content:
             return None
-        cleaned = re.sub(r'^```[a-zA-Z0-9_\-\.]*\s*', '', content.strip())
-        cleaned = re.sub(r'\s*```$', '', cleaned.strip()).strip()
-        m = re.match(r'^([a-zA-Z0-9_]+)\s*\((.*)\)$', cleaned, re.DOTALL)
-        if not m:
-            return None
-        fn_name = m.group(1)
-        raw_args = m.group(2).strip()
+
         tool_names = {t["function"]["name"] for t in CORTEX_TOOLS}
-        if fn_name not in tool_names:
-            return None
-        args: Dict[str, Any] = {}
-        if raw_args:
-            try:
-                parsed = json.loads(raw_args)
-                if isinstance(parsed, dict):
-                    args = parsed
-            except Exception:
-                pass
-            if not args:
-                if (raw_args.startswith('"') and raw_args.endswith('"')) or (raw_args.startswith("'") and raw_args.endswith("'")):
-                    val = raw_args[1:-1]
-                    if fn_name == "run_cli_command":
-                        args = {"command": val}
-                    elif fn_name in ("search_or_browse_web", "get_live_weather"):
-                        args = {"query_or_url": val}
-                    elif fn_name in ("search_prices", "search_places_and_map"):
-                        args = {"query": val}
-                    elif fn_name == "plan_day_itinerary":
-                        args = {"destination": val}
-                    elif fn_name == "inspect_camera":
-                        args = {"focus_target": val}
-                    elif fn_name == "launch_app":
-                        args = {"app_name": val}
-                    elif fn_name == "open_file":
-                        args = {"path": val}
-                    elif fn_name in ("focus_window", "close_window", "minimize_window", "maximize_window"):
-                        args = {"title": val}
-                    elif fn_name == "set_volume":
-                        args = {"level": int(val) if val.isdigit() else 50}
-                    elif fn_name == "kill_process":
-                        args = {"identifier": val}
-                    elif fn_name == "type_text":
-                        args = {"text": val}
-                    elif fn_name == "press_keys":
-                        args = {"keys": [k.strip() for k in val.split(",")]}
-                    elif fn_name == "write_clipboard":
-                        args = {"text": val}
-                    elif fn_name == "list_directory":
-                        args = {"path": val}
-                    elif fn_name == "find_files":
-                        parts = val.split("|")
-                        args = {"root": parts[0].strip(), "pattern": parts[1].strip() if len(parts) > 1 else "*"}
-                    elif fn_name == "recall_from_memory":
-                        args = {"query": val}
-                    elif fn_name == "save_to_memory":
-                        args = {"category": "notes", "key": "info", "value": val}
+
+        # Strip markdown fences and leading/trailing whitespace
+        lines = content.strip().splitlines()
+        # Try each line in case tool call is buried in markdown
+        candidates = [content.strip()]
+        # Also try extracting from code blocks
+        in_block = False
+        block_lines = []
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("```"):
+                if in_block:
+                    if block_lines:
+                        candidates.append("\n".join(block_lines))
+                    block_lines = []
+                    in_block = False
                 else:
-                    m_kv = re.findall(r'([a-zA-Z0-9_]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s,]+))', raw_args)
-                    if m_kv:
-                        for k, v1, v2, v3 in m_kv:
-                            args[k] = v1 or v2 or v3
-        return {"id": f"call_fallback_{fn_name}", "type": "function", "function": {"name": fn_name, "arguments": args}}
+                    in_block = True
+            elif in_block:
+                block_lines.append(stripped)
+            else:
+                candidates.append(stripped)
+
+        for raw in candidates:
+            raw = raw.strip()
+            if not raw:
+                continue
+
+            # --- Format 1 & 2: fn({...}) or fn("val") ---
+            m = re.match(r'^([a-zA-Z0-9_]+)\s*\((.*)\)\s*$', raw, re.DOTALL)
+            if m:
+                fn_name = m.group(1)
+                if fn_name not in tool_names:
+                    continue
+                raw_args = m.group(2).strip()
+                args = {}
+                if raw_args:
+                    # Try JSON object
+                    try:
+                        parsed = json.loads(raw_args)
+                        if isinstance(parsed, dict):
+                            args = parsed
+                    except Exception:
+                        pass
+                    if not args:
+                        # Single quoted/unquoted value -> primary param
+                        val_m = re.match(r'^["\'](.*)["\'"]$', raw_args, re.DOTALL)
+                        if val_m:
+                            val = val_m.group(1)
+                        else:
+                            val = raw_args.strip("'\"")
+                        if val and fn_name in _PRIMARY_PARAM:
+                            pk = _PRIMARY_PARAM[fn_name]
+                            if pk == "level":
+                                try:
+                                    args = {pk: int(val)}
+                                except ValueError:
+                                    args = {pk: 50}
+                            elif pk == "keys":
+                                args = {pk: [k.strip() for k in val.split(",")]}
+                            else:
+                                args = {pk: val}
+                    if not args:
+                        # keyword=value style: fn(param=val, param2=val2)
+                        kv = re.findall(r'([a-zA-Z0-9_]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s,)]+))', raw_args)
+                        if kv:
+                            for k, v1, v2, v3 in kv:
+                                canonical = _PARAM_ALIASES.get(k, k)
+                                args[canonical] = v1 or v2 or v3
+                return {
+                    "id": f"call_fallback_{fn_name}",
+                    "type": "function",
+                    "function": {"name": fn_name, "arguments": args}
+                }
+
+            # --- Format 3: fn -param 'value' -param2 'value2' (PowerShell dash-param) ---
+            m2 = re.match(r'^([a-zA-Z0-9_]+)\s+(-[a-zA-Z].*)', raw, re.DOTALL)
+            if m2:
+                fn_name = m2.group(1)
+                if fn_name not in tool_names:
+                    continue
+                param_str = m2.group(2)
+                args = {}
+                # Extract -param_name 'value' or -param_name "value" or -param_name value
+                pairs = re.findall(
+                    r'-([a-zA-Z0-9_]+)\s+(?:"([^"]*)"|\'([^\']*)\'|([^\s-][^\s]*))',
+                    param_str
+                )
+                for pname, v1, v2, v3 in pairs:
+                    val = v1 or v2 or v3
+                    canonical = _PARAM_ALIASES.get(pname, pname)
+                    if canonical == "level":
+                        try:
+                            val = int(val)
+                        except ValueError:
+                            val = 50
+                    elif canonical == "keys":
+                        val = [k.strip() for k in val.split(",")]
+                    args[canonical] = val
+                # If no pairs found but single token after fn name, use primary param
+                if not args and fn_name in _PRIMARY_PARAM:
+                    remainder = param_str.strip().strip("'\"- ")
+                    if remainder:
+                        args = {_PRIMARY_PARAM[fn_name]: remainder}
+                if args or fn_name in tool_names:
+                    return {
+                        "id": f"call_fallback_{fn_name}",
+                        "type": "function",
+                        "function": {"name": fn_name, "arguments": args}
+                    }
+
+        return None
 
     async def run(
         self,
@@ -94,20 +202,16 @@ class CortexAgent:
     ) -> str:
         """
         Execute autonomous ReAct loop with real-time token streaming.
-        The AI model evaluates the dialogue and freely decides whether to invoke tools or answer with text.
-        Tokens are streamed live via on_token_chunk for immediate UI typing & sentence-by-sentence TTS.
         """
         dialogue = [{"role": "system", "content": system_prompt}] + messages
 
         max_iterations = 6
 
         for iteration in range(max_iterations):
-            # Buffer tokens during tool-decision phase so internal tool preambles are not leaked to UI/TTS
             pending_tokens: List[str] = []
             async def buffer_token(t: str):
                 pending_tokens.append(t)
 
-            # Query model with tool definitions
             resp = await self.client.chat_stream(
                 dialogue,
                 tools=CORTEX_TOOLS,
@@ -117,10 +221,20 @@ class CortexAgent:
             msg = resp.get("message", {})
             tool_calls = msg.get("tool_calls", [])
 
-            # If the model chose not to invoke tools natively, check for textual function calls or deliver content
             if not tool_calls:
                 content = msg.get("content", "").strip()
-                fallback_tc = self._parse_text_tool_call(content)
+
+                # Scan ALL lines for a tool call in any format
+                fallback_tc = None
+                for line in content.splitlines():
+                    tc = CortexAgent._parse_text_tool_call(line.strip())
+                    if tc:
+                        fallback_tc = tc
+                        break
+                # Also try the full content block
+                if not fallback_tc:
+                    fallback_tc = CortexAgent._parse_text_tool_call(content)
+
                 if fallback_tc:
                     tool_calls = [fallback_tc]
                     msg["tool_calls"] = tool_calls
@@ -139,10 +253,8 @@ class CortexAgent:
                     wrap_msg = wrapup_resp.get("message", {})
                     return wrap_msg.get("content", "").strip() or "Task complete."
 
-            # Append the assistant's tool-call response to dialogue
             dialogue.append(msg)
 
-            # Execute all tool calls requested by the model
             for tc in tool_calls:
                 fn = tc.get("function", {})
                 fn_name = fn.get("name", "")
@@ -153,7 +265,6 @@ class CortexAgent:
                     except Exception:
                         fn_args = {}
 
-                # Execute tool
                 tool_output = await tool_executor(fn_name, fn_args)
 
                 dialogue.append({
@@ -161,7 +272,6 @@ class CortexAgent:
                     "content": json.dumps(tool_output),
                 })
 
-        # Final conversational synthesis after completing tool interactions
         final_resp = await self.client.chat_stream(
             dialogue,
             tools=None,
@@ -169,4 +279,3 @@ class CortexAgent:
             on_token=on_token_chunk
         )
         return final_resp.get("message", {}).get("content", "Task complete.")
-
