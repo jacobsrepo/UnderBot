@@ -24,6 +24,7 @@ from tts.speaker import VoiceSpeaker
 from llm.agent import CortexAgent
 from cli.runner import PowerShellRunner, CliRunner
 from skills.manager import SkillManager
+from pc.pc_control import PCController
 
 
 
@@ -43,6 +44,7 @@ class CortexBrain:
         self.agent = CortexAgent(model="qwen2.5-coder:7b")
         self.cli_runner = PowerShellRunner()
         self.skill_manager = SkillManager()
+        self.pc = PCController()
 
         # Start camera background daemon for instant VisualSceneBuffer updates
         self.camera.start_background_daemon()
@@ -730,6 +732,91 @@ class CortexBrain:
                     await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
                 return result
 
+            # ------------------------------------------------------------------
+            # PC Control Tools
+            # ------------------------------------------------------------------
+
+            elif name == "get_volume":
+                return await self.pc.get_volume()
+
+            elif name == "set_volume":
+                level = int(args.get("level", 50))
+                result = await self.pc.set_volume(level)
+                return result
+
+            elif name == "mute_audio":
+                return await self.pc.mute_audio()
+
+            elif name == "unmute_audio":
+                return await self.pc.unmute_audio()
+
+            elif name == "launch_app":
+                app_name = args.get("app_name", "")
+                await broadcast({"type": "state_change", "state": "programming"})
+                result = await self.pc.launch_app(app_name)
+                return result
+
+            elif name == "open_file":
+                path = args.get("path", "")
+                result = await self.pc.open_file(path)
+                return result
+
+            elif name == "list_windows":
+                return await self.pc.list_windows()
+
+            elif name == "focus_window":
+                return await self.pc.focus_window(args.get("title", ""))
+
+            elif name == "close_window":
+                return await self.pc.close_window(args.get("title", ""))
+
+            elif name == "take_screenshot":
+                result = await self.pc.take_screenshot()
+                if "screenshot" in result:
+                    # Feed into camera for vision inspection
+                    self.camera.update_frame(result["screenshot"])
+                    await broadcast({"type": "set_view_mode", "mode": "camera"})
+                return {k: v for k, v in result.items() if k != "screenshot"}  # don't send huge b64 to LLM
+
+            elif name == "get_system_info":
+                return await self.pc.get_system_info()
+
+            elif name == "get_running_processes":
+                limit = int(args.get("limit", 20))
+                return await self.pc.get_running_processes(limit=limit)
+
+            elif name == "kill_process":
+                identifier = args.get("identifier", "")
+                return await self.pc.kill_process(identifier)
+
+            elif name == "type_text":
+                text = args.get("text", "")
+                interval = float(args.get("interval", 0.02))
+                return await self.pc.type_text(text, interval=interval)
+
+            elif name == "press_keys":
+                keys = args.get("keys", [])
+                if isinstance(keys, str):
+                    keys = [k.strip() for k in keys.split(",")]
+                return await self.pc.press_keys(keys)
+
+            elif name == "read_clipboard":
+                return await self.pc.read_clipboard()
+
+            elif name == "write_clipboard":
+                text = args.get("text", "")
+                return await self.pc.write_clipboard(text)
+
+            elif name == "list_directory":
+                path = args.get("path", "")
+                return await self.pc.list_directory(path)
+
+            elif name == "find_files":
+                root = args.get("root", "C:\\Users\\Athul C S")
+                pattern = args.get("pattern", "*")
+                max_results = int(args.get("max_results", 50))
+                return await self.pc.find_files(root, pattern, max_results=max_results)
+
             return {"error": f"Unknown tool: {name}"}
 
         # Dynamically build system prompt with Section 5 Dynamic Prompt Template with Temporal Grounding
@@ -780,6 +867,17 @@ Core Directives:
 
 4. ZERO ROBOTIC FLUFF:
    - Speak naturally without meta-tags, mood tags, bracketed prefixes, or robotic announcements.
+
+5. NATIVE PC CONTROL (use these instead of PowerShell for system tasks):
+   - Adjust volume → `set_volume`, `get_volume`, `mute_audio`, `unmute_audio`
+   - Open apps or files → `launch_app`, `open_file`
+   - Manage windows → `list_windows`, `focus_window`, `close_window`
+   - Browse files → `list_directory`, `find_files`
+   - System health → `get_system_info`, `get_running_processes`, `kill_process`
+   - Keyboard/mouse input → `type_text`, `press_keys`
+   - Clipboard → `read_clipboard`, `write_clipboard`
+   - See the screen → `take_screenshot`
+   - Only fall back to `run_cli_command` for complex multi-step shell tasks not covered above.
 """
         skills_hdr = self.skill_manager.get_skill_catalog_prompt()
         if skills_hdr:

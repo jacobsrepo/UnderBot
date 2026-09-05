@@ -413,5 +413,238 @@ CORTEX_TOOLS = [
                 "required": ["mode"]
             }
         }
+    },
+
+    # ------------------------------------------------------------------
+    # PC Control Tools
+    # ------------------------------------------------------------------
+    {
+        "type": "function",
+        "function": {
+            "name": "get_volume",
+            "description": "Read the current system audio volume level (0-100) and mute state.",
+            "parameters": {"type": "object", "properties": {}}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "set_volume",
+            "description": "Set the system audio volume to a specific level between 0 and 100.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "level": {"type": "integer", "description": "Volume level 0-100"}
+                },
+                "required": ["level"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "mute_audio",
+            "description": "Mute the system audio output.",
+            "parameters": {"type": "object", "properties": {}}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "unmute_audio",
+            "description": "Unmute the system audio output.",
+            "parameters": {"type": "object", "properties": {}}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "launch_app",
+            "description": "Launch an application by name (e.g. 'chrome', 'notepad', 'spotify', 'vscode') or by full .exe path. Use this whenever asked to open, start, or launch any program or application.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "app_name": {"type": "string", "description": "Application name or full .exe path (e.g. 'chrome', 'notepad', 'C:\\\\Program Files\\\\app.exe')"}
+                },
+                "required": ["app_name"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "open_file",
+            "description": "Open a file with its default associated application (e.g. open a PDF, image, document, or video).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Full absolute file path to open"}
+                },
+                "required": ["path"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "list_windows",
+            "description": "List all currently open application windows by title. Use to inspect what programs are running on screen.",
+            "parameters": {"type": "object", "properties": {}}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "focus_window",
+            "description": "Bring a specific window to the foreground and give it focus. Useful for switching between apps.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Partial title of the window to focus (case-insensitive match)"}
+                },
+                "required": ["title"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "close_window",
+            "description": "Close a window by matching its title. Sends a close signal to the application.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Partial window title to close"}
+                },
+                "required": ["title"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "take_screenshot",
+            "description": "Capture the full screen and return it as an image. Use to see what is currently on the user's display, inspect UI, or verify something visually.",
+            "parameters": {"type": "object", "properties": {}}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_system_info",
+            "description": "Get real-time CPU usage, RAM usage, and disk space statistics for the host system.",
+            "parameters": {"type": "object", "properties": {}}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_running_processes",
+            "description": "List currently running processes sorted by CPU usage. Useful for diagnosing high resource usage.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "limit": {"type": "integer", "description": "Max processes to return (default: 20)"}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "kill_process",
+            "description": "Kill a running process by its name or PID. Use with caution.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "identifier": {"type": "string", "description": "Process name (e.g. 'chrome.exe') or numeric PID"}
+                },
+                "required": ["identifier"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "type_text",
+            "description": "Type text at the current keyboard cursor position as if physically typing on a keyboard.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "description": "Text to type"}
+                },
+                "required": ["text"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "press_keys",
+            "description": "Press a key or keyboard shortcut combination (e.g. ['ctrl', 'c'] to copy, ['win', 'd'] to show desktop, ['alt', 'f4'] to close).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "keys": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "List of key names to press simultaneously (e.g. ['ctrl', 'c'], ['enter'], ['win', 'r'])"
+                    }
+                },
+                "required": ["keys"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_clipboard",
+            "description": "Read the current text content of the system clipboard.",
+            "parameters": {"type": "object", "properties": {}}
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "write_clipboard",
+            "description": "Copy text to the system clipboard so it can be pasted.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "description": "Text to put on the clipboard"}
+                },
+                "required": ["text"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "list_directory",
+            "description": "List the files and folders inside a directory on the host PC.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Absolute directory path (e.g. 'C:\\\\Users\\\\Athul C S\\\\Downloads')"}
+                },
+                "required": ["path"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "find_files",
+            "description": "Recursively search a directory tree for files matching a name pattern (wildcards like '*.pdf' or 'CV*' are supported).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "root": {"type": "string", "description": "Root directory to start search from"},
+                    "pattern": {"type": "string", "description": "Filename glob pattern (e.g. '*.pdf', 'resume*', 'CV*.docx')"},
+                    "max_results": {"type": "integer", "description": "Maximum number of results (default: 50)"}
+                },
+                "required": ["root", "pattern"]
+            }
+        }
     }
 ]
