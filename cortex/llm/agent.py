@@ -34,24 +34,31 @@ class CortexAgent:
         max_iterations = 6
 
         for iteration in range(max_iterations):
-            # Query model with tool definitions and token stream listener
+            # Buffer tokens during tool-decision phase so internal tool preambles are not leaked to UI/TTS
+            pending_tokens: List[str] = []
+            async def buffer_token(t: str):
+                pending_tokens.append(t)
+
+            # Query model with tool definitions
             resp = await self.client.chat_stream(
                 dialogue,
                 tools=CORTEX_TOOLS,
                 task_type="tool",
-                on_token=on_token_chunk
+                on_token=buffer_token if on_token_chunk else None
             )
             msg = resp.get("message", {})
-
             tool_calls = msg.get("tool_calls", [])
 
-            # If the model chose not to invoke tools, return streamed content
+            # If the model chose not to invoke tools, deliver the conversational content
             if not tool_calls:
                 content = msg.get("content", "").strip()
                 if content:
+                    if on_token_chunk:
+                        for pt in pending_tokens:
+                            await on_token_chunk(pt)
                     return content
 
-                # If content is empty, get conversational reply
+                # If content is empty, query for dialogue reply with direct live streaming
                 wrapup_resp = await self.client.chat_stream(
                     dialogue,
                     tools=None,

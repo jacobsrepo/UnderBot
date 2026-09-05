@@ -26,34 +26,6 @@ from cli.runner import PowerShellRunner, CliRunner
 from skills.manager import SkillManager
 
 
-BASE_SYSTEM_PROMPT = """You are Cortex, an intelligent, calm, and articulate AI assistant with real-world physical agency, vision, live intelligence, and host automation.
-
-CORE OPERATIONAL PRINCIPLES:
-1. THINK BEFORE YOU ACT:
-   - Carefully examine what the user is asking and check your [LIVE SYSTEM GROUNDING] before formulating a reply.
-   - Anti-Repetition Rule: NEVER repeat the exact same response, refusal, or boilerplate phrase you already gave in recent dialogue turns. If an action failed, explain why or try an alternate approach; if a status was already stated, acknowledge what changed or take the next logical step.
-2. DIRECT ACTION PRINCIPLE (CRITICAL):
-   - When the user asks you to check, inspect, test, read, run, search, or actuate something:
-     DO NOT output conversational filler promising that you will run it in the future (e.g. "I'll use the command in PowerShell to do this", "Let me check the files").
-     CALL THE TOOL DIRECTLY in your first step.
-   - You have native tools:
-     * `check_hardware_connection`: verify microcontroller connection and COM ports.
-     * `read_serial_output`: read live serial communications from COM4.
-     * `run_cli_command`: execute native Windows PowerShell commands (`Get-ChildItem`, `Test-Path`, etc.).
-     * `build_and_flash_sketch`: compile and flash Arduino C++ code to the board.
-     * `set_arduino_pin` / `set_all_arduino_pins`: toggle digital/analog pins.
-     * `search_or_browse_web`: search Google/DuckDuckGo for online news, technical docs, or info.
-     * `get_live_weather`: fetch real-time weather and temperature for any city.
-     * `inspect_camera`: inspect optical webcam frames when the camera is active.
-   - Only speak to the user after the tool has executed and you have real data to report.
-3. PHYSICAL SENSORS & GROUNDING:
-   - Always refer to [LIVE SYSTEM GROUNDING] for true hardware connection and camera status.
-   - The webcam is controlled by the user in their browser. You cannot turn on the webcam remotely. If it is OFF, inform the user they can turn it on in the browser; never offer to turn it on for them.
-   - When the Arduino is connected on COM4, execute physical actions with confidence.
-4. CONVERSATIONAL SPEECH:
-   - Your speech will be synthesized aloud by TTS. Keep spoken summaries concise, natural, and helpful. Do not read raw blocks of C++ or PowerShell code syntax aloud.
-   - Express facial moods naturally using the `set_facial_expression` tool when relevant. Never emit inline mood or bracketed text tags.
-"""
 
 
 class CortexBrain:
@@ -186,12 +158,6 @@ class CortexBrain:
                 used_arduino = True
                 self.active_view_mode = "arduino"
                 status = await self.device.check_hardware_status()
-                conn_str = "CONNECTED" if status.get("connected") else "DISCONNECTED"
-                await broadcast({
-                    "type": "chat_message",
-                    "role": "system",
-                    "content": f"Hardware Sensor: Microcontroller is {conn_str} ({status.get('status')})"
-                })
                 await broadcast({"type": "set_view_mode", "mode": "arduino", "data": self.get_arduino_workbench_state()})
                 await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return status
@@ -214,7 +180,7 @@ class CortexBrain:
                 })
                 return {
                     "connected": self.device.is_connected,
-                    "port": self.device.port_name or "COM4",
+                    "port": self.device.port_name or "None",
                     "output": serial_log
                 }
 
@@ -222,12 +188,8 @@ class CortexBrain:
                 cmd = args.get("command", "")
                 cwd = args.get("cwd", None)
                 await broadcast({"type": "state_change", "state": "programming"})
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Host CLI: powershell.exe -Command \"{cmd}\""})
-
-                # Execute with self-healing retry loop
+                # Execute with self-healing retry loop silently
                 result = await self.cli_runner.execute_with_healing(cmd, cwd=cwd)
-                if result.get("healed"):
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Self-Healing: Command automatically repaired to native PowerShell and succeeded."})
                 return result
 
             elif name == "set_facial_expression":
@@ -249,16 +211,14 @@ class CortexBrain:
                 used_arduino = True
                 self.active_view_mode = "camera"
                 if not self.device.is_connected:
-                    await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: No Arduino board connected. Pin probing aborted."})
                     return {"error": "Cannot probe pins: No Arduino is physically connected via USB.", "connected": False}
 
                 color = args.get("color", "blue").lower()
                 await broadcast({"type": "set_view_mode", "mode": "camera"})
                 await broadcast({"type": "facial_expression", "mood": "focused", "eye_shape": "narrow", "glow_color": "#a855f7"})
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Vision Sensor: Starting closed-loop optical pin scan to detect {color.upper()} LEDs..."})
 
                 async def on_probe_step(step_msg):
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Probe: {step_msg}"})
+                    pass
 
                 probe_result = await self.probe.auto_discover_led_pin(color, on_probe_step)
                 if probe_result.get("success"):
@@ -279,9 +239,6 @@ class CortexBrain:
                     await broadcast({"type": "set_view_mode", "mode": "camera"})
                     await broadcast({"type": "state_change", "state": "seeing"})
                     await broadcast({"type": "facial_expression", "mood": "curious", "eye_shape": "inquiring", "glow_color": "#38bdf8"})
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Vision Sensor: Reading live VisualSceneBuffer ({target})..."})
-                else:
-                    await broadcast({"type": "chat_message", "role": "system", "content": "Vision Sensor: Camera feed is currently OFF / inactive."})
 
                 # Zero-latency inspection from VisualSceneBuffer
                 vision_result = await self.camera.inspect(target)
@@ -291,14 +248,12 @@ class CortexBrain:
                 used_arduino = True
                 self.active_view_mode = "arduino"
                 if not self.device.is_connected:
-                    await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: Pin actuation rejected (No Arduino connected)."})
                     return {"error": "Hardware Actuation Failed: No Arduino board is physically connected to the computer.", "connected": False}
 
                 pin = args.get("pin", "D2")
                 state = int(args.get("state", 0))
                 success = await self.device.set_pin_async(pin, state)
                 state_str = "HIGH (ON)" if state else "LOW (OFF)"
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Actuation: Pin {pin} -> {state_str}"})
                 await broadcast({"type": "device_update", "devices": [self.device.get_status_info()]})
                 await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return {"status": "success" if success else "failed", "pin": str(pin), "state": state_str}
@@ -307,13 +262,11 @@ class CortexBrain:
                 used_arduino = True
                 self.active_view_mode = "arduino"
                 if not self.device.is_connected:
-                    await broadcast({"type": "chat_message", "role": "system", "content": "Hardware Notice: Actuation rejected (No Arduino connected)."})
                     return {"error": "Hardware Actuation Failed: No Arduino board is physically connected to the computer.", "connected": False}
 
                 state = int(args.get("state", 0))
                 success = await self.device.set_all_pins_async(state)
                 state_str = "HIGH (ON)" if state else "LOW (OFF)"
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Actuation: All pins -> {state_str}"})
                 await broadcast({"type": "device_update", "devices": [self.device.get_status_info()]})
                 await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
                 return {"status": "success" if success else "failed", "pins": "D2-D13, A0-A5", "state": state_str}
@@ -642,7 +595,6 @@ class CortexBrain:
                     self.active_sketch["status"] = "compile_failed"
                     self.active_sketch["log"] = compile_stderr or compile_stdout
                     await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler Error:\n{compile_stderr or compile_stdout}"})
                     await broadcast({"type": "facial_expression", "mood": "skeptical", "eye_shape": "squint", "glow_color": "#ef4444"})
                     return {"status": "compile_failed", "stdout": compile_stdout, "stderr": compile_stderr}
 
@@ -654,7 +606,6 @@ class CortexBrain:
                     **self.get_arduino_workbench_state(),
                     "log": f"Build passed. Uploading to {target_port} via avrdude..."
                 }})
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Compiler: Build passed. Flashing microcontroller on {target_port}..."})
 
                 # Safely pause serial worker to prevent COM port lock collision
                 await self.device.pause_serial()
@@ -693,7 +644,6 @@ class CortexBrain:
                     self.active_sketch["status"] = "verified"
                     self.active_sketch["log"] = upload_stdout or "Flash verified 100%. Firmware running on microcontroller."
                     await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash: Firmware successfully uploaded to {target_port}!"})
                     await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
                     return {
                         "status": "success",
@@ -706,7 +656,6 @@ class CortexBrain:
                     self.active_sketch["status"] = "upload_failed"
                     self.active_sketch["log"] = upload_stderr or upload_stdout
                     await broadcast({"type": "arduino_telemetry", "data": self.get_arduino_workbench_state()})
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Hardware Flash Error: {upload_stderr or upload_stdout}"})
                     await broadcast({"type": "facial_expression", "mood": "alert", "eye_shape": "wide", "glow_color": "#ef4444"})
                     return {
                         "status": "upload_failed",
@@ -720,7 +669,6 @@ class CortexBrain:
 
                 await broadcast({"type": "state_change", "state": "programming"})
                 await broadcast({"type": "facial_expression", "mood": "focused", "eye_shape": "narrow", "glow_color": "#a855f7"})
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Package Manager: Installing {pkg_type} package '{pkg_name}'..."})
 
                 if pkg_type == "python":
                     cmd = f"python -m pip install {pkg_name}"
@@ -739,11 +687,7 @@ class CortexBrain:
 
                 result = await self.cli_runner.execute_raw(cmd, timeout_seconds=120)
                 if result.get("success"):
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Package Manager: Successfully installed '{pkg_name}'."})
                     await broadcast({"type": "facial_expression", "mood": "confident", "eye_shape": "normal", "glow_color": "#22c55e"})
-                else:
-                    await broadcast({"type": "chat_message", "role": "system", "content": f"Package Manager Warning: Installation finished with message: {result.get('stderr') or result.get('stdout')}"})
-
                 return result
 
             return {"error": f"Unknown tool: {name}"}
@@ -752,23 +696,33 @@ class CortexBrain:
         now_iso = datetime.datetime.now().isoformat()
         grounding_facts = self.openclaw_memory.get_grounding_context()
         hw_stat = await self.device.check_hardware_status()
-        conn_str = "CONNECTED (ONLINE)" if hw_stat.get("connected") else "DISCONNECTED (No USB detected)"
+        if hw_stat.get("connected"):
+            hw_str = f"Arduino Nano on {hw_stat.get('port')} (ONLINE and responsive)"
+        else:
+            hw_str = "DISCONNECTED (No microcontroller is physically plugged into USB. You cannot read or set pins until a board is connected. If asked, confirm no board is connected.)"
         cam_str = "ACTIVE (Streaming live video)" if self.camera.is_camera_active() else "OFF / INACTIVE (No video feed; only user can enable in browser)"
 
         full_system_prompt = f"""You are Cortex, an advanced desktop cognitive assistant operating natively on Windows.
 Current Environment Grounding:
 - Current Local Timestamp: {now_iso}
 - Host Operating System: Windows (PowerShell Core)
-- Assigned Microcontroller: Arduino Nano on COM4 ({conn_str})
+- Physical Microcontroller: {hw_str}
 - Vision Sensor: {cam_str}
 
 Long-Term Context Grounding (OpenClaw Root Knowledge):
 {grounding_facts}
 
-Operational Rules:
-1. Tool Syntheses must adhere to Windows PowerShell cmdlets (Select-String, Get-ChildItem, Get-Content).
-2. Speak naturally, cleanly, and directly without meta-tags, mood tags, bracketed prefixes, or robotic announcements.
-3. Never emit placeholder dates, simulated status checks, or generic meta-announcements.
+Core Directives:
+1. DIRECT, RAW ANSWERS (NO PREAMBLE, NO NARRATION):
+   - Always provide a direct, straight answer without explaining what you are doing or what tools you intend to use.
+   - NEVER narrate or announce commands (do NOT say "I will now search using PowerShell...", "Let me check the files...", "I am running a script..."). Run the tool silently in the background and report only the final answer.
+   - If asked to find something and it exists, state its path directly. If it does not exist, simply state: "No such file located."
+2. TOOL SYNTHESIS:
+   - Tool Syntheses must adhere to Windows PowerShell cmdlets (Select-String, Get-ChildItem, Get-Content).
+3. HARDWARE GROUNDING:
+   - Strictly honor Physical Microcontroller status. If disconnected, do not claim to control or have an Arduino attached.
+4. ZERO ROBOTIC FLUFF:
+   - Speak naturally without meta-tags, mood tags, bracketed prefixes, or generic announcements.
 """
         skills_hdr = self.skill_manager.get_skill_catalog_prompt()
         if skills_hdr:
