@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cortex</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=4.5">
+    <link rel="stylesheet" href="/static/css/style.css?v=4.6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -124,22 +124,41 @@
                     <div id="browser-screen" class="viewport-screen browser-screen">
                         <div class="screen-header browser-header">
                             <div class="browser-nav-bar">
-                                <span class="badge-dot" style="background: var(--theme-accent, #86efac); box-shadow: 0 0 6px var(--theme-accent, #86efac);"></span>
-                                <a id="browser-url-pill" class="browser-url-pill" href="https://en.wikipedia.org" target="_blank" rel="noopener noreferrer">
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.75;flex-shrink:0;">
-                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                    </svg>
-                                    <span class="url-text">https://en.wikipedia.org</span>
-                                </a>
-                                <div class="browser-mode-tabs" id="browser-mode-tabs">
-                                    <button type="button" class="browser-tab-btn active" data-tab="reader" id="tab-btn-reader">Intel</button>
-                                    <button type="button" class="browser-tab-btn" data-tab="map" id="tab-btn-map">Map & Places</button>
-                                    <button type="button" class="browser-tab-btn" data-tab="itinerary" id="tab-btn-itinerary">Day Plan</button>
-                                    <button type="button" class="browser-tab-btn" data-tab="prices" id="tab-btn-prices">Prices</button>
+                                <div class="browser-nav-buttons">
+                                    <button type="button" id="browser-back-btn" class="btn-browser-nav disabled" title="Back" disabled>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                                    </button>
+                                    <button type="button" id="browser-fwd-btn" class="btn-browser-nav disabled" title="Forward" disabled>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                                    </button>
+                                    <button type="button" id="browser-reload-btn" class="btn-browser-nav" title="Reload View">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                                    </button>
+                                </div>
+                                <div class="browser-omnibar">
+                                    <span class="browser-ssl-badge" title="Secure Encrypted Stream">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                        </svg>
+                                    </span>
+                                    <a id="browser-url-pill" class="browser-url-display" href="https://google.com" target="_blank" rel="noopener noreferrer" title="View Source URL">
+                                        <span class="url-text" id="browser-url-text">https://www.google.com</span>
+                                    </a>
+                                    <div class="browser-context-pill" id="browser-context-pill">
+                                        <span class="context-dot"></span>
+                                        <span class="context-label" id="browser-context-label">LIVE BROWSER</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="screen-header-controls">
+                                <a id="browser-external-link" class="btn-screen-tool" href="#" target="_blank" rel="noopener noreferrer" title="Open Destination in New Window">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                </a>
                                 <button id="browser-split-btn" class="btn-screen-tool" title="Toggle Dual Split Screen">
                                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
@@ -500,6 +519,6 @@
             }
         };
     </script>
-    <script type="module" src="/static/js/app.js?v=4.5"></script>
+    <script type="module" src="/static/js/app.js?v=4.6"></script>
 </body>
 </html>

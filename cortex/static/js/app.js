@@ -78,8 +78,15 @@ class CortexApp {
             searchingHudStream:  document.getElementById('searching-hud-stream'),
             readerEmptyCard:     document.getElementById('reader-empty-card'),
             readerDocument:      document.getElementById('reader-document'),
-            // Multimedia Browser Views
-            browserTabs:         document.querySelectorAll('.browser-tab-btn'),
+            // Multimedia Browser Views & Authentic Chrome
+            browserBackBtn:      document.getElementById('browser-back-btn'),
+            browserFwdBtn:       document.getElementById('browser-fwd-btn'),
+            browserReloadBtn:    document.getElementById('browser-reload-btn'),
+            browserUrlPill:      document.getElementById('browser-url-pill'),
+            browserUrlText:      document.getElementById('browser-url-text'),
+            browserContextPill:  document.getElementById('browser-context-pill'),
+            browserContextLabel: document.getElementById('browser-context-label'),
+            browserExternalLink: document.getElementById('browser-external-link'),
             browserMapContainer: document.getElementById('browser-map-container'),
             browserGoogleMap:    document.getElementById('browser-google-map'),
             placesCountLabel:    document.getElementById('places-count-label'),
@@ -302,11 +309,10 @@ class CortexApp {
             }, 18000);
         });
 
-        this.dom.browserTabs?.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tab = btn.getAttribute('data-tab');
-                this.switchBrowserTab(tab);
-            });
+        this.dom.browserReloadBtn?.addEventListener('click', () => {
+            if (this._lastBrowserQuery) {
+                this._sendChatText(`Show me ${this._lastBrowserQuery}`);
+            }
         });
 
         this._initGeolocation();
@@ -322,6 +328,17 @@ class CortexApp {
 
     showBrowserSearchingHud(query = '') {
         if (!this.dom.readerSearchingHud) return;
+        this._lastBrowserQuery = query || this._lastBrowserQuery;
+        
+        if (this.dom.browserContextLabel) {
+            this.dom.browserContextLabel.textContent = 'CONNECTING...';
+        }
+        if (this.dom.browserUrlText) {
+            this.dom.browserUrlText.textContent = query
+                ? `https://cortex.intel/search?q=${encodeURIComponent(query)}`
+                : 'https://cortex.intel/live';
+        }
+
         if (this.dom.searchingHudQuery) {
             this.dom.searchingHudQuery.textContent = query ? `"${query}"` : '"Scanning live feeds..."';
         }
@@ -335,11 +352,10 @@ class CortexApp {
         }
 
         const phrases = [
-            'Connecting to real-time search channels...',
-            'Querying verified open-web sources...',
-            'Extracting clean editorial narrative...',
-            'Cross-referencing breaking developments...',
-            'Synthesizing executive briefing & takeaways...'
+            'Connecting to real-time satellite and web nodes...',
+            'Extracting verified entities, locations and media...',
+            'Synthesizing contextual dynamic view...',
+            'Calibrating interactive visual viewport...'
         ];
         let pIdx = 0;
         clearInterval(this.searchingPhraseTimer);
@@ -348,7 +364,7 @@ class CortexApp {
             if (this.dom.searchingHudStream) {
                 this.dom.searchingHudStream.innerHTML = `<span class="stream-line">${phrases[pIdx]}</span>`;
             }
-        }, 900);
+        }, 850);
     }
 
     hideBrowserSearchingHud() {
@@ -502,25 +518,69 @@ class CortexApp {
                 (err) => {
                     console.log('[Cortex] Geolocation permission not granted, IP fallback in use');
                 },
-                { timeout: 8000, maximumAge: 60000 }
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
             );
         }
     }
 
-    switchBrowserTab(tabName) {
-        this.activeBrowserTab = tabName;
-        this.dom.browserTabs?.forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
-        });
+    _setDynamicView(viewType, meta = {}) {
+        this.activeDynamicView = viewType;
 
-        if (this.dom.readerDocument) this.dom.readerDocument.style.display = (tabName === 'reader') ? 'flex' : 'none';
-        if (this.dom.browserMapContainer) this.dom.browserMapContainer.style.display = (tabName === 'map') ? 'flex' : 'none';
-        if (this.dom.browserItineraryContainer) this.dom.browserItineraryContainer.style.display = (tabName === 'itinerary') ? 'flex' : 'none';
-        if (this.dom.browserPricesContainer) this.dom.browserPricesContainer.style.display = (tabName === 'prices') ? 'flex' : 'none';
+        // Display ONLY the active dynamic container
+        if (this.dom.readerDocument) {
+            this.dom.readerDocument.style.display = (viewType === 'reader') ? 'flex' : 'none';
+        }
+        if (this.dom.browserMapContainer) {
+            this.dom.browserMapContainer.style.display = (viewType === 'places') ? 'flex' : 'none';
+        }
+        if (this.dom.browserItineraryContainer) {
+            this.dom.browserItineraryContainer.style.display = (viewType === 'itinerary') ? 'flex' : 'none';
+        }
+        if (this.dom.browserPricesContainer) {
+            this.dom.browserPricesContainer.style.display = (viewType === 'prices') ? 'flex' : 'none';
+        }
+
+        // Update Omnibar URL
+        const displayUrl = meta.url || 'https://cortex.intel/live';
+        if (this.dom.browserUrlText) {
+            this.dom.browserUrlText.textContent = displayUrl;
+        }
+        if (this.dom.browserUrlPill) {
+            this.dom.browserUrlPill.href = displayUrl;
+        }
+        if (this.dom.browserExternalLink) {
+            this.dom.browserExternalLink.href = displayUrl;
+        }
+
+        // Update Dynamic Context Pill
+        if (this.dom.browserContextLabel) {
+            this.dom.browserContextLabel.textContent = (meta.badge || 'LIVE BROWSER').toUpperCase();
+        }
+        if (this.dom.browserContextPill && meta.color) {
+            this.dom.browserContextPill.style.color = meta.color;
+            this.dom.browserContextPill.style.borderColor = meta.color + '44';
+            const dot = this.dom.browserContextPill.querySelector('.context-dot');
+            if (dot) {
+                dot.style.background = meta.color;
+                dot.style.boxShadow = `0 0 6px ${meta.color}`;
+            }
+        }
+    }
+
+    switchBrowserTab(tabName) {
+        // Backwards compatibility alias
+        this._setDynamicView(tabName === 'map' ? 'places' : tabName);
     }
 
     renderPlacesView(data) {
         if (!data) return;
+        const mapsUrl = data.embed_map_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.query || data.location_label || 'places')}`;
+        this._setDynamicView('places', {
+            url: mapsUrl,
+            badge: 'MAP & PLACES',
+            color: '#38bdf8'
+        });
+
         if (this.dom.browserGoogleMap && data.embed_map_url) {
             this.dom.browserGoogleMap.src = data.embed_map_url;
         }
@@ -529,11 +589,6 @@ class CortexApp {
         }
         if (this.dom.placesCountLabel) {
             this.dom.placesCountLabel.textContent = `EXPLORE SPOTS (${data.places?.length || 0})`;
-        }
-        if (this.dom.browserUrlPill) {
-            const textEl = this.dom.browserUrlPill.querySelector('.url-text') || this.dom.browserUrlPill;
-            textEl.textContent = `https://maps.google.com?q=${encodeURIComponent(data.query || 'places')}`;
-            this.dom.browserUrlPill.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.query || 'places')}`;
         }
         if (this.dom.browserPlacesGrid) {
             this.dom.browserPlacesGrid.innerHTML = '';
@@ -573,6 +628,13 @@ class CortexApp {
 
     renderItineraryView(data) {
         if (!data) return;
+        const dirUrl = data.embed_map_url || `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(data.destination || 'exploration')}`;
+        this._setDynamicView('itinerary', {
+            url: dirUrl,
+            badge: 'DAY BLUEPRINT',
+            color: '#a855f7'
+        });
+
         if (this.dom.itinTitle) {
             this.dom.itinTitle.textContent = data.headline || `1-Day Blueprint: ${data.destination || ''}`;
         }
@@ -584,11 +646,6 @@ class CortexApp {
         }
         if (this.dom.itineraryGoogleMap && data.embed_map_url) {
             this.dom.itineraryGoogleMap.src = data.embed_map_url;
-        }
-        if (this.dom.browserUrlPill) {
-            const textEl = this.dom.browserUrlPill.querySelector('.url-text') || this.dom.browserUrlPill;
-            textEl.textContent = `https://maps.google.com/itinerary?dest=${encodeURIComponent(data.destination || '')}`;
-            this.dom.browserUrlPill.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.destination || 'itinerary')}`;
         }
         if (this.dom.itineraryTimeline) {
             this.dom.itineraryTimeline.innerHTML = '';
@@ -646,16 +703,18 @@ class CortexApp {
 
     renderPricesView(data) {
         if (!data) return;
+        const shopUrl = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(data.query || 'products')}`;
+        this._setDynamicView('prices', {
+            url: shopUrl,
+            badge: 'PRICES & DEALS',
+            color: '#fbbf24'
+        });
+
         if (this.dom.pricesTitle) {
             this.dom.pricesTitle.textContent = data.headline || `Pricing: ${data.query}`;
         }
         if (this.dom.priceRangeBadge) {
             this.dom.priceRangeBadge.textContent = data.price_range || 'Market Overview';
-        }
-        if (this.dom.browserUrlPill) {
-            const textEl = this.dom.browserUrlPill.querySelector('.url-text') || this.dom.browserUrlPill;
-            textEl.textContent = `https://shopping.google.com/search?q=${encodeURIComponent(data.query || '')}`;
-            this.dom.browserUrlPill.href = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(data.query || '')}`;
         }
         if (this.dom.browserPricesGrid) {
             this.dom.browserPricesGrid.innerHTML = '';
@@ -693,6 +752,12 @@ class CortexApp {
 
     renderReaderView(data) {
         if (!data) return;
+        const srcUrl = data.url || 'https://en.wikipedia.org';
+        this._setDynamicView('reader', {
+            url: srcUrl,
+            badge: data.category || (data.is_news ? 'BREAKING NEWS' : 'WEB INTEL'),
+            color: '#86efac'
+        });
 
         // 1. Browser address bar URL
         if (data.url && this.dom.browserUrlPill) {
@@ -830,25 +895,21 @@ class CortexApp {
 
         if (data.type === 'places' || Array.isArray(data.places)) {
             this.renderPlacesView(data);
-            this.switchBrowserTab('map');
             return;
         }
 
         if (data.type === 'itinerary' || Array.isArray(data.stops)) {
             this.renderItineraryView(data);
-            this.switchBrowserTab('itinerary');
             return;
         }
 
         if (data.type === 'prices' || Array.isArray(data.items)) {
             this.renderPricesView(data);
-            this.switchBrowserTab('prices');
             return;
         }
 
         // Default: Reader Document View
         this.renderReaderView(data);
-        this.switchBrowserTab('reader');
     }
 
     updateArduinoWorkbench(data) {

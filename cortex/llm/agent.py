@@ -46,6 +46,10 @@ class CortexAgent:
                         args = {"command": val}
                     elif fn_name in ("search_or_browse_web", "get_live_weather"):
                         args = {"query_or_url": val}
+                    elif fn_name in ("search_prices", "search_places_and_map"):
+                        args = {"query": val}
+                    elif fn_name == "plan_day_itinerary":
+                        args = {"destination": val}
                     elif fn_name == "inspect_camera":
                         args = {"focus_target": val}
                 else:

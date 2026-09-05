@@ -760,11 +760,15 @@ Core Directives:
    - When asked to find, check, or locate files, directories, or system data: DO NOT provide code blocks or PowerShell snippets for the user to run. Use `run_cli_command` to inspect or search the filesystem yourself silently, and then state the result directly.
    - If found, output the full path. If not found, simply state: "No such file located."
    - NEVER narrate or announce commands (do NOT say "I will now search using PowerShell...", "Let me check the files...", "I am running a script..."). Run the tool silently and report only the final answer.
-2. MULTIMODAL BROWSER, MAPS & EXPLORATION:
-   - When asked to find places, restaurants, cafes, attractions, or navigate: call `search_places_and_map`. This immediately opens the browser screen with live Google Maps, authentic photos, ratings, and price levels.
-   - When asked to plan a day, build an itinerary, or organize a day trip: call `plan_day_itinerary`. This generates a full visual timeline with schedule times, venue photos, itemized costs, and Google Maps route links.
-   - When asked about prices, product comparisons, or deals: call `search_prices`.
-   - When asked where the user is: state their live physical location ({loc_str}) or call `get_user_location`.
+2. MANDATORY VISUAL BROWSER ACTIVATION (DO NOT JUST ANSWER IN CHAT):
+   - Whenever the user asks to see, show, look up, browse, search, compare prices, or plan a day:
+     * YOU MUST CALL THE CORRESPONDING TOOL to launch the visual browser screen. Never just reply with text alone without calling the tool!
+     * To plan a day, trip, or schedule -> MUST call `plan_day_itinerary(destination=..., preferences=..., budget=...)`
+     * For prices, deals, buying, or costs -> MUST call `search_prices(query=...)`
+     * For places, maps, cafes, food, hotels, attractions, or directions -> MUST call `search_places_and_map(query=..., location=...)`
+     * For web search, articles, news, or URLs -> MUST call `search_or_browse_web(query_or_url=...)`
+   - Calling the tool immediately activates the interactive visual browser window side-by-side with your face.
+   - When asked where the user is physically located: state their live physical location ({loc_str}) or call `get_user_location`.
 3. HARDWARE GROUNDING:
    - Strictly honor Physical Microcontroller status. If disconnected, state clearly that no board is connected.
 4. ZERO ROBOTIC FLUFF:
@@ -773,6 +777,17 @@ Core Directives:
         skills_hdr = self.skill_manager.get_skill_catalog_prompt()
         if skills_hdr:
             full_system_prompt += f"\n\n{skills_hdr}"
+
+        # Dynamic Visual Intent Hinting: guarantees the local model executes visual browser tools instead of echoing plain text
+        lower_input = text_clean.lower()
+        if re.search(r'\b(daily plan|day plan|plan a day|plan my day|itinerary|day trip|schedule my day)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user is requesting a day plan or itinerary. You MUST invoke `plan_day_itinerary` immediately so the interactive visual blueprint opens in the browser. DO NOT answer with text alone without executing the tool.]"
+        elif re.search(r'\b(price of|prices of|cost of|how much is|look up the price|check price|compare prices|pricing|deals on)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user is asking about prices or deals. You MUST invoke `search_prices` immediately so the live pricing comparison grid opens in the browser. DO NOT answer with text alone without executing the tool.]"
+        elif re.search(r'\b(show me cafes|show me restaurants|places to visit|cafes near|restaurants near|places near|show me places|map of|find hotels|find cafes|spots in)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user is asking for places, maps, or venues. You MUST invoke `search_places_and_map` immediately so the interactive Google Map and place cards open in the browser. DO NOT answer with text alone without executing the tool.]"
+        elif re.search(r'\b(show me|browse|search the web for|look up on web|search for)\b', lower_input) and not re.search(r'\b(camera|pin|arduino|port|com4)\b', lower_input):
+            full_system_prompt += "\n[IMPERATIVE: The user is asking to show or browse web content. You MUST invoke `search_or_browse_web` immediately so the visual browser viewport opens. DO NOT answer with text alone without executing the tool.]"
 
         history = self.openclaw_memory.get_recent_history(limit=8)
 
@@ -895,18 +910,14 @@ Core Directives:
             details=f"**User**: {text_clean}\n**Cortex**: {clean_content}"
         )
 
-        # Auto-dismiss viewports if user shifted topic away
-        if self.active_view_mode == "browser" and not used_web_search:
-            await broadcast({"type": "set_view_mode", "mode": "none"})
-            self.active_view_mode = "none"
-        elif self.active_view_mode == "camera" and not used_camera:
-            await broadcast({"type": "set_view_mode", "mode": "none"})
-            self.active_view_mode = "none"
-        elif self.active_view_mode == "arduino" and not used_arduino:
-            # Only dismiss hardware workbench if user clearly changed topics to web search or vision
-            if used_web_search or used_camera:
-                await broadcast({"type": "set_view_mode", "mode": "none"})
-                self.active_view_mode = "none"
+        # Keep active viewports open across turns so user can read/interact with them;
+        # Only switch viewport if another tool explicitly changed active_view_mode
+        if used_web_search:
+            self.active_view_mode = "browser"
+        elif used_camera:
+            self.active_view_mode = "camera"
+        elif used_arduino:
+            self.active_view_mode = "arduino"
 
         await broadcast({"type": "state_change", "state": "idle"})
         return tts_text

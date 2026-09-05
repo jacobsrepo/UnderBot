@@ -10,6 +10,7 @@ import re
 import urllib.request
 import urllib.parse
 import asyncio
+import subprocess
 from typing import Dict, Any, List, Optional
 
 
@@ -37,7 +38,10 @@ class GeoEngine:
     async def get_live_location(self) -> Dict[str, Any]:
         """
         Returns the user's current physical location.
-        Uses cached browser GPS if available, otherwise resolves via low-latency IP geolocation services.
+        Priority:
+        1. Cached browser GPS
+        2. Windows native GeoCoordinateWatcher (.NET System.Device.Location) + reverse geocoding
+        3. Low-latency IP geolocation services (fallback)
         """
         if self.cached_location and self.cached_location.get("latitude"):
             if not self.cached_location.get("city"):
@@ -46,30 +50,76 @@ class GeoEngine:
                     if rev.get("city"):
                         self.cached_location["city"] = rev["city"]
                         self.cached_location["country"] = rev.get("country", "")
+                        self.cached_location["street"] = rev.get("street", "")
                 except Exception:
                     pass
             return self.cached_location
 
         loop = asyncio.get_running_loop()
 
+        # 1. Try Windows native GeoCoordinateWatcher for pinpoint hardware GPS / Wi-Fi trilateration
+        def _fetch_windows_location() -> Optional[Dict[str, Any]]:
+            try:
+                ps_code = """
+Add-Type -AssemblyName System.Device
+$watcher = New-Object System.Device.Location.GeoCoordinateWatcher
+$watcher.Start()
+Start-Sleep -Milliseconds 1200
+$loc = $watcher.Position.Location
+$watcher.Stop()
+if (-not $loc.IsUnknown) {
+    [PSCustomObject]@{
+        latitude = [math]::Round($loc.Latitude, 6)
+        longitude = [math]::Round($loc.Longitude, 6)
+    } | ConvertTo-Json -Compress
+}
+"""
+                res = subprocess.run(
+                    ["powershell", "-NoProfile", "-Command", ps_code],
+                    capture_output=True,
+                    text=True,
+                    timeout=4
+                )
+                out = res.stdout.strip()
+                if out and "{" in out:
+                    data = json.loads(out)
+                    lat = float(data.get("latitude", 0.0))
+                    lon = float(data.get("longitude", 0.0))
+                    if lat and lon:
+                        return {
+                            "latitude": lat,
+                            "longitude": lon,
+                            "source": "windows_native_gps"
+                        }
+            except Exception as e:
+                print(f"[GeoEngine] Windows native location check error: {e}")
+            return None
+
+        win_coords = await loop.run_in_executor(None, _fetch_windows_location)
+        if win_coords and win_coords.get("latitude"):
+            rev = await self.reverse_geocode(win_coords["latitude"], win_coords["longitude"])
+            loc = {
+                "city": rev.get("city") or "Nearby",
+                "region": rev.get("state") or "",
+                "country": rev.get("country") or "",
+                "street": rev.get("street") or "",
+                "latitude": win_coords["latitude"],
+                "longitude": win_coords["longitude"],
+                "source": "windows_native_gps"
+            }
+            self.cached_location = loc
+            return loc
+
+        # 2. IP Geolocation fallback
         def _fetch_ip_loc() -> Dict[str, Any]:
             services = [
-                ("http://ip-api.com/json", lambda d: {
+                ("https://ipinfo.io/json", lambda d: {
                     "city": d.get("city", "Unknown City"),
-                    "region": d.get("regionName", ""),
+                    "region": d.get("region", ""),
                     "country": d.get("country", ""),
-                    "latitude": d.get("lat", 0.0),
-                    "longitude": d.get("lon", 0.0),
+                    "latitude": float(d.get("loc", "0,0").split(",")[0]) if "," in d.get("loc", "") else 0.0,
+                    "longitude": float(d.get("loc", "0,0").split(",")[1]) if "," in d.get("loc", "") else 0.0,
                     "timezone": d.get("timezone", "UTC"),
-                    "source": "ip_geolocation"
-                }),
-                ("https://freeipapi.com/api/json", lambda d: {
-                    "city": d.get("cityName", "Unknown City"),
-                    "region": d.get("regionName", ""),
-                    "country": d.get("countryName", ""),
-                    "latitude": d.get("latitude", 0.0),
-                    "longitude": d.get("longitude", 0.0),
-                    "timezone": d.get("timeZones", ["UTC"])[0] if d.get("timeZones") else "UTC",
                     "source": "ip_geolocation"
                 }),
                 ("https://ipwho.is/", lambda d: {
@@ -79,6 +129,15 @@ class GeoEngine:
                     "latitude": d.get("latitude", 0.0),
                     "longitude": d.get("longitude", 0.0),
                     "timezone": d.get("timezone", {}).get("id", "UTC"),
+                    "source": "ip_geolocation"
+                }),
+                ("http://ip-api.com/json", lambda d: {
+                    "city": d.get("city", "Unknown City"),
+                    "region": d.get("regionName", ""),
+                    "country": d.get("country", ""),
+                    "latitude": d.get("lat", 0.0),
+                    "longitude": d.get("lon", 0.0),
+                    "timezone": d.get("timezone", "UTC"),
                     "source": "ip_geolocation"
                 })
             ]
