@@ -86,6 +86,7 @@ class CortexApp {
             statusSubtitle:      document.getElementById('status-subtitle'),
             chatMessages:        document.getElementById('chat-messages'),
             inputBar:            document.getElementById('input-bar'),
+            chatForm:            document.getElementById('chat-form'),
             chatInput:           document.getElementById('chat-input'),
             sendBtn:             document.getElementById('send-btn'),
             micBtn:              document.getElementById('mic-btn'),
@@ -229,14 +230,22 @@ class CortexApp {
             this.dom.voiceStatusLabel.textContent = isMuted ? 'MUTED' : 'LIVE TALK';
         });
 
-        this.dom.chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+        this.dom.chatForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this._sendChat();
+        });
+
+        this.dom.chatInput?.addEventListener('keydown', (e) => {
+            if ((e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey) {
                 e.preventDefault();
                 this._sendChat();
             }
         });
 
-        this.dom.sendBtn.addEventListener('click', () => this._sendChat());
+        this.dom.sendBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this._sendChat();
+        });
 
         this.dom.cycleBtn.addEventListener('click', () => {
             this._wsSend({ type: 'demo_cycle' });
@@ -814,8 +823,15 @@ class CortexApp {
     }
 
     _sendChat() {
-        const text = this.dom.chatInput.value.trim();
+        const inputEl = this.dom?.chatInput || document.getElementById('chat-input');
+        if (!inputEl) {
+            console.error('[Chat] chatInput element missing!');
+            return;
+        }
+        const text = inputEl.value.trim();
         if (!text) return;
+
+        console.log('[Chat] _sendChat triggered with content:', text);
 
         // Ensure Web Audio context is unlocked via user gesture
         try {
@@ -826,17 +842,19 @@ class CortexApp {
 
         if (text.toLowerCase() === '/clear' || text.toLowerCase() === 'clear chat' || text.toLowerCase() === 'clear memory') {
             this._wsSend({ type: 'clear_memory' });
-            this.dom.chatMessages.innerHTML = `
-                <div class="message system">
-                    <div class="message-bubble">Conversation memory cleared. Ready for fresh interaction.</div>
-                </div>
-            `;
-            this.dom.chatInput.value = '';
+            if (this.dom.chatMessages) {
+                this.dom.chatMessages.innerHTML = `
+                    <div class="message system">
+                        <div class="message-bubble">Conversation memory cleared. Ready for fresh interaction.</div>
+                    </div>
+                `;
+            }
+            inputEl.value = '';
             return;
         }
         this._sendChatText(text);
-        this.dom.chatInput.value = '';
-        this.dom.chatInput.focus();
+        inputEl.value = '';
+        inputEl.focus();
     }
 
     bargeIn() {
@@ -857,8 +875,14 @@ class CortexApp {
         this._lastLocalUserMessage = text;
         this._addMessage('user', text);
 
-        // 2. Safely interrupt any ongoing speech
-        this.bargeIn();
+        // 2. Safely interrupt local audio playback
+        try {
+            if (this.voice && typeof this.voice.bargeIn === 'function') {
+                this.voice.bargeIn();
+            }
+        } catch (e) {
+            console.warn('[Voice] bargeIn error:', e);
+        }
 
         // 3. Safely capture camera snapshot if active
         try {
@@ -869,12 +893,13 @@ class CortexApp {
 
         // 4. Send chat message to server or queue if reconnecting
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            console.log('[Chat] Dispatching chat_message via WebSocket:', text);
             this._wsSend({ type: 'chat_message', content: text });
         } else {
             console.warn('[WS] Socket not open (state: ' + this.ws?.readyState + '), message queued');
             if (!this._pendingQueue) this._pendingQueue = [];
             this._pendingQueue.push({ type: 'chat_message', content: text });
-            this._addMessage('system', 'Reconnecting to Cortex Core...');
+            this._addMessage('system', 'Connecting to Cortex Core... Message queued.');
             this._connectWS();
         }
     }
@@ -1002,6 +1027,17 @@ class CortexApp {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    window.cortex = new CortexApp();
-});
+function initCortex() {
+    if (!window.cortex) {
+        window.cortex = new CortexApp();
+        console.log('[Cortex] CortexApp instantiated and mounted to window.cortex');
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCortex);
+} else {
+    initCortex();
+}
+
+window.addEventListener('load', initCortex);
