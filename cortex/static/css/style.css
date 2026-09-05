@@ -2095,6 +2095,12 @@ body {
     color: var(--theme-accent, #4ade80);
 }
 
+.btn-mic.active {
+    background: var(--theme-accent, #4ade80);
+    color: #0b0c0f;
+    box-shadow: 0 0 12px var(--theme-glow, rgba(74, 222, 128, 0.4));
+}
+
 .btn-send {
     background: var(--theme-accent, #3b82f6);
     color: #0b0c0f;

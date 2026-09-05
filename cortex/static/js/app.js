@@ -85,7 +85,7 @@ class CortexApp {
             statusTitle:         document.getElementById('status-title'),
             statusSubtitle:      document.getElementById('status-subtitle'),
             chatMessages:        document.getElementById('chat-messages'),
-            inputBar:            document.getElementById('input-bar'),
+            inputBar:            document.querySelector('.input-bar') || document.getElementById('chat-form'),
             chatForm:            document.getElementById('chat-form'),
             chatInput:           document.getElementById('chat-input'),
             sendBtn:             document.getElementById('send-btn'),
@@ -120,7 +120,11 @@ class CortexApp {
             },
             onSpeakingStateChange: (isSpeaking) => {
                 if (this.face) {
-                    this._setState(isSpeaking ? 'speaking' : (this.viewMode !== 'none' ? 'seeing' : 'idle'));
+                    const fallbackState = this.liveVoiceActive ? 'listening' : (this.viewMode !== 'none' ? 'seeing' : 'idle');
+                    this._setState(isSpeaking ? 'speaking' : fallbackState);
+                }
+                if (this.dom.voiceStatusLabel && this.liveVoiceActive) {
+                    this.dom.voiceStatusLabel.textContent = isSpeaking ? 'SPEAKING' : (this.voice?.isMuted ? 'MUTED' : 'LISTENING');
                 }
             },
             onSpeechRecognized: (transcript) => {
@@ -130,8 +134,15 @@ class CortexApp {
             onStateChange: (active, mode) => {
                 this.liveVoiceActive = active;
                 if (active) {
-                    this.dom.inputBar.classList.add('live-active');
-                    this.dom.liveVoiceBtn.classList.add('active');
+                    this.dom.inputBar?.classList.add('live-active');
+                    this.dom.liveVoiceBtn?.classList.add('active');
+                    this.dom.micBtn?.classList.add('active');
+                    const span = this.dom.liveVoiceBtn?.querySelector('span');
+                    if (span) span.textContent = 'End Live Talk';
+                    if (this.dom.micBtn) this.dom.micBtn.title = 'End Live Talk';
+                    if (this.dom.voiceStatusLabel) {
+                        this.dom.voiceStatusLabel.textContent = mode === 'simulated' ? 'SIMULATED' : 'LISTENING';
+                    }
                     this._setState('listening');
                     if (mode === 'simulated') {
                         this._addMessage('system', 'Live Talk active (Microphone simulated)');
@@ -139,10 +150,19 @@ class CortexApp {
                         this._addMessage('system', 'Live Talk active — listening for voice');
                     }
                 } else {
-                    this.dom.inputBar.classList.remove('live-active');
-                    this.dom.liveVoiceBtn.classList.remove('active');
+                    this.dom.inputBar?.classList.remove('live-active');
+                    this.dom.liveVoiceBtn?.classList.remove('active');
+                    this.dom.micBtn?.classList.remove('active');
+                    const span = this.dom.liveVoiceBtn?.querySelector('span');
+                    if (span) span.textContent = 'Start Live Talk';
+                    if (this.dom.micBtn) this.dom.micBtn.title = 'Start Live Talk';
+                    if (this.dom.voiceStatusLabel) {
+                        this.dom.voiceStatusLabel.textContent = 'LIVE TALK';
+                    }
                     if (this.face && this.viewMode === 'none') {
                         this._setState('idle');
+                    } else if (this.face && this.viewMode !== 'none') {
+                        this._setState('seeing');
                     }
                 }
             }
@@ -220,14 +240,16 @@ class CortexApp {
             this._wsSend({ type: 'clear_serial_log' });
         });
 
-        this.dom.liveVoiceBtn.addEventListener('click', () => this.toggleLiveVoice());
-        this.dom.micBtn.addEventListener('click', () => this.toggleLiveVoice());
-        this.dom.voiceEndBtn.addEventListener('click', () => this.voice.stop());
+        this.dom.liveVoiceBtn?.addEventListener('click', () => this.toggleLiveVoice());
+        this.dom.micBtn?.addEventListener('click', () => this.toggleLiveVoice());
+        this.dom.voiceEndBtn?.addEventListener('click', () => this.voice.stop());
 
-        this.dom.voiceMuteBtn.addEventListener('click', () => {
+        this.dom.voiceMuteBtn?.addEventListener('click', () => {
             const isMuted = this.voice.toggleMute();
             this.dom.voiceMuteBtn.classList.toggle('active', isMuted);
-            this.dom.voiceStatusLabel.textContent = isMuted ? 'MUTED' : 'LIVE TALK';
+            if (this.dom.voiceStatusLabel) {
+                this.dom.voiceStatusLabel.textContent = isMuted ? 'MUTED' : 'LISTENING';
+            }
         });
 
         this.dom.chatForm?.addEventListener('submit', (e) => {

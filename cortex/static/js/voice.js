@@ -217,6 +217,9 @@ export class LiveVoiceEngine {
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (this.audioCtx.state === 'suspended') {
+                    await this.audioCtx.resume();
+                }
                 this.analyser = this.audioCtx.createAnalyser();
                 this.analyser.fftSize = 64;
                 this.analyser.smoothingTimeConstant = 0.75;
@@ -250,8 +253,9 @@ export class LiveVoiceEngine {
         }
 
         if (this.canvas) {
-            this.canvas.width = 300;
-            this.canvas.height = 28;
+            const rect = this.canvas.getBoundingClientRect();
+            this.canvas.width = rect.width > 50 ? Math.round(rect.width) : 300;
+            this.canvas.height = rect.height > 10 ? Math.round(rect.height) : 28;
         }
 
         this._renderWave();
@@ -399,7 +403,11 @@ export class LiveVoiceEngine {
 
                 ctx.fillStyle = grad;
                 ctx.beginPath();
-                ctx.roundRect(x, y, barWidth, barHeight, 2);
+                if (typeof ctx.roundRect === 'function') {
+                    ctx.roundRect(x, y, barWidth, barHeight, 2);
+                } else {
+                    ctx.rect(x, y, barWidth, barHeight);
+                }
                 ctx.fill();
             }
         }
