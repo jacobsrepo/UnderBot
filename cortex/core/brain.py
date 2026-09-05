@@ -9,17 +9,20 @@ import os
 import asyncio
 import json
 import re
+import time
+import datetime
+from pathlib import Path
 from typing import Dict, Any, Optional, Callable
 
-from memory.conversation import ConversationMemory
-from memory.knowledge import KnowledgeMemory
-from devices.serial_device import SerialDevice
+from memory.openclaw_memory import OpenClawMemory
+from core.sentence_chunker import SentenceChunker
+from devices.serial_device import SerialWorker, SerialDevice
 from vision.camera import Camera
 from vision.probe import HardwareVisionProbe
 from research.surfer import WebSurfer
 from tts.speaker import VoiceSpeaker
 from llm.agent import CortexAgent
-from cli.runner import CliRunner
+from cli.runner import PowerShellRunner, CliRunner
 from skills.manager import SkillManager
 
 
@@ -55,15 +58,18 @@ CORE OPERATIONAL PRINCIPLES:
 
 class CortexBrain:
     def __init__(self):
-        self.conv_memory = ConversationMemory()
-        self.knowledge = KnowledgeMemory()
-        self.device = SerialDevice()
+        self.openclaw_memory = OpenClawMemory(Path(__file__).parent.parent / "memory")
+        self.conv_memory = self.openclaw_memory
+        self.knowledge = self.openclaw_memory
+        self.sentence_chunker = SentenceChunker(min_char_threshold=20)
+        self.device = SerialWorker(port="COM4", baudrate=115200)
+        self.device.start()
         self.camera = Camera()
         self.probe = HardwareVisionProbe(self.device, self.camera)
         self.surfer = WebSurfer()
         self.speaker = VoiceSpeaker()
         self.agent = CortexAgent(model="qwen2.5-coder:7b")
-        self.cli_runner = CliRunner()
+        self.cli_runner = PowerShellRunner()
         self.skill_manager = SkillManager()
 
         # Start camera background daemon for instant VisualSceneBuffer updates
@@ -117,8 +123,10 @@ class CortexBrain:
         clean = re.sub(r'`[^`\n]+`', '', clean)
         # Strip markdown links: [Text](url) -> Text
         clean = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', clean)
-        # Strip [mood:...] tags
-        clean = re.sub(r'\[mood:[^\]]+\]', '', clean, flags=re.IGNORECASE)
+        # Strip [mood:...] tags and variations
+        clean = re.sub(r'\[[^\]]*mood:[^\]]*\]', '', clean, flags=re.IGNORECASE)
+        clean = re.sub(r'\[[^\]]*glow:[^\]]*\]', '', clean, flags=re.IGNORECASE)
+        clean = re.sub(r'\b(?:mood|glow):[a-zA-Z0-9_#]+;?', '', clean, flags=re.IGNORECASE)
         # Strip generic bracketed metadata like [insert ...] or [SYSTEM ...]
         clean = re.sub(r'\[(?:insert|system|hardware|vision)[^\]]*\]', '', clean, flags=re.IGNORECASE)
         # Strip URLs
@@ -129,8 +137,6 @@ class CortexBrain:
         clean = re.sub(r'\{[^\}]{8,}\}', '', clean)
         # Clean excessive whitespace
         clean = re.sub(r'\s+', ' ', clean).strip()
-        if not clean or len(clean) < 3:
-            clean = "Task completed."
         return clean
 
     def _extract_and_dispatch_mood_tags(self, text: str) -> Optional[Dict[str, Any]]:
@@ -335,12 +341,12 @@ class CortexBrain:
                 cat = args.get("category", "notes")
                 k = args.get("key", "info")
                 v = args.get("value", "")
-                self.knowledge.save_fact(cat, k, v)
+                self.openclaw_memory.save_fact(cat, k, v)
                 return {"status": "saved", "category": cat, "key": k}
 
-            elif name == "recall_from_memory":
+            elif name in ("recall_from_memory", "search_memory"):
                 q = args.get("query", "")
-                return {"results": self.knowledge.search_facts(q)}
+                return {"results": self.openclaw_memory.search_memory(q)}
 
             elif name == "build_and_flash_sketch":
                 used_arduino = True
@@ -730,19 +736,33 @@ class CortexBrain:
 
             return {"error": f"Unknown tool: {name}"}
 
-        # Dynamically build system prompt with live grounding context & skills catalog
-        # Probe physical hardware status live on EVERY turn for absolute ground truth
+        # Dynamically build system prompt with Section 5 Dynamic Prompt Template with Temporal Grounding
+        now_iso = datetime.datetime.now().isoformat()
+        grounding_facts = self.openclaw_memory.get_grounding_context()
         hw_stat = await self.device.check_hardware_status()
-        learned_facts = self.knowledge.get_category_facts("pin_mapping")
-        grounding_hdr = self.conv_memory.get_grounding_context(
-            hw_status=hw_stat,
-            camera_active=self.camera.is_camera_active(),
-            learned_facts=learned_facts
-        )
-        skills_hdr = self.skill_manager.get_skill_catalog_prompt()
-        full_system_prompt = f"{BASE_SYSTEM_PROMPT}\n\n{grounding_hdr}\n\n{skills_hdr}"
+        conn_str = "CONNECTED (ONLINE)" if hw_stat.get("connected") else "DISCONNECTED (No USB detected)"
+        cam_str = "ACTIVE (Streaming live video)" if self.camera.is_camera_active() else "OFF / INACTIVE (No video feed; only user can enable in browser)"
 
-        history = self.conv_memory.get_recent_history(limit=8)
+        full_system_prompt = f"""You are Cortex, an advanced desktop cognitive assistant operating natively on Windows.
+Current Environment Grounding:
+- Current Local Timestamp: {now_iso}
+- Host Operating System: Windows (PowerShell Core)
+- Assigned Microcontroller: Arduino Nano on COM4 ({conn_str})
+- Vision Sensor: {cam_str}
+
+Long-Term Context Grounding (OpenClaw Root Knowledge):
+{grounding_facts}
+
+Operational Rules:
+1. Tool Syntheses must adhere to Windows PowerShell cmdlets (Select-String, Get-ChildItem, Get-Content).
+2. Express internal sentiment via inline streaming tags: [mood:<curious|analytical|confident|skeptical|alert>;glow:<HEX>]
+3. Never emit placeholder dates, simulated status checks, or generic meta-announcements.
+"""
+        skills_hdr = self.skill_manager.get_skill_catalog_prompt()
+        if skills_hdr:
+            full_system_prompt += f"\n\n{skills_hdr}"
+
+        history = self.openclaw_memory.get_recent_history(limit=8)
 
         # Detect and auto-cache any referenced .ino sketch file from the user's prompt
         ino_match = re.search(r'(?:file:///)?([a-zA-Z]:[\\/][^"\';\n\r]+\.ino)', text_clean)
@@ -761,12 +781,47 @@ class CortexBrain:
                 except Exception as e:
                     print(f"[Brain] Error reading .ino: {e}")
 
-        # Run autonomous ReAct agent loop - let the AI freely decide!
+        # Setup real-time UI typing stream and pipelined sentence-by-sentence TTS
+        msg_id = f"msg_{int(time.time() * 1000)}"
+        chunk_idx = 0
+        tts_queue: asyncio.Queue = asyncio.Queue()
+        tts_worker_task = asyncio.create_task(self._stream_tts_worker(tts_queue, broadcast))
+
+        async def on_token_chunk(token: str):
+            nonlocal chunk_idx
+            # 1. Stream token to UI immediately
+            await broadcast({
+                "type": "chat_stream_chunk",
+                "msg_id": msg_id,
+                "chunk": token
+            })
+            # 2. Feed token into Sentence Chunker
+            sentences = self.sentence_chunker.append(token)
+            for s in sentences:
+                clean_s = self._sanitize_for_tts(s)
+                if clean_s:
+                    await tts_queue.put((chunk_idx, clean_s, False))
+                    chunk_idx += 1
+
+        # Run autonomous ReAct agent loop with real-time streaming
         response = await self.agent.run(
             messages=history,
             system_prompt=full_system_prompt,
-            tool_executor=execute_tool
+            tool_executor=execute_tool,
+            on_token_chunk=on_token_chunk
         )
+
+        # Flush any remaining sentence from chunker
+        remaining_sentences = self.sentence_chunker.flush()
+        for s in remaining_sentences:
+            clean_s = self._sanitize_for_tts(s)
+            if clean_s:
+                await tts_queue.put((chunk_idx, clean_s, True))
+                chunk_idx += 1
+
+        # Signal TTS worker completion and await queue drain
+        await tts_queue.put(None)
+        await tts_worker_task
 
         # Process any embedded facial mood tags
         mood_tag = self._extract_and_dispatch_mood_tags(response)
@@ -779,19 +834,20 @@ class CortexBrain:
                 "intensity": mood_tag["intensity"]
             })
 
-        # Sanitize for TTS and history
+        # Finalize streaming message in chat UI
         tts_text = self._sanitize_for_tts(response)
-        self.conv_memory.add_message("assistant", tts_text)
-        await broadcast({"type": "chat_message", "role": "assistant", "content": tts_text})
+        await broadcast({
+            "type": "chat_stream_end",
+            "msg_id": msg_id,
+            "full_content": tts_text
+        })
 
-        # Synthesize audio with stripped text
-        audio_uri = await self.speaker.synthesize_speech(tts_text)
-        if audio_uri:
-            await broadcast({
-                "type": "voice_audio",
-                "audio": audio_uri,
-                "text": tts_text
-            })
+        # Save to OpenClaw short-term session and medium-term daily journal
+        self.openclaw_memory.add_message("assistant", tts_text)
+        self.openclaw_memory.append_daily_log(
+            action="Turn Complete",
+            details=f"**User**: {text_clean}\n**Cortex**: {tts_text}"
+        )
 
         # Auto-dismiss viewports if user shifted topic away
         if self.active_view_mode == "browser" and not used_web_search:
@@ -808,3 +864,29 @@ class CortexBrain:
 
         await broadcast({"type": "state_change", "state": "idle"})
         return tts_text
+
+    async def _stream_tts_worker(self, tts_queue: asyncio.Queue, broadcast: Callable):
+        while True:
+            item = await tts_queue.get()
+            if item is None:
+                tts_queue.task_done()
+                break
+            chunk_idx, text, is_final = item
+            try:
+                audio_uri = await self.speaker.synthesize_speech(text)
+                if audio_uri:
+                    await broadcast({
+                        "type": "voice_audio_chunk",
+                        "audio": audio_uri,
+                        "text": text,
+                        "chunk_index": chunk_idx,
+                        "is_final": is_final
+                    })
+            except Exception as e:
+                print(f"[TTS Stream] Synthesis error: {e}")
+            finally:
+                tts_queue.task_done()
+
+    def abort_current_generation(self):
+        """Barge-In: Flush chunker buffer and reset generation state."""
+        self.sentence_chunker.flush()

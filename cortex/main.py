@@ -195,8 +195,12 @@ async def handle_message(ws: WebSocket, message: dict):
             "replace": True
         })
 
+    elif msg_type == "barge_in":
+        brain.abort_current_generation()
+        await broadcast({"type": "state_change", "state": "idle"})
+
     elif msg_type == "clear_memory":
-        brain.conv_memory.clear_session("default")
+        brain.openclaw_memory.clear_session("default")
         await broadcast({
             "type": "chat_message",
             "role": "system",

@@ -728,10 +728,21 @@ class CortexApp {
             case 'chat_message':
                 this._addMessage(msg.role, msg.content);
                 break;
+            case 'chat_stream_chunk':
+                this.handleStreamChunk(msg);
+                break;
+            case 'chat_stream_end':
+                this.handleStreamEnd(msg);
+                break;
+            case 'voice_audio_chunk':
+                if (this.voice && msg.audio) {
+                    this.voice.enqueueAudioChunk(msg.audio, msg.text || '', msg.is_final || false);
+                }
+                break;
             case 'voice_audio':
                 // Play Neural Male Voice Audio through TTS engine with anti-echo text
                 if (this.voice && msg.audio) {
-                    this.voice.playAudio(msg.audio, msg.text || '');
+                    this.voice.enqueueAudioChunk(msg.audio, msg.text || '', true);
                 }
                 break;
             case 'facial_expression':
@@ -797,11 +808,64 @@ class CortexApp {
         this.dom.chatInput.focus();
     }
 
+    bargeIn() {
+        if (this.voice) {
+            this.voice.bargeIn();
+        }
+        this._wsSend({ type: 'barge_in' });
+    }
+
     _sendChatText(text) {
         if (!text) return;
-        // Trigger a fresh snapshot if camera is active so Cortex sees current frame
+        // User spoke or typed — immediately interrupt any ongoing speech
+        this.bargeIn();
         this._captureAndSendSnapshot();
         this._wsSend({ type: 'chat_message', content: text });
+    }
+
+    handleStreamChunk(msg) {
+        const msgId = msg.msg_id;
+        const chunk = msg.chunk || '';
+        if (!msgId) return;
+
+        let el = document.getElementById(msgId);
+        if (!el) {
+            el = document.createElement('div');
+            el.id = msgId;
+            el.className = 'message assistant';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble streaming';
+            bubble.innerHTML = `<span class="stream-text"></span><span class="typing-cursor">▋</span>`;
+            el.appendChild(bubble);
+            this.dom.chatMessages.appendChild(el);
+        }
+
+        const streamText = el.querySelector('.stream-text');
+        if (streamText) {
+            streamText.textContent += chunk;
+        }
+        this.dom.chatMessages.scrollTop = this.dom.chatMessages.scrollHeight;
+    }
+
+    handleStreamEnd(msg) {
+        const msgId = msg.msg_id;
+        if (!msgId) return;
+
+        const el = document.getElementById(msgId);
+        if (!el) return;
+
+        const cursor = el.querySelector('.typing-cursor');
+        if (cursor) cursor.remove();
+
+        const bubble = el.querySelector('.message-bubble');
+        if (bubble) {
+            bubble.classList.remove('streaming');
+            const streamText = el.querySelector('.stream-text');
+            const fullContent = msg.full_content || (streamText ? streamText.textContent : bubble.textContent);
+            bubble.innerHTML = this._formatMessageContent(fullContent);
+        }
+        this.dom.chatMessages.scrollTop = this.dom.chatMessages.scrollHeight;
     }
 
     _addMessage(role, content) {

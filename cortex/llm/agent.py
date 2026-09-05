@@ -21,52 +21,43 @@ class CortexAgent:
         messages: List[Dict[str, Any]],
         system_prompt: str,
         tool_executor: Callable[[str, Dict[str, Any]], Any],
-        on_state_change: Optional[Callable[[str], Any]] = None
+        on_state_change: Optional[Callable[[str], Any]] = None,
+        on_token_chunk: Optional[Callable[[str], Any]] = None
     ) -> str:
         """
-        Execute autonomous ReAct loop.
+        Execute autonomous ReAct loop with real-time token streaming.
         The AI model evaluates the dialogue and freely decides whether to invoke tools or answer with text.
+        Tokens are streamed live via on_token_chunk for immediate UI typing & sentence-by-sentence TTS.
         """
         dialogue = [{"role": "system", "content": system_prompt}] + messages
 
         max_iterations = 6
 
         for iteration in range(max_iterations):
-            # Query model with tool definitions
-            resp = await self.client.chat(dialogue, tools=CORTEX_TOOLS, task_type="tool")
+            # Query model with tool definitions and token stream listener
+            resp = await self.client.chat_stream(
+                dialogue,
+                tools=CORTEX_TOOLS,
+                task_type="tool",
+                on_token=on_token_chunk
+            )
             msg = resp.get("message", {})
 
             tool_calls = msg.get("tool_calls", [])
 
-            # If the model chose not to invoke tools, check if it responded directly or stalled on a promise
+            # If the model chose not to invoke tools, return streamed content
             if not tool_calls:
                 content = msg.get("content", "").strip()
                 if content:
-                    # Auto-followthrough: If the model stated an intention to run a tool on iteration 0
-                    # but forgot to emit the tool call, prompt it to execute the tool immediately
-                    if iteration == 0:
-                        lower = content.lower()
-                        promised_tool = any(p in lower for p in (
-                            "i'll use the command", "i will use the command",
-                            "i'll run the command", "i will run the command",
-                            "let's run the command", "i'll check the weather",
-                            "i will check the weather", "i will use the function",
-                            "please give me a moment to retrieve", "let me list the files",
-                            "i'll list the files", "i will list the files",
-                            "i will run a command", "i'll run a command"
-                        ))
-                        if promised_tool:
-                            dialogue.append(msg)
-                            dialogue.append({
-                                "role": "user",
-                                "content": "Please proceed and execute the tool call now."
-                            })
-                            continue
-
                     return content
 
-                # If content is empty (e.g. model only generated whitespace), get conversational reply
-                wrapup_resp = await self.client.chat(dialogue, tools=None, task_type="dialogue")
+                # If content is empty, get conversational reply
+                wrapup_resp = await self.client.chat_stream(
+                    dialogue,
+                    tools=None,
+                    task_type="dialogue",
+                    on_token=on_token_chunk
+                )
                 wrap_msg = wrapup_resp.get("message", {})
                 return wrap_msg.get("content", "").strip() or "Task complete."
 
@@ -93,6 +84,11 @@ class CortexAgent:
                 })
 
         # Final conversational synthesis after completing tool interactions
-        final_resp = await self.client.chat(dialogue, tools=None, task_type="dialogue")
+        final_resp = await self.client.chat_stream(
+            dialogue,
+            tools=None,
+            task_type="dialogue",
+            on_token=on_token_chunk
+        )
         return final_resp.get("message", {}).get("content", "Task complete.")
 

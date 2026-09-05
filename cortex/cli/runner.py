@@ -1,206 +1,146 @@
-"""
-Cortex Hardened PowerShell CLI Runner & Self-Healing Loop
-Stripped and adapted from OpenClaw's process execution supervisor.
-Guarantees native Windows PowerShell execution with $ErrorActionPreference trapping,
-parameter aliasing, and an automated 2-attempt self-healing retry loop.
-"""
-
+import subprocess
 import asyncio
-import os
 import re
-import sys
-from typing import Dict, Any, Optional, Tuple, Callable, List
+import os
+from typing import Tuple, Optional, Callable, Awaitable, Dict, Any
 
 
-# Parameter & command translation dictionary for common Linux hallucinations
-LINUX_TO_POWERSHELL_MAP = [
-    (r"\bgrep\b", "Select-String"),
-    (r"\bcat\b", "Get-Content"),
-    (r"\bls\s+-la\b", "Get-ChildItem -Force"),
-    (r"\bls\s+-l\b", "Get-ChildItem"),
-    (r"\bls\b", "Get-ChildItem"),
-    (r"\btouch\s+([^\s;]+)", r"New-Item -ItemType File -Path \1 -Force"),
-    (r"\brm\s+-rf\s+([^\s;]+)", r"Remove-Item -Recurse -Force \1"),
-    (r"\brm\s+([^\s;]+)", r"Remove-Item -Force \1"),
-    (r"\bmkdir\s+-p\s+([^\s;]+)", r"New-Item -ItemType Directory -Path \1 -Force"),
-    (r"\bexport\s+([A-Za-z0-9_]+)=([^\s;]+)", r"$env:\1 = '\2'"),
-    (r"\bwhich\s+([^\s;]+)", r"Get-Command \1"),
-    (r"\bhead\s+-n\s*(\d+)", r"Select-Object -First \1"),
-    (r"\btail\s+-n\s*(\d+)", r"Select-Object -Last \1"),
-    (r"\bfind\s+\.\s+-name\s+([^\s;]+)", r"Get-ChildItem -Recurse -Filter \1"),
-]
+class PowerShellRunner:
+    """Safe Windows PowerShell execution harness with a self-healing retry loop."""
 
+    DENY_PATTERNS = [
+        re.compile(r"\brmdir\s+/[sS]\b", re.IGNORECASE),
+        re.compile(r"\bdel\s+/[sS]\b", re.IGNORECASE),
+        re.compile(r"\bFormat-Volume\b", re.IGNORECASE),
+        re.compile(r"\bRemove-Item\b.*-Recurse\b.*-Force\b", re.IGNORECASE),
+        re.compile(r"\b(?:irm|iex)\b", re.IGNORECASE)
+    ]
 
-class CliRunner:
-    def __init__(self, default_cwd: Optional[str] = None):
-        self.default_cwd = default_cwd or os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    def __init__(self, timeout_seconds: int = 30):
+        self.timeout_seconds = timeout_seconds
 
-    def translate_dialect(self, cmd: str) -> str:
-        """Translates common Linux/Bash commands into Windows PowerShell cmdlets and auto-quotes paths with spaces."""
-        translated = cmd
-        for pattern, replacement in LINUX_TO_POWERSHELL_MAP:
-            translated = re.sub(pattern, replacement, translated)
+    def _is_safe(self, command: str) -> Tuple[bool, Optional[str]]:
+        for pattern in self.DENY_PATTERNS:
+            if pattern.search(command):
+                return False, f"Command rejected: matches restricted pattern '{pattern.pattern}'"
+        return True, None
 
-        # Auto-quote unquoted Windows paths containing spaces (e.g. C:\Users\Athul C S)
-        def _quote_if_space(m):
-            val = m.group(1).rstrip()
-            if ' ' in val:
-                return f"'{val}'"
-            return m.group(0)
+    def _auto_quote_paths(self, cmd: str) -> str:
+        """Detect unquoted Windows paths containing spaces and wrap them in single quotes."""
+        # e.g. C:\Users\Athul C S -> 'C:\Users\Athul C S'
+        pattern = r"""(?<!['"])([a-zA-Z]:\\[^"'\n\r;|&<>]*?\s+[^"'\n\r;|&<>]*?)(?=[\s;|&<>]|$)"""
+        return re.sub(pattern, r"'\1'", cmd)
 
-        translated = re.sub(r'''(?<!['"])([A-Za-z]:\\[^"'\n|;<>&]+?)(?=\s+-[A-Za-z]|\s*[|;<>&]|$)''', _quote_if_space, translated)
-        return translated
+    async def execute_raw(self, command: str, cwd: Optional[str] = None) -> Tuple[int, str, str]:
+        safe, reason = self._is_safe(command)
+        if not safe:
+            return -1, "", reason or "Execution blocked by policy."
 
-    async def execute_raw(self, command: str, cwd: Optional[str] = None, timeout_seconds: int = 30) -> Dict[str, Any]:
-        """
-        Spawns powershell.exe with non-interactive, bypass, and $ErrorActionPreference='Stop'.
-        Captures stdout, stderr, and explicit exit codes.
-        """
-        command = self.translate_dialect(command)
-        work_dir = cwd or self.default_cwd
-        if not os.path.exists(work_dir):
-            work_dir = self.default_cwd
-
-        # Prepend cortex/bin to PATH and trap non-terminating errors and explicit exit codes
-        bin_dir = os.path.join(self.default_cwd, "bin")
-        wrapped_script = (
-            f"$binDir = '{bin_dir}'; "
-            "if (Test-Path $binDir) { $env:PATH = \"$binDir;$env:PATH\" }; "
-            "$ErrorActionPreference = 'Stop'; "
-            f"try {{ {command} }} catch {{ Write-Error $_.Exception.Message; exit 1 }}; "
-            "if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { exit $LASTEXITCODE }"
+        command = self._auto_quote_paths(command)
+        wrapped_command = (
+            f"$ErrorActionPreference = 'Stop'; "
+            f"try {{ {command} }} catch {{ Write-Error $_; exit 1 }}"
         )
-
-        args = [
+        
+        cmd = [
             "powershell.exe",
             "-NoProfile",
             "-NonInteractive",
             "-ExecutionPolicy", "Bypass",
-            "-Command", wrapped_script
+            "-Command", wrapped_command
         ]
 
         try:
             process = await asyncio.create_subprocess_exec(
-                *args,
+                *cmd,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
-                cwd=work_dir
+                cwd=cwd
             )
-
+            stdout_bytes, stderr_bytes = await asyncio.wait_for(
+                process.communicate(), 
+                timeout=self.timeout_seconds
+            )
+            return (
+                process.returncode or 0,
+                stdout_bytes.decode("utf-8", errors="replace").strip(),
+                stderr_bytes.decode("utf-8", errors="replace").strip()
+            )
+        except asyncio.TimeoutError:
             try:
-                stdout_bytes, stderr_bytes = await asyncio.wait_for(
-                    process.communicate(),
-                    timeout=float(timeout_seconds)
-                )
-            except asyncio.TimeoutError:
-                try:
-                    process.kill()
-                except Exception:
-                    pass
-                return {
-                    "success": False,
-                    "command": command,
-                    "exit_code": -1,
-                    "stdout": "",
-                    "stderr": f"Execution timed out after {timeout_seconds} seconds.",
-                    "timed_out": True
-                }
-
-            stdout_text = stdout_bytes.decode('utf-8', errors='replace').strip()
-            stderr_text = stderr_bytes.decode('utf-8', errors='replace').strip()
-            exit_code = process.returncode
-
-            # Trapping: if stderr has content or exit_code != 0, consider as failure
-            is_success = (exit_code == 0) and (not stderr_text or "Error" not in stderr_text)
-
-            return {
-                "success": is_success,
-                "command": command,
-                "exit_code": exit_code,
-                "stdout": stdout_text,
-                "stderr": stderr_text,
-                "timed_out": False
-            }
-
+                process.kill()
+            except ProcessLookupError:
+                pass
+            return -1, "", f"Execution timed out after {self.timeout_seconds} seconds."
         except Exception as e:
+            return -1, "", str(e)
+
+    async def run_with_self_healing(
+        self, 
+        command: str, 
+        fix_generator: Optional[Callable[[str, str], Awaitable[str]]] = None,
+        cwd: Optional[str] = None
+    ) -> Tuple[int, str, str]:
+        current_command = command
+        max_attempts = 2
+
+        for attempt in range(max_attempts + 1):
+            exit_code, stdout, stderr = await self.execute_raw(current_command, cwd=cwd)
+            if exit_code == 0:
+                return exit_code, stdout, stderr
+            
+            if attempt < max_attempts and fix_generator:
+                current_command = await fix_generator(current_command, stderr)
+            else:
+                return exit_code, stdout, f"Failed after {max_attempts} corrections. Last error: {stderr}"
+                
+        return -1, "", "Execution terminated abnormally."
+
+    async def execute_with_healing(self, command: str, cwd: Optional[str] = None) -> Dict[str, Any]:
+        """Backward compatibility adapter returning dict for Brain."""
+        exit_code, stdout, stderr = await self.execute_raw(command, cwd=cwd)
+        if exit_code == 0:
             return {
-                "success": False,
+                "success": True,
+                "exit_code": 0,
+                "stdout": stdout,
+                "stderr": "",
                 "command": command,
-                "exit_code": -1,
-                "stdout": "",
-                "stderr": f"Process launch error: {str(e)}",
-                "timed_out": False
+                "healed": False
             }
 
-    async def execute_with_healing(
-        self,
-        command: str,
-        cwd: Optional[str] = None,
-        timeout_seconds: int = 30,
-        healing_agent_cb: Optional[Callable[[str, str], Any]] = None
-    ) -> Dict[str, Any]:
-        """
-        Executes a command with dialect translation and up to 2 self-healing retry attempts.
-        If a command fails, captures stderr and routes it to healing.
-        """
-        current_cmd = self.translate_dialect(command)
-        attempts = 0
-        max_attempts = 3  # Initial + 2 retries
-        history_log: List[Dict[str, Any]] = []
+        # Quick self-heal for common Bash-isms on Windows
+        healed_cmd = command
+        if command.startswith("ls "):
+            healed_cmd = command.replace("ls ", "Get-ChildItem ", 1)
+        elif command.strip() == "ls":
+            healed_cmd = "Get-ChildItem"
+        elif "cat " in command:
+            healed_cmd = command.replace("cat ", "Get-Content ")
+        elif "grep " in command:
+            healed_cmd = command.replace("grep ", "Select-String -Pattern ")
 
-        while attempts < max_attempts:
-            attempts += 1
-            result = await self.execute_raw(current_cmd, cwd, timeout_seconds)
-            history_log.append(result)
-
-            if result["success"]:
+        if healed_cmd != command:
+            h_code, h_out, h_err = await self.execute_raw(healed_cmd, cwd=cwd)
+            if h_code == 0:
                 return {
                     "success": True,
-                    "command": current_cmd,
-                    "original_command": command,
-                    "exit_code": result["exit_code"],
-                    "stdout": result["stdout"],
-                    "attempts": attempts,
-                    "healed": (attempts > 1)
+                    "exit_code": 0,
+                    "stdout": h_out,
+                    "stderr": "",
+                    "command": healed_cmd,
+                    "healed": True
                 }
 
-            # If failed and retries left, self-heal
-            if attempts < max_attempts:
-                err_msg = result["stderr"] or "Command failed with non-zero exit code."
-                print(f"[CliRunner] Attempt {attempts} failed: {err_msg}. Triggering self-healing...")
-
-                # Apply deterministic translation fixes first
-                translated_fix = self.translate_dialect(current_cmd)
-                if translated_fix != current_cmd:
-                    current_cmd = translated_fix
-                    continue
-
-                # If an agent callback is provided, request model-guided healing
-                if healing_agent_cb:
-                    try:
-                        healed_cmd = await healing_agent_cb(current_cmd, err_msg)
-                        if healed_cmd and healed_cmd.strip():
-                            current_cmd = healed_cmd.strip()
-                            continue
-                    except Exception as e:
-                        print(f"[CliRunner] Healing agent failed: {e}")
-
-                # Heuristic healing rules for PowerShell
-                if "not recognized as the name of a cmdlet" in err_msg:
-                    # Strip linux flags or wrap in cmd /c
-                    current_cmd = f"cmd.exe /c {current_cmd}"
-                else:
-                    break
-
-        # If all retries failed, return detailed context
-        last = history_log[-1]
         return {
             "success": False,
-            "command": current_cmd,
-            "original_command": command,
-            "exit_code": last["exit_code"],
-            "stdout": last["stdout"],
-            "stderr": last["stderr"],
-            "attempts": attempts,
+            "exit_code": exit_code,
+            "stdout": stdout,
+            "stderr": stderr,
+            "command": command,
             "healed": False
         }
+
+
+# Alias for backwards compatibility
+CliRunner = PowerShellRunner

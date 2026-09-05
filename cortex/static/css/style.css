@@ -2228,3 +2228,42 @@ body {
         height: 280px;
     }
 }
+
+/* ── Real-Time Streaming & Typing Cursor ─────────────────────────── */
+.message-bubble.streaming {
+    border-left: 2px solid var(--theme-accent, #38bdf8);
+    position: relative;
+}
+
+.typing-cursor {
+    display: inline-block;
+    color: var(--theme-accent, #38bdf8);
+    animation: cursorBlink 0.75s infinite ease-in-out;
+    margin-left: 2px;
+    font-weight: 700;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.btn-barge-in {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #f87171;
+    border-radius: var(--radius-pill);
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-barge-in:hover {
+    background: rgba(239, 68, 68, 0.3);
+    color: #ffffff;
+}

@@ -9,7 +9,7 @@ import json
 import asyncio
 import urllib.request
 import urllib.error
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Callable
 
 OLLAMA_BASE = "http://127.0.0.1:11434"
 
@@ -88,3 +88,99 @@ class LLMClient:
                 return {"message": {"role": "assistant", "content": f"Inference notice: {str(e)}"}}
 
         return await loop.run_in_executor(None, _send)
+
+    async def chat_stream(
+        self,
+        messages: List[Dict[str, Any]],
+        tools: Optional[List[Dict[str, Any]]] = None,
+        task_type: str = "dialogue",
+        on_token: Optional[Callable[[str], Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Stream chat messages from Ollama with dynamic sampling.
+        - Conversational tokens trigger on_token(token) in real-time.
+        - Tool call tokens are suppressed from on_token and returned in the final message object.
+        """
+        if not self.active_model:
+            self._discover_model()
+
+        temp = 0.1 if task_type == "tool" else 0.65
+        top_p = 0.9 if task_type == "tool" else 0.95
+
+        payload: Dict[str, Any] = {
+            "model": self.active_model,
+            "messages": messages,
+            "stream": True,
+            "options": {
+                "num_ctx": 16384,
+                "temperature": temp,
+                "top_p": top_p,
+                "repeat_penalty": 1.18,
+                "repeat_last_n": 128,
+            }
+        }
+
+        if tools:
+            payload["tools"] = tools
+
+        loop = asyncio.get_running_loop()
+        async_q: asyncio.Queue = asyncio.Queue()
+
+        def _worker():
+            try:
+                data = json.dumps(payload).encode('utf-8')
+                req = urllib.request.Request(
+                    f"{OLLAMA_BASE}/api/chat",
+                    data=data,
+                    headers={"Content-Type": "application/json"}
+                )
+                with urllib.request.urlopen(req, timeout=90.0) as resp:
+                    for line in resp:
+                        if line:
+                            try:
+                                d = json.loads(line.decode('utf-8'))
+                                loop.call_soon_threadsafe(async_q.put_nowait, d)
+                            except Exception:
+                                pass
+            except Exception as e:
+                loop.call_soon_threadsafe(
+                    async_q.put_nowait,
+                    {"error": str(e), "message": {"role": "assistant", "content": f"Inference notice: {str(e)}"}}
+                )
+            finally:
+                loop.call_soon_threadsafe(async_q.put_nowait, None)
+
+        worker_task = loop.run_in_executor(None, _worker)
+
+        full_content = ""
+        tool_calls = []
+
+        while True:
+            item = await async_q.get()
+            if item is None:
+                break
+            
+            msg = item.get("message", {})
+            # Tool calls discrimination: if tool_calls present, do not stream to UI/voice
+            tc = msg.get("tool_calls")
+            if tc:
+                tool_calls.extend(tc)
+            
+            token = msg.get("content", "")
+            if token:
+                full_content += token
+                if on_token and not tool_calls:
+                    res = on_token(token)
+                    if asyncio.iscoroutine(res):
+                        await res
+
+        await worker_task
+
+        return {
+            "message": {
+                "role": "assistant",
+                "content": full_content,
+                "tool_calls": tool_calls
+            },
+            "done": True
+        }

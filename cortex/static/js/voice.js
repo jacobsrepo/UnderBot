@@ -1,8 +1,97 @@
 /**
  * Cortex Live Voice Engine
- * Full duplex speech recognition (STT) + Neural male voice audio playback (TTS)
- * with robust Acoustic Echo Cancellation (anti-self-listening loop prevention).
+ * Gapless Web Audio API Queue + Neural Voice Streaming + STT
  */
+
+export class GaplessVoiceQueue {
+    constructor(callbacks = {}) {
+        this.ctx = null;
+        this.nextStartTime = 0;
+        this.activeSources = [];
+        this.onSpeakingStateChange = callbacks.onSpeakingStateChange || (() => {});
+        this.onFinishedAll = callbacks.onFinishedAll || (() => {});
+        this.isPlaying = false;
+        this.cooldownTimer = null;
+    }
+
+    _ensureAudioContext() {
+        if (!this.ctx || this.ctx.state === 'closed') {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    }
+
+    async enqueueAudioBase64(base64Data, text = "", isFinal = false) {
+        if (!base64Data) return;
+        this._ensureAudioContext();
+
+        clearTimeout(this.cooldownTimer);
+
+        let rawBase64 = base64Data;
+        if (rawBase64.includes(',')) {
+            rawBase64 = rawBase64.split(',')[1];
+        }
+
+        const binary = atob(rawBase64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+
+        try {
+            const audioBuffer = await this.ctx.decodeAudioData(bytes.buffer.slice(0));
+            const source = this.ctx.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(this.ctx.destination);
+
+            const now = this.ctx.currentTime;
+            const startTime = Math.max(now, this.nextStartTime);
+            source.start(startTime);
+
+            this.nextStartTime = startTime + audioBuffer.duration;
+            this.activeSources.push(source);
+
+            if (!this.isPlaying) {
+                this.isPlaying = true;
+                this.onSpeakingStateChange(true);
+            }
+
+            source.onended = () => {
+                const idx = this.activeSources.indexOf(source);
+                if (idx > -1) this.activeSources.splice(idx, 1);
+
+                if (this.activeSources.length === 0) {
+                    this.nextStartTime = 0;
+                    this.cooldownTimer = setTimeout(() => {
+                        this.isPlaying = false;
+                        this.onSpeakingStateChange(false);
+                        this.onFinishedAll();
+                    }, 400);
+                }
+            };
+        } catch (e) {
+            console.error("[GaplessVoiceQueue] Audio decoding error:", e);
+        }
+    }
+
+    bargeIn() {
+        clearTimeout(this.cooldownTimer);
+        for (const source of this.activeSources) {
+            try {
+                source.stop(0);
+            } catch (e) {}
+        }
+        this.activeSources = [];
+        this.nextStartTime = 0;
+        if (this.isPlaying) {
+            this.isPlaying = false;
+            this.onSpeakingStateChange(false);
+            this.onFinishedAll();
+        }
+    }
+}
 
 export class LiveVoiceEngine {
     constructor(callbacks = {}) {
@@ -25,6 +114,19 @@ export class LiveVoiceEngine {
         this.currentAudio = null;
         this.lastSpokenText = "";
         this.cooldownTimer = null;
+
+        this.voiceQueue = new GaplessVoiceQueue({
+            onSpeakingStateChange: (speaking) => {
+                this.isSpeaking = speaking;
+                this.onSpeakingStateChange(speaking);
+            },
+            onFinishedAll: () => {
+                this.isSpeaking = false;
+                if (this.isActive && !this.isMuted && this.recognition) {
+                    try { this.recognition.start(); } catch (e) {}
+                }
+            }
+        });
 
         this.canvas = document.getElementById('live-audio-canvas');
         this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
@@ -213,72 +315,25 @@ export class LiveVoiceEngine {
         return this.isMuted;
     }
 
-    async playAudio(audioDataUri, text = "") {
+    enqueueAudioChunk(audioDataUri, text = "", isFinal = false) {
         if (!audioDataUri) return;
-
-        clearTimeout(this.cooldownTimer);
-        this.isSpeaking = true;
         this.lastSpokenText = (text || "").toLowerCase().trim();
-
-        // 1. Immediately abort speech recognition so mic does not transcribe Cortex's own voice
         if (this.recognition) {
-            try {
-                this.recognition.abort();
-            } catch (e) {}
+            try { this.recognition.abort(); } catch (e) {}
         }
+        this.voiceQueue.enqueueAudioBase64(audioDataUri, text, isFinal);
+    }
 
-        try {
-            if (this.currentAudio) {
-                this.currentAudio.pause();
-                this.currentAudio = null;
-            }
-
-            const audio = new Audio(audioDataUri);
-            this.currentAudio = audio;
-            this.onSpeakingStateChange(true);
-
-            if (!this.audioCtx || this.audioCtx.state === 'closed') {
-                this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            try {
-                const ttsAnalyser = this.audioCtx.createAnalyser();
-                ttsAnalyser.fftSize = 64;
-                const ttsSource = this.audioCtx.createMediaElementSource(audio);
-                ttsSource.connect(ttsAnalyser);
-                ttsAnalyser.connect(this.audioCtx.destination);
-            } catch (e) {}
-
-            const onFinish = () => {
-                this.currentAudio = null;
-                this.onSpeakingStateChange(false);
-                this.onVolumeChange(0);
-
-                // Acoustic Guard: Wait 1200ms after audio ends for speaker room echo to fully decay
-                this.cooldownTimer = setTimeout(() => {
-                    this.isSpeaking = false;
-                    // Resume listening for user
-                    if (this.isActive && !this.isMuted && this.recognition) {
-                        try {
-                            this.recognition.start();
-                        } catch (e) {}
-                    }
-                }, 1200);
-            };
-
-            audio.onended = onFinish;
-            audio.onerror = onFinish;
-
-            await audio.play();
-
-        } catch (err) {
-            console.warn('[VoiceEngine] Audio playback error:', err);
-            this.isSpeaking = false;
-            this.onSpeakingStateChange(false);
-            if (this.isActive && !this.isMuted && this.recognition) {
-                try { this.recognition.start(); } catch (e) {}
-            }
+    bargeIn() {
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio = null;
         }
+        this.voiceQueue.bargeIn();
+    }
+
+    async playAudio(audioDataUri, text = "") {
+        this.enqueueAudioChunk(audioDataUri, text, true);
     }
 
     _renderWave() {
