@@ -42,20 +42,25 @@ class SerialWorker:
         self.port = None
 
     def _find_board_port(self) -> Optional[str]:
-        """Scans COM ports and strictly matches USB serial devices, ignoring motherboard/ACPI ports like COM1."""
+        """Scans COM ports and strictly matches physical USB serial devices (Arduino, CH340, FTDI, CP210x), ignoring legacy motherboard/ACPI ports like COM1."""
         ports = list(serial.tools.list_ports.comports())
-        # 1. Check if preferred port (e.g. COM4) is physically present
-        for p in ports:
-            if p.device.upper() == self.preferred_port.upper():
-                return p.device
-        # 2. Check for any USB serial adapter (Arduino, CH340, FTDI, CP210x)
         for p in ports:
             hwid = (p.hwid or "").upper()
             desc = (p.description or "").upper()
-            # Explicitly ignore legacy ACPI/motherboard UART ports
-            if "ACPI" in hwid or "PNP0501" in hwid or (desc == "COMMUNICATIONS PORT" and "USB" not in hwid):
+            device = (p.device or "").upper()
+
+            # Ignore motherboard UART / ACPI / legacy ports
+            if "ACPI" in hwid or "PNP0501" in hwid:
                 continue
-            if "USB" in hwid or "USB" in desc or "ARDUINO" in desc or "CH340" in desc or "FTDI" in desc:
+            if desc == "COMMUNICATIONS PORT" and "USB" not in hwid:
+                continue
+
+            # Require USB serial identifiers (VID/PID, Arduino, CH340, FTDI, CP210, USB-SERIAL)
+            is_usb = any(k in hwid or k in desc for k in ["USB", "VID_", "ARDUINO", "CH340", "FTDI", "CP210", "SILABS", "PROLIFIC"])
+            if is_usb:
+                # If preferred port matches, prioritize it
+                if device == self.preferred_port.upper():
+                    return p.device
                 return p.device
         return None
 

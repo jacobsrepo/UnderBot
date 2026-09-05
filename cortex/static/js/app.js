@@ -35,6 +35,9 @@ class CortexApp {
             sidebar:             document.getElementById('sidebar'),
             sidebarCollapse:     document.getElementById('sidebar-collapse-btn'),
             sidebarExpand:       document.getElementById('sidebar-expand-btn'),
+            devDrawerBtn:        document.getElementById('dev-drawer-btn'),
+            drawerBackdrop:      document.getElementById('drawer-backdrop'),
+            hudStatusText:       document.getElementById('hud-status-text'),
             // Viewport buttons
             cameraTriggerBtn:    document.getElementById('camera-trigger-btn'),
             browserTriggerBtn:   document.getElementById('browser-trigger-btn'),
@@ -196,12 +199,24 @@ class CortexApp {
     }
 
     _bindEvents() {
-        this.dom.sidebarCollapse.addEventListener('click', () => {
-            this.dom.sidebar.classList.add('collapsed');
-        });
+        const toggleDrawer = (open) => {
+            const shouldOpen = open !== undefined ? open : !this.dom.sidebar?.classList.contains('open');
+            this.dom.sidebar?.classList.toggle('open', shouldOpen);
+            this.dom.drawerBackdrop?.classList.toggle('open', shouldOpen);
+        };
 
-        this.dom.sidebarExpand.addEventListener('click', () => {
-            this.dom.sidebar.classList.remove('collapsed');
+        this.dom.devDrawerBtn?.addEventListener('click', () => toggleDrawer());
+        this.dom.sidebarCollapse?.addEventListener('click', () => toggleDrawer(false));
+        this.dom.drawerBackdrop?.addEventListener('click', () => toggleDrawer(false));
+        this.dom.sidebarExpand?.addEventListener('click', () => toggleDrawer(true));
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'd' || e.key === 'D')) {
+                e.preventDefault();
+                toggleDrawer();
+            } else if (e.key === 'Escape' && this.dom.sidebar?.classList.contains('open')) {
+                toggleDrawer(false);
+            }
         });
 
         this.dom.cameraTriggerBtn?.addEventListener('click', () => {
@@ -1159,6 +1174,9 @@ class CortexApp {
             const info = this.face.getStateInfo(state);
             this.dom.statusTitle.textContent = info.label;
             this.dom.statusSubtitle.textContent = info.subtext;
+            if (this.dom.hudStatusText) {
+                this.dom.hudStatusText.textContent = info.label.toUpperCase();
+            }
         }
     }
 
