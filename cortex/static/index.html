@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cortex</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=4.4">
+    <link rel="stylesheet" href="/static/css/style.css?v=4.5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -132,6 +132,12 @@
                                     </svg>
                                     <span class="url-text">https://en.wikipedia.org</span>
                                 </a>
+                                <div class="browser-mode-tabs" id="browser-mode-tabs">
+                                    <button type="button" class="browser-tab-btn active" data-tab="reader" id="tab-btn-reader">Intel</button>
+                                    <button type="button" class="browser-tab-btn" data-tab="map" id="tab-btn-map">Map & Places</button>
+                                    <button type="button" class="browser-tab-btn" data-tab="itinerary" id="tab-btn-itinerary">Day Plan</button>
+                                    <button type="button" class="browser-tab-btn" data-tab="prices" id="tab-btn-prices">Prices</button>
+                                </div>
                             </div>
                             <div class="screen-header-controls">
                                 <button id="browser-split-btn" class="btn-screen-tool" title="Toggle Dual Split Screen">
@@ -234,6 +240,52 @@
                                         <span class="sources-label">Sources:</span>
                                         <div class="sources-pill-row" id="reader-sources-pill-row"></div>
                                     </div>
+                                </div>
+
+                                <!-- ── Map & Places Exploration Mode ── -->
+                                <div class="browser-map-container" id="browser-map-container" style="display: none;">
+                                    <div class="map-embed-wrapper">
+                                        <iframe id="browser-google-map" class="browser-google-map" src="" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    </div>
+                                    <div class="browser-places-header">
+                                        <div class="places-title-wrap">
+                                            <span class="places-badge-dot"></span>
+                                            <span class="places-header-title" id="places-count-label">EXPLORE PLACES</span>
+                                        </div>
+                                        <span class="places-loc-pill" id="places-loc-label">NEARBY</span>
+                                    </div>
+                                    <div class="browser-places-grid" id="browser-places-grid"></div>
+                                </div>
+
+                                <!-- ── Day Itinerary & Budget Mode ── -->
+                                <div class="browser-itinerary-container" id="browser-itinerary-container" style="display: none;">
+                                    <div class="itinerary-header-card" id="itinerary-header-card">
+                                        <div class="itin-header-top">
+                                            <span class="itin-budget-pill" id="itin-budget-pill">MODERATE BUDGET</span>
+                                            <span class="itin-duration-pill">1 FULL DAY</span>
+                                        </div>
+                                        <h2 class="itin-title" id="itin-title">1-Day Exploration Blueprint</h2>
+                                        <div class="itin-meta-row">
+                                            <span class="itin-cost-summary" id="itin-cost-summary">Estimated Budget: $80 - $130 / person</span>
+                                        </div>
+                                    </div>
+                                    <div class="itinerary-map-wrapper">
+                                        <iframe id="itinerary-google-map" class="browser-google-map mini" src="" loading="lazy"></iframe>
+                                    </div>
+                                    <div class="itinerary-timeline" id="itinerary-timeline"></div>
+                                    <div class="itinerary-tips-box" id="itinerary-tips-box" style="display: none;">
+                                        <div class="tips-header">TRAVEL TIPS & LOGISTICS</div>
+                                        <div class="tips-list" id="itinerary-tips-list"></div>
+                                    </div>
+                                </div>
+
+                                <!-- ── Price & Deals Comparison Mode ── -->
+                                <div class="browser-prices-container" id="browser-prices-container" style="display: none;">
+                                    <div class="prices-header-card">
+                                        <h2 class="prices-title" id="prices-title">Pricing Intelligence</h2>
+                                        <span class="price-range-badge" id="price-range-badge">Analyzing rates...</span>
+                                    </div>
+                                    <div class="browser-prices-grid" id="browser-prices-grid"></div>
                                 </div>
                             </div>
                         </div>
@@ -448,6 +500,6 @@
             }
         };
     </script>
-    <script type="module" src="/static/js/app.js?v=4.4"></script>
+    <script type="module" src="/static/js/app.js?v=4.5"></script>
 </body>
 </html>

@@ -164,6 +164,19 @@ async def handle_message(ws: WebSocket, message: dict):
         if frame:
             brain.receive_camera_frame(frame)
 
+    elif msg_type == "client_location":
+        loc = message.get("location", {})
+        if loc and "lat" in loc and "lon" in loc:
+            brain.surfer.geo.set_client_location(
+                lat=float(loc["lat"]),
+                lon=float(loc["lon"]),
+                accuracy=float(loc.get("accuracy", 0.0)),
+                city=loc.get("city", ""),
+                region=loc.get("region", ""),
+                country=loc.get("country", "")
+            )
+            print(f"[Geo] Client location updated: {loc.get('lat')}, {loc.get('lon')}", flush=True)
+
     elif msg_type == "get_arduino_state":
         await ws.send_json({
             "type": "arduino_telemetry",

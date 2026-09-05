@@ -288,8 +288,48 @@ class CortexBrain:
                 doc = await self.surfer.surf(query)
                 # Stream sanitized document content with word/card flow animation
                 await broadcast({"type": "set_view_mode", "mode": "browser", "data": doc, "searching": False})
-                await broadcast({"type": "chat_message", "role": "system", "content": f"Web Research: {doc['title']}"})
                 return doc
+
+            elif name == "get_user_location":
+                loc = await self.surfer.geo.get_live_location()
+                return loc
+
+            elif name == "search_places_and_map":
+                used_web_search = True
+                self.active_view_mode = "browser"
+                q = args.get("query", "")
+                loc = args.get("location")
+                limit = int(args.get("limit", 5))
+                await broadcast({"type": "state_change", "state": "browsing"})
+                await broadcast({"type": "facial_expression", "mood": "browsing", "eye_shape": "reading", "glow_color": "#38bdf8"})
+                await broadcast({"type": "set_view_mode", "mode": "browser", "searching": True, "query": f"Places: {q}"})
+                places_data = await self.surfer.geo.search_places(q, near_location=loc, limit=limit)
+                await broadcast({"type": "set_view_mode", "mode": "browser", "data": places_data, "searching": False})
+                return places_data
+
+            elif name == "plan_day_itinerary":
+                used_web_search = True
+                self.active_view_mode = "browser"
+                dest = args.get("destination", "")
+                pref = args.get("preferences", "")
+                budget = args.get("budget", "moderate")
+                await broadcast({"type": "state_change", "state": "browsing"})
+                await broadcast({"type": "facial_expression", "mood": "focused", "eye_shape": "normal", "glow_color": "#a855f7"})
+                await broadcast({"type": "set_view_mode", "mode": "browser", "searching": True, "query": f"Itinerary: {dest or 'Local Area'}"})
+                itin_data = await self.surfer.plan_day_itinerary(dest, preferences=pref, budget=budget)
+                await broadcast({"type": "set_view_mode", "mode": "browser", "data": itin_data, "searching": False})
+                return itin_data
+
+            elif name == "search_prices":
+                used_web_search = True
+                self.active_view_mode = "browser"
+                q = args.get("query", "")
+                await broadcast({"type": "state_change", "state": "browsing"})
+                await broadcast({"type": "facial_expression", "mood": "analytical", "eye_shape": "narrow", "glow_color": "#fbbf24"})
+                await broadcast({"type": "set_view_mode", "mode": "browser", "searching": True, "query": f"Prices: {q}"})
+                prices_data = await self.surfer.search_prices_and_deals(q)
+                await broadcast({"type": "set_view_mode", "mode": "browser", "data": prices_data, "searching": False})
+                return prices_data
 
             elif name == "set_display_view":
                 target_mode = args.get("mode", "none")
@@ -701,6 +741,8 @@ class CortexBrain:
         else:
             hw_str = "DISCONNECTED (No microcontroller is physically plugged into USB. You cannot read or set pins until a board is connected. If asked, confirm no board is connected.)"
         cam_str = "ACTIVE (Streaming live video)" if self.camera.is_camera_active() else "OFF / INACTIVE (No video feed; only user can enable in browser)"
+        loc = await self.surfer.geo.get_live_location()
+        loc_str = f"{loc.get('city')}, {loc.get('country')} (Lat: {loc.get('latitude')}, Lon: {loc.get('longitude')})" if loc.get("city") else "Auto-detected from client"
 
         full_system_prompt = f"""You are Cortex, an advanced desktop cognitive assistant operating natively on Windows.
 Current Environment Grounding:
@@ -708,6 +750,7 @@ Current Environment Grounding:
 - Host Operating System: Windows (PowerShell Core)
 - Physical Microcontroller: {hw_str}
 - Vision Sensor: {cam_str}
+- Live Physical Location: {loc_str}
 
 Long-Term Context Grounding (OpenClaw Root Knowledge):
 {grounding_facts}
@@ -717,8 +760,11 @@ Core Directives:
    - When asked to find, check, or locate files, directories, or system data: DO NOT provide code blocks or PowerShell snippets for the user to run. Use `run_cli_command` to inspect or search the filesystem yourself silently, and then state the result directly.
    - If found, output the full path. If not found, simply state: "No such file located."
    - NEVER narrate or announce commands (do NOT say "I will now search using PowerShell...", "Let me check the files...", "I am running a script..."). Run the tool silently and report only the final answer.
-2. TOOL SYNTHESIS:
-   - Tool Syntheses must adhere to Windows PowerShell cmdlets (Select-String, Get-ChildItem, Get-Content).
+2. MULTIMODAL BROWSER, MAPS & EXPLORATION:
+   - When asked to find places, restaurants, cafes, attractions, or navigate: call `search_places_and_map`. This immediately opens the browser screen with live Google Maps, authentic photos, ratings, and price levels.
+   - When asked to plan a day, build an itinerary, or organize a day trip: call `plan_day_itinerary`. This generates a full visual timeline with schedule times, venue photos, itemized costs, and Google Maps route links.
+   - When asked about prices, product comparisons, or deals: call `search_prices`.
+   - When asked where the user is: state their live physical location ({loc_str}) or call `get_user_location`.
 3. HARDWARE GROUNDING:
    - Strictly honor Physical Microcontroller status. If disconnected, state clearly that no board is connected.
 4. ZERO ROBOTIC FLUFF:

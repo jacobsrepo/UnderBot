@@ -78,6 +78,25 @@ class CortexApp {
             searchingHudStream:  document.getElementById('searching-hud-stream'),
             readerEmptyCard:     document.getElementById('reader-empty-card'),
             readerDocument:      document.getElementById('reader-document'),
+            // Multimedia Browser Views
+            browserTabs:         document.querySelectorAll('.browser-tab-btn'),
+            browserMapContainer: document.getElementById('browser-map-container'),
+            browserGoogleMap:    document.getElementById('browser-google-map'),
+            placesCountLabel:    document.getElementById('places-count-label'),
+            placesLocLabel:      document.getElementById('places-loc-label'),
+            browserPlacesGrid:   document.getElementById('browser-places-grid'),
+            browserItineraryContainer: document.getElementById('browser-itinerary-container'),
+            itineraryGoogleMap:  document.getElementById('itinerary-google-map'),
+            itinTitle:           document.getElementById('itin-title'),
+            itinBudgetPill:      document.getElementById('itin-budget-pill'),
+            itinCostSummary:     document.getElementById('itin-cost-summary'),
+            itineraryTimeline:   document.getElementById('itinerary-timeline'),
+            itineraryTipsBox:    document.getElementById('itinerary-tips-box'),
+            itineraryTipsList:   document.getElementById('itinerary-tips-list'),
+            browserPricesContainer: document.getElementById('browser-prices-container'),
+            pricesTitle:         document.getElementById('prices-title'),
+            priceRangeBadge:     document.getElementById('price-range-badge'),
+            browserPricesGrid:   document.getElementById('browser-prices-grid'),
             // Camera video elements
             cameraVideo:         document.getElementById('camera-video'),
             cameraCanvas:        document.getElementById('camera-snapshot-canvas'),
@@ -282,6 +301,15 @@ class CortexApp {
                     <span>Cycle Expressions</span>`;
             }, 18000);
         });
+
+        this.dom.browserTabs?.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.getAttribute('data-tab');
+                this.switchBrowserTab(tab);
+            });
+        });
+
+        this._initGeolocation();
     }
 
     toggleLiveVoice() {
@@ -457,16 +485,214 @@ class CortexApp {
         }
     }
 
-    updateBrowserContent(data) {
-        this.hideBrowserSearchingHud();
-        if (!data) return;
+    _initGeolocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    this._wsSend({
+                        type: 'client_location',
+                        location: {
+                            lat: pos.coords.latitude,
+                            lon: pos.coords.longitude,
+                            accuracy: pos.coords.accuracy
+                        }
+                    });
+                    console.log('[Cortex] Live location shared with brain:', pos.coords.latitude, pos.coords.longitude);
+                },
+                (err) => {
+                    console.log('[Cortex] Geolocation permission not granted, IP fallback in use');
+                },
+                { timeout: 8000, maximumAge: 60000 }
+            );
+        }
+    }
 
-        if (this.dom.readerEmptyCard) {
-            this.dom.readerEmptyCard.style.display = 'none';
+    switchBrowserTab(tabName) {
+        this.activeBrowserTab = tabName;
+        this.dom.browserTabs?.forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+        });
+
+        if (this.dom.readerDocument) this.dom.readerDocument.style.display = (tabName === 'reader') ? 'flex' : 'none';
+        if (this.dom.browserMapContainer) this.dom.browserMapContainer.style.display = (tabName === 'map') ? 'flex' : 'none';
+        if (this.dom.browserItineraryContainer) this.dom.browserItineraryContainer.style.display = (tabName === 'itinerary') ? 'flex' : 'none';
+        if (this.dom.browserPricesContainer) this.dom.browserPricesContainer.style.display = (tabName === 'prices') ? 'flex' : 'none';
+    }
+
+    renderPlacesView(data) {
+        if (!data) return;
+        if (this.dom.browserGoogleMap && data.embed_map_url) {
+            this.dom.browserGoogleMap.src = data.embed_map_url;
         }
-        if (this.dom.readerDocument) {
-            this.dom.readerDocument.style.display = 'flex';
+        if (this.dom.placesLocLabel) {
+            this.dom.placesLocLabel.textContent = (data.location_label || 'NEARBY').toUpperCase();
         }
+        if (this.dom.placesCountLabel) {
+            this.dom.placesCountLabel.textContent = `EXPLORE SPOTS (${data.places?.length || 0})`;
+        }
+        if (this.dom.browserUrlPill) {
+            const textEl = this.dom.browserUrlPill.querySelector('.url-text') || this.dom.browserUrlPill;
+            textEl.textContent = `https://maps.google.com?q=${encodeURIComponent(data.query || 'places')}`;
+            this.dom.browserUrlPill.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.query || 'places')}`;
+        }
+        if (this.dom.browserPlacesGrid) {
+            this.dom.browserPlacesGrid.innerHTML = '';
+            const places = data.places || [];
+            places.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = 'place-card flow-in';
+                card.style.animationDelay = `${0.06 + idx * 0.06}s`;
+                
+                const photoHtml = p.image_url
+                    ? `<div class="place-photo" style="background-image: url('${this._esc(p.image_url)}');"></div>`
+                    : `<div class="place-photo placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>`;
+                
+                card.innerHTML = `
+                    ${photoHtml}
+                    <div class="place-content">
+                        <div class="place-meta-row">
+                            <span class="place-category-pill">${this._esc(p.category || 'Spot')}</span>
+                            ${p.price_level ? `<span class="place-price-pill">${this._esc(p.price_level)}</span>` : ''}
+                            ${p.rating ? `<span class="place-rating-pill">★ ${p.rating}</span>` : ''}
+                        </div>
+                        <h4 class="place-name">${this._esc(p.name)}</h4>
+                        <p class="place-desc">${this._esc(p.description || '')}</p>
+                        <div class="place-footer">
+                            <span class="place-address" title="${this._esc(p.address)}">${this._esc(p.address)}</span>
+                            <a class="btn-place-maps" href="${this._esc(p.google_maps_url || '#')}" target="_blank" rel="noopener noreferrer">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>Directions</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                this.dom.browserPlacesGrid.appendChild(card);
+            });
+        }
+    }
+
+    renderItineraryView(data) {
+        if (!data) return;
+        if (this.dom.itinTitle) {
+            this.dom.itinTitle.textContent = data.headline || `1-Day Blueprint: ${data.destination || ''}`;
+        }
+        if (this.dom.itinBudgetPill) {
+            this.dom.itinBudgetPill.textContent = (data.budget_tier || 'Moderate') + ' Budget';
+        }
+        if (this.dom.itinCostSummary) {
+            this.dom.itinCostSummary.textContent = `Estimated Budget: ${data.total_budget_est || '$80 - $130 / person'}`;
+        }
+        if (this.dom.itineraryGoogleMap && data.embed_map_url) {
+            this.dom.itineraryGoogleMap.src = data.embed_map_url;
+        }
+        if (this.dom.browserUrlPill) {
+            const textEl = this.dom.browserUrlPill.querySelector('.url-text') || this.dom.browserUrlPill;
+            textEl.textContent = `https://maps.google.com/itinerary?dest=${encodeURIComponent(data.destination || '')}`;
+            this.dom.browserUrlPill.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.destination || 'itinerary')}`;
+        }
+        if (this.dom.itineraryTimeline) {
+            this.dom.itineraryTimeline.innerHTML = '';
+            const stops = data.stops || [];
+            stops.forEach((s, idx) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-stop flow-in';
+                item.style.animationDelay = `${0.08 + idx * 0.08}s`;
+
+                const photoHtml = s.image_url
+                    ? `<div class="stop-img" style="background-image: url('${this._esc(s.image_url)}');"></div>`
+                    : '';
+
+                item.innerHTML = `
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                        <div class="marker-line"></div>
+                    </div>
+                    <div class="stop-card">
+                        <div class="stop-header">
+                            <span class="stop-time-badge">${this._esc(s.time)}</span>
+                            <span class="stop-period-pill">${this._esc(s.period || 'Stop')}</span>
+                            ${s.cost ? `<span class="stop-cost-pill">${this._esc(s.cost)}</span>` : ''}
+                        </div>
+                        ${photoHtml}
+                        <h4 class="stop-title">${this._esc(s.title || s.name)}</h4>
+                        <p class="stop-activity">${this._esc(s.activity || '')}</p>
+                        <div class="stop-footer">
+                            <span class="stop-address">${this._esc(s.address || '')}</span>
+                            <a class="btn-stop-dir" href="${this._esc(s.directions_url || '#')}" target="_blank" rel="noopener noreferrer">
+                                <span>Directions ↗</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                this.dom.itineraryTimeline.appendChild(item);
+            });
+        }
+        if (this.dom.itineraryTipsBox && this.dom.itineraryTipsList) {
+            const tips = data.tips || [];
+            if (tips.length > 0) {
+                this.dom.itineraryTipsList.innerHTML = '';
+                tips.forEach(t => {
+                    const row = document.createElement('div');
+                    row.className = 'tip-item';
+                    row.innerHTML = `<span class="tip-bullet">›</span><span>${this._esc(t)}</span>`;
+                    this.dom.itineraryTipsList.appendChild(row);
+                });
+                this.dom.itineraryTipsBox.style.display = 'block';
+            } else {
+                this.dom.itineraryTipsBox.style.display = 'none';
+            }
+        }
+    }
+
+    renderPricesView(data) {
+        if (!data) return;
+        if (this.dom.pricesTitle) {
+            this.dom.pricesTitle.textContent = data.headline || `Pricing: ${data.query}`;
+        }
+        if (this.dom.priceRangeBadge) {
+            this.dom.priceRangeBadge.textContent = data.price_range || 'Market Overview';
+        }
+        if (this.dom.browserUrlPill) {
+            const textEl = this.dom.browserUrlPill.querySelector('.url-text') || this.dom.browserUrlPill;
+            textEl.textContent = `https://shopping.google.com/search?q=${encodeURIComponent(data.query || '')}`;
+            this.dom.browserUrlPill.href = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(data.query || '')}`;
+        }
+        if (this.dom.browserPricesGrid) {
+            this.dom.browserPricesGrid.innerHTML = '';
+            const items = data.items || [];
+            items.forEach((it, idx) => {
+                const card = document.createElement('div');
+                card.className = 'price-item-card flow-in';
+                card.style.animationDelay = `${0.06 + idx * 0.06}s`;
+
+                const photoHtml = it.image_url
+                    ? `<div class="deal-photo" style="background-image: url('${this._esc(it.image_url)}');"></div>`
+                    : `<div class="deal-photo placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>`;
+
+                card.innerHTML = `
+                    ${photoHtml}
+                    <div class="deal-content">
+                        <div class="deal-top-row">
+                            <span class="deal-badge">${this._esc(it.badge || 'Deal')}</span>
+                            <span class="deal-store-pill">${this._esc(it.source || 'Online Store')}</span>
+                        </div>
+                        <h4 class="deal-title">${this._esc(it.title)}</h4>
+                        <div class="deal-price-row">
+                            <span class="deal-price">${this._esc(it.price)}</span>
+                        </div>
+                        <p class="deal-snippet">${this._esc(it.snippet || '')}</p>
+                        <a class="btn-deal-link" href="${this._esc(it.url || '#')}" target="_blank" rel="noopener noreferrer">
+                            <span>Check Store ↗</span>
+                        </a>
+                    </div>
+                `;
+                this.dom.browserPricesGrid.appendChild(card);
+            });
+        }
+    }
+
+    renderReaderView(data) {
+        if (!data) return;
 
         // 1. Browser address bar URL
         if (data.url && this.dom.browserUrlPill) {
@@ -507,7 +733,7 @@ class CortexApp {
             this.dom.webMediaContainer.style.display = 'none';
         }
 
-        // 6. Narrative content body (Staggered paragraph flow-in animation)
+        // 6. Narrative content body
         if (this.dom.readerContentBody) {
             let bodyText = data.briefing || data.summary || '';
             bodyText = bodyText.replace(/^\[LIVE BREAKING NEWS INTEL:[^\]]+\]\s*/i, '');
@@ -535,7 +761,7 @@ class CortexApp {
             });
         }
 
-        // 7. Key developments / highlights list (Staggered flow-in animation)
+        // 7. Key developments / highlights list
         if (this.dom.readerTakeawaysBox && this.dom.readerTakeawaysList) {
             const devs = data.developments || [];
             if (Array.isArray(devs) && devs.length > 0) {
@@ -563,7 +789,7 @@ class CortexApp {
             }
         }
 
-        // 8. Discreet Citations Bar at Bottom with flow-in
+        // 8. Discreet Citations Bar at Bottom
         if (this.dom.readerSourcesBar && this.dom.readerSourcesPillRow) {
             const sources = data.sources || (data.results ? data.results.map(r => ({ name: r.source || r.domain || 'Source', url: r.url })) : []);
             if (Array.isArray(sources) && sources.length > 0) {
@@ -592,6 +818,37 @@ class CortexApp {
                 this.dom.readerSourcesBar.style.display = 'none';
             }
         }
+    }
+
+    updateBrowserContent(data) {
+        this.hideBrowserSearchingHud();
+        if (!data) return;
+
+        if (this.dom.readerEmptyCard) {
+            this.dom.readerEmptyCard.style.display = 'none';
+        }
+
+        if (data.type === 'places' || Array.isArray(data.places)) {
+            this.renderPlacesView(data);
+            this.switchBrowserTab('map');
+            return;
+        }
+
+        if (data.type === 'itinerary' || Array.isArray(data.stops)) {
+            this.renderItineraryView(data);
+            this.switchBrowserTab('itinerary');
+            return;
+        }
+
+        if (data.type === 'prices' || Array.isArray(data.items)) {
+            this.renderPricesView(data);
+            this.switchBrowserTab('prices');
+            return;
+        }
+
+        // Default: Reader Document View
+        this.renderReaderView(data);
+        this.switchBrowserTab('reader');
     }
 
     updateArduinoWorkbench(data) {

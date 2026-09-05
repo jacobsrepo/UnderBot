@@ -203,6 +203,84 @@ CORTEX_TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "get_user_location",
+            "description": "Detect and retrieve the user's live physical location (city, region, country, latitude, longitude, timezone). Call this whenever asked where the user is, what is nearby, or for location-specific queries without a stated city.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_places_and_map",
+            "description": "Search for points of interest, venues, attractions, restaurants, cafes, or spots with embedded Google Maps, authentic photos, ratings, price levels, and addresses. Displays interactive map and place cards in the browser screen.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "What kind of place to look for (e.g. 'ramen', 'modern art museum', 'coffee shops', 'parks', 'boutique hotels')"
+                    },
+                    "location": {
+                        "type": "string",
+                        "description": "Optional city, neighborhood, or area name. If omitted, uses current user location."
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "description": "Maximum number of spots to return (default: 5)"
+                    }
+                },
+                "required": ["query"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "plan_day_itinerary",
+            "description": "Generate and visualize a complete 1-day itinerary with realistic schedule times, curated local spots, photos, price/budget estimates, and Google Maps route links. Displays interactive timeline cards in the browser screen.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "destination": {
+                        "type": "string",
+                        "description": "The destination city or area (e.g. 'Tokyo', 'Paris', 'New York', 'Freiburg'). If omitted, uses current user location."
+                    },
+                    "preferences": {
+                        "type": "string",
+                        "description": "Optional interests or themes (e.g. 'art and history', 'foodie exploration', 'scenic nature', 'budget-friendly')"
+                    },
+                    "budget": {
+                        "type": "string",
+                        "enum": ["budget", "moderate", "luxury"],
+                        "description": "Target expense level (default: 'moderate')"
+                    }
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_prices",
+            "description": "Look up product prices, market rates, flight/hotel price estimates, or shopping deals with verified prices, retailers, and image previews.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Product or service to price check (e.g. 'Sony WH-1000XM5 headphones', 'flight from NYC to London', 'iPhone 15 pro', 'museum tickets')"
+                    }
+                },
+                "required": ["query"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "save_to_memory",
             "description": "Save a learned fact or hardware pin mapping into persistent long-term memory across restarts.",
             "parameters": {
