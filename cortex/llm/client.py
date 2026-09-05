@@ -60,8 +60,11 @@ class LLMClient:
             "messages": messages,
             "stream": False,
             "options": {
+                "num_ctx": 16384,
                 "temperature": temp,
                 "top_p": top_p,
+                "repeat_penalty": 1.18,
+                "repeat_last_n": 128,
             }
         }
 

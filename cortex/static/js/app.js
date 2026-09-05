@@ -782,6 +782,16 @@ class CortexApp {
     _sendChat() {
         const text = this.dom.chatInput.value.trim();
         if (!text) return;
+        if (text.toLowerCase() === '/clear' || text.toLowerCase() === 'clear chat' || text.toLowerCase() === 'clear memory') {
+            this._wsSend({ type: 'clear_memory' });
+            this.dom.chatMessages.innerHTML = `
+                <div class="message system">
+                    <div class="message-bubble">Conversation memory cleared. Ready for fresh interaction.</div>
+                </div>
+            `;
+            this.dom.chatInput.value = '';
+            return;
+        }
         this._sendChatText(text);
         this.dom.chatInput.value = '';
         this.dom.chatInput.focus();

@@ -38,10 +38,31 @@ class CortexAgent:
 
             tool_calls = msg.get("tool_calls", [])
 
-            # If the model chose not to invoke tools, it wants to respond directly
+            # If the model chose not to invoke tools, check if it responded directly or stalled on a promise
             if not tool_calls:
                 content = msg.get("content", "").strip()
                 if content:
+                    # Auto-followthrough: If the model stated an intention to run a tool on iteration 0
+                    # but forgot to emit the tool call, prompt it to execute the tool immediately
+                    if iteration == 0:
+                        lower = content.lower()
+                        promised_tool = any(p in lower for p in (
+                            "i'll use the command", "i will use the command",
+                            "i'll run the command", "i will run the command",
+                            "let's run the command", "i'll check the weather",
+                            "i will check the weather", "i will use the function",
+                            "please give me a moment to retrieve", "let me list the files",
+                            "i'll list the files", "i will list the files",
+                            "i will run a command", "i'll run a command"
+                        ))
+                        if promised_tool:
+                            dialogue.append(msg)
+                            dialogue.append({
+                                "role": "user",
+                                "content": "Please proceed and execute the tool call now."
+                            })
+                            continue
+
                     return content
 
                 # If content is empty (e.g. model only generated whitespace), get conversational reply

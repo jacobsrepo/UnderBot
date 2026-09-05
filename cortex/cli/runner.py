@@ -36,10 +36,19 @@ class CliRunner:
         self.default_cwd = default_cwd or os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
     def translate_dialect(self, cmd: str) -> str:
-        """Translates common Linux/Bash commands into Windows PowerShell cmdlets."""
+        """Translates common Linux/Bash commands into Windows PowerShell cmdlets and auto-quotes paths with spaces."""
         translated = cmd
         for pattern, replacement in LINUX_TO_POWERSHELL_MAP:
             translated = re.sub(pattern, replacement, translated)
+
+        # Auto-quote unquoted Windows paths containing spaces (e.g. C:\Users\Athul C S)
+        def _quote_if_space(m):
+            val = m.group(1).rstrip()
+            if ' ' in val:
+                return f"'{val}'"
+            return m.group(0)
+
+        translated = re.sub(r'''(?<!['"])([A-Za-z]:\\[^"'\n|;<>&]+?)(?=\s+-[A-Za-z]|\s*[|;<>&]|$)''', _quote_if_space, translated)
         return translated
 
     async def execute_raw(self, command: str, cwd: Optional[str] = None, timeout_seconds: int = 30) -> Dict[str, Any]:
@@ -47,6 +56,7 @@ class CliRunner:
         Spawns powershell.exe with non-interactive, bypass, and $ErrorActionPreference='Stop'.
         Captures stdout, stderr, and explicit exit codes.
         """
+        command = self.translate_dialect(command)
         work_dir = cwd or self.default_cwd
         if not os.path.exists(work_dir):
             work_dir = self.default_cwd

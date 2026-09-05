@@ -195,6 +195,14 @@ async def handle_message(ws: WebSocket, message: dict):
             "replace": True
         })
 
+    elif msg_type == "clear_memory":
+        brain.conv_memory.clear_session("default")
+        await broadcast({
+            "type": "chat_message",
+            "role": "system",
+            "content": "Conversation memory and history cleared. Ready for fresh interaction."
+        })
+
     elif msg_type == "demo_cycle":
         states = [
             ("listening", "Listening to microphone audio stream…"),
