@@ -178,11 +178,11 @@ class CortexApp {
             this.dom.sidebar.classList.remove('collapsed');
         });
 
-        this.dom.cameraTriggerBtn.addEventListener('click', () => {
+        this.dom.cameraTriggerBtn?.addEventListener('click', () => {
             this.setViewMode(this.viewMode === 'camera' ? 'none' : 'camera');
         });
 
-        this.dom.browserTriggerBtn.addEventListener('click', () => {
+        this.dom.browserTriggerBtn?.addEventListener('click', () => {
             this.setViewMode(this.viewMode === 'browser' ? 'none' : 'browser');
         });
 
@@ -194,7 +194,7 @@ class CortexApp {
             }
         });
 
-        this.dom.dualViewTriggerBtn.addEventListener('click', () => {
+        this.dom.dualViewTriggerBtn?.addEventListener('click', () => {
             this.setViewMode(this.viewMode === 'dual' ? 'none' : 'dual');
         });
 
@@ -338,10 +338,10 @@ class CortexApp {
         this.viewMode = mode;
 
         this.dom.mainStage.classList.remove('camera-active', 'browser-active', 'arduino-active', 'dual-active');
-        this.dom.cameraTriggerBtn.classList.remove('active');
-        this.dom.browserTriggerBtn.classList.remove('active');
+        this.dom.cameraTriggerBtn?.classList.remove('active');
+        this.dom.browserTriggerBtn?.classList.remove('active');
         this.dom.arduinoTriggerBtn?.classList.remove('active');
-        this.dom.dualViewTriggerBtn.classList.remove('active');
+        this.dom.dualViewTriggerBtn?.classList.remove('active');
 
         if (mode === 'browser' || mode === 'dual') {
             if (msg && msg.searching) {
@@ -371,13 +371,13 @@ class CortexApp {
         switch (mode) {
             case 'camera':
                 this.dom.mainStage.classList.add('camera-active');
-                this.dom.cameraTriggerBtn.classList.add('active');
+                this.dom.cameraTriggerBtn?.classList.add('active');
                 this._setState('seeing');
                 break;
 
             case 'browser':
                 this.dom.mainStage.classList.add('browser-active');
-                this.dom.browserTriggerBtn.classList.add('active');
+                this.dom.browserTriggerBtn?.classList.add('active');
                 this._setState('browsing');
                 break;
 
@@ -389,7 +389,7 @@ class CortexApp {
 
             case 'dual':
                 this.dom.mainStage.classList.add('camera-active', 'browser-active', 'dual-active');
-                this.dom.dualViewTriggerBtn.classList.add('active');
+                this.dom.dualViewTriggerBtn?.classList.add('active');
                 this._setState('seeing');
                 break;
 
