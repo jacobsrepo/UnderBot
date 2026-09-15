@@ -1,0 +1,16 @@
+[workspace]
+name = "compact-lab-rover"
+version = "0.1.0"
+channels = ["https://prefix.dev/robostack-jazzy", "https://prefix.dev/conda-forge"]
+platforms = ["win-64"]
+
+[dependencies]
+python = "3.12.*"
+pyyaml = "*"
+ros-jazzy-rviz2 = ">=14.1.23,<15"
+ros-jazzy-robot-state-publisher = ">=3.3.4,<4"
+ros-jazzy-joint-state-publisher-gui = ">=2.4.3,<3"
+
+[tasks]
+view = "python view_rover.py"
+build-model = "python build_model.py"
