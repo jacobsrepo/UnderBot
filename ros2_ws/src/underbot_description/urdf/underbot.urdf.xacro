@@ -1,0 +1,420 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="underbot">
+
+  <!-- ================= MATERIALS ================= -->
+  <material name="chassis_white">
+    <color rgba="0.9 0.9 0.92 1.0"/>
+  </material>
+  <material name="accent_blue">
+    <color rgba="0.1 0.45 0.85 1.0"/>
+  </material>
+  <material name="dark_gray">
+    <color rgba="0.2 0.2 0.22 1.0"/>
+  </material>
+  <material name="aluminum">
+    <color rgba="0.75 0.75 0.78 1.0"/>
+  </material>
+  <material name="lens_glass">
+    <color rgba="0.05 0.05 0.05 1.0"/>
+  </material>
+
+  <!-- ================= BASE FOOTPRINT ================= -->
+  <link name="base_footprint"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.04" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ================= BASE LINK (CHASSIS) ================= -->
+  <!-- 200 x 200 mm footprint, 320 mm main body height -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.16" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.20 0.20 0.32"/>
+      </geometry>
+      <material name="chassis_white"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.16" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.20 0.20 0.32"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="4.5"/>
+      <origin xyz="0 0 0.12" rpy="0 0 0"/>
+      <inertia ixx="0.045" ixy="0" ixz="0" iyy="0.045" iyz="0" izz="0.03"/>
+    </inertial>
+  </link>
+
+  <!-- Service Door / Accent Panel -->
+  <link name="accent_door_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.12 0.14"/>
+      </geometry>
+      <material name="accent_blue"/>
+    </visual>
+  </link>
+  <joint name="accent_door_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="accent_door_link"/>
+    <origin xyz="0.101 0 0.16" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ================= WHEELS (XIAOMI VACUUM BASE) ================= -->
+  <!-- Wheel diameter: 70mm (radius 0.035m), track width: 170mm (0.17m) -->
+  <xacro:macro name="wheel" params="name y_offset">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="0.035" length="0.024"/>
+        </geometry>
+        <material name="dark_gray"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="0.035" length="0.024"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.25"/>
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00015"/>
+      </inertial>
+    </link>
+
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}"/>
+      <origin xyz="0 ${y_offset} -0.005" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel name="left_wheel_link" y_offset="0.085"/>
+  <xacro:wheel name="right_wheel_link" y_offset="-0.085"/>
+
+  <!-- Passive Casters (Front & Rear) -->
+  <xacro:macro name="caster" params="name x_offset">
+    <link name="${name}">
+      <visual>
+        <geometry>
+          <sphere radius="0.015"/>
+        </geometry>
+        <material name="dark_gray"/>
+      </visual>
+      <collision>
+        <geometry>
+          <sphere radius="0.015"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.05"/>
+        <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+      </inertial>
+    </link>
+
+    <joint name="${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name}"/>
+      <origin xyz="${x_offset} 0 -0.025" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:caster name="front_caster_link" x_offset="0.075"/>
+  <xacro:caster name="rear_caster_link" x_offset="-0.075"/>
+
+  <!-- ================= SENSORS ================= -->
+  <!-- 1. Body IMU (Floor 3: BNO086) -->
+  <link name="imu_body_link">
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.005"/>
+      </geometry>
+      <material name="accent_blue"/>
+    </visual>
+  </link>
+  <joint name="imu_body_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_body_link"/>
+    <origin xyz="0 0 0.18" rpy="0 0 0"/>
+  </joint>
+
+  <!-- 2. LiDAR Link (Floor 1/2) -->
+  <link name="lidar_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.035" length="0.03"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.035" length="0.03"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.06 0 0.10" rpy="0 0 0"/>
+  </joint>
+
+  <!-- 3. Time-of-Flight Sensors (Floor 2: Front, Rear, Left, Right) -->
+  <xacro:macro name="tof_sensor" params="name x y z yaw">
+    <link name="${name}">
+      <visual>
+        <geometry>
+          <box size="0.01 0.015 0.008"/>
+        </geometry>
+        <material name="dark_gray"/>
+      </visual>
+    </link>
+    <joint name="${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name}"/>
+      <origin xyz="${x} ${y} ${z}" rpy="0 0 ${yaw}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:tof_sensor name="tof_front_link" x="0.102" y="0" z="0.08" yaw="0"/>
+  <xacro:tof_sensor name="tof_rear_link" x="-0.102" y="0" z="0.08" yaw="${pi}"/>
+  <xacro:tof_sensor name="tof_left_link" x="0" y="0.102" z="0.08" yaw="${pi/2}"/>
+  <xacro:tof_sensor name="tof_right_link" x="0" y="-0.102" z="0.08" yaw="${-pi/2}"/>
+
+  <!-- ================= 2-AXIS PAN/TILT HEAD (FLOOR 4) ================= -->
+  <!-- Pan Mount (Yaw: -90° to +90°) -->
+  <link name="camera_pan_link">
+    <visual>
+      <origin xyz="0 0 0.015" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.02" length="0.03"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+    <inertial>
+      <mass value="0.08"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+  </link>
+  <joint name="camera_pan_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="camera_pan_link"/>
+    <origin xyz="0 0 0.32" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${-pi/2}" upper="${pi/2}" effort="1.0" velocity="2.0"/>
+  </joint>
+
+  <!-- Tilt Head (Pitch: -45° to +60°) -->
+  <link name="camera_tilt_link">
+    <visual>
+      <origin xyz="0.01 0 0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.06 0.03"/>
+      </geometry>
+      <material name="lens_glass"/>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.06 0.03"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.12"/>
+      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.00002" iyz="0" izz="0.00002"/>
+    </inertial>
+  </link>
+  <joint name="camera_tilt_joint" type="revolute">
+    <parent link="camera_pan_link"/>
+    <child link="camera_tilt_link"/>
+    <origin xyz="0 0 0.03" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${-pi/4}" upper="${pi/3}" effort="1.0" velocity="2.0"/>
+  </joint>
+
+  <!-- Camera Optical Frame (REP 103 standard) -->
+  <link name="camera_optical_frame"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_tilt_link"/>
+    <child link="camera_optical_frame"/>
+    <origin xyz="0.025 0 0.01" rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
+
+  <!-- Camera Head IMU -->
+  <link name="imu_camera_link"/>
+  <joint name="imu_camera_joint" type="fixed">
+    <parent link="camera_tilt_link"/>
+    <child link="imu_camera_link"/>
+    <origin xyz="0 0 0.01" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ================= 3-DOF ROBOTIC ARM + GRIPPER ================= -->
+  <!-- Arm Base Mount (Side Mount on Floor 3) -->
+  <link name="arm_base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.022" length="0.025"/>
+      </geometry>
+      <material name="aluminum"/>
+    </visual>
+  </link>
+  <joint name="arm_base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="arm_base_link"/>
+    <origin xyz="0.08 0.11 0.22" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Joint 1: Shoulder Yaw (-90° to +90°) -->
+  <link name="shoulder_link">
+    <visual>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.035 0.035 0.05"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.035 0.035 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.18"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00008"/>
+    </inertial>
+  </link>
+  <joint name="joint_1" type="revolute">
+    <parent link="arm_base_link"/>
+    <child link="shoulder_link"/>
+    <origin xyz="0 0 0.015" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${-pi/2}" upper="${pi/2}" effort="3.0" velocity="2.0"/>
+  </joint>
+
+  <!-- Joint 2: Shoulder Pitch / Upper Arm (0° to 135°) -->
+  <link name="upper_arm_link">
+    <visual>
+      <origin xyz="0.06 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.12 0.028 0.028"/>
+      </geometry>
+      <material name="aluminum"/>
+    </visual>
+    <collision>
+      <origin xyz="0.06 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.12 0.028 0.028"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.22"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0003"/>
+    </inertial>
+  </link>
+  <joint name="joint_2" type="revolute">
+    <parent link="shoulder_link"/>
+    <child link="upper_arm_link"/>
+    <origin xyz="0 0 0.045" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0" upper="${135*pi/180}" effort="4.0" velocity="2.0"/>
+  </joint>
+
+  <!-- Joint 3: Elbow Pitch / Forearm (-90° to +90°) -->
+  <link name="forearm_link">
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.10 0.024 0.024"/>
+      </geometry>
+      <material name="aluminum"/>
+    </visual>
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.10 0.024 0.024"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.15"/>
+      <inertia ixx="0.00005" ixy="0" ixz="0" iyy="0.00015" iyz="0" izz="0.00015"/>
+    </inertial>
+  </link>
+  <joint name="joint_3" type="revolute">
+    <parent link="upper_arm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="0.12 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${-pi/2}" upper="${pi/2}" effort="3.0" velocity="2.0"/>
+  </joint>
+
+  <!-- Gripper Base -->
+  <link name="gripper_base_link">
+    <visual>
+      <origin xyz="0.015 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.04 0.025"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+  </link>
+  <joint name="gripper_base_joint" type="fixed">
+    <parent link="forearm_link"/>
+    <child link="gripper_base_link"/>
+    <origin xyz="0.10 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Gripper Fingers (Parallel jaw) -->
+  <link name="gripper_left_finger">
+    <visual>
+      <origin xyz="0.02 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.04 0.008 0.018"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+  </link>
+  <joint name="gripper_left_joint" type="prismatic">
+    <parent link="gripper_base_link"/>
+    <child link="gripper_left_finger"/>
+    <origin xyz="0.03 0.015 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0" upper="0.02" effort="10.0" velocity="0.05"/>
+  </joint>
+
+  <link name="gripper_right_finger">
+    <visual>
+      <origin xyz="0.02 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.04 0.008 0.018"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+  </link>
+  <joint name="gripper_right_joint" type="prismatic">
+    <parent link="gripper_base_link"/>
+    <child link="gripper_right_finger"/>
+    <origin xyz="0.03 -0.015 0" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit lower="0" upper="0.02" effort="10.0" velocity="0.05"/>
+    <mimic joint="gripper_left_joint" multiplier="1.0" offset="0"/>
+  </joint>
+
+  <!-- Tool Center Point (TCP) / Gripper Tip Frame -->
+  <link name="tcp_link"/>
+  <joint name="tcp_joint" type="fixed">
+    <parent link="gripper_base_link"/>
+    <child link="tcp_link"/>
+    <origin xyz="0.06 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>
