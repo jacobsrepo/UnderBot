@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compact Lab Rover — Mission Control</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- TOP HEADER BAR -->
+  <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-50 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
+        <i class="fa-solid fa-robot text-xl text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold tracking-wide text-white flex items-center gap-2">
+          COMPACT LAB ROVER
+          <span class="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-sky-950 text-sky-400 border border-sky-800">ROS 2 Jazzy</span>
+        </h1>
+        <p class="text-xs text-slate-400 font-mono">ID: ros2-brain-system &bull; Raspberry Pi 5</p>
+      </div>
+    </div>
+
+    <!-- TELEMETRY PILLS -->
+    <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+      <div class="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" id="status-dot"></span>
+        <span id="ws-status" class="text-emerald-400 font-semibold">CONNECTED</span>
+      </div>
+
+      <div class="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center gap-2">
+        <i class="fa-solid fa-microchip text-slate-400"></i>
+        <span>CPU: <span id="telemetry-temp" class="text-white">--</span></span>
+      </div>
+
+      <div class="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center gap-2">
+        <i class="fa-solid fa-memory text-slate-400"></i>
+        <span>RAM: <span id="telemetry-ram" class="text-white">--</span></span>
+      </div>
+
+      <div class="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center gap-2">
+        <i class="fa-solid fa-brain text-purple-400"></i>
+        <span class="text-purple-300">VLA: Qwen 2.5 1.5B</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN DASHBOARD CONTENT -->
+  <main class="flex-1 p-6 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT COLUMN: NATURAL LANGUAGE CHAT & VLA INTERFACE (7 Cols) -->
+    <section class="lg:col-span-7 flex flex-col bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-comments text-sky-400 text-lg"></i>
+          <h2 class="font-semibold text-white tracking-wide">Natural Language & VLA Dialogue</h2>
+        </div>
+        <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md">Topic: /underbot/command</span>
+      </div>
+
+      <!-- CHAT LOG CONTAINER -->
+      <div id="chat-box" class="flex-1 overflow-y-auto min-h-[350px] max-h-[480px] space-y-3.5 pr-2 mb-4 scrollbar-thin scrollbar-thumb-slate-700">
+        <!-- Welcome Message -->
+        <div class="flex gap-3 items-start">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center flex-shrink-0 text-sm font-mono font-bold">🤖</div>
+          <div class="bg-slate-800/90 border border-slate-700/70 rounded-2xl rounded-tl-none p-3.5 text-sm text-slate-200 max-w-[85%] shadow">
+            <p class="font-medium text-sky-300 text-xs mb-1">Underbot Brain</p>
+            Hello Athul! I am the Compact Lab Rover brain running on ROS 2 Jazzy with our local VLA model. Ask me anything, or give me commands like <span class="font-mono text-sky-300">"Bring Alfred the red ball"</span> or <span class="font-mono text-sky-300">"Look around"</span>!
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTION PLAN CAROUSEL / LIST -->
+      <div id="plan-container" class="hidden mb-4 p-3.5 bg-sky-950/40 border border-sky-900/60 rounded-xl">
+        <p class="text-xs font-mono font-semibold text-sky-400 flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-list-check"></i> ACTIVE ROBOT ACTION PLAN:
+        </p>
+        <div id="plan-steps" class="flex flex-wrap gap-2 text-xs font-mono"></div>
+      </div>
+
+      <!-- CHAT INPUT & VOICE CONTROL -->
+      <form id="chat-form" class="flex items-center gap-2 pt-2">
+        <button type="button" id="mic-btn" title="Click to speak (Voice Recognition)" class="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-sky-400 flex items-center justify-center transition border border-slate-700 flex-shrink-0">
+          <i class="fa-solid fa-microphone text-lg"></i>
+        </button>
+        <input type="text" id="chat-input" placeholder="Type a message or command (or click mic to speak)..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 transition">
+        <button type="submit" class="px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-medium text-sm transition flex items-center gap-2 shadow-lg shadow-sky-600/25 flex-shrink-0">
+          <span>Send</span>
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </form>
+    </section>
+
+    <!-- RIGHT COLUMN: TELEOPERATION & ROBOT STATE (5 Cols) -->
+    <section class="lg:col-span-5 flex flex-col gap-6">
+
+      <!-- TELEOPERATION D-PAD -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-xl">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-gamepad text-emerald-400 text-lg"></i>
+            <h2 class="font-semibold text-white tracking-wide">Manual Teleoperation</h2>
+          </div>
+          <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md">/cmd_vel</span>
+        </div>
+
+        <!-- VIRTUAL JOYSTICK / ARROWS -->
+        <div class="flex flex-col items-center justify-center py-2">
+          <!-- Forward -->
+          <button onclick="sendVelocity(0.25, 0.0)" class="w-14 h-14 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-sky-600 border border-slate-700 text-white flex items-center justify-center text-xl transition shadow mb-2">
+            <i class="fa-solid fa-arrow-up"></i>
+          </button>
+          
+          <div class="flex items-center gap-4">
+            <!-- Left -->
+            <button onclick="sendVelocity(0.0, 0.6)" class="w-14 h-14 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-sky-600 border border-slate-700 text-white flex items-center justify-center text-xl transition shadow">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <!-- Stop Center -->
+            <button onclick="sendStop()" class="w-14 h-14 rounded-xl bg-slate-950 hover:bg-slate-800 active:bg-rose-900 border border-slate-700 text-amber-400 flex items-center justify-center text-lg font-bold transition shadow">
+              STOP
+            </button>
+            <!-- Right -->
+            <button onclick="sendVelocity(0.0, -0.6)" class="w-14 h-14 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-sky-600 border border-slate-700 text-white flex items-center justify-center text-xl transition shadow">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Backward -->
+          <button onclick="sendVelocity(-0.25, 0.0)" class="w-14 h-14 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-sky-600 border border-slate-700 text-white flex items-center justify-center text-xl transition shadow mt-2">
+            <i class="fa-solid fa-arrow-down"></i>
+          </button>
+        </div>
+
+        <!-- EMERGENCY STOP BUTTON -->
+        <div class="mt-4 pt-3 border-t border-slate-800">
+          <button onclick="sendStop()" class="w-full py-3 rounded-xl bg-rose-600/90 hover:bg-rose-600 active:scale-[0.98] text-white font-bold tracking-wider text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30">
+            <i class="fa-solid fa-hand text-lg"></i>
+            <span>EMERGENCY STOP</span>
+          </button>
+          <p class="text-center text-[11px] text-slate-500 font-mono mt-2">Keyboard Control: Use <kbd class="px-1 py-0.5 bg-slate-800 rounded">W</kbd> <kbd class="px-1 py-0.5 bg-slate-800 rounded">A</kbd> <kbd class="px-1 py-0.5 bg-slate-800 rounded">S</kbd> <kbd class="px-1 py-0.5 bg-slate-800 rounded">D</kbd> or Arrow Keys &bull; Space to Stop</p>
+        </div>
+      </div>
+
+      <!-- ODOMETRY & POSE DISPLAY -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-xl">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-compass text-amber-400 text-lg"></i>
+            <h2 class="font-semibold text-white tracking-wide">Live Odometry & Pose</h2>
+          </div>
+          <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md">/odom</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 font-mono text-xs">
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+            <span class="text-slate-400 block mb-1">X Position:</span>
+            <span id="odom-x" class="text-lg font-bold text-sky-400">0.000 m</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+            <span class="text-slate-400 block mb-1">Y Position:</span>
+            <span id="odom-y" class="text-lg font-bold text-sky-400">0.000 m</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+            <span class="text-slate-400 block mb-1">Linear Speed (V):</span>
+            <span id="odom-v" class="text-lg font-bold text-emerald-400">0.00 m/s</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+            <span class="text-slate-400 block mb-1">Angular Speed (W):</span>
+            <span id="odom-w" class="text-lg font-bold text-amber-400">0.00 rad/s</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT WEBSOCKET & VOICE LOGIC -->
+  <script>
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    let socket;
+
+    function connectWebSocket() {
+      socket = new WebSocket(wsUrl);
+
+      socket.onopen = () => {
+        document.getElementById('status-dot').className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+        document.getElementById('ws-status').textContent = 'CONNECTED';
+        document.getElementById('ws-status').className = 'text-emerald-400 font-semibold';
+      };
+
+      socket.onclose = () => {
+        document.getElementById('status-dot').className = 'w-2 h-2 rounded-full bg-rose-500';
+        document.getElementById('ws-status').textContent = 'RECONNECTING...';
+        document.getElementById('ws-status').className = 'text-rose-400 font-semibold';
+        setTimeout(connectWebSocket, 2000);
+      };
+
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'response') {
+          appendRobotMessage(data.text);
+        } else if (data.type === 'plan') {
+          displayPlan(data.data);
+        } else if (data.type === 'telemetry') {
+          if (data.temp) document.getElementById('telemetry-temp').textContent = data.temp;
+          if (data.ram) document.getElementById('telemetry-ram').textContent = data.ram;
+        } else if (data.type === 'odom') {
+          document.getElementById('odom-x').textContent = data.x + ' m';
+          document.getElementById('odom-y').textContent = data.y + ' m';
+          document.getElementById('odom-v').textContent = data.v + ' m/s';
+          document.getElementById('odom-w').textContent = data.w + ' rad/s';
+        }
+      };
+    }
+
+    connectWebSocket();
+
+    // Append Messages to Chat
+    const chatBox = document.getElementById('chat-box');
+
+    function appendUserMessage(text) {
+      const msg = document.createElement('div');
+      msg.className = 'flex gap-3 items-start justify-end';
+      msg.innerHTML = `
+        <div class="bg-sky-600 text-white rounded-2xl rounded-tr-none p-3.5 text-sm max-w-[85%] shadow">
+          <p class="font-medium text-sky-200 text-xs mb-1 text-right">You</p>
+          ${escapeHtml(text)}
+        </div>
+        <div class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center flex-shrink-0 text-sm font-mono font-bold">👤</div>
+      `;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function appendRobotMessage(text) {
+      const msg = document.createElement('div');
+      msg.className = 'flex gap-3 items-start';
+      msg.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center flex-shrink-0 text-sm font-mono font-bold">🤖</div>
+        <div class="bg-slate-800/90 border border-slate-700/70 rounded-2xl rounded-tl-none p-3.5 text-sm text-slate-200 max-w-[85%] shadow">
+          <p class="font-medium text-sky-300 text-xs mb-1">Underbot Brain</p>
+          ${escapeHtml(text)}
+        </div>
+      `;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function displayPlan(planStr) {
+      const container = document.getElementById('plan-container');
+      const stepsDiv = document.getElementById('plan-steps');
+      if (!planStr || planStr === '[]') {
+        container.classList.add('hidden');
+        return;
+      }
+      try {
+        const plan = JSON.parse(planStr);
+        if (Array.isArray(plan) && plan.length > 0) {
+          stepsDiv.innerHTML = plan.map((s, idx) => `
+            <div class="px-3 py-1.5 rounded-lg bg-slate-900 border border-sky-800/60 text-sky-200 flex items-center gap-1.5 shadow">
+              <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center text-[10px] font-bold">${idx + 1}</span>
+              <span><strong>${s.action || 'step'}</strong>: ${s.target || ''}</span>
+            </div>
+          `).join('');
+          container.classList.remove('hidden');
+        } else {
+          container.classList.add('hidden');
+        }
+      } catch (e) {
+        container.classList.add('hidden');
+      }
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Chat Form
+    document.getElementById('chat-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (text && socket && socket.readyState === WebSocket.OPEN) {
+        appendUserMessage(text);
+        socket.send(JSON.stringify({ type: 'command', text: text }));
+        input.value = '';
+      }
+    });
+
+    // Voice Speech Recognition (Web Speech API)
+    const micBtn = document.getElementById('mic-btn');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.lang = 'en-US';
+
+      micBtn.addEventListener('click', () => {
+        micBtn.classList.add('bg-rose-600', 'text-white', 'animate-pulse');
+        recognition.start();
+      });
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('chat-input').value = transcript;
+        micBtn.classList.remove('bg-rose-600', 'text-white', 'animate-pulse');
+      };
+
+      recognition.onerror = () => {
+        micBtn.classList.remove('bg-rose-600', 'text-white', 'animate-pulse');
+      };
+
+      recognition.onend = () => {
+        micBtn.classList.remove('bg-rose-600', 'text-white', 'animate-pulse');
+      };
+    } else {
+      micBtn.style.display = 'none';
+    }
+
+    // Teleoperation controls
+    function sendVelocity(linear, angular) {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'cmd_vel', linear: linear, angular: angular }));
+      }
+    }
+
+    function sendStop() {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'stop' }));
+      }
+    }
+
+    // Keyboard driving support
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'INPUT') return;
+      if (e.key === 'ArrowUp' || e.key === 'w') sendVelocity(0.25, 0.0);
+      else if (e.key === 'ArrowDown' || e.key === 's') sendVelocity(-0.25, 0.0);
+      else if (e.key === 'ArrowLeft' || e.key === 'a') sendVelocity(0.0, 0.6);
+      else if (e.key === 'ArrowRight' || e.key === 'd') sendVelocity(0.0, -0.6);
+      else if (e.key === ' ' || e.key === 'Escape') sendStop();
+    });
+  </script>
+</body>
+</html>
