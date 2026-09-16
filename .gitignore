@@ -3,3 +3,12 @@ __pycache__/
 .pixi/
 *.log
 preview.png
+node_modules/
+dist/
+*.foxe
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
