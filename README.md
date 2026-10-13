@@ -30,6 +30,7 @@ The browser checks use an installed Chrome by default. Set `PLAYWRIGHT_CHANNEL=m
 
 ## Content and provenance
 
+- Navigation video: owner-provided Foxglove screen recording, 13 October 2026 (69 seconds). Shows the R08 model and A* navigation simulation in a point-cloud map. The web copy preserves the full recording at 2560 pixels wide, H.264 CRF 24 with fast-start metadata; its entirely silent audio track is omitted. The poster is taken at 60 seconds. Playback is user-initiated, with a visual description and download link at `/#demo`.
 - Project purpose: owner-provided brief, 13 October 2026 — a general-purpose robot body for testing VLA and WAM models, aimed at project followers and collaborators.
 - Hardware source: `gautamsajeen/UnderBot-Personal`, revision R08, commit `3f28a652bb34109b23241bd98b33f2c56ea0a87a`.
 - Technical claims are based on the source README, URDF and `underbot_description/docs/accuracy_and_physics.md`.

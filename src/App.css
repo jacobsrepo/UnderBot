@@ -562,6 +562,46 @@
   text-align: right;
   font-weight: 550;
 }
+.demo-recording {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #101619;
+  color: #eef0e9;
+}
+.demo-recording video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2560 / 1046;
+}
+.demo-recording figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 24px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.demo-context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 24px;
+}
+.demo-context p {
+  flex: 1 1 440px;
+  max-width: 760px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.demo-context .text-link {
+  margin-top: 4px;
+}
 .development-section {
   background: #e9ede4;
   padding: 90px 0;

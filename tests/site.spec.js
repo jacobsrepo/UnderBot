@@ -1,6 +1,28 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+test("navigation recording loads, plays and seeks without downloading on page load", async ({ page }, testInfo) => {
+  const requested = [];
+  page.on("request", (request) => {
+    if (request.url().endsWith(".mp4")) requested.push(request.url());
+  });
+  await page.goto("/#demo");
+  const video = page.locator("#demo video");
+  await expect(video).toBeVisible();
+  expect(requested).toEqual([]);
+  await video.evaluate((element) => element.load());
+  await expect.poll(() => video.evaluate((element) => element.readyState)).toBeGreaterThanOrEqual(2);
+  const duration = await video.evaluate((element) => element.duration);
+  expect(duration).toBeGreaterThan(68);
+  expect(duration).toBeLessThan(70);
+  await video.evaluate((element) => element.play());
+  await expect.poll(() => video.evaluate((element) => element.currentTime)).toBeGreaterThan(0.3);
+  await video.evaluate((element) => { element.pause(); element.currentTime = 60; });
+  await expect.poll(() => video.evaluate((element) => element.seeking)).toBe(false);
+  await page.locator("#demo").screenshot({ path: testInfo.outputPath("navigation-video.png") });
+  await expect(page.locator("#demo-description")).toContainText("A* navigation simulation");
+});
+
 test("project page renders the actual robot and supports its exploration controls", async ({
   page,
 }, testInfo) => {

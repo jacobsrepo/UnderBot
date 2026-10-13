@@ -119,6 +119,9 @@ function Header({ explorer }) {
           <a href={`${prefix}#hardware`} onClick={() => setOpen(false)}>
             Hardware
           </a>
+          <a href={`${prefix}#demo`} onClick={() => setOpen(false)}>
+            Demo
+          </a>
           <a href={`${prefix}#development`} onClick={() => setOpen(false)}>
             Development
           </a>
@@ -588,12 +591,55 @@ function Home() {
             </div>
           </section>
           <Hardware />
+          <section id="demo" className="section demo-section">
+            <div className="section-heading">
+              <div>
+                <div className="eyebrow">03 / NAVIGATION IN SIMULATION</div>
+                <h2>From a goal<br />to a path.</h2>
+              </div>
+              <p>
+                The R08 model inside our navigation workflow. Watch the planned
+                route and simulated robot motion in Foxglove.
+              </p>
+            </div>
+            <figure className="demo-recording">
+              <video
+                controls
+                playsInline
+                preload="none"
+                poster="/media/underbot-navigation.jpg"
+                aria-label="UnderBot R08 navigation simulation"
+                aria-describedby="demo-description"
+                width="2560"
+                height="1046"
+              >
+                <source src="/media/underbot-navigation.mp4" type="video/mp4" />
+                <a href="/media/underbot-navigation.mp4">Download the navigation recording</a>
+              </video>
+              <figcaption>
+                <span>FOXGLOVE / R08 MODEL</span>
+                <span>1:09 · SILENT RECORDING · 13 OCT 2026</span>
+              </figcaption>
+            </figure>
+            <div className="demo-context">
+              <p id="demo-description">
+                A yellow planned path crosses a 3D point-cloud map. The R08
+                robot model moves along the route as the view changes from a
+                map overview to a close-up of the robot. This recording shows
+                our A* navigation simulation; physical navigation and VLA / WAM
+                experiments are future validation steps.
+              </p>
+              <a className="text-link" href="/media/underbot-navigation.mp4" download>
+                Download recording <Download size={16} />
+              </a>
+            </div>
+          </section>
         </div>
         <section id="development" className="development-section">
           <div className="container">
             <div className="section-heading">
               <div>
-                <div className="eyebrow">03 / WORK IN PROGRESS</div>
+                <div className="eyebrow">04 / WORK IN PROGRESS</div>
                 <h2>
                   A real project.
                   <br />
@@ -684,7 +730,7 @@ function Home() {
           <section id="resources" className="section resources-section">
             <div className="section-heading">
               <div>
-                <div className="eyebrow">04 / GET INTO THE DETAILS</div>
+                <div className="eyebrow">05 / GET INTO THE DETAILS</div>
                 <h2>
                   Less mystery.
                   <br />
