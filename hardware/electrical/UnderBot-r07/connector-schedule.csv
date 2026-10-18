@@ -1,0 +1,11 @@
+Sheet,Reference,Pin,Net,Purpose,Status
+01_Power,J101,1,NOCO_RAW,GB70 accessory harness IN,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J101,2,GND_SYS,GB70 accessory harness IN,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J102,1,PI_INPUT,PI branch output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J102,2,GND_SYS,PI branch output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J103,1,DEPTH_INPUT,KINECT branch output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J103,2,GND_SYS,KINECT branch output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J104,1,ACT_INPUT,ACTUATOR branch output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J104,2,GND_SYS,ACTUATOR branch output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J105,1,AUX_INPUT,AUXILIARY branch output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Power,J105,2,GND_SYS,AUXILIARY branch output,Proposed carrier/harness pin; NOT OEM pin numbering

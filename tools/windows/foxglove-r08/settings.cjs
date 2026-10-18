@@ -1,0 +1,2 @@
+﻿const { chromium } = require('../Underbot-Website/node_modules/playwright');
+(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:9223');const p=b.contexts()[0].pages().find(p=>p.url().includes('/app.html'));await p.getByRole('tab',{name:'Panel',exact:true}).click(); console.log((await p.locator('body').innerText()).slice(0,10000)); await b.close()})().catch(e=>{console.error(e);process.exit(1)});

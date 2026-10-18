@@ -154,6 +154,7 @@ environments:
       - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-fastrtps-cmake-module-3.6.4-np2py312hf80f32c_21.conda
       - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-foonathan-memory-vendor-1.3.1-np2py312hf80f32c_21.conda
       - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-foxglove-bridge-3.4.3-h9490d1a_21.conda
+      - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-foxglove-msgs-3.4.3-np2py312hf80f32c_21.conda
       - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-geometry-msgs-5.3.8-np2py312hf80f32c_21.conda
       - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-gmock-vendor-1.14.9000-np2py312hf80f32c_21.conda
       - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-gtest-vendor-1.14.9000-np2py312hf80f32c_21.conda
@@ -2523,6 +2524,26 @@ packages:
   run_exports: {}
   size: 2037
   timestamp: 1788454876389
+- conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-foxglove-msgs-3.4.3-np2py312hf80f32c_21.conda
+  sha256: 0ecec84bd381c9f9a77d42866d8e5c938d489863661f1c42582fbbef7e839ab4
+  md5: aecf3c21093d349afaa1ba84ca3ef7f3
+  depends:
+  - python
+  - ros-jazzy-builtin-interfaces
+  - ros-jazzy-geometry-msgs
+  - ros-jazzy-ros-workspace
+  - ros-jazzy-rosidl-default-runtime
+  - ros2-distro-mutex 0.16.* jazzy_*
+  - vc >=14.3,<15
+  - vc14_runtime >=14.44.35208
+  - ucrt >=10.0.20348.0
+  - numpy >=1.25,<3
+  - python_abi 3.12.* *_cp312
+  - ros2-distro-mutex >=0.16.0,<0.17.0a0
+  license: MIT
+  run_exports: {}
+  size: 651690
+  timestamp: 1788210712653
 - conda: https://prefix.dev/robostack-jazzy/win-64/ros-jazzy-geometry-msgs-5.3.8-np2py312hf80f32c_21.conda
   sha256: df1bbfe5ae4249862f55dcda8e2e28f849e0f1784dc6c8549fa1b09c2c2fa2d5
   md5: fb9b43b1ce90d4b522fd963949519c11

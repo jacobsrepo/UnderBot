@@ -1,0 +1,10 @@
+{
+  "tracks": 43,
+  "zones": 2,
+  "widths_mm": [
+    1.2,
+    3,
+    4
+  ],
+  "release": "HOLD: fuse coordination, physical fit, thermal and external protection validation"
+}

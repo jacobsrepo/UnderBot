@@ -1,0 +1,10 @@
+{
+  "footprints": 17,
+  "tracks": 0,
+  "size_mm": [
+    200,
+    180
+  ],
+  "status": "UNROUTED / MOUNTING GEOMETRY HOLDS",
+  "drc": "not completed; no pass claimed"
+}

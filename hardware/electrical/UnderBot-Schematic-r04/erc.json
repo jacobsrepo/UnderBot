@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-02T09:05:42",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702",
+            "violations": []
+        },
+        {
+            "path": "/01 - Battery input, isolation and Kelvin shunt/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/f083c98a-a7b3-519e-b03a-d847f962bacf",
+            "violations": []
+        },
+        {
+            "path": "/02 - INA228 current / voltage monitor circuit/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/7ded7016-bfe0-5801-953a-913d62006471",
+            "violations": []
+        },
+        {
+            "path": "/03 - Fused converter harnesses and power outputs/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb",
+            "violations": []
+        },
+        {
+            "path": "/04 - Controller and sensor harness / temperature circuit/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896",
+            "violations": []
+        },
+        {
+            "path": "/05 - Actuator power and external safety interfaces - HOLD/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32",
+            "violations": []
+        },
+        {
+            "path": "/06 - Single-source external charger input - prototype/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/dc7eb8ff-9193-5e3a-af2b-709d6c81bce7",
+            "violations": []
+        },
+        {
+            "path": "/07 - Off-board modules and ESP32 GPIO wiring/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/45a3b6c5-b79d-50e1-8e84-af0cd42ee32d",
+            "violations": []
+        },
+        {
+            "path": "/08 - Ten servo signal and fused power branches/",
+            "uuid_path": "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f",
+            "violations": []
+        }
+    ],
+    "source": "UnderBot.kicad_sch"
+}

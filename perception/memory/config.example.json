@@ -1,0 +1,9 @@
+{
+  "robot_id": "underbot-pi",
+  "local_dsn": "host=127.0.0.1 port=5432 dbname=underbot user=underbot_app passfile=/home/underbot/.config/underbot/pgpass",
+  "base_dsn": "host=127.0.0.1 port=55433 dbname=underbot_base user=underbot_sync passfile=/home/underbot/.config/underbot/pgpass",
+  "authoritative": false,
+  "gallery_max_age_hours": 168,
+  "threshold": 0.5,
+  "margin": 0.08
+}

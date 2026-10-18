@@ -1,0 +1,427 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid ea3dda63-23a3-5d55-aa25-3a8bb179b29c) (paper "A3")
+        (title_block (title "03 - Fused converter harnesses and power outputs") (date "2026-10-02") (rev "0.5 PROCUREMENT") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "Device:Fuse"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "F"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fuse"
+			(at -1.905 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Fuse*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Fuse_0_1"
+			(rectangle
+				(start -0.762 -2.54)
+				(end 0.762 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 2.54) (xy 0 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Fuse_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "power:PWR_FLAG"
+		(power global)
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "#FLG"
+			(at 0 1.905 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 0 3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "flag power"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "PWR_FLAG_0_0"
+			(pin power_out line
+				(at 0 0 90)
+				(length 0)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "PWR_FLAG_0_1"
+			(polyline
+				(pts
+					(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "COMMERCIAL DC/DC MODULES: INPUT AND OUTPUT HARNESS CONNECTIONS" (at 20 15 0) (effects (font (size 2 2)) (justify left top)) (uuid 141bac38-f64e-5499-a1ee-2ff5ed78894d))(text "Pairs TO_x and FROM_x go to an off-board converter. They are NOT shorted together on the PCB." (at 20 23 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid ddb5c0fc-9752-5cf7-92af-463a15157171))(symbol (lib_id "Device:Fuse") (at 63.5 60.96 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e64142cb-37c0-55a4-9156-68f65cb42670) (property "Reference" "F201" (at 63.5 53.34 90) (effects (font (size 1.27 1.27)) )) (property "Value" "Rating TBD" (at 63.5 55.88 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 63.5 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 63.5 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "F201") (unit 1)))))(wire (pts (xy 59.69 60.96) (xy 41.91 60.96)) (stroke (width 0) (type default)) (uuid 76f3ec65-78ff-59bf-a387-50af41cb4061))(global_label "VBAT_SW" (shape bidirectional) (at 41.91 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid f48d6b42-b1d4-5271-b445-966d66e61a5d))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 139.7 60.96 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid f9b24203-c9cd-5933-b8ea-37f8fcc3acf8) (property "Reference" "J211" (at 139.7 53.34 0) (effects (font (size 1.27 1.27)) )) (property "Value" "TO PI converter VIN/GND" (at 139.7 55.88 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 139.7 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 139.7 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J211") (unit 1)))))(wire (pts (xy 134.62 60.96) (xy 124.46 60.96)) (stroke (width 0) (type default)) (uuid 23d29710-8db1-5b34-9dbe-7b50b3d94527))(global_label "PI_VIN" (shape bidirectional) (at 124.46 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid 78b4607f-688b-57f8-8b92-def79a3b34b1))(wire (pts (xy 134.62 63.5) (xy 124.46 63.5)) (stroke (width 0) (type default)) (uuid 4a22cf57-a56e-57d5-bcdb-07dd084f9ee6))(global_label "GND_SYS" (shape bidirectional) (at 124.46 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 11403b1a-eba2-599d-bf9d-b1d108f40538))(wire (pts (xy 67.31 60.96) (xy 93.98 60.96)) (stroke (width 0) (type default)) (uuid a2d0c5e8-7aee-5e98-8dd2-53a1e15759d6))(global_label "PI_VIN" (shape bidirectional) (at 93.98 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid 74be70bb-9976-507b-9720-23d0541d4555))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 264.16 60.96 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 169f15a5-28c2-5270-b24e-e67922c9c49e) (property "Reference" "J212" (at 264.16 53.34 0) (effects (font (size 1.27 1.27)) )) (property "Value" "FROM PI VOUT/GND" (at 264.16 55.88 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 264.16 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 264.16 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J212") (unit 1)))))(wire (pts (xy 259.08 60.96) (xy 248.92 60.96)) (stroke (width 0) (type default)) (uuid 596972cf-d659-5a3d-8cc9-3a9efbcafdcb))(global_label "PI_PRE_12V" (shape bidirectional) (at 248.92 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid a03addd7-757b-5396-8346-91c319529112))(wire (pts (xy 259.08 63.5) (xy 248.92 63.5)) (stroke (width 0) (type default)) (uuid 420040b1-4195-52d7-86e9-5f9d8ef8efb0))(global_label "GND_SYS" (shape bidirectional) (at 248.92 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 8329bfd7-2848-5f7b-9047-1698d7225a2a))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 365.76 60.96 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid d6f09b80-fba4-509d-b476-f07e71b8f4f2) (property "Reference" "J213" (at 365.76 53.34 0) (effects (font (size 1.27 1.27)) )) (property "Value" "PI load output" (at 365.76 55.88 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 365.76 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 365.76 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J213") (unit 1)))))(wire (pts (xy 360.68 60.96) (xy 350.52 60.96)) (stroke (width 0) (type default)) (uuid 6cb44642-69a2-5482-a6eb-9d97a3c01368))(global_label "PI_PRE_12V" (shape bidirectional) (at 350.52 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid 8b4747ca-e22a-5234-9772-48147e845474))(wire (pts (xy 360.68 63.5) (xy 350.52 63.5)) (stroke (width 0) (type default)) (uuid a470930b-1c95-58a1-8065-3544b10a2374))(global_label "GND_SYS" (shape bidirectional) (at 350.52 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 7be91ba3-ae9d-52cd-b831-f21856d55965))(text "Pololu D36V50F12 -> 12V -> 52Pi EP-0225 -> Pi USB-C; see sheet 09" (at 35 81.28 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 1c438adb-042b-54e4-8791-8ea53a7a09ff))(symbol (lib_id "Device:Fuse") (at 63.5 121.92 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e65485ba-ec11-5b60-b8c5-6a418275ceb7) (property "Reference" "F202" (at 63.5 114.3 90) (effects (font (size 1.27 1.27)) )) (property "Value" "Rating TBD" (at 63.5 116.84 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 63.5 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 63.5 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "F202") (unit 1)))))(wire (pts (xy 59.69 121.92) (xy 41.91 121.92)) (stroke (width 0) (type default)) (uuid 4c9adcda-07b5-5305-8ea5-e6f2d1a3c0ad))(global_label "VBAT_SW" (shape bidirectional) (at 41.91 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid 9a4cd231-70e6-52a6-87e1-bb3cd4b51c6d))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 139.7 121.92 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid a7264821-1731-5d0c-81d2-cd1e70a018d1) (property "Reference" "J221" (at 139.7 114.3 0) (effects (font (size 1.27 1.27)) )) (property "Value" "TO KINECT converter VIN/GND" (at 139.7 116.84 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 139.7 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 139.7 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J221") (unit 1)))))(wire (pts (xy 134.62 121.92) (xy 124.46 121.92)) (stroke (width 0) (type default)) (uuid ee9328a7-75b4-5ae5-abe2-90978d4778d4))(global_label "KINECT_VIN" (shape bidirectional) (at 124.46 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid 9455468a-0811-5dad-a94a-309da4aab2d8))(wire (pts (xy 134.62 124.46) (xy 124.46 124.46)) (stroke (width 0) (type default)) (uuid 6766e02b-90e3-5c06-a216-2b91f9125528))(global_label "GND_SYS" (shape bidirectional) (at 124.46 124.46 0) (effects (font (size 1 1)) (justify left)) (uuid 1920f522-0be6-5fce-9c11-a4ca631c91f3))(wire (pts (xy 67.31 121.92) (xy 93.98 121.92)) (stroke (width 0) (type default)) (uuid d76c6b0f-8d08-5f9c-a50c-1d85371aeb67))(global_label "KINECT_VIN" (shape bidirectional) (at 93.98 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid a58d3f45-dd67-583c-99fb-b17c64c50895))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 264.16 121.92 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e966ed1a-5f9f-5caf-b8bb-ddeb26f826d8) (property "Reference" "J222" (at 264.16 114.3 0) (effects (font (size 1.27 1.27)) )) (property "Value" "FROM KINECT VOUT/GND" (at 264.16 116.84 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 264.16 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 264.16 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J222") (unit 1)))))(wire (pts (xy 259.08 121.92) (xy 248.92 121.92)) (stroke (width 0) (type default)) (uuid 13f9d2f4-7d17-5981-8e1a-39d40d1b0195))(global_label "KINECT_12V" (shape bidirectional) (at 248.92 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid 3da3eaea-82bc-59bc-8cb7-16c6913c6f48))(wire (pts (xy 259.08 124.46) (xy 248.92 124.46)) (stroke (width 0) (type default)) (uuid 29e7eff7-2873-5eea-8860-7c344f3226e1))(global_label "GND_SYS" (shape bidirectional) (at 248.92 124.46 0) (effects (font (size 1 1)) (justify left)) (uuid 04185391-279b-5784-a106-2a7fe06e91ee))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 365.76 121.92 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 10d016d6-c1f2-59da-9fd9-a2a600d8708c) (property "Reference" "J223" (at 365.76 114.3 0) (effects (font (size 1.27 1.27)) )) (property "Value" "KINECT load output" (at 365.76 116.84 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 365.76 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 365.76 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J223") (unit 1)))))(wire (pts (xy 360.68 121.92) (xy 350.52 121.92)) (stroke (width 0) (type default)) (uuid 74ccb4ab-bed4-5715-a266-fa17a4c7f913))(global_label "KINECT_12V" (shape bidirectional) (at 350.52 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid 3bd4b295-250f-5c78-bae9-92ea9630ace7))(wire (pts (xy 360.68 124.46) (xy 350.52 124.46)) (stroke (width 0) (type default)) (uuid edff2f77-8d94-5cd1-95fb-ea315cffea4a))(global_label "GND_SYS" (shape bidirectional) (at 350.52 124.46 0) (effects (font (size 1 1)) (justify left)) (uuid d699abcb-1460-5617-8f90-39debd165344))(text "Pololu D36V50F12 -> Xbox 360 Kinect v1 power adapter (verify adapter label)" (at 35 142.24 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid e197df98-ef37-5dbe-9dbc-2963dadaa823))(symbol (lib_id "Device:Fuse") (at 63.5 182.88 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 72e4cf96-b08c-5fd1-af3b-dbc736d24d0c) (property "Reference" "F203" (at 63.5 175.26 90) (effects (font (size 1.27 1.27)) )) (property "Value" "Rating TBD" (at 63.5 177.79999999999998 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 63.5 182.88 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 63.5 182.88 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "F203") (unit 1)))))(wire (pts (xy 59.69 182.88) (xy 41.91 182.88)) (stroke (width 0) (type default)) (uuid 91f2d621-1538-536d-8715-e357b2ade5b4))(global_label "VBAT_SW" (shape bidirectional) (at 41.91 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid 42e9db1e-37b1-51d8-99df-9e27aae9dff5))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 139.7 182.88 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 4a8d799d-4d1c-5bd8-9a97-4829623ca8ad) (property "Reference" "J231" (at 139.7 175.26 0) (effects (font (size 1.27 1.27)) )) (property "Value" "TO AUX converter VIN/GND" (at 139.7 177.79999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 139.7 182.88 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 139.7 182.88 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J231") (unit 1)))))(wire (pts (xy 134.62 182.88) (xy 124.46 182.88)) (stroke (width 0) (type default)) (uuid 96f80392-7bad-56d4-83bd-a66a3c875a4a))(global_label "AUX_VIN" (shape bidirectional) (at 124.46 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid 2c8b8b63-a577-5bef-af27-0574c7162d10))(wire (pts (xy 134.62 185.42) (xy 124.46 185.42)) (stroke (width 0) (type default)) (uuid 2fa12b75-92f5-53af-83b7-56e6539da02b))(global_label "GND_SYS" (shape bidirectional) (at 124.46 185.42 0) (effects (font (size 1 1)) (justify left)) (uuid ba41aa8a-37b7-5aa1-bcb0-fc7d1dd78ea9))(wire (pts (xy 67.31 182.88) (xy 93.98 182.88)) (stroke (width 0) (type default)) (uuid 6da43d09-28a6-573e-b3b4-d0051fe6cefb))(global_label "AUX_VIN" (shape bidirectional) (at 93.98 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid f94922d4-952b-5d43-b9bf-e5e3a76e5119))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 264.16 182.88 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid efb05c75-641a-55ef-8a87-831ed2bb8308) (property "Reference" "J232" (at 264.16 175.26 0) (effects (font (size 1.27 1.27)) )) (property "Value" "FROM AUX VOUT/GND" (at 264.16 177.79999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 264.16 182.88 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 264.16 182.88 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J232") (unit 1)))))(wire (pts (xy 259.08 182.88) (xy 248.92 182.88)) (stroke (width 0) (type default)) (uuid f9f07069-5b83-52d3-851b-f38b61cde48d))(global_label "AUX_5V" (shape bidirectional) (at 248.92 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid c7e38f1c-3530-5162-86e7-5a43d62a910a))(wire (pts (xy 259.08 185.42) (xy 248.92 185.42)) (stroke (width 0) (type default)) (uuid 4521ee32-46b4-56da-8ec3-7de0fdcda849))(global_label "GND_SYS" (shape bidirectional) (at 248.92 185.42 0) (effects (font (size 1 1)) (justify left)) (uuid 1cdece0e-00e7-5989-93ab-1669569f75c8))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 365.76 182.88 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 081108ff-7d34-510d-b127-1a4ed41c9098) (property "Reference" "J233" (at 365.76 175.26 0) (effects (font (size 1.27 1.27)) )) (property "Value" "AUX load output" (at 365.76 177.79999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 365.76 182.88 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 365.76 182.88 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J233") (unit 1)))))(wire (pts (xy 360.68 182.88) (xy 350.52 182.88)) (stroke (width 0) (type default)) (uuid c40aba7a-11e0-5910-9734-b5934815b4c4))(global_label "AUX_5V" (shape bidirectional) (at 350.52 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid 7410decc-7880-55ad-aa6c-a81ecc3befcb))(wire (pts (xy 360.68 185.42) (xy 350.52 185.42)) (stroke (width 0) (type default)) (uuid 01967ef8-78a5-559f-97c5-cfa46ef183f5))(global_label "GND_SYS" (shape bidirectional) (at 350.52 185.42 0) (effects (font (size 1 1)) (justify left)) (uuid eccc61f3-6748-5df3-b999-2234b2882f5c))(text "Pololu D36V28F5: 5V auxiliaries; design allocation 2A continuous" (at 35 203.2 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 2e9a5c50-a63e-5697-a205-cb000456eda0))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 139.7 236.22 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid dda4fe2a-56bd-542a-acad-39fa30cc1d7c) (property "Reference" "J241" (at 139.7 228.6 0) (effects (font (size 1.27 1.27)) )) (property "Value" "TO 3.3V regulator VIN/GND" (at 139.7 231.14 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 139.7 236.22 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 139.7 236.22 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J241") (unit 1)))))(wire (pts (xy 134.62 236.22) (xy 124.46 236.22)) (stroke (width 0) (type default)) (uuid f566ae90-8590-580e-98ab-d50930a16a9c))(global_label "AUX_5V" (shape bidirectional) (at 124.46 236.22 0) (effects (font (size 1 1)) (justify left)) (uuid 8fabcad2-eb7b-5dfa-b064-acea75907ac7))(wire (pts (xy 134.62 238.76) (xy 124.46 238.76)) (stroke (width 0) (type default)) (uuid 63698f1e-9c05-50d0-a174-abdb669d6fb6))(global_label "GND_SYS" (shape bidirectional) (at 124.46 238.76 0) (effects (font (size 1 1)) (justify left)) (uuid c3f728da-d121-5d29-ae9b-cbc111ed4109))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 264.16 236.22 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e8988c02-1375-59e6-973b-a6ae8f792ec7) (property "Reference" "J242" (at 264.16 228.6 0) (effects (font (size 1.27 1.27)) )) (property "Value" "FROM 3.3V regulator VOUT/GND" (at 264.16 231.14 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 264.16 236.22 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 264.16 236.22 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "J242") (unit 1)))))(wire (pts (xy 259.08 236.22) (xy 248.92 236.22)) (stroke (width 0) (type default)) (uuid 17e8f77e-0658-5332-9b96-1e35c2a73af1))(global_label "LOGIC_3V3" (shape bidirectional) (at 248.92 236.22 0) (effects (font (size 1 1)) (justify left)) (uuid 3298c30f-8ee5-5a3f-995d-b4dcef8af150))(wire (pts (xy 259.08 238.76) (xy 248.92 238.76)) (stroke (width 0) (type default)) (uuid d8e28943-b3e5-591b-9ca6-3831e3b912df))(global_label "GND_SYS" (shape bidirectional) (at 248.92 238.76 0) (effects (font (size 1 1)) (justify left)) (uuid c8be0551-6b17-54f7-8fad-12675ff7b03d))(text "All J numbers define OUR harness ends. Verify converter terminal labels, polarity and connector current limits." (at 20 257 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 0023c371-e3d5-5adc-b1f7-da8d8293c328))(text "J213 is 12V into EP-0225 DC input, NEVER into Pi USB. Use its supplied USB-C output cable. Raw 6S exceeds its 24V limit." (at 20 264 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 2adc8e54-ef02-559e-9df3-d2fcc90c3e1d))(symbol (lib_id "power:PWR_FLAG") (at 320.04 231.14 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 7124c591-7056-58dd-9f52-af74bb51beb5) (property "Reference" "#FLG01" (at 320.04 223.51999999999998 0) (effects (font (size 1.27 1.27)) )) (property "Value" "PWR_FLAG" (at 320.04 226.05999999999997 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 320.04 231.14 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 320.04 231.14 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "#FLG01") (unit 1)))))(wire (pts (xy 320.04 231.14) (xy 320.04 236.22)) (stroke (width 0) (type default)) (uuid 56f14ca3-d3b5-5b12-a61e-3725de2f93e1))(global_label "LOGIC_3V3" (shape bidirectional) (at 320.04 236.22 0) (effects (font (size 1 1)) (justify left)) (uuid 51a9cb00-85c8-5f12-8db1-8ad6df5bdc74))(symbol (lib_id "power:PWR_FLAG") (at 350.52 231.14 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid f06ff50d-5162-54bd-b014-7a39d7009b4b) (property "Reference" "#FLG02" (at 350.52 223.51999999999998 0) (effects (font (size 1.27 1.27)) )) (property "Value" "PWR_FLAG" (at 350.52 226.05999999999997 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 350.52 231.14 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 350.52 231.14 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/db0328c5-0c74-547d-a9b9-46d81ad5cfbb" (reference "#FLG02") (unit 1)))))(wire (pts (xy 350.52 231.14) (xy 350.52 236.22)) (stroke (width 0) (type default)) (uuid 26d534c7-b6e2-5b57-84c2-99b4f3422c0c))(global_label "GND_SYS" (shape bidirectional) (at 350.52 236.22 0) (effects (font (size 1 1)) (justify left)) (uuid e9a4156b-656b-5072-ba2e-9eb23e66d7e6)) (embedded_fonts no))

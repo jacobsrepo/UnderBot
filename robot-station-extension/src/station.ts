@@ -48,7 +48,12 @@ export function initStation(context: PanelExtensionContext): () => void {
     <h3>Camera aim</h3><div class="pad"><span></span><button data-pan="U">U ↑</button><span></span><button data-pan="L">L ←</button><button data-id="cameraStop">Hold</button><button data-pan="R">R →</button><span></span><button data-pan="D">D ↓</button><span></span></div>
     <p class="note">Pan/tilt velocity requests · requires a camera actuator adapter.</p>
     <h3>Communications</h3><button data-id="comms">Request comms ON</button><button data-id="commsOff">Request comms OFF</button><p class="note" data-id="commsState">Audio backend: not connected</p>
-    <h3>Robot AI chat</h3><div class="messages" data-id="messages"><p>Waiting for the robot AI backend. Chat does not issue motor commands.</p></div><textarea data-id="prompt" rows="2" placeholder="Ask about the robot…" maxlength="2000"></textarea><button data-id="send">Send</button><p class="note" data-id="chatState">No AI provider configured.</p>
+    <h3>Navigation simulation</h3><p class="note" data-id="navState">Navigation: no recent status.</p>
+    <div class="row"><label>X (m)<input data-id="goalX" type="number" step="0.2" value="2" style="width:80px"></label><label>Y (m)<input data-id="goalY" type="number" step="0.2" value="3" style="width:80px"></label><button data-id="goXY">Go to coordinates</button></div>
+    <div class="row"><input data-id="waypointName" type="text" placeholder="Waypoint name: desk" maxlength="32"><button data-id="saveXY">Save at X/Y</button></div>
+    <p class="note" data-id="waypoints">Saved waypoints: waiting for map.</p><button data-id="spin360">Spin 360°</button><button data-id="navStop" class="stop">Cancel navigation</button>
+    <p class="note">Chat: make one full clockwise revolution · back up fifty centimetres · turn around and return to start. Qwen translates varied wording into checked simulation skills. Save locations with save waypoint desk here. Maximum 8 steps. Yellow arrow shows heading.</p>
+    <h3>Robot AI chat</h3><p class="note" data-id="aiBackend">Waiting for AI status.</p><div class="messages" data-id="messages"><p>Chat is connected to Qwen. Explicit navigation requests can move the simulated robot.</p></div><textarea data-id="prompt" rows="2" placeholder="Ask about the robot…" maxlength="2000"></textarea><button data-id="send">Send</button><p class="note" data-id="chatState">Ask a question or send a simulation goal.</p>
     <p class="note error" data-id="error"></p>
     <details><summary>Topic settings</summary><label>Station namespace<input type="text" data-id="prefix"></label><label><input type="checkbox" data-id="lateral"> Left/right means strafe (holonomic base)</label><button data-id="apply">Apply and disable controls</button><p class="note">Telemetry: /imu/data and /odom. Configure other views in their panel settings.</p></details>
   </div>`;
@@ -85,13 +90,15 @@ export function initStation(context: PanelExtensionContext): () => void {
     text("arm", armed ? "Disable controls" : "Enable controls");
     root.querySelectorAll<HTMLButtonElement>("[data-drive], [data-pan]").forEach((b) => { b.disabled = !canMove(); });
     el<HTMLButtonElement>("comms").disabled = !canPublish(); el<HTMLButtonElement>("commsOff").disabled = !canPublish();
-    el<HTMLButtonElement>("send").disabled = !canPublish() || !!pendingChat;
+    for (const id of ["send","goXY","saveXY","spin360"]) { el<HTMLButtonElement>(id).disabled = !canPublish() || !!pendingChat; }
+    el<HTMLButtonElement>("navStop").disabled = !canPublish();
     if (Date.now() - imuAt > 1800) { text("angles", "IMU: no recent valid orientation"); el("attitude").style.opacity = "0.25"; }
     if (Date.now() - odomAt > 1800) { text("speed", "—"); }
-    if (pendingChat && Date.now() - chatSentAt > 20000) { pendingChat = undefined; text("chatState", "No response. Check the AI backend."); }
+    if (pendingChat && Date.now() - chatSentAt > 180000) { pendingChat = undefined; text("chatState", "No response. Check the AI backend."); }
+    text("aiBackend", fresh() ? `AI: ${status.ai ?? "not configured"}` : "AI: no recent station status");
     text("commsState", fresh() ? `Audio backend: ${status.comms ?? "not configured"}` : "Audio backend: no recent status");
   }
-  function subscribe() { context.subscribe(["/imu/data", "/odom", `${config.prefix}/status`, `${config.prefix}/ai/response`].map((topic) => ({ topic }))); }
+  function subscribe() { context.subscribe(["/imu/data", "/odom", `${config.prefix}/status`, `${config.prefix}/ai/response`, `${config.prefix}/nav/status`].map((topic) => ({ topic }))); }
   function chatLine(value: string) { const p = document.createElement("p"); p.textContent = value; el("messages").append(p); while (el("messages").children.length > 40) { el("messages").firstElementChild?.remove(); } el("messages").scrollTop = el("messages").scrollHeight; }
   el("arm").onclick = () => { if (armed) { stop(); armed = false; } else if (fresh()) { armed = true; } refresh(); };
   el("stop").onclick = () => { stop(); armed = false; refresh(); };
@@ -111,12 +118,26 @@ export function initStation(context: PanelExtensionContext): () => void {
   root.querySelectorAll<HTMLButtonElement>("[data-pan]").forEach((b) => bindHold(b, true));
   el("comms").onclick = () => publish("comms/request", { data: JSON.stringify({ enabled: true }) });
   el("commsOff").onclick = () => publish("comms/request", { data: JSON.stringify({ enabled: false }) });
-  el("send").onclick = () => {
-    const prompt = el<HTMLTextAreaElement>("prompt").value.trim(); if (!prompt || !canPublish() || pendingChat) { return; }
+  function sendChat(prompt: string) {
+    if (!prompt || !canPublish() || pendingChat) { return; }
     pendingChat = `${Date.now()}-${Math.random().toString(36).slice(2)}`; chatSentAt = Date.now();
     publish("ai/request", { data: JSON.stringify({ id: pendingChat, text: prompt }) });
     chatLine(`You: ${prompt}`); el<HTMLTextAreaElement>("prompt").value = ""; text("chatState", "Waiting for robot AI…"); refresh();
+  }
+  el("send").onclick = () => sendChat(el<HTMLTextAreaElement>("prompt").value.trim());
+  function coordinates() {
+    const x=el<HTMLInputElement>("goalX").valueAsNumber, y=el<HTMLInputElement>("goalY").valueAsNumber;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) { text("error","Enter finite X and Y coordinates in map metres."); return; }
+    return `${x}, ${y}`;
+  }
+  el("goXY").onclick = () => { const xy=coordinates(); if (xy) { sendChat(`go to ${xy}`); } };
+  el("saveXY").onclick = () => {
+    const name=el<HTMLInputElement>("waypointName").value.trim().toLowerCase(), xy=coordinates();
+    if (!/^[a-z][a-z0-9_]{0,31}$/.test(name)) { text("error","Use a waypoint name such as desk or charging_dock."); return; }
+    if (xy) { sendChat(`save waypoint ${name} at ${xy}`); }
   };
+  el("spin360").onclick = () => sendChat("spin 360 degrees");
+  el("navStop").onclick = () => { publish("cmd_vel",zero()); text("chatState","Simulation motion and remaining steps cancelled."); };
   el("apply").onclick = () => {
     const prefix = el<HTMLInputElement>("prefix").value.trim().replace(/\/$/, "");
     if (!/^\/[A-Za-z][A-Za-z0-9_/]*$/.test(prefix)) { text("error", "Use an absolute ROS namespace, e.g. /station"); return; }
@@ -133,6 +154,7 @@ export function initStation(context: PanelExtensionContext): () => void {
       for (const event of state.currentFrame ?? []) {
         const m = event.message as Record<string, any>;
         if (event.topic === `${config.prefix}/status`) { status = JSON.parse(m.data) as Status; statusAt = Date.now(); }
+        else if (event.topic === `${config.prefix}/nav/status`) { const nav=JSON.parse(m.data); text("navState", `SIMULATION: ${String(nav.state)} · pose ${nav.pose?.slice(0,2).map((v:number)=>v.toFixed(2)).join(", ")} m · heading ${(nav.heading_degrees ?? 0).toFixed(1)}° · ${nav.queued_steps ?? 0} queued steps${nav.turn_progress_degrees != null ? ` · turned ${nav.turn_progress_degrees.toFixed(1)}°` : ""}${nav.goal_error_metres != null ? ` · goal error ${(nav.goal_error_metres*100).toFixed(1)} cm` : ""}${nav.planned_length_metres != null ? ` · planned ${nav.planned_length_metres.toFixed(2)} m` : ""}`); text("waypoints", `Saved waypoints: ${Object.entries(nav.landmarks ?? {}).map(([name,xy])=>`${name} (${(xy as number[]).map(v=>v.toFixed(1)).join(", ")})`).join(" · ")}`); }
         else if (event.topic === "/imu/data") {
           const q = m.orientation; const n = q ? Math.hypot(q.x, q.y, q.z, q.w) : 0;
           if (n > 0.0001 && Number.isFinite(n) && m.orientation_covariance?.[0] !== -1) {
@@ -144,7 +166,7 @@ export function initStation(context: PanelExtensionContext): () => void {
             text("angles", `R ${roll.toFixed(1)}° · P ${pitch.toFixed(1)}° · Y ${yaw.toFixed(1)}°`); imuAt=Date.now();
           }
         } else if (event.topic === "/odom") { const v=m.twist?.twist?.linear; if (v && Number.isFinite(v.x) && Number.isFinite(v.y)) { text("speed", Math.hypot(v.x,v.y).toFixed(2)); odomAt=Date.now(); } }
-        else if (event.topic === `${config.prefix}/ai/response`) { const response=JSON.parse(m.data); if (response.id === pendingChat) { chatLine(`Robot: ${String(response.text)}`); pendingChat=undefined; text("chatState", response.ok ? "Response received" : "Backend not ready"); } }
+        else if (event.topic === `${config.prefix}/ai/response`) { const response=JSON.parse(m.data); if (response.execution_event === true) { chatLine(`Robot: ${String(response.text)} [${String(response.id).slice(-8)}]`); } else if (response.id === pendingChat && response.final === false) { text("chatState", String(response.text)); } else if (response.id === pendingChat) { chatLine(`Robot: ${String(response.text)}`); pendingChat=undefined; text("chatState", response.ok ? "Response received" : "Backend not ready"); } }
       }
       refresh();
     } catch (err) { text("error", `Invalid telemetry: ${String(err)}`); }

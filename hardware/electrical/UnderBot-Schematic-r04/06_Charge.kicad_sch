@@ -1,0 +1,313 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 2b372ef7-5f6f-5b07-a403-b20a2e0407b5) (paper "A3")
+        (title_block (title "06 - Single-source external charger input - prototype") (date "2026-10-02") (rev "0.4 REVIEW") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:Fuse"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "F"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fuse"
+			(at -1.905 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Fuse*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Fuse_0_1"
+			(rectangle
+				(start -0.762 -2.54)
+				(end 0.762 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 2.54) (xy 0 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Fuse_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "FIRST REVISION: ONE APPROPRIATE 6S CHARGER CONNECTED AT A TIME" (at 20 15 0) (effects (font (size 2 2)) (justify left top)) (uuid fa5e1b66-5ba1-56bc-bc54-738dbdbe5b30))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 50.8 71.12 180) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 95ba4d76-2cfb-5e8a-bce4-49049cf4b927) (property "Reference" "J601" (at 50.8 60.96 0) (effects (font (size 1.27 1.27)) )) (property "Value" "25.2V CC/CV charger input" (at 50.8 63.5 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 50.8 71.12 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 50.8 71.12 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/dc7eb8ff-9193-5e3a-af2b-709d6c81bce7" (reference "J601") (unit 1)))))(symbol (lib_id "Device:Fuse") (at 124.46 71.12 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 494efd30-eaca-532c-b5a1-a1fa952a63ba) (property "Reference" "F601" (at 124.46 63.50000000000001 90) (effects (font (size 1.27 1.27)) )) (property "Value" "Charge cable fuse - TBD" (at 124.46 66.04 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 124.46 71.12 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 124.46 71.12 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/dc7eb8ff-9193-5e3a-af2b-709d6c81bce7" (reference "F601") (unit 1)))))(wire (pts (xy 55.88 71.12) (xy 120.65 71.12)) (stroke (width 0) (type default)) (uuid a33cbc90-1084-57c8-ab78-5f7ca45e3406))(wire (pts (xy 128.27 71.12) (xy 158.75 71.12)) (stroke (width 0) (type default)) (uuid 5d062920-1f7d-599f-826c-6a5485f4b5bb))(global_label "VBAT_FUSED" (shape bidirectional) (at 158.75 71.12 180) (effects (font (size 1 1)) (justify right)) (uuid bc80bb83-6cd9-5514-901c-a4769e739c44))(wire (pts (xy 55.88 68.58) (xy 76.2 68.58)) (stroke (width 0) (type default)) (uuid 9a05e8c5-ccec-5fdc-b7d9-036e8a7dc23c))(global_label "GND_SYS" (shape bidirectional) (at 76.2 68.58 180) (effects (font (size 1 1)) (justify right)) (uuid 50bb4eae-699e-5079-8a97-e9d980b29156))(text "Uses the common-port BMS topology: charge positive -> F601 -> F101 -> pack positive; return -> protected BMS return." (at 20 124 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 65cf350e-25a6-513c-92b7-917d1bc8eef0))(text "If the selected BMS has a separate C- port, this sheet MUST change. Never wire charger return directly to raw cell negative." (at 20 136 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 7aad6ecf-582d-5d7d-8e70-255bfb36f10a))(text "Use a finished 6S Li-ion charger with termination, temperature policy and reverse-current protection; 4A is a candidate limit." (at 20 148 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 5eea7769-6121-567d-9985-47a3a26128a1))(text "Prototype charging procedure: service switch OFF; appropriate pack/BMS fitted; one source; no energized motion." (at 20 160 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 911c6010-8f42-56d4-bf5c-f4c30f3f7703))(text "NOT IN THIS REVISION: unattended dock contacts/interlock, parallel solar + mains sources, charge-source OR-ing or supercapacitors." (at 20 180 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 5dcfa7da-d33e-5668-87db-2ce7ffcaa01b))(text "Station PV / LiFePO4 / buck-boost charger remains an EXTERNAL subsystem in the architecture drawing. No station PCB is implied." (at 20 192 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 9aaac7ce-71e1-5c53-95c7-ed8925d58eaf))(text "The original T12 dock/battery is independent. Neither T12 battery terminals nor its 20V charging input accepts 25.2V directly." (at 20 204 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid c05933d3-c930-55fe-928c-16c921051184))(text "Mechanical connector selection, touch protection and fuse coordination are still required before connecting real batteries." (at 20 224 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 35d87465-e8c7-5798-8df3-4500be60d9f5)) (embedded_fonts no))

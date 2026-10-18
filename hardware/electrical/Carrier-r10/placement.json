@@ -1,0 +1,197 @@
+[
+  {
+    "ref": "J1",
+    "value": "Protected12V input + / GND",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "VIN",
+      "2": "GND"
+    },
+    "x": 60,
+    "y": 66,
+    "angle": 0
+  },
+  {
+    "ref": "J2",
+    "value": "Stop contact SEND+ / RETURN+ (NO GND)",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "VIN",
+      "2": "ACT"
+    },
+    "x": 60,
+    "y": 200,
+    "angle": 0
+  },
+  {
+    "ref": "F1",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "VIN",
+      "2": "PI_IN"
+    },
+    "x": 62,
+    "y": 95,
+    "angle": 0
+  },
+  {
+    "ref": "F2",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "VIN",
+      "2": "KINECT_IN"
+    },
+    "x": 62,
+    "y": 135,
+    "angle": 0
+  },
+  {
+    "ref": "F3",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "ACT",
+      "2": "ARM_IN"
+    },
+    "x": 85,
+    "y": 195,
+    "angle": 0
+  },
+  {
+    "ref": "F4",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "ACT",
+      "2": "AUX_IN"
+    },
+    "x": 110,
+    "y": 170,
+    "angle": 0
+  },
+  {
+    "ref": "J3",
+    "value": "Short DC cable to mounted EP-0225",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "PI_IN",
+      "2": "GND"
+    },
+    "x": 160,
+    "y": 145,
+    "angle": 0
+  },
+  {
+    "ref": "J4",
+    "value": "DDR input: +Vin5 / -Vin6",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "KINECT_IN",
+      "2": "GND"
+    },
+    "x": 190,
+    "y": 185,
+    "angle": 0
+  },
+  {
+    "ref": "J5",
+    "value": "DDR output return: +Vo3 / -Vo1",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "DEPTH_12",
+      "2": "GND"
+    },
+    "x": 222,
+    "y": 62,
+    "angle": 0
+  },
+  {
+    "ref": "J6",
+    "value": "Regulated12V to Kinect v2 adapter",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "DEPTH_12",
+      "2": "GND"
+    },
+    "x": 230,
+    "y": 200,
+    "angle": 0
+  },
+  {
+    "ref": "J7",
+    "value": "Stopped nominal12V to Adeept VIN",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "ARM_IN",
+      "2": "GND"
+    },
+    "x": 105,
+    "y": 215,
+    "angle": 0
+  },
+  {
+    "ref": "J8",
+    "value": "Stopped regulated5V AUX output",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "AUX_5V",
+      "2": "GND"
+    },
+    "x": 155,
+    "y": 210,
+    "angle": 0
+  },
+  {
+    "ref": "U3",
+    "value": "D24V50F5 module",
+    "footprint": "UnderBotCarrier:D24V50F5",
+    "nets": {
+      "1": "",
+      "2": "AUX_IN",
+      "3": "GND",
+      "4": "GND",
+      "5": "AUX_5V"
+    },
+    "x": 142,
+    "y": 172,
+    "angle": 0
+  },
+  {
+    "ref": "H1",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 55,
+    "y": 55,
+    "angle": 0
+  },
+  {
+    "ref": "H2",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 245,
+    "y": 55,
+    "angle": 0
+  },
+  {
+    "ref": "H3",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 55,
+    "y": 225,
+    "angle": 0
+  },
+  {
+    "ref": "H4",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 245,
+    "y": 225,
+    "angle": 0
+  }
+]

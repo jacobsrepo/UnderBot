@@ -1,0 +1,32 @@
+{
+  "source": "Autoware sample-map-planning pointcloud_map.pcd",
+  "source_url": "https://autoware-files.s3.us-west-2.amazonaws.com/maps/demos/sample-map-planning.zip",
+  "archive_sha256": "5536fce7bb8db7688fdf94ec004118b898637ad0d5b6175108b10989dd6e93b9",
+  "resolution": 0.2,
+  "origin": [
+    -20,
+    -20
+  ],
+  "size": 200,
+  "global_xy_centre": [
+    3805.0,
+    73765.0
+  ],
+  "ground_height": 19.357005214691164,
+  "spawn": [
+    0.1,
+    0.1
+  ],
+  "landmarks": {
+    "start": [
+      0.1,
+      0.1
+    ],
+    "goal_a": [
+      19.9,
+      19.9
+    ]
+  },
+  "free_region_cells": 20691,
+  "limitations": "Experimental flat-ground projection; 0.4 m obstacle inflation; unknown blocked. Not a validated traversability map. Robot pose and sensors simulated."
+}

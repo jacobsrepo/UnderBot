@@ -2,19 +2,16 @@
 
 ## Branch workflow
 
-`EM-URDF-Body` is the current integration branch for the initial body and station
-handoff. Keep this combined snapshot there. After team review, open a pull request
-to `main` so it can become the shared baseline.
-
-Each teammate should branch from the same baseline and open a pull request back
-to the integration branch (or to `main` after the baseline is merged):
+`main` is the consolidated baseline. Historical development branches remain intact. Use a feature branch for new work and open a pull request to `main`:
 
 ```sh
 git fetch origin
-git switch EM-URDF-Body
+git switch main
 git pull --ff-only
 git switch -c feature/your-change
 ```
+
+Keep each implementation in its documented component folder. See [the project map](docs/PROJECT_MAP.md) before changing shared ROS topics or choosing a robot model. Imported desktop, ROS and website snapshots retain their own setup instructions and are not automatically deployed from this repository.
 
 Do not have all eight people push directly to the same branch. Agree who owns
 geometry, joints, sensor drivers, base control, navigation, perception,

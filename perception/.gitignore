@@ -1,0 +1,17 @@
+.pixi/
+__pycache__/
+*.pyc
+*.log
+models/
+runs/
+.ultralytics/
+Ultralytics/
+UnderBot EMEET Live.json
+.stop-request
+location.local.json
+.stop-audio
+
+.private/
+*.local.json
+*.onnx
+*.download

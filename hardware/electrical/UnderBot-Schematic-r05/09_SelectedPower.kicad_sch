@@ -1,0 +1,329 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid f370da95-b39e-5606-b8f2-f96da8e2382d) (paper "A3")
+        (title_block (title "09 - Selected commercial power modules") (date "2026-10-02") (rev "0.5 PROCUREMENT") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "UnderBot_Modules:Pololu_buck_used_terminals" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Pololu_buck_used_terminals" (at 0 10.16 0) (effects (font (size 1 1))))
+      (symbol "Pololu_buck_used_terminals_0_1" (rectangle (start -25.4 7.62) (end 25.4 -7.62) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Pololu_buck_used_terminals_1_1" (pin passive line (at -30.48 2.54 0) (length 5.08) (name "VIN" (effects (font (size 1 1)))) (number "VIN" (effects (font (size 1 1)))))(pin passive line (at -30.48 -2.54 0) (length 5.08) (name "GND" (effects (font (size 1 1)))) (number "GND" (effects (font (size 1 1)))))(pin passive line (at 30.48 2.54 180) (length 5.08) (name "VOUT" (effects (font (size 1 1)))) (number "VOUT" (effects (font (size 1 1)))))))(symbol "UnderBot_Modules:EP0225_used_power_ports" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "EP0225_used_power_ports" (at 0 10.16 0) (effects (font (size 1 1))))
+      (symbol "EP0225_used_power_ports_0_1" (rectangle (start -25.4 7.62) (end 25.4 -7.62) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "EP0225_used_power_ports_1_1" (pin passive line (at -30.48 2.54 0) (length 5.08) (name "DC_PLUS" (effects (font (size 1 1)))) (number "DC_PLUS" (effects (font (size 1 1)))))(pin passive line (at -30.48 -2.54 0) (length 5.08) (name "DC_MINUS" (effects (font (size 1 1)))) (number "DC_MINUS" (effects (font (size 1 1)))))(pin passive line (at 30.48 2.54 180) (length 5.08) (name "USB_C_OUT" (effects (font (size 1 1)))) (number "USB_C_OUT" (effects (font (size 1 1)))))))(symbol "UnderBot_Modules:Pi5_USB_power_interface" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Pi5_USB_power_interface" (at 0 7.62 0) (effects (font (size 1 1))))
+      (symbol "Pi5_USB_power_interface_0_1" (rectangle (start -25.4 5.08) (end 25.4 -5.08) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Pi5_USB_power_interface_1_1" (pin passive line (at -30.48 0.0 0) (length 5.08) (name "USB_C_IN" (effects (font (size 1 1)))) (number "USB_C_IN" (effects (font (size 1 1)))))))(symbol "Device:Fuse"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "F"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fuse"
+			(at -1.905 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Fuse*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Fuse_0_1"
+			(rectangle
+				(start -0.762 -2.54)
+				(end 0.762 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 2.54) (xy 0 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Fuse_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "UnderBot_Modules:Hobbywing_30606000_ports" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 17.78 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Hobbywing_30606000_ports" (at 0 15.239999999999998 0) (effects (font (size 1 1))))
+      (symbol "Hobbywing_30606000_ports_0_1" (rectangle (start -25.4 12.7) (end 25.4 -12.7) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Hobbywing_30606000_ports_1_1" (pin passive line (at -30.48 7.619999999999999 0) (length 5.08) (name "MAIN_PLUS" (effects (font (size 1 1)))) (number "MAIN_PLUS" (effects (font (size 1 1)))))(pin passive line (at -30.48 2.539999999999999 0) (length 5.08) (name "MAIN_MINUS" (effects (font (size 1 1)))) (number "MAIN_MINUS" (effects (font (size 1 1)))))(pin passive line (at -30.48 -2.540000000000001 0) (length 5.08) (name "BACKUP_PLUS" (effects (font (size 1 1)))) (number "BACKUP_PLUS" (effects (font (size 1 1)))))(pin passive line (at -30.48 -7.620000000000001 0) (length 5.08) (name "BACKUP_MINUS" (effects (font (size 1 1)))) (number "BACKUP_MINUS" (effects (font (size 1 1)))))(pin passive line (at 30.48 7.619999999999999 180) (length 5.08) (name "OUT_PLUS" (effects (font (size 1 1)))) (number "OUT_PLUS" (effects (font (size 1 1)))))(pin passive line (at 30.48 2.539999999999999 180) (length 5.08) (name "OUT_MINUS" (effects (font (size 1 1)))) (number "OUT_MINUS" (effects (font (size 1 1)))))))(symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "SELECTED POWER MODULES / NO PARALLEL REGULATOR OUTPUTS" (at 20 14 0) (effects (font (size 2 2)) (justify left top)) (uuid df8726ec-280e-50ff-9430-39d5ea233413))(symbol (lib_id "UnderBot_Modules:Pololu_buck_used_terminals") (at 83.82 55.88 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 3ce78cd9-53d5-5e55-8f78-152657b6cfd2) (property "Reference" "A901" (at 83.82 41.910000000000004 0) (effects (font (size 1.27 1.27)) )) (property "Value" "D36V50F12 / Pi preregulator" (at 83.82 44.45 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 83.82 55.88 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 83.82 55.88 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A901") (unit 1)))))(wire (pts (xy 53.34 53.34) (xy 43.18 53.34)) (stroke (width 0) (type default)) (uuid b61856cc-1325-54a6-b058-1c9c4ef8c073))(global_label "PI_VIN" (shape bidirectional) (at 43.18 53.34 0) (effects (font (size 1 1)) (justify left)) (uuid d01c2cf8-c98e-552b-b0e8-84b7d235aeb5))(wire (pts (xy 53.34 58.42) (xy 43.18 58.42)) (stroke (width 0) (type default)) (uuid 1fc749a3-8976-5454-93eb-a3543995e7c8))(global_label "GND_SYS" (shape bidirectional) (at 43.18 58.42 0) (effects (font (size 1 1)) (justify left)) (uuid 294a1c8e-ab9a-5015-bfd1-c72453145054))(wire (pts (xy 114.3 53.34) (xy 124.46 53.34)) (stroke (width 0) (type default)) (uuid d1416140-3035-5698-8233-c8e4b8eaada4))(global_label "PI_PRE_12V" (shape bidirectional) (at 124.46 53.34 180) (effects (font (size 1 1)) (justify right)) (uuid f22f9f3d-b705-58d2-938c-b4953a430b27))(symbol (lib_id "UnderBot_Modules:Pololu_buck_used_terminals") (at 83.82 111.76 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 7f0d77e2-bb3a-59e3-910c-06e877d6ba40) (property "Reference" "A903" (at 83.82 97.78999999999999 0) (effects (font (size 1.27 1.27)) )) (property "Value" "D36V50F12 / Kinect 12V" (at 83.82 100.33 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 83.82 111.76 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 83.82 111.76 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A903") (unit 1)))))(wire (pts (xy 53.34 109.22) (xy 43.18 109.22)) (stroke (width 0) (type default)) (uuid 7218bba3-bc68-5e36-97ae-5c153580b264))(global_label "KINECT_VIN" (shape bidirectional) (at 43.18 109.22 0) (effects (font (size 1 1)) (justify left)) (uuid c9bcf3f8-1aef-522c-91c7-c9efcd6b77dd))(wire (pts (xy 53.34 114.3) (xy 43.18 114.3)) (stroke (width 0) (type default)) (uuid a687c7d7-6b75-5143-ba0b-f2250a266054))(global_label "GND_SYS" (shape bidirectional) (at 43.18 114.3 0) (effects (font (size 1 1)) (justify left)) (uuid c238ece0-4f86-5585-85b3-3a3923d42709))(wire (pts (xy 114.3 109.22) (xy 124.46 109.22)) (stroke (width 0) (type default)) (uuid d9016e02-a5a0-5ffb-814b-0b497e33247d))(global_label "KINECT_12V" (shape bidirectional) (at 124.46 109.22 180) (effects (font (size 1 1)) (justify right)) (uuid 3b7dc9d0-2515-5116-9e50-ebe6392f8944))(symbol (lib_id "UnderBot_Modules:Pololu_buck_used_terminals") (at 83.82 167.64 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid b830e59e-0888-5222-91ba-2dc60c6d8f63) (property "Reference" "A904" (at 83.82 153.67 0) (effects (font (size 1.27 1.27)) )) (property "Value" "D36V28F5 / auxiliary 5V" (at 83.82 156.20999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 83.82 167.64 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 83.82 167.64 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A904") (unit 1)))))(wire (pts (xy 53.34 165.1) (xy 43.18 165.1)) (stroke (width 0) (type default)) (uuid e63e9a34-7f5e-5ea5-b3c3-f776d9355fb4))(global_label "AUX_VIN" (shape bidirectional) (at 43.18 165.1 0) (effects (font (size 1 1)) (justify left)) (uuid ccc2c75b-595a-5ff3-ae51-799494668397))(wire (pts (xy 53.34 170.18) (xy 43.18 170.18)) (stroke (width 0) (type default)) (uuid c402e048-94e6-5f79-a395-94aad6aa53bb))(global_label "GND_SYS" (shape bidirectional) (at 43.18 170.18 0) (effects (font (size 1 1)) (justify left)) (uuid b76bb42e-f4b1-59bb-9f47-3d1b15d8c651))(wire (pts (xy 114.3 165.1) (xy 124.46 165.1)) (stroke (width 0) (type default)) (uuid bc66c1a1-c567-5612-9b02-5c397d8d6356))(global_label "AUX_5V" (shape bidirectional) (at 124.46 165.1 180) (effects (font (size 1 1)) (justify right)) (uuid 51406fd0-2e2c-520f-9588-a50d81811f30))(symbol (lib_id "UnderBot_Modules:Pololu_buck_used_terminals") (at 294.64 167.64 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 318e5450-1fe1-54a3-afe2-87cba455699b) (property "Reference" "A905" (at 294.64 153.67 0) (effects (font (size 1.27 1.27)) )) (property "Value" "D24V5F3 / logic 3.3V" (at 294.64 156.20999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 294.64 167.64 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 294.64 167.64 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A905") (unit 1)))))(wire (pts (xy 264.16 165.1) (xy 254.0 165.1)) (stroke (width 0) (type default)) (uuid 3d8e5f38-c3d8-53f9-b24c-2161d2339370))(global_label "AUX_5V" (shape bidirectional) (at 254.0 165.1 0) (effects (font (size 1 1)) (justify left)) (uuid fae817db-0339-5354-861f-2a8f0d94b0a2))(wire (pts (xy 264.16 170.18) (xy 254.0 170.18)) (stroke (width 0) (type default)) (uuid 39814ba0-8395-5d3c-be88-6061f6e2ece4))(global_label "GND_SYS" (shape bidirectional) (at 254.0 170.18 0) (effects (font (size 1 1)) (justify left)) (uuid df3ba7a2-44a8-5a47-b876-f62e53619a68))(wire (pts (xy 325.12 165.1) (xy 335.28 165.1)) (stroke (width 0) (type default)) (uuid d3634526-0706-526e-9668-cbcf4532a537))(global_label "LOGIC_3V3" (shape bidirectional) (at 335.28 165.1 180) (effects (font (size 1 1)) (justify right)) (uuid dc8774aa-afe5-590f-854a-3eaa4d6f8204))(symbol (lib_id "UnderBot_Modules:EP0225_used_power_ports") (at 294.64 55.88 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 555a3127-754d-5d11-a439-5a34e42d5741) (property "Reference" "A902" (at 294.64 41.910000000000004 0) (effects (font (size 1.27 1.27)) )) (property "Value" "52Pi EP-0225 / Pi5 PD source" (at 294.64 44.45 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 294.64 55.88 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 294.64 55.88 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A902") (unit 1)))))(wire (pts (xy 264.16 53.34) (xy 254.0 53.34)) (stroke (width 0) (type default)) (uuid a1ca3ac4-9190-5ce1-bab4-8610a17282f4))(global_label "PI_PRE_12V" (shape bidirectional) (at 254.0 53.34 0) (effects (font (size 1 1)) (justify left)) (uuid d1f88c31-4027-5ea0-9b7c-50910fc70496))(wire (pts (xy 264.16 58.42) (xy 254.0 58.42)) (stroke (width 0) (type default)) (uuid 9ba2ffb8-31f4-50b1-84b3-e8d23de85522))(global_label "GND_SYS" (shape bidirectional) (at 254.0 58.42 0) (effects (font (size 1 1)) (justify left)) (uuid dd6aa6ef-58a3-565f-89aa-c2ee6d78fadd))(wire (pts (xy 325.12 53.34) (xy 335.28 53.34)) (stroke (width 0) (type default)) (uuid e9780ef4-5132-57b9-8265-1bb7c021fcee))(label "PI_USB_C_CABLE"  (at 335.28 53.34 180) (effects (font (size 1 1)) (justify right)) (uuid 3537173a-4fe2-50d2-a202-f895ad43e42b))(symbol (lib_id "UnderBot_Modules:Pi5_USB_power_interface") (at 294.64 121.92 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 8196475a-efcd-5f31-bdee-a16312387d22) (property "Reference" "A908" (at 294.64 110.49 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Raspberry Pi 5 / power cable port" (at 294.64 113.03 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 294.64 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 294.64 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A908") (unit 1)))))(wire (pts (xy 264.16 121.92) (xy 254.0 121.92)) (stroke (width 0) (type default)) (uuid 5e9e3b49-e4dc-501b-9454-067ae01be92f))(label "PI_USB_C_CABLE"  (at 254.0 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid be2946de-1eb3-5215-b777-52b3b4701da4))(text "USB_C_OUT denotes the COMPLETE supplied cable,\nincluding PD signalling. Never make a two-wire USB adapter.\nUse DC input ONLY; 12V preregulation is mandatory." (at 215 83 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid a7ffe356-f000-5e0e-a4d0-8db41a398c58))(symbol (lib_id "Device:Fuse") (at 73.66 198.12 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 0d4cea58-cc5c-5165-ba1b-3ab3a639b13d) (property "Reference" "F901" (at 73.66 190.5 90) (effects (font (size 1.27 1.27)) )) (property "Value" "Input fuse TBD" (at 73.66 193.04 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 73.66 198.12 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 73.66 198.12 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "F901") (unit 1)))))(wire (pts (xy 69.85 198.12) (xy 44.45 198.12)) (stroke (width 0) (type default)) (uuid 732063a7-e126-55a8-a62c-d67bc85174b0))(global_label "ACTUATOR_SWITCHED" (shape bidirectional) (at 44.45 198.12 0) (effects (font (size 1 1)) (justify left)) (uuid 2bf925cc-1087-518d-a897-9f58adcb9a6e))(wire (pts (xy 77.47 198.12) (xy 92.71 198.12)) (stroke (width 0) (type default)) (uuid 2bf28384-2719-5434-ac58-1b684c690d4b))(global_label "BEC_LEFT_IN" (shape bidirectional) (at 92.71 198.12 180) (effects (font (size 1 1)) (justify right)) (uuid 04ac404c-0ffc-5066-8300-bd8e651ffbf9))(symbol (lib_id "UnderBot_Modules:Hobbywing_30606000_ports") (at 91.44 233.68 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e25be28f-61e2-5e5c-bef2-c22e5c3ee9c6) (property "Reference" "A906" (at 91.44 214.63 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Hobbywing 30606000 / SET 6.0V" (at 91.44 217.17 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 91.44 233.68 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 91.44 233.68 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A906") (unit 1)))))(wire (pts (xy 60.96 226.06) (xy 50.8 226.06)) (stroke (width 0) (type default)) (uuid 29af89a2-0234-5d3e-bada-c90c554894cc))(global_label "BEC_LEFT_IN" (shape bidirectional) (at 50.8 226.06 0) (effects (font (size 1 1)) (justify left)) (uuid db3f204a-4ea5-5a46-9c9e-37b5f6383365))(wire (pts (xy 60.96 231.14) (xy 50.8 231.14)) (stroke (width 0) (type default)) (uuid c8e133f9-7f32-59bf-91f4-19747eb2ca5b))(global_label "GND_SYS" (shape bidirectional) (at 50.8 231.14 0) (effects (font (size 1 1)) (justify left)) (uuid 130cda9b-9807-5073-92d4-47b269f709df))(no_connect (at 60.96 236.22) (uuid 7b135dad-3da8-5462-9a24-6a3904856520))(no_connect (at 60.96 241.3) (uuid 63a10ac8-faa3-5dd9-89c6-0a2af9a78e21))(wire (pts (xy 121.92 226.06) (xy 132.08 226.06)) (stroke (width 0) (type default)) (uuid 7acf756b-b308-5799-b1b5-02de51f6ded6))(global_label "SERVO_LEFT_6V" (shape bidirectional) (at 132.08 226.06 180) (effects (font (size 1 1)) (justify right)) (uuid 2e1022ea-541d-5e08-926d-9aa8b83d8c3d))(wire (pts (xy 121.92 231.14) (xy 132.08 231.14)) (stroke (width 0) (type default)) (uuid 19c5fd53-2490-5a3e-965e-9e16d9e7bcb2))(global_label "GND_SYS" (shape bidirectional) (at 132.08 231.14 180) (effects (font (size 1 1)) (justify right)) (uuid 68f49ba6-ab4b-5270-ae0f-bd8c4b6a4839))(symbol (lib_id "Device:Fuse") (at 276.86 198.12 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid fcf8cdd0-64fb-5a29-9867-5565cc4f140d) (property "Reference" "F902" (at 276.86 190.5 90) (effects (font (size 1.27 1.27)) )) (property "Value" "Input fuse TBD" (at 276.86 193.04 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 276.86 198.12 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 276.86 198.12 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "F902") (unit 1)))))(wire (pts (xy 273.05 198.12) (xy 247.65 198.12)) (stroke (width 0) (type default)) (uuid 08cea8cc-7536-5059-a054-ca54238e375d))(global_label "ACTUATOR_SWITCHED" (shape bidirectional) (at 247.65 198.12 0) (effects (font (size 1 1)) (justify left)) (uuid 6c3ab64d-67a5-531d-ba39-557a22bd9efe))(wire (pts (xy 280.67 198.12) (xy 295.91 198.12)) (stroke (width 0) (type default)) (uuid 5d0ae24c-6242-5def-a082-2c0458cf353d))(global_label "BEC_RIGHT_IN" (shape bidirectional) (at 295.91 198.12 180) (effects (font (size 1 1)) (justify right)) (uuid 3bbb7269-8c31-5ec3-9561-85d23f1f1272))(symbol (lib_id "UnderBot_Modules:Hobbywing_30606000_ports") (at 294.64 233.68 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 64de92eb-a791-5185-a6b6-25bb85a909b8) (property "Reference" "A907" (at 294.64 214.63 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Hobbywing 30606000 / SET 6.0V" (at 294.64 217.17 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 294.64 233.68 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 294.64 233.68 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "A907") (unit 1)))))(wire (pts (xy 264.16 226.06) (xy 254.0 226.06)) (stroke (width 0) (type default)) (uuid c70d0408-2b39-54d5-a856-7ccdfb0b1578))(global_label "BEC_RIGHT_IN" (shape bidirectional) (at 254.0 226.06 0) (effects (font (size 1 1)) (justify left)) (uuid 88956030-5c9b-5211-84cc-c2e362a88948))(wire (pts (xy 264.16 231.14) (xy 254.0 231.14)) (stroke (width 0) (type default)) (uuid fc3faabd-4d8d-59ea-afc8-32abf99ee62c))(global_label "GND_SYS" (shape bidirectional) (at 254.0 231.14 0) (effects (font (size 1 1)) (justify left)) (uuid a0d6f77d-d449-5739-af6a-8f7a2feb56f9))(no_connect (at 264.16 236.22) (uuid a93e84a5-0247-58e5-a954-c2b41bb2d7f9))(no_connect (at 264.16 241.3) (uuid 1c887b65-c57b-5550-80cc-f2cf35766df9))(wire (pts (xy 325.12 226.06) (xy 335.28 226.06)) (stroke (width 0) (type default)) (uuid 75d18f33-6f96-5558-b720-eb27c7ce929e))(global_label "SERVO_RIGHT_6V" (shape bidirectional) (at 335.28 226.06 180) (effects (font (size 1 1)) (justify right)) (uuid c0dd9fb3-9d0c-5b8f-91f1-ace2702e4353))(wire (pts (xy 325.12 231.14) (xy 335.28 231.14)) (stroke (width 0) (type default)) (uuid afa4cf74-5e4c-5860-80d1-7a826ccc0cd9))(global_label "GND_SYS" (shape bidirectional) (at 335.28 231.14 180) (effects (font (size 1 1)) (justify right)) (uuid de77d7ed-4393-50c4-a4f3-238cded241c5))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 383.54 121.92 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid ebae0717-d28e-5322-85ed-4d2c648d60de) (property "Reference" "J915" (at 383.54 114.3 0) (effects (font (size 1.27 1.27)) )) (property "Value" "RIGHT distribution" (at 383.54 116.84 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 383.54 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 383.54 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/c24de8f0-cf55-5ea8-9318-1f19771c4be6" (reference "J915") (unit 1)))))(wire (pts (xy 378.46 121.92) (xy 368.3 121.92)) (stroke (width 0) (type default)) (uuid 0cb07d89-21f3-5a9c-9b2e-1feabdcb3f81))(global_label "SERVO_RIGHT_6V" (shape bidirectional) (at 368.3 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid d69df9c6-0eed-597b-8b94-ecdf944d806b))(wire (pts (xy 378.46 124.46) (xy 368.3 124.46)) (stroke (width 0) (type default)) (uuid 99e233b6-2053-5a93-8b5b-6a5e2106fb1e))(global_label "GND_SYS" (shape bidirectional) (at 368.3 124.46 0) (effects (font (size 1 1)) (justify left)) (uuid a893d7b4-6923-58e0-b232-6a1de2a3c47d))(text "BEC backup leads: individually insulated, no battery fitted. A backup battery would bypass the main actuator disconnect." (at 20 260 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid ce602f7b-4515-5679-a467-3043f2967d1c))(text "BEC multiple output connectors distribute current; never send all current through one servo plug. Use vendor-rated harnesses." (at 20 268 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 1802ad32-8d4d-506a-952e-8bd2ed44e89e)) (embedded_fonts no))

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1420" viewBox="0 0 1500 1420">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Arial,sans-serif;fill:#152b3e}.title{font-size:30px;font-weight:bold}.sub{font-size:17px;fill:#506376}.h{font-size:18px;font-weight:bold}.t{font-size:15px}.small{font-size:13px}.box{fill:white;stroke:#8aa0b4;stroke-width:1.5;rx:10}.power{fill:none;stroke:#ce6424;stroke-width:3;marker-end:url(#a)}.data{fill:none;stroke:#267bba;stroke-width:2.5;marker-end:url(#a)}.stop{fill:none;stroke:#b53448;stroke-width:2.5;stroke-dasharray:7 5;marker-end:url(#a)}</style>
+<rect width="1500" height="1420" fill="#f3f6fa"/>
+<text x="40" y="50" class="title">UnderBot — power and system connections</text>
+<text x="40" y="81" class="sub">Xiaomi T12 base · Kinect v1 assumed · body + camera IMUs · 6S3P battery · revision 0.1</text>
+<rect x="40" y="100" width="1420" height="42" rx="8" fill="#fff0d9"/>
+<text x="56" y="127" class="h">REVIEW DRAFT — module interfaces only. Base power, actuator ratings and physical pinouts are unresolved.</text>
+<text x="40" y="180" class="h">POWER • orange lines include positive and protected return; branch fuses are required</text>
+<rect class="box" x="40" y="210" width="265" height="110"/>
+<text x="57" y="239" class="h">6S3P pack + matched BMS</text><text x="57" y="266" class="t">18 cells; 25.2 V full charge</text><text x="57" y="291" class="t">266 Wh planning budget</text>
+<path class="power" d="M305 265H355"/>
+<rect class="box" x="355" y="210" width="270" height="110"/>
+<text x="372" y="239" class="h">Fuse → isolator → monitor</text><text x="372" y="266" class="t">INA228 + rated Kelvin shunt</text><text x="372" y="291" class="t">Protected distribution bus</text>
+<path class="power" d="M625 265H685V239H735"/>
+<path class="power" d="M685 265V347H735"/>
+<path class="power" d="M685 347V455H735"/>
+<rect class="box" x="735" y="205" width="300" height="72"/><text x="751" y="232" class="h">5.1 V compute buck + source</text><text x="751" y="255" class="t">Pi-compatible USB-C power path</text>
+<path class="power" d="M1035 239H1100"/><rect class="box" x="1100" y="205" width="355" height="72"/><text x="1116" y="232" class="h">Pi + USB / storage / cooling</text><text x="1116" y="255" class="t">Include peripheral and peak load</text>
+<rect class="box" x="735" y="313" width="300" height="72"/><text x="751" y="340" class="h">12 V sensor buck</text><text x="751" y="363" class="t">Confirm Kinect adapter label</text>
+<path class="power" d="M1035 347H1100"/><rect class="box" x="1100" y="313" width="355" height="72"/><text x="1116" y="340" class="h">Kinect v1 + adapter</text><text x="1116" y="363" class="t">Independent of arm power</text>
+<rect class="box" x="735" y="421" width="300" height="72"/><text x="751" y="448" class="h">5 V auxiliary → 3.3 V logic</text><text x="751" y="471" class="t">Separate rail; common ground</text>
+<path class="power" d="M1035 455H1100"/><rect class="box" x="1100" y="421" width="355" height="72"/><text x="1116" y="448" class="h">Sensors / audio / indicators</text><text x="1116" y="471" class="t">Verify each module's rated input</text>
+<path class="power" d="M490 320V536"/>
+<rect class="box" x="355" y="536" width="270" height="85"/><text x="372" y="564" class="h">Actuator disconnect</text><text x="372" y="589" class="t">Normally-open DC contactor</text><text x="372" y="609" class="small">Regulated coil / suppression as required</text>
+<rect class="box" x="40" y="530" width="265" height="100"/><text x="57" y="558" class="h">E-stop + manual reset</text><text x="57" y="583" class="t">Hardware permit + watchdog</text><text x="57" y="607" class="t">No automatic restart</text><path class="stop" d="M305 578H355"/>
+<path class="power" d="M625 578H735"/><rect class="box" x="735" y="536" width="300" height="85"/><text x="751" y="564" class="h">Fused arm buck / drivers</text><text x="751" y="589" class="t">6 / 7.4 / 12 V: actuator-dependent</text><text x="751" y="609" class="small">Arms, grippers and pan/tilt</text>
+<path class="power" d="M670 578V672H735"/><rect class="box" x="735" y="638" width="720" height="75"/><text x="751" y="666" class="h">T12 power interface — DO NOT CONNECT UNTIL VALIDATED</text><text x="751" y="690" class="t">14.8 V system / 20 V dock. Preserve OEM battery initially; separate base stop required.</text>
+<text x="40" y="760" class="h">CONTROL &amp; SENSING • blue lines are interfaces, not physical pin assignments</text>
+<rect class="box" x="40" y="790" width="275" height="90"/><text x="57" y="819" class="h">Raspberry Pi / ROS 2</text><text x="57" y="846" class="t">Depth, navigation, perception</text><text x="57" y="868" class="small">Network ↔ base station; SSD via chosen bus</text>
+<path class="data" d="M315 835H430"/><text x="339" y="823" class="small">USB</text>
+<rect class="box" x="430" y="790" width="280" height="90"/><text x="447" y="819" class="h">ESP32 low-level control</text><text x="447" y="846" class="t">Watchdog / feedback / commands</text><text x="447" y="868" class="small">USB powered; no competing 5 V source</text>
+<path class="data" d="M710 820H800"/><rect class="box" x="800" y="790" width="300" height="90"/><text x="817" y="819" class="h">I2C mux / bus interface</text><text x="817" y="846" class="t">Ch0: body IMU · Ch1: head IMU</text><text x="817" y="868" class="small">Ch2–5: optional ToF x4; short cables</text>
+<path class="data" d="M710 855H755V956H800"/>
+<rect class="box" x="800" y="913" width="300" height="90"/><text x="817" y="942" class="h">Actuator signal drivers</text><text x="817" y="969" class="t">PWM PCA9685 OR smart bus</text><text x="817" y="991" class="small">Choose after actuator model selection</text>
+<path class="data" d="M570 880V951H430"/>
+<rect class="box" x="40" y="913" width="390" height="90"/><text x="57" y="942" class="h">Xiaomi T12 OEM controller</text><text x="57" y="969" class="t">Motors, encoders, bump/cliff, LiDAR</text><text x="57" y="991" class="small">API and LiDAR access TBD; OEM gyro may be inaccessible</text>
+<rect class="box" x="1150" y="790" width="305" height="213"/><text x="1167" y="819" class="h">Kinect v1 → Pi USB 2.0</text><text x="1167" y="850" class="t">Correct power/USB adapter</text><text x="1167" y="878" class="t">libfreenect depth + RGB</text><text x="1167" y="906" class="t">Head IMU moves with camera</text><text x="1167" y="934" class="t">Calibrated camera / body frames</text><text x="1167" y="962" class="t">Confirm model and test streams</text><text x="1167" y="989" class="small">No EMEET / Kinect v2 assumptions</text>
+<text x="40" y="1052" class="h">CHARGING • robot Li-ion and station LiFePO4 use different charge profiles</text>
+<rect class="box" x="40" y="1080" width="350" height="90"/><text x="57" y="1109" class="h">Station: 2 × 100 W PV</text><text x="57" y="1136" class="t">MPPT → 8S LiFePO4 / BMS / fuse</text><text x="57" y="1158" class="small">25.6 V / 50 Ah nominal; verify panel cold Voc</text>
+<path class="power" d="M390 1125H440"/><rect class="box" x="440" y="1080" width="370" height="90"/><text x="457" y="1109" class="h">True buck-boost Li-ion charger</text><text x="457" y="1136" class="t">25.2 V CC/CV, 4 A candidate</text><text x="457" y="1158" class="small">Protected dock; current limit + motion interlock</text>
+<path class="power" d="M810 1125H865"/><rect class="box" x="865" y="1080" width="590" height="90"/><text x="882" y="1109" class="h">Charge-source management → robot BMS port</text><text x="882" y="1136" class="t">Dock OR mains OR roof MPPT; no raw parallel outputs</text><text x="882" y="1158" class="small">Combined-current limits, termination, temperature and backfeed protection</text>
+<rect class="box" x="40" y="1200" width="770" height="70"/><text x="57" y="1228" class="h">Optional roof PV 5–6 Wp → matching 6S boost MPPT</text><text x="57" y="1252" class="t">Supplemental energy only; about 0.21 A at 25.2 V for 6 W and 90% efficiency</text><path class="power" d="M810 1236H1140V1170"/>
+<text x="40" y="1320" class="h">Runtime estimate: 266 Wh × 0.80 usable × 0.87 efficiency ÷ load watts</text><text x="40" y="1350" class="t">28 W → 6.61 h · 40 W → 4.63 h · 60 W → 3.09 h. Measure real loads and peaks; six hours is not yet verified.</text><text x="40" y="1387" class="small">Read README.md for all 32 BOM corrections and source links. Editable details: underbot_power / underbot_connections / underbot_charging.kicad_sch</text>
+</svg>

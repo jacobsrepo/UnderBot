@@ -1,0 +1,268 @@
+60W DIN Rail Type DC-DC Converter               DDR-60 series
+
+                                                                                            User's Manual
+
+                                                                                                Click Me
+
+    UL62368-1 AS/NZS62368-1 TPTC004 IEC62368-1   
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+±
+                                                 
+
+                                                        https://www.meanwell.com/serviceGTIN.aspx
+
+
+
+
+
+
+
+ 
+
+    
+   
+
+    
+    
+    
+    
+
+ 
+          
+
+                                         
+                                         :
+                                         
+                                         
+
+                                                File Name:DDR-60-SPEC 2026-03-31
+                   60W DIN Rail Type DC-DC Converter                                                                 DDR-60 series
+
+SPECIFICATION
+
+MODEL                           DDR-60G-5 DDR-60G-12 DDR-60G-15 DDR-60G-24 DDR-60L-5 DDR-60L-12 DDR-60L-15 DDR-60L-24
+
+          DC VOLTAGE            5V               12V        15V                      24V                5V           12V               15V               24V
+                                                 5A         4A                       2.5A               12A          5A                4A                2.5A
+          RATED CURRENT         10.8A            0 ~ 5A     0 ~ 4A                   0 ~ 2.5A           0 ~ 12A      0 ~ 5A            0 ~ 4A            0 ~ 2.5A
+                                                 60W        60W                      60W                60W          60W               60W               60W
+          CURRENT RANGE         0 ~ 10.8A        75mVp-p    75mVp-p                  100mVp-p           60mVp-p      75mVp-p           75mVp-p           100mVp-p
+                                                 9 ~ 13.2V  13.5 ~ 16.5V             21.6 ~ 28V         4.5 ~ 5.5V   9 ~ 13.2V         13.5 ~ 16.5V      21.6 ~ 28V
+          RATED POWER           54W              ±2.0%      ±2.0%                    ±2.0%              ±2.0%        ±2.0%             ±2.0%             ±2.0%
+                                                 ±0.5%      ±0.5%                    ±0.5%              ±0.5%        ±0.5%             ±0.5%             ±0.5%
+OUTPUT    RIPPLE & NOISE (max.) Note.2 60mVp-p
+
+          VOLTAGE ADJ. RANGE    4.5 ~ 5.5V
+
+          VOLTAGE TOLERANCE Note.3 ±2.0%
+
+          LINE REGULATION       ±0.5%
+
+          LOAD REGULATION       ±1.5%            ±0.5%      ±0.5%                    ±0.5%              ±1.5%        ±0.5%             ±0.5%             ±0.5%
+
+          SETUP, RISE TIME      120ms, 85ms at full load
+
+          HOLD UP TIME (Typ.)   G-type: 5ms@24Vdc input                                                 L-type: 10ms@48Vdc input
+
+          EXTERNAL CAPACITANCE  6800F            4700F      3300F                    2200F              6800F        4700F             3300F             2200F
+          LOAD (Max.)
+
+          VOLTAGE RANGE Note.4 9 ~ 36Vdc                                                                18 ~ 75Vdc
+
+          EFFICIENCY (Typ.)     87.5%            91%        91%                      91%                87.5%        91%               92%               92%
+
+INPUT
+
+          DC CURRENT (Typ.)     3A /24Vdc                                                               1.5A /48Vdc
+
+          INRUSH CURRENT (Typ.) 20A /24Vdc                                                              20A /48Vdc
+
+          OVERLOAD              105 ~ 135% rated output power
+                                Protection type : Constant current limiting, recovers automatically after fault condition is removed
+
+PROTECTION                      5.75 ~ 7V        13.8 ~ 16.2V 17.25 ~ 20.25V 28.8 ~ 34V                 5.75 ~ 7V    13.8 ~ 16.2V 17.25 ~ 20.25V 28.8 ~ 34V
+               OVER VOLTAGE
+                                Protection type : Shut down o/p voltage, re-power on to recover
+
+          REVERSE POLARITY      By internal MOSFET, no damage, recovers automatically after fault condition removed
+
+                                                24Vin (G-type):Power ON9V , OFF8.5V
+          UNDER VOLTAGE LOCKOUT
+
+                                                48Vin (L-type):Power ON18V , OFF17V
+
+          WORKING TEMP.         -40 ~ +85 (Refer to "Derating Curve")
+
+          WORKING HUMIDITY      5 ~ 95% RH non-condensing
+
+ENVIRONMENT STORAGE TEMP., HUMIDITY -40 ~ +85, 5 ~ 95% RH non-condensing
+
+          TEMP. COEFFICIENT     ±0.03%/ (0 ~60)
+          VIBRATION             Component:10 ~ 500Hz, 2G 10min./1cycle, 60min. each along X, Y, Z axes; Mounting: Compliance to IEC60068-2-6
+
+          OPERATING ALTITUDE    5000 meters
+          SAFETY STANDARDS      IEC 62368-1, UL 62368-1, AS/NZS 62368-1, EAC TP TC 004 approved
+          WITHSTAND VOLTAGE     I/P-O/P:4KVdc
+
+          ISOLATION RESISTANCE I/P-O/P>100M Ohms / 500Vdc / 25/ 70% RH
+
+                                Parameter                                            Standard                       Test Level / Note
+
+                                Conducted                                            BS EN/EN55032                  Class A
+
+          EMC EMISSION          Radiated                                             BS EN/EN55032                  Class A for 1m I/O cable , Class B for 30cm I/O cable
+                                                                                                                    -----
+SAFETY &                        Voltage Flicker                                      BS EN/EN61000-3-3
+EMC                                                                                                                 Test Level / Note
+(Note 5)                        BS EN/EN55035 , BS EN/EN61000-6-2(BS EN/EN50082-2)
+
+                                Parameter                                            Standard
+
+                                ESD                                                  BS EN/EN61000-4-2              Level 3, 8KV air ; Level 3, 6KV contact; criteria A
+
+                                Radiated                                             BS EN/EN61000-4-3              Level 3, 10V/m ; criteria A
+
+          EMC IMMUNITY          EFT / Burst                                          BS EN/EN61000-4-4              Level 3, 2KV ; criteria A
+                                Surge                                                BS EN/EN61000-4-5              Level 3, 1KV/Line-Line ; criteria A
+
+                                Conducted                                            BS EN/EN61000-4-6              Level 3, 10V ; criteria A
+
+                                Magnetic Field                                       BS EN/EN61000-4-8              Level 4, 30A/m ; criteria A
+
+          MTBF                  3261.6K hrs min. Telcordia SR-332 (Bellcore) ; 611.1K hrs min. MIL-HDBK-217F (25)
+
+OTHERS DIMENSION                52.5*90*54.5mm (W*H*D)
+
+          PACKING               216g; 60pcs/14Kg/0.97CUFT
+
+NOTE      
+          
+          
+          
+          
+          
+          (as available on https://www.meanwell.com//Upload/PDF/EMI_statement_en.pdf )
+          
+          https://www.meanwell.com/serviceDisclaimer.aspx
+
+                                                                                                                                       File Name:DDR-60-SPEC 2026-03-31
+               60W DIN Rail Type DC-DC Converter                                                                                         DDR-60 series
+
+Block Diagram
+
+               REVERSE               EMI                                   POWER                                     RECTIFIERS                                                     fosc : 130KHz
+                                    FILTER                               SWITCHING                                         &
+I/P            POLARITY                                                                                                                                                      +Vo
+                                                                                                                        FILTER                                               -Vo
+
+                UNDER                                        O.L.P.        PWM                                                DETECTION
+               VOLTAGE                                                   CONTROL                                                CIRCUIT
+               LOCKOUT
+                                                                                                                              O.V.P.
+
+Derating Curve                                                                                                       DDR-60G-12/15/24
+        DDR-60G-5
+
+LOAD (%)  100                                                                                              LOAD (%)  100
+
+                                            18Vdc input                                                              85
+          80                                                                                                                                                  18Vdc input
+          75
+                                                                                                                     70
+          60
+                                                18Vdc input                                                          55
+                                                                                                                                                                18Vdc input
+           50
+                                                                                                                      35
+           35
+
+LOAD (%)      -40 -30 -20 -10 0 10 20 30 40 50 60 70 80 85                                                 LOAD (%)     -40 -30 -20 -10 0 10 20 30 40 50 60 70 80 85
+                                                                                               (VERTICAL)                                                                                                 (VERTICAL)
+
+                                 AMBIENT TEMPERATURE ()                                                                                     AMBIENT TEMPERATURE ()
+
+            DDR-60L-5                                                                                                  DDR-60L-12/15/24
+
+          100                                                                                                        100
+          90
+          80                                                                                                         70
+                                                                                                                     50
+                                            36Vdc input                                                              35
+          70
+          60
+
+                                                36Vdc input
+          50
+
+           35
+
+          -40 -30 -20 -10 0 10 20 30 40 50 60 70 80 85                                                               -40 -30 -20 -10 0 10 20 30 40 50 60 70 80 85
+                                                                                           (VERTICAL)                                                                                                 (VERTICAL)
+
+                              AMBIENT TEMPERATURE ()                                                                                     AMBIENT TEMPERATURE ()
+
+Output derating VS input voltage
+
+          100
+
+          90
+          85
+
+          75
+
+                         DDR-60L-12/15/24
+
+          60             DDR-60L-5
+
+LOAD (%)                 DDR-60G-12/15/24
+
+          40             DDR-60G-5
+
+          20
+
+G-type: 9 12       18    24                                  30      36
+
+L-type: 18 24      36    48                                  60      75
+
+                         INPUT VOLTAGE
+
+                                                                                                                                                                             File Name:DDR-60-SPEC 2026-03-31
+              60W DIN Rail Type DC-DC Converter                                      DDR-60 series
+
+Mechanical Specification                                                                          Case No. DDR-60
+
+(Unit: mm , tolerance ± 1mm)                                                           58.4
+                                                                                       54.5
+
+                  52.5
+           1234
+
+Power LED
+
+                                                       90
+                                                                  63.65
+                                                                          45.15
+
+           56
+
+                                                                                 35
+
+ADMISSIBLE DIN-RAIL:TS35/7.5 OR TS35/15
+
+Pin No.      Assignment
+ 1,2       DC output -Vo
+ 3,4       DC output +Vo
+  5        DC input +Vin
+  6        DC input -Vin
+
+Installation Manual
+
+Please refer to : http://www.meanwell.com/manual.html
+
+                                                                                     File Name:DDR-60-SPEC 2026-03-31
+

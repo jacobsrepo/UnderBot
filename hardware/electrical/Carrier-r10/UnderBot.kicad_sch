@@ -1,0 +1,7 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 28d6ab5c-ba8e-504d-a8f6-662666777702) (paper "A3") (lib_symbols)
+(sheet (at 30 55) (size 185 45) (stroke (width 0.254) (type default)) (fill (color 0 0 0 0)) (uuid 0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d)
+(property "Sheetname" "Converter carrier circuit r10" (at 30 53 0) (effects (font (size 1.5 1.5)) (justify left bottom)))
+(property "Sheetfile" "Carrier.kicad_sch" (at 30 102 0) (effects (font (size 1.5 1.5)) (justify left top)))
+(instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702" (page "2")))))
+(text "NOCO + T12 / CONVERTER CARRIER / MECHANICAL & ELECTRICAL REVIEW" (at 20 25 0) (effects (font (size 2 2)) (justify left top)) (uuid c0152e7c-a986-52b6-9fa3-d20b99251a3f))
+(sheet_instances (path "/" (page "1"))) (embedded_fonts no))

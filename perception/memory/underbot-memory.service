@@ -1,0 +1,17 @@
+[Unit]
+Description=UnderBot PostgreSQL memory synchronization
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=underbot
+WorkingDirectory=/home/underbot/UnderBot/perception
+ExecStart=/home/underbot/UnderBot/perception/.venv/bin/python -m memory.cli --config .private/robot.json sync
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

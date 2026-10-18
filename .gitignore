@@ -12,3 +12,19 @@ dist/
 *.pem
 *.key
 .DS_Store
+
+# Local tools, CAD session state and reproducible upstream downloads
+.pdf-tools/
+check-config/
+*.kicad_prl
+*.lck
+navigation/sample-map-planning/
+navigation/sample-map-planning.zip
+hardware/electrical/adeept-v4.zip
+# Runtime/private data
+.private/
+*.local.json
+*.sqlite
+*.sqlite3
+*.db
+.history/
