@@ -23,3 +23,5 @@ Additional consolidation checks:
 - Snapshot source trees matched upstream exactly before the documented website path adaptation. Original commits are preserved in merge ancestry.
 
 Model validator reports from this run are stored in the local consolidation backup folder. Historical per-model reports remain unmodified. The validators need an activated Pixi environment for numerical-library DLLs on this PC.
+
+Final checks: 182 Python/FreeCAD sources parsed; all five imported snapshots retained every original file with only the two documented website adaptations. The navigation demo initialized successfully on isolated ROS domain 221 with its bundled 200 x 200 map and two landmarks. No live controller was connected.
