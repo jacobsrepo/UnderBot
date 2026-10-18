@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Cortex - AI Studio</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css?t=v500">
+</head>
+<body class="mode-studio">
+    
+    <!-- Floating Mini Companion HUD (Always-on-Top Mode) -->
+    <div class="mini-hud-widget" id="mini-hud-widget" style="display: none;">
+        <div class="mini-hud-left">
+            <div class="mini-status-dot" id="mini-status-dot"></div>
+            <span class="mini-title">CORTEX</span>
+            <span class="mini-engine-tag" id="mini-engine-tag">Coder Core</span>
+            <canvas id="mini-waveform-canvas" width="50" height="14"></canvas>
+        </div>
+        <div class="mini-hud-right">
+            <button class="mini-ptt-btn" id="btn-mini-mute" title="Toggle Mute">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </button>
+            <button class="mini-expand-btn" id="btn-expand-studio" title="Expand Full Studio">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Tactical Studio Application Layout -->
+    <div class="app-layout" id="main-studio-layout">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand">
+                    <span class="brand-title">CORTEX</span>
+                    <span class="brand-badge">AI STUDIO</span>
+                </div>
+            </div>
+
+            <!-- Central Live Telemetry Badge -->
+            <div class="header-center">
+                <div class="engine-telemetry-badge" id="engine-telemetry-pill">
+                    <span class="status-dot online" id="status-dot"></span>
+                    <span class="status-model-name" id="status-model-name">Coder & Tool Engine</span>
+                    <span class="status-divider">|</span>
+                    <span class="status-state-text" id="status-state-text">Ready (Tactical Mode)</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <!-- Dedicated Mute / Unmute Button -->
+                <button class="control-btn" id="btn-toggle-mute" title="Mute / Unmute Microphone">
+                    <svg id="icon-mic-unmuted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    <svg id="icon-mic-muted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    <span id="label-mute-state">Mute</span>
+                </button>
+
+                <!-- Mini HUD Toggle -->
+                <button class="control-btn" id="btn-toggle-mini-hud" title="Switch to Always-On-Top Mini Companion HUD">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                    <span>Mini HUD</span>
+                </button>
+
+                <!-- Hardware Drawer Toggle -->
+                <button class="control-btn" id="btn-toggle-hardware" title="Arduino & ESP Hardware Manager">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                    <span>Hardware</span>
+                </button>
+
+                <button class="control-btn" id="btn-network-connect" title="Connect other devices on Wi-Fi">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    <span>LAN</span>
+                </button>
+
+                <button class="control-btn" id="btn-open-settings" title="Preferences">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+
+                <button class="control-btn btn-danger" id="btn-stop-system" title="Terminate all server processes and close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="app-main">
+            
+            <!-- Left: Multimodal Vision Panel (Screen vs Camera) -->
+            <section class="panel video-panel">
+                <div class="panel-topbar">
+                    <div class="camera-controls-left">
+                        <div class="tabs">
+                            <button class="tab-item active" id="tab-screen">Desktop Screen</button>
+                            <button class="tab-item" id="tab-cam">Camera Feed</button>
+                        </div>
+
+                        <!-- Camera Device Selector -->
+                        <select id="browser-camera-select" class="dropdown-clean" style="display: none;" title="Select active camera device">
+                            <option value="">Detecting cameras...</option>
+                        </select>
+                    </div>
+
+                    <div class="telemetry">
+                        <span class="telemetry-tag" id="vision-mode-tag">Screen OCR / Event Feed</span>
+                        <span class="telemetry-tag tag-live" id="active-engine-badge">Coder Core</span>
+                    </div>
+                </div>
+
+                <div class="viewport">
+                    <video id="screen-video" autoplay playsinline muted style="display: block;"></video>
+                    <video id="client-video" autoplay playsinline muted style="display: none;"></video>
+                    <canvas id="hidden-frame-canvas" style="display: none;"></canvas>
+
+                    <div class="viewport-overlay">
+                        <button class="overlay-btn" id="btn-inspect-frame">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <span>Inspect Visual Context</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hardware & Serial Drawer -->
+                <div class="hardware-drawer" id="hardware-drawer" style="display: none;">
+                    <div class="drawer-header">
+                        <span class="drawer-title">Microcontroller & COM Interface</span>
+                        <div class="drawer-actions">
+                            <select id="select-com-ports" class="dropdown-clean">
+                                <option value="">Scanning COM ports...</option>
+                            </select>
+                            <select id="select-baud-rate" class="dropdown-clean" title="Select Baud Rate">
+                                <option value="115200" selected>115200 Baud</option>
+                                <option value="57600">57600 Baud</option>
+                                <option value="19200">19200 Baud</option>
+                                <option value="9600">9600 Baud</option>
+                            </select>
+                            <button class="control-btn" id="btn-refresh-ports">Rescan</button>
+                            <button class="control-btn btn-primary" id="btn-connect-port">Connect</button>
+                        </div>
+                    </div>
+                    <!-- Live Serial Console -->
+                    <div class="serial-console" id="serial-console">
+                        <div class="console-line info">[CORTEX] Ready to stream microcontroller telemetry or flash firmware.</div>
+                    </div>
+                    <div class="serial-input-row">
+                        <input type="text" id="serial-send-input" class="text-input" placeholder="Send serial command (e.g., RELAY_ON, 90)...">
+                        <button class="control-btn" id="btn-send-serial">Send</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right: Conversational Core & Action Feed -->
+            <section class="panel transcript-panel">
+                <div class="panel-topbar">
+                    <span class="topbar-title">Mission Log & Actions</span>
+                    
+                    <div class="audio-status-wrap">
+                        <span class="audio-label active" id="audio-status-label">Hands-Free (Active)</span>
+                        <canvas id="audio-waveform-canvas" width="110" height="20"></canvas>
+                    </div>
+                </div>
+
+                <!-- Live Model Diagnostic Confirmation Card -->
+                <div class="model-diagnostic-card" id="model-diagnostic-card">
+                    <div class="diagnostic-row">
+                        <span class="diag-label">Active Core:</span>
+                        <span class="diag-value text-accent" id="diag-engine-name">Coder & Tool Engine (Decoupled)</span>
+                    </div>
+                    <div class="diagnostic-row">
+                        <span class="diag-label">Sensory Stream:</span>
+                        <span class="diag-value" id="diag-sensory-mode">RapidOCR Pre-Filter (Zero-VLM Overhead)</span>
+                    </div>
+                    <div class="diagnostic-row">
+                        <span class="diag-label">Status:</span>
+                        <span class="diag-badge" id="diag-status-badge">ONLINE & READY</span>
+                    </div>
+                </div>
+
+                <!-- Chat & Action Timeline -->
+                <div class="transcript-feed" id="transcript-feed">
+                    <div class="chat-bubble assistant">
+                        <div class="bubble-header">
+                            <span class="bubble-author">CORTEX</span>
+                            <span class="bubble-time">Ready</span>
+                        </div>
+                        <div class="bubble-body">
+                            Dual-engine architecture initialized. Standing by for desktop commands, hardware programming, or screen analysis.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Step-by-Step Action Execution Bar -->
+                <div class="processing-indicator" id="processing-indicator" style="display: none;">
+                    <div class="spinner"></div>
+                    <span id="processing-text">Executing tactical directive...</span>
+                </div>
+
+                <!-- Bottom Controls -->
+                <div class="panel-dock">
+                    <div class="dock-row-controls">
+                        <button class="ptt-button" id="btn-ptt">
+                            <div class="ptt-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                            </div>
+                            <span class="ptt-label" id="ptt-label">Hands-Free Listening ("CORTEX...")</span>
+                        </button>
+                    </div>
+
+                    <div class="input-container">
+                        <input type="text" id="text-input" class="text-input" placeholder="Give command (e.g. 'minimize all windows', 'program arduino nano')..." autocomplete="off">
+                        <button id="btn-send" class="btn-send" title="Send command">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Safety Confirmation Modal -->
+        <div class="modal-backdrop" id="modal-safety" style="display: none;">
+            <div class="modal-card safety-card">
+                <div class="modal-header">
+                    <h3 class="modal-title" style="color: var(--accent-red);">⚠️ Security Guardrail Notice</h3>
+                    <button class="modal-close" id="btn-close-safety">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p id="safety-modal-msg" style="color: var(--text-medium); font-size: 0.9rem; line-height: 1.4;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="control-btn" id="btn-safety-cancel">Cancel Operation</button>
+                    <button class="control-btn btn-danger" id="btn-safety-confirm">Confirm & Proceed</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network / Mobile Pairing Modal -->
+        <div class="modal-backdrop" id="modal-network" style="display: none;">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3 class="modal-title">Connect Mobile / Secondary Device</h3>
+                    <button class="modal-close" id="btn-close-network">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: var(--text-medium); font-size: 0.85rem;">
+                        Scan the QR code with your phone or open the link below on any device on your Wi-Fi:
+                    </p>
+                    <div style="display: flex; justify-content: center; margin: 10px 0;">
+                        <img id="qr-code-image" src="" alt="Scan QR Code" style="background: white; padding: 10px; border-radius: 8px; max-width: 180px; height: auto;">
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Network Address</label>
+                        <div style="display: flex; gap: 6px;">
+                            <input type="text" id="network-url-input" class="text-input full" readonly style="font-family: var(--font-mono); font-size: 0.82rem;">
+                            <button class="control-btn" id="btn-copy-network-url" style="white-space: nowrap;">Copy</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="control-btn btn-primary" id="btn-close-network-footer">Done</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Modal -->
+        <div class="modal-backdrop" id="modal-preferences" style="display: none;">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3 class="modal-title">CORTEX Preferences</h3>
+                    <button class="modal-close" id="btn-modal-close">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-field">
+                        <label class="form-label">Voice Preset (Male)</label>
+                        <select id="voice-select" class="dropdown-clean full">
+                            <option value="guy">Guy (Tactical & Direct)</option>
+                            <option value="christopher">Christopher (Authoritative)</option>
+                            <option value="eric">Eric (Conversational)</option>
+                            <option value="ryan">Ryan (Precise)</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">LLM API Endpoint</label>
+                        <input type="text" id="llm-endpoint-input" class="text-input full" placeholder="http://localhost:11434/v1" style="font-family: var(--font-mono); font-size: 0.82rem;">
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">LLM Model Name</label>
+                        <input type="text" id="llm-model-input" class="text-input full" placeholder="qwen2.5-coder:7b" style="font-family: var(--font-mono); font-size: 0.82rem;">
+                    </div>
+
+                    <!-- Neural Model Hub (Visual Coder & Automation Master) -->
+                    <div class="form-field model-hub-section">
+                        <div class="section-title-row">
+                            <label class="form-label" style="margin-bottom: 0;">Neural Model Hub (Visual Coder & Automation Models)</label>
+                            <button class="control-btn btn-xs" id="btn-refresh-models" title="Refresh local models">Rescan</button>
+                        </div>
+                        <div class="model-cards-grid" id="model-cards-container">
+                            <!-- Populated dynamically via app.js -->
+                            <div class="model-loading-placeholder">Scanning local AI models...</div>
+                        </div>
+
+                        <!-- Live Download Progress Bar -->
+                        <div class="download-progress-box" id="download-progress-box" style="display: none;">
+                            <div class="progress-info-row">
+                                <span class="progress-model-name" id="progress-model-name">Pulling model...</span>
+                                <span class="progress-percent" id="progress-percent">0%</span>
+                            </div>
+                            <div class="progress-bar-track">
+                                <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="progress-status-msg" id="progress-status-msg">Downloading layers from repository...</div>
+                        </div>
+
+                        <!-- Custom Model Pull Input -->
+                        <div class="custom-pull-row">
+                            <input type="text" id="custom-pull-input" class="text-input" placeholder="Pull custom model (e.g. codellama, mistral:7b)...">
+                            <button class="control-btn btn-primary" id="btn-pull-custom">Pull</button>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label">Cognitive Pipeline</label>
+                        <input type="text" class="text-input full" value="Decoupled Visual Tool Coder + On-Demand Multimodal Eyes" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="control-btn" id="btn-modal-cancel">Cancel</button>
+                    <button class="control-btn btn-primary" id="btn-modal-save">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shutdown Modal -->
+        <div class="modal-backdrop" id="modal-shutdown" style="display: none;">
+            <div class="modal-card shutdown-card">
+                <div class="modal-header">
+                    <h3 class="modal-title">CORTEX Standby</h3>
+                </div>
+                <div class="modal-body">
+                    <p class="shutdown-msg">CORTEX subsystems and neural engines have powered down cleanly.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <audio id="tts-audio-element" preload="auto"></audio>
+
+    <script src="/static/audio_visualizer.js?t=v500"></script>
+    <script src="/static/app.js?t=v500"></script>
+</body>
+</html>
