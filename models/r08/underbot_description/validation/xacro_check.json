@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "urdf_sha256": "805ae58b87af3d3030c201def6d7126b09fd0e907e6bebbdabf9e0db6059e3c7",
+  "checks": [
+    "Python and FreeCAD macro syntax only",
+    "Xacro semantic round-trip",
+    "ROS/portable/Gazebo link and joint equivalence",
+    "Mesh resolution and metric scale in all3URDF profiles",
+    "14commands/2passive/2mimic actuation map",
+    "Package XML parsing"
+  ],
+  "syntax_files": 9,
+  "links": 23,
+  "joints": 22,
+  "native_applications_executed": false
+}

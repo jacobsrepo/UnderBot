@@ -1,0 +1,5010 @@
+{
+  "status": "PASS",
+  "file": "models/Underbot_R09_textured.glb",
+  "sha256": "ad09fdc7719950058ca5b369c6a7fb44c2ef13c3dfb728ec682a57cd37aab64a",
+  "bytes": 25471748,
+  "audit_method": "Independent CPU parser reads GLB JSON/BIN, PNG pixels and typed vertex/index buffers; no Blender builder code is executed.",
+  "glb_version": 2,
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "counts": {
+    "nodes": 273,
+    "link_frames": 23,
+    "mesh_nodes": 250,
+    "meshes": 250,
+    "materials": 11,
+    "textures": 18,
+    "embedded_images": 18,
+    "triangles": 223360
+  },
+  "all_resources_embedded": true,
+  "excluded_studio_content": [
+    "lights",
+    "camera",
+    "floor",
+    "background"
+  ],
+  "coordinate_convention": "glTF metre coordinates, Y up; geometry is rotated from ROS x-forward/y-left/z-up.",
+  "assembled_bounds_gltf_m": [
+    [
+      -0.27900001406669617,
+      -1.5518448095996895e-08,
+      -0.3567244116721347
+    ],
+    [
+      0.27900001406669617,
+      0.7779999598860741,
+      0.3567244116721347
+    ]
+  ],
+  "polycarbonate": {
+    "transmission": 0.9399999976158142,
+    "ior": 1.5859999656677246,
+    "roughness": 0.054999999701976776,
+    "alpha": 1,
+    "uses_opaque_texture": false
+  },
+  "material_usage": {
+    "black_abs": 37,
+    "black_painted_aluminium": 44,
+    "brushed_aluminium": 131,
+    "status_led_green": 4,
+    "pcb_green": 3,
+    "optical_black_glass": 4,
+    "matte_black_vinyl": 14,
+    "worx_orange": 3,
+    "polycarbonate": 5,
+    "control_red": 2,
+    "tire_rubber": 3
+  },
+  "texture_checks": [
+    {
+      "material": "matte_black_vinyl",
+      "role": "basecolor",
+      "image_index": 13,
+      "embedded_image_sha256": "4db373e44bf239b6fb6163eeedc17085e7f4f35da613d53cc1c5932084a9f0ab",
+      "source_image_sha256": "4db373e44bf239b6fb6163eeedc17085e7f4f35da613d53cc1c5932084a9f0ab",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "matte_black_vinyl",
+      "role": "metallicroughness",
+      "image_index": 14,
+      "embedded_image_sha256": "6a575ada06343166754cc9ac201a34a2e79185e164d32ddda7d10fa5fdab763f",
+      "source_image_sha256": "6a575ada06343166754cc9ac201a34a2e79185e164d32ddda7d10fa5fdab763f",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "matte_black_vinyl",
+      "role": "normal",
+      "image_index": 12,
+      "embedded_image_sha256": "c368abc3d6a034c65ffde0c886956c3ea3b55f962eebc4c33411ea9aaa4fb56a",
+      "source_image_sha256": "c368abc3d6a034c65ffde0c886956c3ea3b55f962eebc4c33411ea9aaa4fb56a",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0,
+      "maximum_normal_unit_length_error": 0.0007532835006713867
+    },
+    {
+      "material": "black_painted_aluminium",
+      "role": "basecolor",
+      "image_index": 4,
+      "embedded_image_sha256": "cc61bc70bf8fc6fb586d40613b0631cde66e1bfe405aba736448f4e8a7eb3f4f",
+      "source_image_sha256": "cc61bc70bf8fc6fb586d40613b0631cde66e1bfe405aba736448f4e8a7eb3f4f",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "black_painted_aluminium",
+      "role": "metallicroughness",
+      "image_index": 5,
+      "embedded_image_sha256": "ec260ec5cf07b015668f588e7e985c2543a3197c97f77722f99482fd3bde7d17",
+      "source_image_sha256": "ec260ec5cf07b015668f588e7e985c2543a3197c97f77722f99482fd3bde7d17",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "black_painted_aluminium",
+      "role": "normal",
+      "image_index": 3,
+      "embedded_image_sha256": "863527c57e03886854bcf9f0ac2302856b500718414dca14ded6324fa332fc6b",
+      "source_image_sha256": "863527c57e03886854bcf9f0ac2302856b500718414dca14ded6324fa332fc6b",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0,
+      "maximum_normal_unit_length_error": 0.0002614259719848633
+    },
+    {
+      "material": "tire_rubber",
+      "role": "basecolor",
+      "image_index": 16,
+      "embedded_image_sha256": "a693b116ad6078b48dd7670ecdc310881ba1da152baafbdc0b319294d81f6d2b",
+      "source_image_sha256": "a693b116ad6078b48dd7670ecdc310881ba1da152baafbdc0b319294d81f6d2b",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "tire_rubber",
+      "role": "metallicroughness",
+      "image_index": 17,
+      "embedded_image_sha256": "016a208e2558a6a654b1afb2919db7862884f2ed95db2cb7c53aca51efc054a0",
+      "source_image_sha256": "016a208e2558a6a654b1afb2919db7862884f2ed95db2cb7c53aca51efc054a0",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "tire_rubber",
+      "role": "normal",
+      "image_index": 15,
+      "embedded_image_sha256": "c7662fcb268c482002a2b0a0d1e4a54abf37279d985b242ab18987b8aa1336d4",
+      "source_image_sha256": "c7662fcb268c482002a2b0a0d1e4a54abf37279d985b242ab18987b8aa1336d4",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0,
+      "maximum_normal_unit_length_error": 0.0009990930557250977
+    },
+    {
+      "material": "brushed_aluminium",
+      "role": "basecolor",
+      "image_index": 7,
+      "embedded_image_sha256": "41a089816c2c9d2471db5f5c558d556de2b2c913f3e44219d0ce87e700dffc73",
+      "source_image_sha256": "41a089816c2c9d2471db5f5c558d556de2b2c913f3e44219d0ce87e700dffc73",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "brushed_aluminium",
+      "role": "metallicroughness",
+      "image_index": 8,
+      "embedded_image_sha256": "f8e89c988151557445bc13613b23fc7d17e1aebd4d3766cc73ab7726948eb225",
+      "source_image_sha256": "f8e89c988151557445bc13613b23fc7d17e1aebd4d3766cc73ab7726948eb225",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "brushed_aluminium",
+      "role": "normal",
+      "image_index": 6,
+      "embedded_image_sha256": "3b1623538782043af105f44dff3b0ff5b228ce5cd83dcefde63939c185d02226",
+      "source_image_sha256": "3b1623538782043af105f44dff3b0ff5b228ce5cd83dcefde63939c185d02226",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0,
+      "maximum_normal_unit_length_error": 0.00019991397857666016
+    },
+    {
+      "material": "black_abs",
+      "role": "basecolor",
+      "image_index": 1,
+      "embedded_image_sha256": "f266444a2b4afa673639a138409a8e9b0155dcb0959267c6aa69758f3ffd6492",
+      "source_image_sha256": "f266444a2b4afa673639a138409a8e9b0155dcb0959267c6aa69758f3ffd6492",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "black_abs",
+      "role": "metallicroughness",
+      "image_index": 2,
+      "embedded_image_sha256": "54d963c1f7f30ae751a3c2f136d8cf084863c875658210c7962b4f64cee7ab8c",
+      "source_image_sha256": "54d963c1f7f30ae751a3c2f136d8cf084863c875658210c7962b4f64cee7ab8c",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "black_abs",
+      "role": "normal",
+      "image_index": 0,
+      "embedded_image_sha256": "f8c9e240458863ed30511af20abbd41b75baed6b6e278d9b5cc2e1d81573078e",
+      "source_image_sha256": "f8c9e240458863ed30511af20abbd41b75baed6b6e278d9b5cc2e1d81573078e",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0,
+      "maximum_normal_unit_length_error": 0.0002614259719848633
+    },
+    {
+      "material": "pcb_green",
+      "role": "basecolor",
+      "image_index": 10,
+      "embedded_image_sha256": "72b865da602d4f4551ee5d61dbcdacd24bc5836123e87e848191fc73fc296505",
+      "source_image_sha256": "72b865da602d4f4551ee5d61dbcdacd24bc5836123e87e848191fc73fc296505",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "pcb_green",
+      "role": "metallicroughness",
+      "image_index": 11,
+      "embedded_image_sha256": "664605245c9033cd7af1505fbbcaffc96f2202d9cf6879c3ea55b100ab049a07",
+      "source_image_sha256": "664605245c9033cd7af1505fbbcaffc96f2202d9cf6879c3ea55b100ab049a07",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0
+    },
+    {
+      "material": "pcb_green",
+      "role": "normal",
+      "image_index": 9,
+      "embedded_image_sha256": "d273698841b2423d48387a426f25a6dcdd04414793e91654ae12abef4dbf6b13",
+      "source_image_sha256": "d273698841b2423d48387a426f25a6dcdd04414793e91654ae12abef4dbf6b13",
+      "byte_identical": true,
+      "decoded_max_channel_error_8bit": 0,
+      "decoded_mean_channel_error_8bit": 0.0,
+      "maximum_normal_unit_length_error": 1.537799835205078e-05
+    }
+  ],
+  "mesh_checks": [
+    {
+      "link": "base_link",
+      "part": "active_cooler",
+      "material": "black_abs",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19913160800933838,
+        0.803254246711731
+      ],
+      "uv_max": [
+        0.19913160800933838,
+        1.196745753288269
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73246603952505,
+      "uv_to_geometry_area_ratio_max": 100.0000199213386,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "adapter_spacer_-0.16000000000000003_-0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.12413163483142853,
+        0.878254234790802
+      ],
+      "uv_max": [
+        0.12413163483142853,
+        1.1217457056045532
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73440804085966,
+      "uv_to_geometry_area_ratio_max": 100.00005987623221,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "adapter_spacer_-0.16000000000000003_0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.12413163483142853,
+        0.878254234790802
+      ],
+      "uv_max": [
+        0.12413163483142853,
+        1.1217457056045532
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73440804085966,
+      "uv_to_geometry_area_ratio_max": 100.00005987623221,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "adapter_spacer_0.020000000000000004_-0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.12413163483142853,
+        0.878254234790802
+      ],
+      "uv_max": [
+        0.12413163483142853,
+        1.1217457056045532
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73440804085966,
+      "uv_to_geometry_area_ratio_max": 100.00005987623221,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "adapter_spacer_0.020000000000000004_0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.12413163483142853,
+        0.878254234790802
+      ],
+      "uv_max": [
+        0.12413163483142853,
+        1.1217457056045532
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73440804085966,
+      "uv_to_geometry_area_ratio_max": 100.00005987623221,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "arm_bridge_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9983980059623718,
+        0.40042752027511597
+      ],
+      "uv_max": [
+        0.9983980059623718,
+        1.5995724201202393
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73626235374364,
+      "uv_to_geometry_area_ratio_max": 100.00009157818037,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "arm_bridge_1",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9983980059623718,
+        0.40042752027511597
+      ],
+      "uv_max": [
+        0.9983980059623718,
+        1.5995724201202393
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73626235374364,
+      "uv_to_geometry_area_ratio_max": 100.00009157818037,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "arm_flange_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.4483978748321533,
+        0.5504274368286133
+      ],
+      "uv_max": [
+        0.4483978748321533,
+        1.4495725631713867
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72793940976876,
+      "uv_to_geometry_area_ratio_max": 100.00008841573518,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "arm_flange_1",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.4483978748321533,
+        0.5504274368286133
+      ],
+      "uv_max": [
+        0.4483978748321533,
+        1.4495725631713867
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72793940976876,
+      "uv_to_geometry_area_ratio_max": 100.00008841573518,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "battery_retainer_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.3691449463367462,
+        0.500855028629303
+      ],
+      "uv_max": [
+        0.3691449463367462,
+        1.4991450309753418
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73712928508958,
+      "uv_to_geometry_area_ratio_max": 100.0000044047705,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "battery_retainer_1",
+      "material": "black_painted_aluminium",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.3691449463367462,
+        0.500855028629303
+      ],
+      "uv_max": [
+        0.3691449463367462,
+        1.4991450309753418
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73712928508958,
+      "uv_to_geometry_area_ratio_max": 100.0000044047705,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_-1_-0.16000000000000003_0.505",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_-1_-0.16000000000000003_0.5850000000000001",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_-1_0.020000000000000004_0.505",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_-1_0.020000000000000004_0.5850000000000001",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_1_-0.16000000000000003_0.505",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_1_-0.16000000000000003_0.5850000000000001",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_1_0.020000000000000004_0.505",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "bridge_bolt_1_0.020000000000000004_0.5850000000000001",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.030000001192092896,
+        0.9599999785423279
+      ],
+      "uv_max": [
+        0.030000001192092896,
+        1.0399999618530273
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98627692924276,
+      "uv_to_geometry_area_ratio_max": 100.00709563282835,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "camera_pcb_standoff_-0.025_-0.065",
+      "material": "brushed_aluminium",
+      "vertices": 1628,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.9503999948501587
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.0496000051498413
+      ],
+      "uv_to_geometry_area_ratio_min": 69.94398643634152,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "camera_pcb_standoff_-0.025_0.065",
+      "material": "brushed_aluminium",
+      "vertices": 1628,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.9503999948501587
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.0496000051498413
+      ],
+      "uv_to_geometry_area_ratio_min": 69.94398643634152,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "camera_pcb_standoff_0.005_-0.065",
+      "material": "brushed_aluminium",
+      "vertices": 1628,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.9503999948501587
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.0496000051498413
+      ],
+      "uv_to_geometry_area_ratio_min": 69.94398643634152,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "camera_pcb_standoff_0.005_0.065",
+      "material": "brushed_aluminium",
+      "vertices": 1628,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.9503999948501587
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.0496000051498413
+      ],
+      "uv_to_geometry_area_ratio_min": 69.94398643634152,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "camera_shelf",
+      "material": "black_painted_aluminium",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.7796793580055237,
+        0.22032064199447632
+      ],
+      "uv_max": [
+        0.7796793580055237,
+        1.779679298400879
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74229522682966,
+      "uv_to_geometry_area_ratio_max": 100.00000004241286,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "camera_vertical_bracket_-0.055",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.05839790403842926,
+        0.46910208463668823
+      ],
+      "uv_max": [
+        0.05839790403842926,
+        1.530897855758667
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73604560772585,
+      "uv_to_geometry_area_ratio_max": 100.00001614276873,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "camera_vertical_bracket_0.055",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.05839790403842926,
+        0.46910208463668823
+      ],
+      "uv_max": [
+        0.05839790403842926,
+        1.530897855758667
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73604560772585,
+      "uv_to_geometry_area_ratio_max": 100.00001614276873,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "charge_led_0",
+      "material": "status_led_green",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.029893124476075172,
+        0.9701068997383118
+      ],
+      "uv_max": [
+        0.029893124476075172,
+        1.029893159866333
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72728926911117,
+      "uv_to_geometry_area_ratio_max": 99.99995513871515,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "charge_led_1",
+      "material": "status_led_green",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.029893124476075172,
+        0.9701068997383118
+      ],
+      "uv_max": [
+        0.029893124476075172,
+        1.029893159866333
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72728926911117,
+      "uv_to_geometry_area_ratio_max": 99.99995513871515,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "charge_led_2",
+      "material": "status_led_green",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.029893124476075172,
+        0.9701068997383118
+      ],
+      "uv_max": [
+        0.029893124476075172,
+        1.029893159866333
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72728926911117,
+      "uv_to_geometry_area_ratio_max": 99.99995513871515,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "charge_led_3",
+      "material": "status_led_green",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.029893124476075172,
+        0.9701068997383118
+      ],
+      "uv_max": [
+        0.029893124476075172,
+        1.029893159866333
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72728926911117,
+      "uv_to_geometry_area_ratio_max": 99.99995513871515,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "charging_contact_0.078",
+      "material": "brushed_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.06978625059127808,
+        0.970801055431366
+      ],
+      "uv_max": [
+        0.06978625059127808,
+        1.0291990041732788
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727809376951164,
+      "uv_to_geometry_area_ratio_max": 99.99991132693255,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "charging_contact_0.122",
+      "material": "brushed_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.06978625059127808,
+        0.970801055431366
+      ],
+      "uv_max": [
+        0.06978625059127808,
+        1.0291990041732788
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727809376951164,
+      "uv_to_geometry_area_ratio_max": 99.99991132693255,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "chassis_adapter",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9993587732315063,
+        0.0006412267684936523
+      ],
+      "uv_max": [
+        0.9993587732315063,
+        1.9993587732315063
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73998309138296,
+      "uv_to_geometry_area_ratio_max": 100.00003326151925,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "compute_board",
+      "material": "pcb_green",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.42467936873435974,
+        0.5753206014633179
+      ],
+      "uv_max": [
+        0.42467936873435974,
+        1.4246793985366821
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73836472606637,
+      "uv_to_geometry_area_ratio_max": 100.00000755195771,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "compute_standoff_-0.046000000000000006_-0.035",
+      "material": "brushed_aluminium",
+      "vertices": 1580,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.980107307434082
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.019892692565918
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95422034436184,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "compute_standoff_-0.046000000000000006_0.035",
+      "material": "brushed_aluminium",
+      "vertices": 1580,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.980107307434082
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.019892692565918
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95422034436184,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "compute_standoff_-0.094_-0.035",
+      "material": "brushed_aluminium",
+      "vertices": 1580,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.980107307434082
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.019892692565918
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95422034436184,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "compute_standoff_-0.094_0.035",
+      "material": "brushed_aluminium",
+      "vertices": 1580,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019892698153853416,
+        0.980107307434082
+      ],
+      "uv_max": [
+        0.019892698153853416,
+        1.019892692565918
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95422034436184,
+      "uv_to_geometry_area_ratio_max": 100.34562331786877,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "control_panel",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.7742518782615662,
+        0.22574812173843384
+      ],
+      "uv_max": [
+        0.7742518782615662,
+        1.774251937866211
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73719432229995,
+      "uv_to_geometry_area_ratio_max": 100.0,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "converter",
+      "material": "pcb_green",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.2741316258907318,
+        0.7282542586326599
+      ],
+      "uv_max": [
+        0.2741316258907318,
+        1.2717456817626953
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73389587046231,
+      "uv_to_geometry_area_ratio_max": 100.00001767473498,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cooler_fin_0",
+      "material": "black_painted_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.17483967542648315,
+        0.9701603055000305
+      ],
+      "uv_max": [
+        0.17483967542648315,
+        1.0298396348953247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72697865016476,
+      "uv_to_geometry_area_ratio_max": 100.00003926707348,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cooler_fin_1",
+      "material": "black_painted_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.17483967542648315,
+        0.9701603055000305
+      ],
+      "uv_max": [
+        0.17483967542648315,
+        1.0298396348953247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72697865016476,
+      "uv_to_geometry_area_ratio_max": 100.00003926707348,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cooler_fin_2",
+      "material": "black_painted_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.17483967542648315,
+        0.9701603055000305
+      ],
+      "uv_max": [
+        0.17483967542648315,
+        1.0298396348953247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72697865016476,
+      "uv_to_geometry_area_ratio_max": 100.00003926707348,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cooler_fin_3",
+      "material": "black_painted_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.17483967542648315,
+        0.9701603055000305
+      ],
+      "uv_max": [
+        0.17483967542648315,
+        1.0298396348953247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72697865016476,
+      "uv_to_geometry_area_ratio_max": 100.00003926707348,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cooler_fin_4",
+      "material": "black_painted_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.17483967542648315,
+        0.9701603055000305
+      ],
+      "uv_max": [
+        0.17483967542648315,
+        1.0298396348953247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72697865016476,
+      "uv_to_geometry_area_ratio_max": 100.00003926707348,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cooler_fin_5",
+      "material": "black_painted_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.17483967542648315,
+        0.9701603055000305
+      ],
+      "uv_max": [
+        0.17483967542648315,
+        1.0298396348953247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72697865016476,
+      "uv_to_geometry_area_ratio_max": 100.00003926707348,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cut_to_edge_side_-1",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -1.0243587493896484,
+        0.6274031400680542
+      ],
+      "uv_max": [
+        1.0243587493896484,
+        1.3725968599319458
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73836472606637,
+      "uv_to_geometry_area_ratio_max": 100.0000391039685,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "cut_to_edge_side_1",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -1.0243587493896484,
+        0.6274031400680542
+      ],
+      "uv_max": [
+        1.0243587493896484,
+        1.3725968599319458
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73836472606637,
+      "uv_to_geometry_area_ratio_max": 100.0000391039685,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "display",
+      "material": "optical_black_glass",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19989311695098877,
+        0.8004004955291748
+      ],
+      "uv_max": [
+        0.19989311695098877,
+        1.1995995044708252
+      ],
+      "uv_to_geometry_area_ratio_min": 57.724298613885594,
+      "uv_to_geometry_area_ratio_max": 100.0000024868159,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_door_left_strip",
+      "material": "matte_black_vinyl",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.10959946364164352,
+        0.7026068568229675
+      ],
+      "uv_max": [
+        0.10959946364164352,
+        1.2973930835723877
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72804776761282,
+      "uv_to_geometry_area_ratio_max": 100.00000209043245,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_door_lower",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        -0.8898930549621582
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        2.889893054962158
+      ],
+      "uv_to_geometry_area_ratio_min": 57.682293715871324,
+      "uv_to_geometry_area_ratio_max": 100.00000315502051,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_door_right_strip",
+      "material": "matte_black_vinyl",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.10959946364164352,
+        0.7026068568229675
+      ],
+      "uv_max": [
+        0.10959946364164352,
+        1.2973930835723877
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72804776761282,
+      "uv_to_geometry_area_ratio_max": 100.00000209043245,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_door_upper",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        0.0001068115234375
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        1.9998931884765625
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73849487047366,
+      "uv_to_geometry_area_ratio_max": 100.00001834296798,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -1.4496793746948242,
+        -0.44879841804504395
+      ],
+      "uv_max": [
+        1.4496793746948242,
+        2.448798418045044
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72790329055488,
+      "uv_to_geometry_area_ratio_max": 100.00000369572436,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_-0.02099999999999999",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_-0.041999999999999996",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_-0.063",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_-0.08399999999999999",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_-0.105",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_-0.126",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_0.0",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_0.02100000000000002",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_0.04200000000000001",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_0.063",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_0.08400000000000002",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_0.10500000000000001",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_grille_rib_0.126",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.019679369404911995,
+        0.6753206253051758
+      ],
+      "uv_max": [
+        0.019679369404911995,
+        1.3246793746948242
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73193479423361,
+      "uv_to_geometry_area_ratio_max": 100.00016508968729,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_hinge_0.305",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.06935874372720718,
+        0.8006412386894226
+      ],
+      "uv_max": [
+        0.06935874372720718,
+        1.1993587017059326
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73258498212521,
+      "uv_to_geometry_area_ratio_max": 99.99998842814031,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_hinge_0.525",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.06935874372720718,
+        0.8006412386894226
+      ],
+      "uv_max": [
+        0.06935874372720718,
+        1.1993587017059326
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73258498212521,
+      "uv_to_geometry_area_ratio_max": 99.99998842814031,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "front_latch",
+      "material": "black_abs",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.0596781000494957,
+        0.9403219223022461
+      ],
+      "uv_max": [
+        0.0596781000494957,
+        1.059678077697754
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95056846287717,
+      "uv_to_geometry_area_ratio_max": 100.07206636905227,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "height_adjustment_dial",
+      "material": "worx_orange",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19946351647377014,
+        0.8005365133285522
+      ],
+      "uv_max": [
+        0.19946351647377014,
+        1.1994634866714478
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95199109357473,
+      "uv_to_geometry_area_ratio_max": 100.02682566837028,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "lidar_pedestal",
+      "material": "black_painted_aluminium",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.1791316121816635,
+        0.8232542872428894
+      ],
+      "uv_max": [
+        0.1791316121816635,
+        1.1767457723617554
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73400257173115,
+      "uv_to_geometry_area_ratio_max": 100.00002576569841,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "noco_gb70",
+      "material": "black_abs",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.4941316246986389,
+        -0.10913169384002686
+      ],
+      "uv_max": [
+        0.4941316246986389,
+        2.1091318130493164
+      ],
+      "uv_to_geometry_area_ratio_min": 57.731953886355484,
+      "uv_to_geometry_area_ratio_max": 100.0,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "noco_label",
+      "material": "matte_black_vinyl",
+      "vertices": 192,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.34989312291145325,
+        0.07510673999786377
+      ],
+      "uv_max": [
+        0.34989312291145325,
+        1.9248932600021362
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74181169393198,
+      "uv_to_geometry_area_ratio_max": 100.00000587955914,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "noco_rear_label",
+      "material": "matte_black_vinyl",
+      "vertices": 192,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.34989312291145325,
+        0.07510673999786377
+      ],
+      "uv_max": [
+        0.34989312291145325,
+        1.9248932600021362
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74181169393198,
+      "uv_to_geometry_area_ratio_max": 100.00000587955914,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "noco_tray",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.7795724272727966,
+        0.22160214185714722
+      ],
+      "uv_max": [
+        0.7795724272727966,
+        1.778397798538208
+      ],
+      "uv_to_geometry_area_ratio_min": 57.728459523466356,
+      "uv_to_geometry_area_ratio_max": 100.00009365841703,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_-0.16000000000000003_0.23700000000000002",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_-0.16000000000000003_0.39",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_-0.16000000000000003_0.64",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_-0.16000000000000003_0.673",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_0.020000000000000004_0.23700000000000002",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_0.020000000000000004_0.39",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_0.020000000000000004_0.64",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_-1_0.020000000000000004_0.673",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_-0.16000000000000003_0.23700000000000002",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_-0.16000000000000003_0.39",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_-0.16000000000000003_0.64",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_-0.16000000000000003_0.673",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_0.020000000000000004_0.23700000000000002",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_0.020000000000000004_0.39",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_0.020000000000000004_0.64",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "panel_screw_1_0.020000000000000004_0.673",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.02499999850988388,
+        0.9750000238418579
+      ],
+      "uv_max": [
+        0.02499999850988388,
+        1.024999976158142
+      ],
+      "uv_to_geometry_area_ratio_min": 72.9865470159144,
+      "uv_to_geometry_area_ratio_max": 100.01108205169872,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "polycarbonate_floor_0",
+      "material": "polycarbonate",
+      "vertices": 584,
+      "triangles": 572,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        0.0001068115234375
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        1.9998931884765625
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72440392582021,
+      "uv_to_geometry_area_ratio_max": 100.00000931508914,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "polycarbonate_floor_1",
+      "material": "polycarbonate",
+      "vertices": 584,
+      "triangles": 572,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        0.0001068115234375
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        1.9998931884765625
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72440392582021,
+      "uv_to_geometry_area_ratio_max": 100.00000931508914,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "polycarbonate_floor_2",
+      "material": "polycarbonate",
+      "vertices": 584,
+      "triangles": 572,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        0.0001068115234375
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        1.9998931884765625
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72440392582021,
+      "uv_to_geometry_area_ratio_max": 100.00000931508914,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "polycarbonate_floor_3",
+      "material": "polycarbonate",
+      "vertices": 584,
+      "triangles": 572,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        0.0001068115234375
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        1.9998931884765625
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72440392582021,
+      "uv_to_geometry_area_ratio_max": 100.00000931508914,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "post_-0.16000000000000003_-0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 980,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        -1.499866247177124
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        3.499866247177124
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72337720626988,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "post_-0.16000000000000003_0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 980,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        -1.499866247177124
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        3.499866247177124
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72337720626988,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "post_0.020000000000000004_-0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 980,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        -1.499866247177124
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        3.499866247177124
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72337720626988,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "post_0.020000000000000004_0.09000000000000001",
+      "material": "black_painted_aluminium",
+      "vertices": 980,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        -1.499866247177124
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        3.499866247177124
+      ],
+      "uv_to_geometry_area_ratio_min": 57.72337720626988,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "power_io",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.6491315960884094,
+        0.3508684039115906
+      ],
+      "uv_max": [
+        0.6491315960884094,
+        1.6491315364837646
+      ],
+      "uv_to_geometry_area_ratio_min": 57.731953886355484,
+      "uv_to_geometry_area_ratio_max": 100.00001964505051,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_0_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_0_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_1_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_1_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_2_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_2_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_3_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_x_3_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_0_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_0_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_1_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_1_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_2_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_2_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_3_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rail_y_3_1",
+      "material": "black_painted_aluminium",
+      "vertices": 992,
+      "triangles": 956,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.09986639767885208,
+        0.20013362169265747
+      ],
+      "uv_max": [
+        0.09986639767885208,
+        1.7998664379119873
+      ],
+      "uv_to_geometry_area_ratio_min": 57.71928126192801,
+      "uv_to_geometry_area_ratio_max": 100.00005925520132,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rear_door_closed",
+      "material": "polycarbonate",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        -1.2998931407928467
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        3.2998931407928467
+      ],
+      "uv_to_geometry_area_ratio_min": 57.682293715871324,
+      "uv_to_geometry_area_ratio_max": 100.0000029826182,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rear_hinge_0.305",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.06935874372720718,
+        0.8006412386894226
+      ],
+      "uv_max": [
+        0.06935874372720718,
+        1.1993587017059326
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73258498212521,
+      "uv_to_geometry_area_ratio_max": 99.99998842814031,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rear_hinge_0.525",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.06935874372720718,
+        0.8006412386894226
+      ],
+      "uv_max": [
+        0.06935874372720718,
+        1.1993587017059326
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73258498212521,
+      "uv_to_geometry_area_ratio_max": 99.99998842814031,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "rear_latch",
+      "material": "black_abs",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.0596781000494957,
+        0.9403219223022461
+      ],
+      "uv_max": [
+        0.0596781000494957,
+        1.059678077697754
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95056846287717,
+      "uv_to_geometry_area_ratio_max": 100.07206636905227,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_-1_front_strip",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22489312291145325,
+        0.4501068592071533
+      ],
+      "uv_max": [
+        0.22489312291145325,
+        1.5498931407928467
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73181878876603,
+      "uv_to_geometry_area_ratio_max": 100.00001010630666,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_-1_lower",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        -0.3248932361602783
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        2.3248932361602783
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74890144533538,
+      "uv_to_geometry_area_ratio_max": 100.00000225059092,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_-1_rear_strip",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22489312291145325,
+        0.4501068592071533
+      ],
+      "uv_max": [
+        0.22489312291145325,
+        1.5498931407928467
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73181878876603,
+      "uv_to_geometry_area_ratio_max": 100.00001010630666,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_-1_upper",
+      "material": "matte_black_vinyl",
+      "vertices": 192,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        0.5751068592071533
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        1.4248931407928467
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74196341618621,
+      "uv_to_geometry_area_ratio_max": 100.00000702553571,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_1_front_strip",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22489312291145325,
+        0.4501068592071533
+      ],
+      "uv_max": [
+        0.22489312291145325,
+        1.5498931407928467
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73181878876603,
+      "uv_to_geometry_area_ratio_max": 100.00001010630666,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_1_lower",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        -0.3248932361602783
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        2.3248932361602783
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74890144533538,
+      "uv_to_geometry_area_ratio_max": 100.00000225059092,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_1_rear_strip",
+      "material": "matte_black_vinyl",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22489312291145325,
+        0.4501068592071533
+      ],
+      "uv_max": [
+        0.22489312291145325,
+        1.5498931407928467
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73181878876603,
+      "uv_to_geometry_area_ratio_max": 100.00001010630666,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_1_upper",
+      "material": "matte_black_vinyl",
+      "vertices": 192,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.9998931884765625,
+        0.5751068592071533
+      ],
+      "uv_max": [
+        0.9998931884765625,
+        1.4248931407928467
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74196341618621,
+      "uv_to_geometry_area_ratio_max": 100.00000702553571,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "side_charging_contact_bar",
+      "material": "control_red",
+      "vertices": 192,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.34989312291145325,
+        0.8801068663597107
+      ],
+      "uv_max": [
+        0.34989312291145325,
+        1.1198930740356445
+      ],
+      "uv_to_geometry_area_ratio_min": 57.7313853187021,
+      "uv_to_geometry_area_ratio_max": 99.99999332887589,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "stop_button",
+      "material": "control_red",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.21913161873817444,
+        0.7832542657852173
+      ],
+      "uv_max": [
+        0.21913161873817444,
+        1.2167457342147827
+      ],
+      "uv_to_geometry_area_ratio_min": 57.734920211257005,
+      "uv_to_geometry_area_ratio_max": 100.00001268005485,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "wiring_distribution",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.44913169741630554,
+        0.5508682727813721
+      ],
+      "uv_max": [
+        0.44913169741630554,
+        1.449131727218628
+      ],
+      "uv_to_geometry_area_ratio_min": 57.731953886355484,
+      "uv_to_geometry_area_ratio_max": 100.0000237291319,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "wr141e_lower_chassis",
+      "material": "black_abs",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -1.9991315603256226,
+        -0.47913169860839844
+      ],
+      "uv_max": [
+        1.9991315603256226,
+        2.4791316986083984
+      ],
+      "uv_to_geometry_area_ratio_min": 57.730588205146134,
+      "uv_to_geometry_area_ratio_max": 100.00000706240476,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "base_link",
+      "part": "wr141e_orange_hood",
+      "material": "worx_orange",
+      "vertices": 364,
+      "triangles": 444,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -2.7859201431274414,
+        -0.8983867168426514
+      ],
+      "uv_max": [
+        2.786006450653076,
+        2.8983867168426514
+      ],
+      "uv_to_geometry_area_ratio_min": 62.560857750378005,
+      "uv_to_geometry_area_ratio_max": 100.0000945268043,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "camera_mount",
+      "part": "depth_lens",
+      "material": "optical_black_glass",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.07957079261541367,
+        0.9204292297363281
+      ],
+      "uv_max": [
+        0.07957079261541367,
+        1.0795707702636719
+      ],
+      "uv_to_geometry_area_ratio_min": 69.9515194271186,
+      "uv_to_geometry_area_ratio_max": 100.10853322520721,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "camera_mount",
+      "part": "infrared_emitter_provisional",
+      "material": "optical_black_glass",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.14959947764873505,
+        0.8504005074501038
+      ],
+      "uv_max": [
+        0.14959947764873505,
+        1.1495994329452515
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 100.0000114271109,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "camera_mount",
+      "part": "kinect_heatspreader_provisional",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.4991316497325897,
+        0.5008683204650879
+      ],
+      "uv_max": [
+        0.4991316497325897,
+        1.499131679534912
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73297819269462,
+      "uv_to_geometry_area_ratio_max": 100.00002333121581,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "camera_mount",
+      "part": "kinect_logic_board_provisional",
+      "material": "pcb_green",
+      "vertices": 184,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.749679446220398,
+        0.25032055377960205
+      ],
+      "uv_max": [
+        0.749679446220398,
+        1.749679446220398
+      ],
+      "uv_to_geometry_area_ratio_min": 57.74067681985379,
+      "uv_to_geometry_area_ratio_max": 100.00000565993483,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "camera_mount",
+      "part": "kinect_optical_carrier_provisional",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.7691317200660706,
+        0.23086827993392944
+      ],
+      "uv_max": [
+        0.7691317200660706,
+        1.7691316604614258
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73400257173115,
+      "uv_to_geometry_area_ratio_max": 99.99999866949707,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "camera_mount",
+      "part": "rgb_lens",
+      "material": "optical_black_glass",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.07957079261541367,
+        0.9204292297363281
+      ],
+      "uv_max": [
+        0.07957079261541367,
+        1.0795707702636719
+      ],
+      "uv_to_geometry_area_ratio_min": 69.9515194271186,
+      "uv_to_geometry_area_ratio_max": 100.10853322520721,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "caster_link",
+      "part": "front_hub",
+      "material": "black_abs",
+      "vertices": 1638,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.16946353018283844,
+        0.796999990940094
+      ],
+      "uv_max": [
+        0.16946353018283844,
+        1.2030000686645508
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95427534231214,
+      "uv_to_geometry_area_ratio_max": 100.02980768894369,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "caster_link",
+      "part": "front_wheel",
+      "material": "tire_rubber",
+      "vertices": 2400,
+      "triangles": 3068,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.39946383237838745,
+        0.6005361676216125
+      ],
+      "uv_max": [
+        0.39946383237838745,
+        1.3994638919830322
+      ],
+      "uv_to_geometry_area_ratio_min": 69.40688748255714,
+      "uv_to_geometry_area_ratio_max": 100.04293774927552,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "caster_swivel_link",
+      "part": "caster_axle",
+      "material": "brushed_aluminium",
+      "vertices": 1724,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.03481222689151764,
+        0.700700044631958
+      ],
+      "uv_max": [
+        0.03481222689151764,
+        1.299299955368042
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95256518647335,
+      "uv_to_geometry_area_ratio_max": 100.13805444884512,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "caster_swivel_link",
+      "part": "fork_cheek_-1",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.14935871958732605,
+        0.6324031352996826
+      ],
+      "uv_max": [
+        0.14935871958732605,
+        1.3675968647003174
+      ],
+      "uv_to_geometry_area_ratio_min": 57.735763839922676,
+      "uv_to_geometry_area_ratio_max": 100.00003454433316,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "caster_swivel_link",
+      "part": "fork_cheek_1",
+      "material": "black_painted_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.14935871958732605,
+        0.6324031352996826
+      ],
+      "uv_max": [
+        0.14935871958732605,
+        1.3675968647003174
+      ],
+      "uv_to_geometry_area_ratio_min": 57.735763839922676,
+      "uv_to_geometry_area_ratio_max": 100.00003454433316,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "caster_swivel_link",
+      "part": "swivel_shaft",
+      "material": "brushed_aluminium",
+      "vertices": 1600,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08951714634895325,
+        0.8517999649047852
+      ],
+      "uv_max": [
+        0.08951714634895325,
+        1.1482000350952148
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95518403457051,
+      "uv_to_geometry_area_ratio_max": 100.0601143817192,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_arm_base",
+      "part": "base_rotor",
+      "material": "black_abs",
+      "vertices": 2438,
+      "triangles": 3068,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.20946381986141205,
+        0.7905361652374268
+      ],
+      "uv_max": [
+        0.20946381986141205,
+        1.2094638347625732
+      ],
+      "uv_to_geometry_area_ratio_min": 69.4070840773657,
+      "uv_to_geometry_area_ratio_max": 100.06363907318543,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_arm_base",
+      "part": "root_plate",
+      "material": "brushed_aluminium",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.299786239862442,
+        0.7008010149002075
+      ],
+      "uv_max": [
+        0.299786239862442,
+        1.2991989850997925
+      ],
+      "uv_to_geometry_area_ratio_min": 57.728459523466356,
+      "uv_to_geometry_area_ratio_max": 99.99998002525382,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_arm_base",
+      "part": "shoulder_saddle",
+      "material": "brushed_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22913159430027008,
+        0.7732542753219604
+      ],
+      "uv_max": [
+        0.22913159430027008,
+        1.2267457246780396
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73246603952505,
+      "uv_to_geometry_area_ratio_max": 100.00000721124447,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "aluminium_cheek_-1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.44919896125793457,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.44919896125793457,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998219106725,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "aluminium_cheek_1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.44919896125793457,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.44919896125793457,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998219106725,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "bracket_screw_-1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "bracket_screw_-1_0.078",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "bracket_screw_1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "bracket_screw_1_0.078",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "pivot_cap_-1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "pivot_cap_1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_forearm",
+      "part": "servo_body",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19674572348594666,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.19674572348594666,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002545568314,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_gripper_left",
+      "part": "finger",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.2562442123889923,
+        0.9308550357818604
+      ],
+      "uv_max": [
+        0.2562442123889923,
+        1.0691449642181396
+      ],
+      "uv_to_geometry_area_ratio_min": 57.736023929871436,
+      "uv_to_geometry_area_ratio_max": 100.00005410226949,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_gripper_left",
+      "part": "jaw_pivot",
+      "material": "brushed_aluminium",
+      "vertices": 1600,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.0596781000494957,
+        0.9111999869346619
+      ],
+      "uv_max": [
+        0.0596781000494957,
+        1.0887999534606934
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95056846287717,
+      "uv_to_geometry_area_ratio_max": 100.07206636905227,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_gripper_right",
+      "part": "finger",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.2562442123889923,
+        0.9308550357818604
+      ],
+      "uv_max": [
+        0.2562442123889923,
+        1.0691449642181396
+      ],
+      "uv_to_geometry_area_ratio_min": 57.736023929871436,
+      "uv_to_geometry_area_ratio_max": 100.00005410226949,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_gripper_right",
+      "part": "jaw_pivot",
+      "material": "brushed_aluminium",
+      "vertices": 1600,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.0596781000494957,
+        0.9111999869346619
+      ],
+      "uv_max": [
+        0.0596781000494957,
+        1.0887999534606934
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95056846287717,
+      "uv_to_geometry_area_ratio_max": 100.07206636905227,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_hand",
+      "part": "gripper_bridge",
+      "material": "brushed_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.23935876786708832,
+        0.7606412172317505
+      ],
+      "uv_max": [
+        0.23935876786708832,
+        1.2393587827682495
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73518585987202,
+      "uv_to_geometry_area_ratio_max": 100.00003326151925,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_hand",
+      "part": "gripper_servo",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.1767457276582718,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.1767457276582718,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002576569841,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_hand",
+      "part": "wrist_roll_hub",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.13946351408958435,
+        0.8605364561080933
+      ],
+      "uv_max": [
+        0.13946351408958435,
+        1.1394635438919067
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95189299203963,
+      "uv_to_geometry_area_ratio_max": 100.05685048322911,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "aluminium_cheek_-1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22419893741607666,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.22419893741607666,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "aluminium_cheek_1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22419893741607666,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.22419893741607666,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "bracket_screw_-1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "bracket_screw_-1_0.033",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "bracket_screw_1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "bracket_screw_1_0.033",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "pivot_cap_-1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "pivot_cap_1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wrist",
+      "part": "servo_body",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19674572348594666,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.19674572348594666,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002545568314,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "aluminium_cheek_-1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.5241989493370056,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.5241989493370056,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "aluminium_cheek_1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.5241989493370056,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.5241989493370056,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "bracket_screw_-1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "bracket_screw_-1_0.093",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "bracket_screw_1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "bracket_screw_1_0.093",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "pivot_cap_-1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "pivot_cap_1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_upper_arm",
+      "part": "servo_body",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19674572348594666,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.19674572348594666,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002545568314,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub",
+      "material": "brushed_aluminium",
+      "vertices": 2374,
+      "triangles": 3068,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.5174638032913208,
+        0.4825361967086792
+      ],
+      "uv_max": [
+        0.5174638032913208,
+        1.5174638032913208
+      ],
+      "uv_to_geometry_area_ratio_min": 69.4070480385563,
+      "uv_to_geometry_area_ratio_max": 100.02949674366175,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_-1_0",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_-1_1",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_-1_2",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_-1_3",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_-1_4",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_-1_5",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_1_0",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_1_1",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_1_2",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_1_3",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_1_4",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "hub_bolt_1_5",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "left_wheel",
+      "part": "rubber_tyre",
+      "material": "tire_rubber",
+      "vertices": 2802,
+      "triangles": 3456,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.918999969959259,
+        0.08100003004074097
+      ],
+      "uv_max": [
+        0.918999969959259,
+        1.9189999103546143
+      ],
+      "uv_to_geometry_area_ratio_min": 66.25318997498299,
+      "uv_to_geometry_area_ratio_max": 100.00056599973136,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "lidar_mount",
+      "part": "lidar_band",
+      "material": "worx_orange",
+      "vertices": 2312,
+      "triangles": 3068,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.35162466764450073,
+        0.6483753323554993
+      ],
+      "uv_max": [
+        0.35162466764450073,
+        1.3516247272491455
+      ],
+      "uv_to_geometry_area_ratio_min": 69.40720711745344,
+      "uv_to_geometry_area_ratio_max": 100.03586779496858,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "lidar_mount",
+      "part": "lidar_head",
+      "material": "black_abs",
+      "vertices": 2410,
+      "triangles": 3068,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.3494637906551361,
+        0.6505361795425415
+      ],
+      "uv_max": [
+        0.3494637906551361,
+        1.3494638204574585
+      ],
+      "uv_to_geometry_area_ratio_min": 69.40912253706837,
+      "uv_to_geometry_area_ratio_max": 100.03412314724488,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_arm_base",
+      "part": "base_rotor",
+      "material": "black_abs",
+      "vertices": 2438,
+      "triangles": 3068,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.20946381986141205,
+        0.7905361652374268
+      ],
+      "uv_max": [
+        0.20946381986141205,
+        1.2094638347625732
+      ],
+      "uv_to_geometry_area_ratio_min": 69.4070840773657,
+      "uv_to_geometry_area_ratio_max": 100.06363907318543,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_arm_base",
+      "part": "root_plate",
+      "material": "brushed_aluminium",
+      "vertices": 164,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.299786239862442,
+        0.7008010149002075
+      ],
+      "uv_max": [
+        0.299786239862442,
+        1.2991989850997925
+      ],
+      "uv_to_geometry_area_ratio_min": 57.728459523466356,
+      "uv_to_geometry_area_ratio_max": 99.99998002525382,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_arm_base",
+      "part": "shoulder_saddle",
+      "material": "brushed_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22913159430027008,
+        0.7732542753219604
+      ],
+      "uv_max": [
+        0.22913159430027008,
+        1.2267457246780396
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73246603952505,
+      "uv_to_geometry_area_ratio_max": 100.00000721124447,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "aluminium_cheek_-1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.44919896125793457,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.44919896125793457,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998219106725,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "aluminium_cheek_1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.44919896125793457,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.44919896125793457,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998219106725,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "bracket_screw_-1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "bracket_screw_-1_0.078",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "bracket_screw_1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "bracket_screw_1_0.078",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "pivot_cap_-1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "pivot_cap_1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_forearm",
+      "part": "servo_body",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19674572348594666,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.19674572348594666,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002545568314,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_gripper_left",
+      "part": "finger",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.2562442123889923,
+        0.9308550357818604
+      ],
+      "uv_max": [
+        0.2562442123889923,
+        1.0691449642181396
+      ],
+      "uv_to_geometry_area_ratio_min": 57.736023929871436,
+      "uv_to_geometry_area_ratio_max": 100.00005410226949,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_gripper_left",
+      "part": "jaw_pivot",
+      "material": "brushed_aluminium",
+      "vertices": 1600,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.0596781000494957,
+        0.9111999869346619
+      ],
+      "uv_max": [
+        0.0596781000494957,
+        1.0887999534606934
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95056846287717,
+      "uv_to_geometry_area_ratio_max": 100.07206636905227,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_gripper_right",
+      "part": "finger",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.2562442123889923,
+        0.9308550357818604
+      ],
+      "uv_max": [
+        0.2562442123889923,
+        1.0691449642181396
+      ],
+      "uv_to_geometry_area_ratio_min": 57.736023929871436,
+      "uv_to_geometry_area_ratio_max": 100.00005410226949,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_gripper_right",
+      "part": "jaw_pivot",
+      "material": "brushed_aluminium",
+      "vertices": 1600,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.0596781000494957,
+        0.9111999869346619
+      ],
+      "uv_max": [
+        0.0596781000494957,
+        1.0887999534606934
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95056846287717,
+      "uv_to_geometry_area_ratio_max": 100.07206636905227,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_hand",
+      "part": "gripper_bridge",
+      "material": "brushed_aluminium",
+      "vertices": 168,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.23935876786708832,
+        0.7606412172317505
+      ],
+      "uv_max": [
+        0.23935876786708832,
+        1.2393587827682495
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73518585987202,
+      "uv_to_geometry_area_ratio_max": 100.00003326151925,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_hand",
+      "part": "gripper_servo",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.1767457276582718,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.1767457276582718,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002576569841,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_hand",
+      "part": "wrist_roll_hub",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.13946351408958435,
+        0.8605364561080933
+      ],
+      "uv_max": [
+        0.13946351408958435,
+        1.1394635438919067
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95189299203963,
+      "uv_to_geometry_area_ratio_max": 100.05685048322911,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "aluminium_cheek_-1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22419893741607666,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.22419893741607666,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "aluminium_cheek_1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.22419893741607666,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.22419893741607666,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "bracket_screw_-1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "bracket_screw_-1_0.033",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "bracket_screw_1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "bracket_screw_1_0.033",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "pivot_cap_-1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "pivot_cap_1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wrist",
+      "part": "servo_body",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19674572348594666,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.19674572348594666,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002545568314,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "aluminium_cheek_-1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.5241989493370056,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.5241989493370056,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "aluminium_cheek_1",
+      "material": "brushed_aluminium",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.5241989493370056,
+        0.8752137422561646
+      ],
+      "uv_max": [
+        0.5241989493370056,
+        1.1247862577438354
+      ],
+      "uv_to_geometry_area_ratio_min": 57.727072557999314,
+      "uv_to_geometry_area_ratio_max": 99.99998025377937,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "bracket_screw_-1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "bracket_screw_-1_0.093",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "bracket_screw_1_0.015",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "bracket_screw_1_0.093",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "pivot_cap_-1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "pivot_cap_1",
+      "material": "brushed_aluminium",
+      "vertices": 1544,
+      "triangles": 2044,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.08981221914291382,
+        0.9101877808570862
+      ],
+      "uv_max": [
+        0.08981221914291382,
+        1.0898122787475586
+      ],
+      "uv_to_geometry_area_ratio_min": 69.95253564580065,
+      "uv_to_geometry_area_ratio_max": 100.0406106200166,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_upper_arm",
+      "part": "servo_body",
+      "material": "black_abs",
+      "vertices": 176,
+      "triangles": 188,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.19674572348594666,
+        0.8208683729171753
+      ],
+      "uv_max": [
+        0.19674572348594666,
+        1.1791316270828247
+      ],
+      "uv_to_geometry_area_ratio_min": 57.73451474307507,
+      "uv_to_geometry_area_ratio_max": 100.00002545568314,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub",
+      "material": "brushed_aluminium",
+      "vertices": 2374,
+      "triangles": 3068,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.5174638032913208,
+        0.4825361967086792
+      ],
+      "uv_max": [
+        0.5174638032913208,
+        1.5174638032913208
+      ],
+      "uv_to_geometry_area_ratio_min": 69.4070480385563,
+      "uv_to_geometry_area_ratio_max": 100.02949674366175,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_-1_0",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_-1_1",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_-1_2",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_-1_3",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_-1_4",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_-1_5",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_1_0",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_1_1",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_1_2",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_1_3",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_1_4",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "hub_bolt_1_5",
+      "material": "brushed_aluminium",
+      "vertices": 1174,
+      "triangles": 1152,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.020000001415610313,
+        0.9800000190734863
+      ],
+      "uv_max": [
+        0.020000001415610313,
+        1.0199999809265137
+      ],
+      "uv_to_geometry_area_ratio_min": 72.98654704967865,
+      "uv_to_geometry_area_ratio_max": 100.01245589814567,
+      "very_small_triangles_excluded_from_ratio": 0
+    },
+    {
+      "link": "right_wheel",
+      "part": "rubber_tyre",
+      "material": "tire_rubber",
+      "vertices": 2802,
+      "triangles": 3456,
+      "degenerate_triangles": 0,
+      "uv_min": [
+        -0.918999969959259,
+        0.08100003004074097
+      ],
+      "uv_max": [
+        0.918999969959259,
+        1.9189999103546143
+      ],
+      "uv_to_geometry_area_ratio_min": 66.25318997498299,
+      "uv_to_geometry_area_ratio_max": 100.00056599973136,
+      "very_small_triangles_excluded_from_ratio": 0
+    }
+  ],
+  "errors": [],
+  "notes": [
+    "The source library has 24 PNGs because separate roughness maps are provided for authoring; GLB embeds the 18 maps it consumes (base color, normal, packed metallic/roughness for six materials).",
+    "Texture byte identity is recorded; correctness uses decoded pixels because an exporter may recompress PNGs or repack an unused channel.",
+    "JSON extras contain optional provenance paths; these are not glTF runtime resource dependencies.",
+    "Clear polycarbonate uses alpha 1 with transmission instead of the library's alpha .16 basic-viewer fallback; actual sheet thickness remains modeled geometry.",
+    "Optical glass tint/roughness/clearcoat and LED emission are artistically adjusted in the render/export; other textured material maps and factors are verified against the supplied library.",
+    "The exporter makes materials double-sided. This does not add geometry or change dimensions.",
+    "UV ratio excludes triangles with doubled geometric area below 1e-13 m2 to avoid float32 cancellation in tiny bevel geometry.",
+    "GLB is a detailed zero-pose visual assembly. Joint dynamics remain in the accompanying URDF package; this check does not certify hardware dimensions or dynamics."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "urdf_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+  "links": 23,
+  "joints": 22,
+  "independent_controls": 16,
+  "groups": [
+    "Drive wheels · actuated",
+    "Left arm · actuated",
+    "Right arm · actuated",
+    "Passive caster · inspection only"
+  ],
+  "maximum_viewer_vs_pybullet_matrix_error": 1.7421052989075037e-7,
+  "mimic_followers_checked": [
+    "left_gripper_right_joint",
+    "right_gripper_right_joint"
+  ],
+  "reset_all_independent_coordinates": true,
+  "embedded_stl_assets": 45,
+  "all_embedded_meshes_match_current_source": true,
+  "external_dependencies": false,
+  "scope": "The delivered JavaScript ran with DOM/WebGL stubs, decoded all embedded STL meshes, built every slider, drew one frame, matched actual PyBullet FK, applied mimic equations, and reset all controls. Native browser rasterization and GPU appearance were not tested by this check."
+}

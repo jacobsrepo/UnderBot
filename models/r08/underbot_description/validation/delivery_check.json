@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "revision": "R08: 200 mm floors/frame; 204 mm external covers",
+  "scope": "Current package consistency and archive integrity; native target applications not executed",
+  "urdf_sha256": "805ae58b87af3d3030c201def6d7126b09fd0e907e6bebbdabf9e0db6059e3c7",
+  "portable_urdf_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+  "reports": [
+    {
+      "report": "authoring_checks.json",
+      "source_sha256": "805ae58b87af3d3030c201def6d7126b09fd0e907e6bebbdabf9e0db6059e3c7",
+      "result": "PASS"
+    },
+    {
+      "report": "portable_checks.json",
+      "source_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+      "result": "PASS"
+    },
+    {
+      "report": "physics_smoke.json",
+      "source_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+      "result": "PASS"
+    },
+    {
+      "report": "pybullet_preview_R08.json",
+      "source_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+      "result": "PASS"
+    },
+    {
+      "report": "viewer_checks_R08.json",
+      "source_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+      "result": "PASS"
+    },
+    {
+      "report": "xacro_check.json",
+      "source_sha256": "805ae58b87af3d3030c201def6d7126b09fd0e907e6bebbdabf9e0db6059e3c7",
+      "result": "PASS"
+    },
+    {
+      "report": "static_physics.json",
+      "source_sha256": "805ae58b87af3d3030c201def6d7126b09fd0e907e6bebbdabf9e0db6059e3c7",
+      "result": "Completed; numerical scope and limits in report"
+    }
+  ],
+  "floor_bounds_m": [
+    0.2,
+    0.2
+  ],
+  "frame_bounds_m": [
+    0.2,
+    0.2
+  ],
+  "covered_body_bounds_m": [
+    0.204,
+    0.204
+  ],
+  "visual_mesh_count": 45,
+  "modeled_mass_kg": 19.601007799999998,
+  "zero_pose_com_m": [
+    -0.06396505523088457,
+    4.1018299069295336e-05,
+    0.29820547138487036
+  ],
+  "notes": [
+    "Bare Kinect component dimensions, mass and calibration are unmeasured reservations",
+    "Arm geometry, actuator ratings and installed mass distribution remain estimates",
+    "Native ROS, RViz2, Gazebo, Isaac Sim/Lab and FreeCAD execution not available",
+    "Static and dynamics checks do not establish a payload rating"
+  ],
+  "publication": {
+    "report_paths": "Package-relative provenance paths; numerical results and model hashes unchanged",
+    "license": "Unspecified; no new license assigned during publication"
+  }
+}

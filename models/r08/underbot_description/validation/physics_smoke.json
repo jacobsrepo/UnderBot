@@ -1,0 +1,1010 @@
+{
+  "engine": "MuJoCo 3.15.0",
+  "urdf": "urdf/underbot.portable.urdf",
+  "generated_at_utc": "2026-10-11T14:21:23.294858+00:00",
+  "urdf_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+  "source_topology": {
+    "link_count": 23,
+    "joint_count": 22,
+    "joint_types": {
+      "fixed": 4,
+      "continuous": 4,
+      "revolute": 14
+    }
+  },
+  "declared_mass_kg": 19.601007799999998,
+  "rolling_geometry": {
+    "wheel_radii_m": {
+      "left_wheel_joint": 0.0925,
+      "right_wheel_joint": 0.0925
+    },
+    "track_m": 0.354,
+    "expected_ground_bodies": [
+      "caster_link",
+      "left_wheel",
+      "right_wheel"
+    ],
+    "friction_sliding_torsional_rolling": [
+      0.8,
+      0.001,
+      0.0001
+    ]
+  },
+  "direct_import_mass_kg": 19.601007799999998,
+  "mimic_adapter": {
+    "verified_native_relations": [
+      "left_gripper_right_joint",
+      "right_gripper_right_joint"
+    ],
+    "added_relations": [],
+    "total_constraint_count": 2,
+    "equality_solref_time_constant_s": 0.002,
+    "equality_solref_damping_ratio": 1.0,
+    "reason": "Approximate ideal URDF mimic with one explicit equality per jaw pair; generic native softness otherwise causes lag"
+  },
+  "mass_kg": 19.601007799999998,
+  "mass_difference_kg": 0.0,
+  "motor_count": 14,
+  "actuated_joint_names": [
+    "left_wheel_joint",
+    "right_wheel_joint",
+    "left_arm_base_joint",
+    "left_shoulder_joint",
+    "left_elbow_joint",
+    "left_wrist_pitch_joint",
+    "left_wrist_roll_joint",
+    "left_gripper_left_joint",
+    "right_arm_base_joint",
+    "right_shoulder_joint",
+    "right_elbow_joint",
+    "right_wrist_pitch_joint",
+    "right_wrist_roll_joint",
+    "right_gripper_left_joint"
+  ],
+  "passive_joint_names": [
+    "caster_swivel_joint",
+    "caster_wheel_joint"
+  ],
+  "degrees_of_freedom": {
+    "floating_root": 6,
+    "actuated": 14,
+    "passive_caster": 2,
+    "dependent_jaw_coordinates": 2,
+    "joint_coupling_equalities": 2,
+    "engine_velocity_coordinates": 24
+  },
+  "test_controller": {
+    "wheel_velocity_gain_Nm_per_rad_s": 3.0,
+    "arm_kp_Nm_per_rad": 30.0,
+    "arm_kd_Nm_per_rad_s": 1.0,
+    "wrist_pitch_kp_Nm_per_rad": 30.0,
+    "wrist_pitch_kd_Nm_per_rad_s": 0.05,
+    "wrist_roll_kp_Nm_per_rad": 12.0,
+    "wrist_roll_kd_Nm_per_rad_s": 0.0,
+    "gripper_kp_Nm_per_rad": 8.0,
+    "gripper_kd_Nm_per_rad_s": 0.03
+  },
+  "result": "PASS",
+  "tests": [
+    "URDF importer with retained declared inertia",
+    "floating base under gravity",
+    "2 seconds upright rest",
+    "settled base / resting COM at least 10 mm inside contact-derived support polygon",
+    "gentle forward drive / same wheel sign",
+    "positive yaw turn / opposite wheel signs",
+    "all ten positioning joints / torque-capped small commands",
+    "both grippers / mimic equality",
+    "two passive caster joints / high sliding friction rolling contacts",
+    "mass preservation / no hidden supports"
+  ],
+  "gravity_joint_torque_Nm": {
+    "left_arm_base_joint": 0.0,
+    "left_shoulder_joint": 0.7386763754597501,
+    "left_elbow_joint": 0.43259220682378796,
+    "left_wrist_pitch_joint": 0.07903980682383627,
+    "left_wrist_roll_joint": 8.673617379884035e-19,
+    "left_gripper_left_joint": -0.001019485209547094,
+    "right_arm_base_joint": 0.0,
+    "right_shoulder_joint": 0.7386763754597498,
+    "right_elbow_joint": 0.43259220682378774,
+    "right_wrist_pitch_joint": 0.07903980682383627,
+    "right_wrist_roll_joint": 8.673617379884035e-19,
+    "right_gripper_left_joint": -0.0010194852095470946
+  },
+  "rest": {
+    "base_xyz": [
+      -2.6619506479458532e-05,
+      1.888628598993069e-09,
+      -0.0002829096898243939
+    ],
+    "roll_pitch_rad": [
+      -1.195845045188009e-07,
+      0.0009938739443320509
+    ],
+    "contacts": 6,
+    "base_linear_speed_m_s": 1.1657394027801548e-09,
+    "base_angular_speed_rad_s": 6.119452119536826e-09,
+    "support_geometry": {
+      "center_of_mass_world_m": [
+        -0.06369535625410272,
+        4.1055072966551786e-05,
+        0.2977380629849531
+      ],
+      "ground_support_polygon_xy_m": [
+        [
+          -0.1799345995956725,
+          0.20199999984734077
+        ],
+        [
+          -0.17993459496635963,
+          -0.20200000015265634
+        ],
+        [
+          0.19501304495008379,
+          -0.020000001474872554
+        ],
+        [
+          0.19501303332141742,
+          0.01999999852512547
+        ]
+      ],
+      "geometric_margin_m": 0.11623924102738378,
+      "interpretation": "COM projection margin; dynamic inertial loads are not included"
+    },
+    "max_joint_position_error_rad": 0.02401661409749833,
+    "ground_contacts": [
+      {
+        "body": "left_wheel",
+        "geom": "left_wheel_rolling_contact",
+        "distance_m": -0.00010408225043069541
+      },
+      {
+        "body": "left_wheel",
+        "geom": "left_wheel_rolling_contact",
+        "distance_m": -0.0001040762712086335
+      },
+      {
+        "body": "right_wheel",
+        "geom": "right_wheel_rolling_contact",
+        "distance_m": -0.00010403991753858699
+      },
+      {
+        "body": "right_wheel",
+        "geom": "right_wheel_rolling_contact",
+        "distance_m": -0.00010403393831655283
+      },
+      {
+        "body": "caster_link",
+        "geom": "caster_link_rolling_contact",
+        "distance_m": -0.00047673721889616993
+      },
+      {
+        "body": "caster_link",
+        "geom": "caster_link_rolling_contact",
+        "distance_m": -0.0004767324466204287
+      }
+    ],
+    "passive_caster": {
+      "caster_swivel_joint": {
+        "angle_rad": 2.794089521466263e-07,
+        "rate_rad_s": 1.5085017884028568e-07,
+        "actuator_torque_Nm": 0.0
+      },
+      "caster_wheel_joint": {
+        "angle_rad": -0.0006218889491687318,
+        "rate_rad_s": 2.7371872778818764e-07,
+        "actuator_torque_Nm": 0.0
+      }
+    }
+  },
+  "drive": {
+    "translation_m": [
+      0.08783331866133572,
+      1.5346489257585806e-07,
+      -3.8026886869414744e-11
+    ],
+    "roll_pitch_rad": [
+      -1.1963126050359792e-07,
+      0.0009938742396324168
+    ],
+    "support_geometry": {
+      "center_of_mass_world_m": [
+        0.024079055790807317,
+        4.116620278021508e-05,
+        0.2977380629746627
+      ],
+      "ground_support_polygon_xy_m": [
+        [
+          -0.09216031258277903,
+          0.20200003446644232
+        ],
+        [
+          -0.09216004126123474,
+          -0.20199996553346433
+        ],
+        [
+          0.2827875104028814,
+          -0.019999751185190876
+        ],
+        [
+          0.28278740855537565,
+          0.02000024881467923
+        ]
+      ],
+      "geometric_margin_m": 0.11623923274041156,
+      "interpretation": "COM projection margin; dynamic inertial loads are not included"
+    },
+    "command_wheel_speed_rad_s": {
+      "left_wheel_joint": 0.6486486486486487,
+      "right_wheel_joint": 0.6486486486486487
+    },
+    "final_wheel_speed_rad_s": {
+      "left_wheel_joint": 0.6371216600575127,
+      "right_wheel_joint": 0.6371224247287779
+    },
+    "ground_contacts": [
+      {
+        "body": "left_wheel",
+        "geom": "left_wheel_rolling_contact",
+        "distance_m": -0.00010408224477929939
+      },
+      {
+        "body": "left_wheel",
+        "geom": "left_wheel_rolling_contact",
+        "distance_m": -0.0001040762632186637
+      },
+      {
+        "body": "right_wheel",
+        "geom": "right_wheel_rolling_contact",
+        "distance_m": -0.00010403989533007418
+      },
+      {
+        "body": "right_wheel",
+        "geom": "right_wheel_rolling_contact",
+        "distance_m": -0.00010403391376946625
+      },
+      {
+        "body": "caster_link",
+        "geom": "caster_link_rolling_contact",
+        "distance_m": -0.00047673728374562213
+      },
+      {
+        "body": "caster_link",
+        "geom": "caster_link_rolling_contact",
+        "distance_m": -0.0004767325730218111
+      }
+    ],
+    "passive_caster": {
+      "caster_swivel_joint": {
+        "angle_rad": 1.8742298133877393e-06,
+        "rate_rad_s": -3.7077601943216166e-07,
+        "actuator_torque_Nm": 0.0
+      },
+      "caster_wheel_joint": {
+        "angle_rad": 2.2071630778321105,
+        "rate_rad_s": 1.4806790530323348,
+        "actuator_torque_Nm": 0.0
+      }
+    }
+  },
+  "turn": {
+    "yaw_change_rad": 0.2571228184914569,
+    "roll_pitch_rad": [
+      -1.2030152476748306e-05,
+      0.0009499203113167698
+    ],
+    "support_geometry": {
+      "center_of_mass_world_m": [
+        0.06790235162120135,
+        0.03164972564014859,
+        0.2977445687839782
+      ],
+      "ground_support_polygon_xy_m": [
+        [
+          -0.09595160982613732,
+          0.19753212002664625
+        ],
+        [
+          0.006742750785243142,
+          -0.19319779727558734
+        ],
+        [
+          0.3516288510846053,
+          0.07815977513856044
+        ]
+      ],
+      "geometric_margin_m": 0.11630559005236184,
+      "interpretation": "COM projection margin; dynamic inertial loads are not included"
+    },
+    "command_wheel_speed_rad_s": {
+      "left_wheel_joint": -0.4783783783783784,
+      "right_wheel_joint": 0.4783783783783784
+    },
+    "command_yaw_rate_rad_s": 0.25,
+    "ramp_duration_s": 0.5,
+    "constant_command_duration_s": 4.0,
+    "initial_1_5_s_transient": {
+      "yaw_change_rad": 0.044742975726234015,
+      "passive_caster": {
+        "caster_swivel_joint": {
+          "angle_rad": 0.35030448325950364,
+          "rate_rad_s": 0.2770778617440411,
+          "actuator_torque_Nm": 0.0
+        },
+        "caster_wheel_joint": {
+          "angle_rad": 2.7513309941159503,
+          "rate_rad_s": 0.25574671744399924,
+          "actuator_torque_Nm": 0.0
+        }
+      }
+    },
+    "final_wheel_speed_rad_s": {
+      "left_wheel_joint": -0.10135899104813079,
+      "right_wheel_joint": 0.3401606277021122
+    },
+    "ground_contacts": [
+      {
+        "body": "left_wheel",
+        "geom": "left_wheel_rolling_contact",
+        "distance_m": -0.00010508022478339374
+      },
+      {
+        "body": "left_wheel",
+        "geom": "left_wheel_rolling_contact",
+        "distance_m": -0.00010447887400308331
+      },
+      {
+        "body": "right_wheel",
+        "geom": "right_wheel_rolling_contact",
+        "distance_m": -0.00010082266125885364
+      },
+      {
+        "body": "right_wheel",
+        "geom": "right_wheel_rolling_contact",
+        "distance_m": -0.00010022131047857097
+      },
+      {
+        "body": "caster_link",
+        "geom": "caster_link_rolling_contact",
+        "distance_m": -0.00048474012987337334
+      },
+      {
+        "body": "caster_link",
+        "geom": "caster_link_rolling_contact",
+        "distance_m": -0.00045186731227372934
+      }
+    ],
+    "passive_caster": {
+      "caster_swivel_joint": {
+        "angle_rad": 1.0581135538777704,
+        "rate_rad_s": 0.16252706912640733,
+        "actuator_torque_Nm": 0.0
+      },
+      "caster_wheel_joint": {
+        "angle_rad": 4.719027458868854,
+        "rate_rad_s": 1.0828837666665079,
+        "actuator_torque_Nm": 0.0
+      }
+    }
+  },
+  "arm_motion_tests": {
+    "arm_base_joint": {
+      "targets_rad": {
+        "left_arm_base_joint": 0.1,
+        "right_arm_base_joint": 0.1
+      },
+      "before_rad": {
+        "left_arm_base_joint": -1.3120903880688678e-06,
+        "right_arm_base_joint": -6.581256544311251e-05
+      },
+      "after_rad": {
+        "left_arm_base_joint": 0.09773305917492087,
+        "right_arm_base_joint": 0.09773451380133952
+      },
+      "change_rad": {
+        "left_arm_base_joint": 0.09773437126530894,
+        "right_arm_base_joint": 0.09780032636678263
+      },
+      "tracking_error_rad": {
+        "left_arm_base_joint": 0.002266940825079139,
+        "right_arm_base_joint": 0.002265486198660488
+      },
+      "final_speed_rad_s": {
+        "left_arm_base_joint": 0.00019790096218152623,
+        "right_arm_base_joint": 0.00019100780763055963
+      },
+      "support_geometry": {
+        "center_of_mass_world_m": [
+          0.06935179877412102,
+          0.035450719433494156,
+          0.29777862940810473
+        ],
+        "ground_support_polygon_xy_m": [
+          [
+            -0.09852845685309565,
+            0.19676292232654666
+          ],
+          [
+            0.015317634743162079,
+            -0.19086456293367954
+          ],
+          [
+            0.3531323146999606,
+            0.09080964723242829
+          ]
+        ],
+        "geometric_margin_m": 0.11561939975654562,
+        "interpretation": "COM projection margin; dynamic inertial loads are not included"
+      },
+      "robot_contacts": [],
+      "passive_caster": {
+        "caster_swivel_joint": {
+          "angle_rad": 1.0935204865827004,
+          "rate_rad_s": -0.0009242924987153158,
+          "actuator_torque_Nm": 0.0
+        },
+        "caster_wheel_joint": {
+          "angle_rad": 5.005025367242411,
+          "rate_rad_s": -0.00012726079902963185,
+          "actuator_torque_Nm": 0.0
+        }
+      }
+    },
+    "shoulder_joint": {
+      "targets_rad": {
+        "left_shoulder_joint": 0.1,
+        "right_shoulder_joint": 0.1
+      },
+      "before_rad": {
+        "left_shoulder_joint": -0.02403390486797451,
+        "right_shoulder_joint": -0.02403405807402478
+      },
+      "after_rad": {
+        "left_shoulder_joint": 0.0739020980938901,
+        "right_shoulder_joint": 0.07390112391907801
+      },
+      "change_rad": {
+        "left_shoulder_joint": 0.09793600296186461,
+        "right_shoulder_joint": 0.09793518199310279
+      },
+      "tracking_error_rad": {
+        "left_shoulder_joint": 0.026097901906109902,
+        "right_shoulder_joint": 0.026098876080922
+      },
+      "final_speed_rad_s": {
+        "left_shoulder_joint": -6.556048111609625e-05,
+        "right_shoulder_joint": -6.558741377701045e-05
+      },
+      "support_geometry": {
+        "center_of_mass_world_m": [
+          0.06999921447505257,
+          0.03562814172515605,
+          0.2985071477280817
+        ],
+        "ground_support_polygon_xy_m": [
+          [
+            -0.09852622297348265,
+            0.19676292517921629
+          ],
+          [
+            0.015280898893371354,
+            -0.19087600335102275
+          ],
+          [
+            0.353106806418728,
+            0.0907529850611416
+          ]
+        ],
+        "geometric_margin_m": 0.11630874772161906,
+        "interpretation": "COM projection margin; dynamic inertial loads are not included"
+      },
+      "robot_contacts": [],
+      "passive_caster": {
+        "caster_swivel_joint": {
+          "angle_rad": 1.0928095179384234,
+          "rate_rad_s": -0.0009360454409352877,
+          "actuator_torque_Nm": 0.0
+        },
+        "caster_wheel_joint": {
+          "angle_rad": 5.003904332937274,
+          "rate_rad_s": -0.00012661580795348017,
+          "actuator_torque_Nm": 0.0
+        }
+      }
+    },
+    "elbow_joint": {
+      "targets_rad": {
+        "left_elbow_joint": 0.1,
+        "right_elbow_joint": 0.1
+      },
+      "before_rad": {
+        "left_elbow_joint": -0.014187632755686077,
+        "right_elbow_joint": -0.014187828723738038
+      },
+      "after_rad": {
+        "left_elbow_joint": 0.08536698155591747,
+        "right_elbow_joint": 0.08536682531529291
+      },
+      "change_rad": {
+        "left_elbow_joint": 0.09955461431160355,
+        "right_elbow_joint": 0.09955465403903095
+      },
+      "tracking_error_rad": {
+        "left_elbow_joint": 0.014633018444082532,
+        "right_elbow_joint": 0.014633174684707095
+      },
+      "final_speed_rad_s": {
+        "left_elbow_joint": 3.097922221325179e-06,
+        "right_elbow_joint": 3.0982515956318573e-06
+      },
+      "support_geometry": {
+        "center_of_mass_world_m": [
+          0.07000929844903916,
+          0.03562742676636028,
+          0.2981887667673717
+        ],
+        "ground_support_polygon_xy_m": [
+          [
+            -0.09851128174045856,
+            0.19676695007371536
+          ],
+          [
+            0.015285034817611148,
+            -0.1908751506294883
+          ],
+          [
+            0.3530935956716949,
+            0.09072747953244499
+          ]
+        ],
+        "geometric_margin_m": 0.11630838496659911,
+        "interpretation": "COM projection margin; dynamic inertial loads are not included"
+      },
+      "robot_contacts": [],
+      "passive_caster": {
+        "caster_swivel_joint": {
+          "angle_rad": 1.0917349060864403,
+          "rate_rad_s": -0.0009355482378101954,
+          "actuator_torque_Nm": 0.0
+        },
+        "caster_wheel_joint": {
+          "angle_rad": 5.003753129903203,
+          "rate_rad_s": -0.00012719193189651858,
+          "actuator_torque_Nm": 0.0
+        }
+      }
+    },
+    "wrist_pitch_joint": {
+      "targets_rad": {
+        "left_wrist_pitch_joint": 0.1,
+        "right_wrist_pitch_joint": 0.1
+      },
+      "before_rad": {
+        "left_wrist_pitch_joint": -0.0024635941796855615,
+        "right_wrist_pitch_joint": -0.00246379798869238
+      },
+      "after_rad": {
+        "left_wrist_pitch_joint": 0.0971306185637647,
+        "right_wrist_pitch_joint": 0.09713042816604853
+      },
+      "change_rad": {
+        "left_wrist_pitch_joint": 0.09959421274345026,
+        "right_wrist_pitch_joint": 0.09959422615474091
+      },
+      "tracking_error_rad": {
+        "left_wrist_pitch_joint": 0.002869381436235302,
+        "right_wrist_pitch_joint": 0.0028695718339514786
+      },
+      "final_speed_rad_s": {
+        "left_wrist_pitch_joint": 1.3503871944653699e-07,
+        "right_wrist_pitch_joint": 1.3488884365531283e-07
+      },
+      "support_geometry": {
+        "center_of_mass_world_m": [
+          0.0700192705908906,
+          0.03562668924254402,
+          0.2978209964123088
+        ],
+        "ground_support_polygon_xy_m": [
+          [
+            -0.098496377636129,
+            0.19677096446596185
+          ],
+          [
+            0.015289166551904161,
+            -0.19087429841454864
+          ],
+          [
+            0.35308022164275027,
+            0.09070195295120023
+          ]
+        ],
+        "geometric_margin_m": 0.11630793000438998,
+        "interpretation": "COM projection margin; dynamic inertial loads are not included"
+      },
+      "robot_contacts": [],
+      "passive_caster": {
+        "caster_swivel_joint": {
+          "angle_rad": 1.09065536155511,
+          "rate_rad_s": -0.0009352821510321165,
+          "actuator_torque_Nm": 0.0
+        },
+        "caster_wheel_joint": {
+          "angle_rad": 5.003609886900385,
+          "rate_rad_s": -0.00012740601744959298,
+          "actuator_torque_Nm": 0.0
+        }
+      }
+    },
+    "wrist_roll_joint": {
+      "targets_rad": {
+        "left_wrist_roll_joint": 0.1,
+        "right_wrist_roll_joint": 0.1
+      },
+      "before_rad": {
+        "left_wrist_roll_joint": 4.970785481619458e-07,
+        "right_wrist_roll_joint": 5.181382509689928e-07
+      },
+      "after_rad": {
+        "left_wrist_roll_joint": 0.10002609870442207,
+        "right_wrist_roll_joint": 0.10002612203456586
+      },
+      "change_rad": {
+        "left_wrist_roll_joint": 0.10002560162587391,
+        "right_wrist_roll_joint": 0.10002560389631489
+      },
+      "tracking_error_rad": {
+        "left_wrist_roll_joint": -2.6098704422064523e-05,
+        "right_wrist_roll_joint": -2.6122034565853602e-05
+      },
+      "final_speed_rad_s": {
+        "left_wrist_roll_joint": -2.3782623182943613e-08,
+        "right_wrist_roll_joint": -2.3916139708473467e-08
+      },
+      "support_geometry": {
+        "center_of_mass_world_m": [
+          0.07003588180413577,
+          0.03562786266619098,
+          0.29774269076455634
+        ],
+        "ground_support_polygon_xy_m": [
+          [
+            -0.09848144278488187,
+            0.19677498429298587
+          ],
+          [
+            0.01529319303805176,
+            -0.19087348035417706
+          ],
+          [
+            0.3530667088396374,
+            0.09067622950343125
+          ]
+        ],
+        "geometric_margin_m": 0.11631442346727999,
+        "interpretation": "COM projection margin; dynamic inertial loads are not included"
+      },
+      "robot_contacts": [],
+      "passive_caster": {
+        "caster_swivel_joint": {
+          "angle_rad": 1.0895712018042074,
+          "rate_rad_s": -0.000935347978375187,
+          "actuator_torque_Nm": 0.0
+        },
+        "caster_wheel_joint": {
+          "angle_rad": 5.003456163474073,
+          "rate_rad_s": -0.00012715330589355294,
+          "actuator_torque_Nm": 0.0
+        }
+      }
+    }
+  },
+  "arm_and_gripper": {
+    "targets_rad": {
+      "left_arm_base_joint": 0.0,
+      "left_shoulder_joint": 0.0,
+      "left_elbow_joint": 0.0,
+      "left_wrist_pitch_joint": 0.0,
+      "left_wrist_roll_joint": 0.0,
+      "left_gripper_left_joint": 0.3,
+      "right_arm_base_joint": 0.0,
+      "right_shoulder_joint": 0.0,
+      "right_elbow_joint": 0.0,
+      "right_wrist_pitch_joint": 0.0,
+      "right_wrist_roll_joint": 0.0,
+      "right_gripper_left_joint": 0.3
+    },
+    "support_geometry": {
+      "center_of_mass_world_m": [
+        0.0700414986294277,
+        0.03562522572238699,
+        0.29774042368805476
+      ],
+      "ground_support_polygon_xy_m": [
+        [
+          -0.09846399513635866,
+          0.19677968447080832
+        ],
+        [
+          0.015298006085037999,
+          -0.1908724882022782
+        ],
+        [
+          0.35305092691613266,
+          0.09064634055382895
+        ]
+      ],
+      "geometric_margin_m": 0.11630759170067459,
+      "interpretation": "COM projection margin; dynamic inertial loads are not included"
+    },
+    "position_rad": {
+      "left_arm_base_joint": -1.968131774162399e-05,
+      "left_shoulder_joint": -0.02401983932680325,
+      "left_elbow_joint": -0.014244945275548917,
+      "left_wrist_pitch_joint": -0.0024685049258338864,
+      "left_wrist_roll_joint": 5.115148665496674e-07,
+      "left_gripper_left_joint": 0.29992814845211413,
+      "right_arm_base_joint": -2.2532650539870634e-05,
+      "right_shoulder_joint": -0.024020931720487318,
+      "right_elbow_joint": -0.01424517006379175,
+      "right_wrist_pitch_joint": -0.0024687080042913785,
+      "right_wrist_roll_joint": 5.034795053134316e-07,
+      "right_gripper_left_joint": 0.2999281499634155
+    },
+    "final_speed_rad_s": {
+      "left_arm_base_joint": -5.277744905126724e-06,
+      "left_shoulder_joint": -6.44135125001204e-07,
+      "left_elbow_joint": 3.566084074457165e-08,
+      "left_wrist_pitch_joint": 7.693716002340309e-09,
+      "left_wrist_roll_joint": -3.7740582022273574e-09,
+      "left_gripper_left_joint": -6.32857615986763e-10,
+      "right_arm_base_joint": 8.383679690309534e-06,
+      "right_shoulder_joint": -6.389507448792096e-07,
+      "right_elbow_joint": 3.6301125304410425e-08,
+      "right_wrist_pitch_joint": 7.1451331826230545e-09,
+      "right_wrist_roll_joint": 6.250277879139778e-09,
+      "right_gripper_left_joint": -8.720807784225365e-10
+    },
+    "mimic_error_rad": {
+      "left_gripper_right_joint": -1.560393438582164e-05,
+      "right_gripper_right_joint": -1.5109241742417012e-05
+    },
+    "robot_contacts": [],
+    "passive_caster": {
+      "caster_swivel_joint": {
+        "angle_rad": 1.0883042288957165,
+        "rate_rad_s": -0.0009347246450794499,
+        "actuator_torque_Nm": 0.0
+      },
+      "caster_wheel_joint": {
+        "angle_rad": 5.003273299023719,
+        "rate_rad_s": -0.00012867605881074172,
+        "actuator_torque_Nm": 0.0
+      }
+    }
+  },
+  "dependent_joints": {
+    "left_gripper_right_joint": {
+      "leader": "left_gripper_left_joint",
+      "multiplier": 1.0,
+      "offset": 0.0
+    },
+    "right_gripper_right_joint": {
+      "leader": "right_gripper_left_joint",
+      "multiplier": 1.0,
+      "offset": 0.0
+    }
+  },
+  "actuator_effort": {
+    "declared_limits_Nm": {
+      "left_wheel_joint": 2.5,
+      "right_wheel_joint": 2.5,
+      "left_arm_base_joint": 1.0,
+      "left_shoulder_joint": 1.0,
+      "left_elbow_joint": 1.0,
+      "left_wrist_pitch_joint": 1.0,
+      "left_wrist_roll_joint": 1.0,
+      "left_gripper_left_joint": 0.3,
+      "right_arm_base_joint": 1.0,
+      "right_shoulder_joint": 1.0,
+      "right_elbow_joint": 1.0,
+      "right_wrist_pitch_joint": 1.0,
+      "right_wrist_roll_joint": 1.0,
+      "right_gripper_left_joint": 0.3
+    },
+    "observed_peak_abs_Nm": {
+      "left_wheel_joint": 1.3446862420922434,
+      "right_wheel_joint": 1.1826918537653133,
+      "left_arm_base_joint": 1.0,
+      "left_shoulder_joint": 1.0,
+      "left_elbow_joint": 1.0,
+      "left_wrist_pitch_joint": 1.0,
+      "left_wrist_roll_joint": 1.0,
+      "left_gripper_left_joint": 0.3,
+      "right_arm_base_joint": 1.0,
+      "right_shoulder_joint": 1.0,
+      "right_elbow_joint": 1.0,
+      "right_wrist_pitch_joint": 1.0,
+      "right_wrist_roll_joint": 1.0,
+      "right_gripper_left_joint": 0.3
+    },
+    "saturated_steps": {
+      "left_wheel_joint": 0,
+      "right_wheel_joint": 0,
+      "left_arm_base_joint": 29,
+      "left_shoulder_joint": 310,
+      "left_elbow_joint": 12,
+      "left_wrist_pitch_joint": 20,
+      "left_wrist_roll_joint": 6,
+      "left_gripper_left_joint": 195,
+      "right_arm_base_joint": 29,
+      "right_shoulder_joint": 310,
+      "right_elbow_joint": 12,
+      "right_wrist_pitch_joint": 20,
+      "right_wrist_roll_joint": 6,
+      "right_gripper_left_joint": 195
+    },
+    "simulated_steps": 16850
+  },
+  "ground_contact_history": {
+    "gravity_rest": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.001501350968636593
+    },
+    "forward_drive": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.0004856224939086065
+    },
+    "positive_yaw_turn": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.00048631572786247274
+    },
+    "arm_motion_arm_base_joint": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.0005096649957944469
+    },
+    "arm_motion_shoulder_joint": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.0004888220853860523
+    },
+    "arm_motion_elbow_joint": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.00048729142201446585
+    },
+    "arm_motion_wrist_pitch_joint": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.0004897518882440166
+    },
+    "arm_motion_wrist_roll_joint": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.0004848647570389192
+    },
+    "gripper_motion": {
+      "bodies": [
+        "caster_link",
+        "left_wheel",
+        "right_wheel"
+      ],
+      "minimum_distance_m": -0.00048417376060755357
+    }
+  },
+  "robot_contact_history_minimum_distance_m": {},
+  "stability_history": {
+    "gravity_rest": {
+      "samples": 100,
+      "max_abs_roll_pitch_rad": 0.000994126529670032,
+      "minimum_geometric_support_margin_m": 0.1161239597148605,
+      "samples_without_support_polygon": 1
+    },
+    "forward_drive": {
+      "samples": 140,
+      "max_abs_roll_pitch_rad": 0.0010214035116726423,
+      "minimum_geometric_support_margin_m": 0.11623517721910502,
+      "samples_without_support_polygon": 0
+    },
+    "positive_yaw_turn": {
+      "samples": 265,
+      "max_abs_roll_pitch_rad": 0.000993873966191633,
+      "minimum_geometric_support_margin_m": 0.11623926719689966,
+      "samples_without_support_polygon": 0
+    },
+    "arm_motion_arm_base_joint": {
+      "samples": 57,
+      "max_abs_roll_pitch_rad": 0.0010011131060316484,
+      "minimum_geometric_support_margin_m": 0.11561939975654562,
+      "samples_without_support_polygon": 0
+    },
+    "arm_motion_shoulder_joint": {
+      "samples": 58,
+      "max_abs_roll_pitch_rad": 0.000949055041652006,
+      "minimum_geometric_support_margin_m": 0.11630529970232227,
+      "samples_without_support_polygon": 0
+    },
+    "arm_motion_elbow_joint": {
+      "samples": 57,
+      "max_abs_roll_pitch_rad": 0.0009466442733780026,
+      "minimum_geometric_support_margin_m": 0.1163065953081099,
+      "samples_without_support_polygon": 0
+    },
+    "arm_motion_wrist_pitch_joint": {
+      "samples": 58,
+      "max_abs_roll_pitch_rad": 0.000944360655518918,
+      "minimum_geometric_support_margin_m": 0.11630705844326283,
+      "samples_without_support_polygon": 0
+    },
+    "arm_motion_wrist_roll_joint": {
+      "samples": 57,
+      "max_abs_roll_pitch_rad": 0.0009424272158873117,
+      "minimum_geometric_support_margin_m": 0.11630813730616926,
+      "samples_without_support_polygon": 0
+    },
+    "gripper_motion": {
+      "samples": 50,
+      "max_abs_roll_pitch_rad": 0.000940572220080553,
+      "minimum_geometric_support_margin_m": 0.11630759287821815,
+      "samples_without_support_polygon": 0
+    }
+  },
+  "no_hidden_supports": {
+    "base_attachment": "freejoint",
+    "added_world_geometry": [
+      "ground"
+    ],
+    "equality_constraints": "two jaw couplings only",
+    "allowed_ground_bodies": [
+      "caster_link",
+      "left_wheel",
+      "right_wheel"
+    ],
+    "unexpected_ground_bodies": []
+  },
+  "adapter_changes": [
+    "retain static bodies while importing",
+    "add mobile-root freejoint",
+    "add ground/gravity",
+    "verify native jaw mimic equalities; add only absent relations; set explicit 2 ms equality time constant",
+    "torque-capped test motors with external PD",
+    "preserve exact importer mass/inertia across saved-MJCF numeric rounding",
+    "proposed high sliding and low rolling friction for wheels; caster remains passive"
+  ],
+  "limitations": [
+    "Not a Gazebo/Isaac/RViz runtime test",
+    "Hardware dimensions, mass and actuator values remain estimates",
+    "Gentle no-load motion only; not a payload or exhaustive self-collision test",
+    "MuJoCo default parent-child collision filtering applies",
+    "Passive caster alignment produces turn tracking lag; wheel commands are not perfectly achieved",
+    "Proposed caster mechanics/friction and actuator gains are not calibrated hardware data"
+  ]
+}

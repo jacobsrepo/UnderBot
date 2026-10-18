@@ -1,0 +1,533 @@
+{
+  "expected_joints": {
+    "left_wheel_joint": {
+      "parent": "base_link",
+      "child": "left_wheel",
+      "type": "continuous",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        -0.18,
+        0.177,
+        0.0925
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "right_wheel_joint": {
+      "parent": "base_link",
+      "child": "right_wheel",
+      "type": "continuous",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        -0.18,
+        -0.177,
+        0.0925
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "caster_swivel_joint": {
+      "parent": "base_link",
+      "child": "caster_swivel_link",
+      "type": "continuous",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        0.215,
+        0,
+        0.11
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "caster_wheel_joint": {
+      "parent": "caster_swivel_link",
+      "child": "caster_link",
+      "type": "continuous",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        -0.02,
+        0,
+        -0.07
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "camera_mount_joint": {
+      "parent": "base_link",
+      "child": "camera_mount",
+      "type": "fixed",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        -0.005,
+        0,
+        0.635
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "camera_optical_joint": {
+      "parent": "camera_mount",
+      "child": "camera_optical_frame",
+      "type": "fixed",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        0.034,
+        0.06925,
+        0.0065
+      ],
+      "rpy": [
+        -1.5707963267948966,
+        0,
+        -1.5707963267948966
+      ]
+    },
+    "lidar_mount_joint": {
+      "parent": "base_link",
+      "child": "lidar_mount",
+      "type": "fixed",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        -0.07,
+        0,
+        0.733
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "lidar_scan_joint": {
+      "parent": "lidar_mount",
+      "child": "lidar_scan_frame",
+      "type": "fixed",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        0,
+        0,
+        0.0225
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "left_arm_base_joint": {
+      "parent": "base_link",
+      "child": "left_arm_base",
+      "type": "revolute",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        -0.07,
+        0.108,
+        0.545
+      ],
+      "rpy": [
+        0,
+        -1.5707963267948966,
+        -1.5707963267948966
+      ]
+    },
+    "left_shoulder_joint": {
+      "parent": "left_arm_base",
+      "child": "left_upper_arm",
+      "type": "revolute",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        0,
+        0,
+        0.04
+      ],
+      "rpy": [
+        0,
+        -2.6179938779914944,
+        0
+      ]
+    },
+    "left_elbow_joint": {
+      "parent": "left_upper_arm",
+      "child": "left_forearm",
+      "type": "revolute",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        0.105,
+        0,
+        0
+      ],
+      "rpy": [
+        0,
+        1.0471975511965976,
+        0
+      ]
+    },
+    "left_wrist_pitch_joint": {
+      "parent": "left_forearm",
+      "child": "left_wrist",
+      "type": "revolute",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        0.09,
+        0,
+        0
+      ],
+      "rpy": [
+        0,
+        -1.0471975511965976,
+        0
+      ]
+    },
+    "left_wrist_roll_joint": {
+      "parent": "left_wrist",
+      "child": "left_hand",
+      "type": "revolute",
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "xyz": [
+        0.045,
+        0,
+        0
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "left_gripper_left_joint": {
+      "parent": "left_hand",
+      "child": "left_gripper_left",
+      "type": "revolute",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        0.025,
+        0.018,
+        0
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "left_gripper_right_joint": {
+      "parent": "left_hand",
+      "child": "left_gripper_right",
+      "type": "revolute",
+      "axis": [
+        0,
+        0,
+        -1
+      ],
+      "xyz": [
+        0.025,
+        -0.018,
+        0
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "right_arm_base_joint": {
+      "parent": "base_link",
+      "child": "right_arm_base",
+      "type": "revolute",
+      "axis": [
+        0,
+        0,
+        -1
+      ],
+      "xyz": [
+        -0.07,
+        -0.108,
+        0.545
+      ],
+      "rpy": [
+        0,
+        -1.5707963267948966,
+        1.5707963267948966
+      ]
+    },
+    "right_shoulder_joint": {
+      "parent": "right_arm_base",
+      "child": "right_upper_arm",
+      "type": "revolute",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        0,
+        0,
+        0.04
+      ],
+      "rpy": [
+        0,
+        -2.6179938779914944,
+        0
+      ]
+    },
+    "right_elbow_joint": {
+      "parent": "right_upper_arm",
+      "child": "right_forearm",
+      "type": "revolute",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        0.105,
+        0,
+        0
+      ],
+      "rpy": [
+        0,
+        1.0471975511965976,
+        0
+      ]
+    },
+    "right_wrist_pitch_joint": {
+      "parent": "right_forearm",
+      "child": "right_wrist",
+      "type": "revolute",
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "xyz": [
+        0.09,
+        0,
+        0
+      ],
+      "rpy": [
+        0,
+        -1.0471975511965976,
+        0
+      ]
+    },
+    "right_wrist_roll_joint": {
+      "parent": "right_wrist",
+      "child": "right_hand",
+      "type": "revolute",
+      "axis": [
+        -1,
+        0,
+        0
+      ],
+      "xyz": [
+        0.045,
+        0,
+        0
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "right_gripper_left_joint": {
+      "parent": "right_hand",
+      "child": "right_gripper_left",
+      "type": "revolute",
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "xyz": [
+        0.025,
+        0.018,
+        0
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    },
+    "right_gripper_right_joint": {
+      "parent": "right_hand",
+      "child": "right_gripper_right",
+      "type": "revolute",
+      "axis": [
+        0,
+        0,
+        -1
+      ],
+      "xyz": [
+        0.025,
+        -0.018,
+        0
+      ],
+      "rpy": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "expected_world_bounds": {
+    "lidar_mount": {
+      "min": [
+        -0.1052,
+        -0.0352,
+        0.733
+      ],
+      "max": [
+        -0.0348,
+        0.0352,
+        0.778
+      ],
+      "geometry": "visual",
+      "tolerance": 0.0004
+    },
+    "camera_mount": {
+      "min": [
+        -0.0325,
+        -0.07725,
+        0.6115
+      ],
+      "max": [
+        0.029,
+        0.07725,
+        0.6595
+      ],
+      "geometry": "visual",
+      "tolerance": 0.0005
+    }
+  },
+  "ground_contacts": [
+    "left_wheel",
+    "right_wheel",
+    "caster_link"
+  ],
+  "allow_collision_pairs": [
+    [
+      "base_link",
+      "camera_mount"
+    ],
+    [
+      "base_link",
+      "lidar_mount"
+    ]
+  ],
+  "sweep_joint_names": [
+    "left_arm_base_joint",
+    "left_shoulder_joint",
+    "left_elbow_joint",
+    "left_wrist_pitch_joint",
+    "left_wrist_roll_joint",
+    "left_gripper_left_joint",
+    "right_arm_base_joint",
+    "right_shoulder_joint",
+    "right_elbow_joint",
+    "right_wrist_pitch_joint",
+    "right_wrist_roll_joint",
+    "right_gripper_left_joint"
+  ],
+  "mirror_link_pairs": [
+    [
+      "left_arm_base",
+      "right_arm_base"
+    ],
+    [
+      "left_upper_arm",
+      "right_upper_arm"
+    ],
+    [
+      "left_forearm",
+      "right_forearm"
+    ],
+    [
+      "left_wrist",
+      "right_wrist"
+    ],
+    [
+      "left_hand",
+      "right_hand"
+    ],
+    [
+      "left_gripper_left",
+      "right_gripper_right"
+    ],
+    [
+      "left_gripper_right",
+      "right_gripper_left"
+    ]
+  ]
+}

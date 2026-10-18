@@ -1,0 +1,161 @@
+{
+  "units": "SI",
+  "floating_base": true,
+  "commanded_joints": [
+    {
+      "name": "left_wheel_joint",
+      "mode": "velocity",
+      "limit": {
+        "effort": "2.5",
+        "velocity": "4"
+      }
+    },
+    {
+      "name": "right_wheel_joint",
+      "mode": "velocity",
+      "limit": {
+        "effort": "2.5",
+        "velocity": "4"
+      }
+    },
+    {
+      "name": "left_arm_base_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.785398163397",
+        "upper": "0.785398163397"
+      }
+    },
+    {
+      "name": "left_shoulder_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.349065850399",
+        "upper": "0.349065850399"
+      }
+    },
+    {
+      "name": "left_elbow_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.349065850399",
+        "upper": "0.349065850399"
+      }
+    },
+    {
+      "name": "left_wrist_pitch_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.523598775598",
+        "upper": "0.523598775598"
+      }
+    },
+    {
+      "name": "left_wrist_roll_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-1.57079632679",
+        "upper": "1.57079632679"
+      }
+    },
+    {
+      "name": "left_gripper_left_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "0.3",
+        "velocity": "1",
+        "lower": "0",
+        "upper": "0.6"
+      }
+    },
+    {
+      "name": "right_arm_base_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.785398163397",
+        "upper": "0.785398163397"
+      }
+    },
+    {
+      "name": "right_shoulder_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.349065850399",
+        "upper": "0.349065850399"
+      }
+    },
+    {
+      "name": "right_elbow_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.349065850399",
+        "upper": "0.349065850399"
+      }
+    },
+    {
+      "name": "right_wrist_pitch_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-0.523598775598",
+        "upper": "0.523598775598"
+      }
+    },
+    {
+      "name": "right_wrist_roll_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "1",
+        "velocity": "1",
+        "lower": "-1.57079632679",
+        "upper": "1.57079632679"
+      }
+    },
+    {
+      "name": "right_gripper_left_joint",
+      "mode": "position",
+      "limit": {
+        "effort": "0.3",
+        "velocity": "1",
+        "lower": "0",
+        "upper": "0.6"
+      }
+    }
+  ],
+  "passive_joints": [
+    "caster_swivel_joint",
+    "caster_wheel_joint"
+  ],
+  "mimic_followers": [
+    {
+      "name": "left_gripper_right_joint",
+      "joint": "left_gripper_left_joint",
+      "multiplier": "1",
+      "offset": "0"
+    },
+    {
+      "name": "right_gripper_right_joint",
+      "joint": "right_gripper_left_joint",
+      "multiplier": "1",
+      "offset": "0"
+    }
+  ],
+  "note": "Do not add independent drives to passive joints or mimic followers."
+}

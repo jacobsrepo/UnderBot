@@ -1,0 +1,951 @@
+{
+  "schema": "underbot-pbr-material-library-1.0",
+  "revision": "R09",
+  "description": "Original procedural PBR surface maps; material appearance is an artistic approximation, not measured material data.",
+  "source_geometry_sha256": "439c8ad7781f00fce2a9d085e63e6bf840d15aa85a874fcfc8bee48ea1db9b48",
+  "texture_resolution": [
+    2048,
+    2048
+  ],
+  "texture_tile_size_m": 0.1,
+  "units": "metres",
+  "usage": [
+    "URIs are relative to this JSON file. Replace texture URI objects with glTF texture indices when packaging GLB.",
+    "Planar/box projection uses 1 UV repeat per 0.1 m; preserve consistent right-handed tangent basis.",
+    "Base-color PNGs are sRGB. Roughness, metallic-roughness and normal PNGs are linear data.",
+    "Textures only affect shading; do not displace or rescale the dimensioned STL meshes.",
+    "STL does not support materials; use the accompanying GLB or OBJ/MTL for appearance."
+  ],
+  "materials": {
+    "matte_black_vinyl": {
+      "name": "matte_black_vinyl",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "baseColorTexture": {
+          "uri": "textures/matte_black_vinyl_basecolor.png",
+          "texCoord": 0
+        },
+        "metallicFactor": 1.0,
+        "roughnessFactor": 1.0,
+        "metallicRoughnessTexture": {
+          "uri": "textures/matte_black_vinyl_metallicroughness.png",
+          "texCoord": 0
+        }
+      },
+      "normalTexture": {
+        "uri": "textures/matte_black_vinyl_normal.png",
+        "texCoord": 0,
+        "scale": 1.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1,
+        "standalone_roughness_uri": "textures/matte_black_vinyl_roughness.png",
+        "fallback_baseColorFactor_linear": [
+          0.015,
+          0.017,
+          0.019,
+          1.0
+        ],
+        "fallback_roughnessFactor": 0.79,
+        "fallback_metallicFactor": 0.0,
+        "height_rms_m": 8.35143225685897e-07,
+        "normal_convention": "OpenGL/glTF tangent space, +Y, RGB linear data",
+        "colorspace": {
+          "basecolor": "sRGB",
+          "normal": "linear",
+          "metallicroughness": "linear",
+          "roughness": "linear"
+        },
+        "metallic_roughness_channels": {
+          "R": "unused, 1",
+          "G": "roughness",
+          "B": "metallic"
+        },
+        "texture_sampler": {
+          "wrapS": 10497,
+          "wrapT": 10497,
+          "magFilter": 9729,
+          "minFilter": 9987
+        },
+        "seam_check": {
+          "boundary_mean_difference": 3.1165609470917843e-07,
+          "interior_mean_difference": 3.159919401696243e-07,
+          "boundary_to_interior_ratio": 0.9862785935401917
+        }
+      }
+    },
+    "black_painted_aluminium": {
+      "name": "black_painted_aluminium",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "baseColorTexture": {
+          "uri": "textures/black_painted_aluminium_basecolor.png",
+          "texCoord": 0
+        },
+        "metallicFactor": 1.0,
+        "roughnessFactor": 1.0,
+        "metallicRoughnessTexture": {
+          "uri": "textures/black_painted_aluminium_metallicroughness.png",
+          "texCoord": 0
+        }
+      },
+      "normalTexture": {
+        "uri": "textures/black_painted_aluminium_normal.png",
+        "texCoord": 0,
+        "scale": 1.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1,
+        "standalone_roughness_uri": "textures/black_painted_aluminium_roughness.png",
+        "fallback_baseColorFactor_linear": [
+          0.022,
+          0.024,
+          0.027,
+          1.0
+        ],
+        "fallback_roughnessFactor": 0.48,
+        "fallback_metallicFactor": 0.0,
+        "height_rms_m": 4.861264528699394e-07,
+        "normal_convention": "OpenGL/glTF tangent space, +Y, RGB linear data",
+        "colorspace": {
+          "basecolor": "sRGB",
+          "normal": "linear",
+          "metallicroughness": "linear",
+          "roughness": "linear"
+        },
+        "metallic_roughness_channels": {
+          "R": "unused, 1",
+          "G": "roughness",
+          "B": "metallic"
+        },
+        "texture_sampler": {
+          "wrapS": 10497,
+          "wrapT": 10497,
+          "magFilter": 9729,
+          "minFilter": 9987
+        },
+        "seam_check": {
+          "boundary_mean_difference": 1.8426119652303896e-07,
+          "interior_mean_difference": 1.8456211137163336e-07,
+          "boundary_to_interior_ratio": 0.998369574546814
+        }
+      }
+    },
+    "tire_rubber": {
+      "name": "tire_rubber",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "baseColorTexture": {
+          "uri": "textures/tire_rubber_basecolor.png",
+          "texCoord": 0
+        },
+        "metallicFactor": 1.0,
+        "roughnessFactor": 1.0,
+        "metallicRoughnessTexture": {
+          "uri": "textures/tire_rubber_metallicroughness.png",
+          "texCoord": 0
+        }
+      },
+      "normalTexture": {
+        "uri": "textures/tire_rubber_normal.png",
+        "texCoord": 0,
+        "scale": 1.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1,
+        "standalone_roughness_uri": "textures/tire_rubber_roughness.png",
+        "fallback_baseColorFactor_linear": [
+          0.009,
+          0.01,
+          0.011,
+          1.0
+        ],
+        "fallback_roughnessFactor": 0.9,
+        "fallback_metallicFactor": 0.0,
+        "height_rms_m": 9.384770010001375e-07,
+        "normal_convention": "OpenGL/glTF tangent space, +Y, RGB linear data",
+        "colorspace": {
+          "basecolor": "sRGB",
+          "normal": "linear",
+          "metallicroughness": "linear",
+          "roughness": "linear"
+        },
+        "metallic_roughness_channels": {
+          "R": "unused, 1",
+          "G": "roughness",
+          "B": "metallic"
+        },
+        "texture_sampler": {
+          "wrapS": 10497,
+          "wrapT": 10497,
+          "magFilter": 9729,
+          "minFilter": 9987
+        },
+        "seam_check": {
+          "boundary_mean_difference": 3.4697160344876465e-07,
+          "interior_mean_difference": 3.5531985531633836e-07,
+          "boundary_to_interior_ratio": 0.9765049815177917
+        }
+      }
+    },
+    "brushed_aluminium": {
+      "name": "brushed_aluminium",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "baseColorTexture": {
+          "uri": "textures/brushed_aluminium_basecolor.png",
+          "texCoord": 0
+        },
+        "metallicFactor": 1.0,
+        "roughnessFactor": 1.0,
+        "metallicRoughnessTexture": {
+          "uri": "textures/brushed_aluminium_metallicroughness.png",
+          "texCoord": 0
+        }
+      },
+      "normalTexture": {
+        "uri": "textures/brushed_aluminium_normal.png",
+        "texCoord": 0,
+        "scale": 1.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1,
+        "standalone_roughness_uri": "textures/brushed_aluminium_roughness.png",
+        "fallback_baseColorFactor_linear": [
+          0.63,
+          0.67,
+          0.71,
+          1.0
+        ],
+        "fallback_roughnessFactor": 0.32,
+        "fallback_metallicFactor": 1.0,
+        "height_rms_m": 4.2933805843858863e-07,
+        "normal_convention": "OpenGL/glTF tangent space, +Y, RGB linear data",
+        "colorspace": {
+          "basecolor": "sRGB",
+          "normal": "linear",
+          "metallicroughness": "linear",
+          "roughness": "linear"
+        },
+        "metallic_roughness_channels": {
+          "R": "unused, 1",
+          "G": "roughness",
+          "B": "metallic"
+        },
+        "texture_sampler": {
+          "wrapS": 10497,
+          "wrapT": 10497,
+          "magFilter": 9729,
+          "minFilter": 9987
+        },
+        "seam_check": {
+          "boundary_mean_difference": 1.1841745362062284e-07,
+          "interior_mean_difference": 1.0414908047096105e-07,
+          "boundary_to_interior_ratio": 1.136999487876892
+        }
+      }
+    },
+    "black_abs": {
+      "name": "black_abs",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "baseColorTexture": {
+          "uri": "textures/black_abs_basecolor.png",
+          "texCoord": 0
+        },
+        "metallicFactor": 1.0,
+        "roughnessFactor": 1.0,
+        "metallicRoughnessTexture": {
+          "uri": "textures/black_abs_metallicroughness.png",
+          "texCoord": 0
+        }
+      },
+      "normalTexture": {
+        "uri": "textures/black_abs_normal.png",
+        "texCoord": 0,
+        "scale": 1.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1,
+        "standalone_roughness_uri": "textures/black_abs_roughness.png",
+        "fallback_baseColorFactor_linear": [
+          0.027,
+          0.03,
+          0.034,
+          1.0
+        ],
+        "fallback_roughnessFactor": 0.54,
+        "fallback_metallicFactor": 0.0,
+        "height_rms_m": 5.212842211221869e-07,
+        "normal_convention": "OpenGL/glTF tangent space, +Y, RGB linear data",
+        "colorspace": {
+          "basecolor": "sRGB",
+          "normal": "linear",
+          "metallicroughness": "linear",
+          "roughness": "linear"
+        },
+        "metallic_roughness_channels": {
+          "R": "unused, 1",
+          "G": "roughness",
+          "B": "metallic"
+        },
+        "texture_sampler": {
+          "wrapS": 10497,
+          "wrapT": 10497,
+          "magFilter": 9729,
+          "minFilter": 9987
+        },
+        "seam_check": {
+          "boundary_mean_difference": 2.0132335976086324e-07,
+          "interior_mean_difference": 1.9777371562668122e-07,
+          "boundary_to_interior_ratio": 1.017948031425476
+        }
+      }
+    },
+    "pcb_green": {
+      "name": "pcb_green",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "baseColorTexture": {
+          "uri": "textures/pcb_green_basecolor.png",
+          "texCoord": 0
+        },
+        "metallicFactor": 1.0,
+        "roughnessFactor": 1.0,
+        "metallicRoughnessTexture": {
+          "uri": "textures/pcb_green_metallicroughness.png",
+          "texCoord": 0
+        }
+      },
+      "normalTexture": {
+        "uri": "textures/pcb_green_normal.png",
+        "texCoord": 0,
+        "scale": 1.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1,
+        "standalone_roughness_uri": "textures/pcb_green_roughness.png",
+        "fallback_baseColorFactor_linear": [
+          0.012,
+          0.085,
+          0.039,
+          1.0
+        ],
+        "fallback_roughnessFactor": 0.39,
+        "fallback_metallicFactor": 0.0,
+        "height_rms_m": 1.250534324981345e-07,
+        "normal_convention": "OpenGL/glTF tangent space, +Y, RGB linear data",
+        "colorspace": {
+          "basecolor": "sRGB",
+          "normal": "linear",
+          "metallicroughness": "linear",
+          "roughness": "linear"
+        },
+        "metallic_roughness_channels": {
+          "R": "unused, 1",
+          "G": "roughness",
+          "B": "metallic"
+        },
+        "texture_sampler": {
+          "wrapS": 10497,
+          "wrapT": 10497,
+          "magFilter": 9729,
+          "minFilter": 9987
+        },
+        "seam_check": {
+          "boundary_mean_difference": 4.915393603255325e-08,
+          "interior_mean_difference": 4.747625581558168e-08,
+          "boundary_to_interior_ratio": 1.035337209701538
+        }
+      }
+    },
+    "polycarbonate": {
+      "name": "polycarbonate",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.94,
+          0.975,
+          0.99,
+          0.16
+        ],
+        "roughnessFactor": 0.055,
+        "metallicFactor": 0.0
+      },
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "extras": {
+        "tile_size_m": 0.1,
+        "note": "Alpha fallback supports basic viewers; use transmission for raytraced rendering. Clear sheet, no opaque surface map. Thickness is representative; model geometry sets sheet thickness."
+      },
+      "extensions": {
+        "KHR_materials_transmission": {
+          "transmissionFactor": 0.94
+        },
+        "KHR_materials_ior": {
+          "ior": 1.586
+        },
+        "KHR_materials_volume": {
+          "thicknessFactor": 0.003,
+          "attenuationDistance": 3.0,
+          "attenuationColor": [
+            0.94,
+            0.98,
+            0.99
+          ]
+        }
+      }
+    },
+    "optical_black_glass": {
+      "name": "optical_black_glass",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.004,
+          0.007,
+          0.013,
+          1.0
+        ],
+        "roughnessFactor": 0.075,
+        "metallicFactor": 0.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1
+      },
+      "extensions": {
+        "KHR_materials_ior": {
+          "ior": 1.52
+        }
+      }
+    },
+    "worx_orange": {
+      "name": "worx_orange",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.96,
+          0.22,
+          0.015,
+          1.0
+        ],
+        "roughnessFactor": 0.42,
+        "metallicFactor": 0.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1
+      }
+    },
+    "control_red": {
+      "name": "control_red",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.65,
+          0.015,
+          0.015,
+          1.0
+        ],
+        "roughnessFactor": 0.44,
+        "metallicFactor": 0.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1
+      }
+    },
+    "status_led_green": {
+      "name": "status_led_green",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.015,
+          0.55,
+          0.035,
+          1.0
+        ],
+        "roughnessFactor": 0.28,
+        "metallicFactor": 0.0
+      },
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "extras": {
+        "tile_size_m": 0.1
+      },
+      "emissiveFactor": [
+        0.025,
+        0.45,
+        0.03
+      ]
+    }
+  },
+  "urdf_material_fallbacks": {
+    "matte_black": "matte_black_vinyl",
+    "servo_black": "black_abs",
+    "aluminium": "brushed_aluminium",
+    "polycarbonate": "polycarbonate",
+    "pcb_green": "pcb_green",
+    "worx_orange": "worx_orange",
+    "control_red": "control_red"
+  },
+  "part_assignments": {
+    "base_link": {
+      "wr141e_lower_chassis": "black_abs",
+      "wr141e_orange_hood": "worx_orange",
+      "front_grille": "black_abs",
+      "front_grille_rib_-0.126": "black_abs",
+      "front_grille_rib_-0.105": "black_abs",
+      "front_grille_rib_-0.08399999999999999": "black_abs",
+      "front_grille_rib_-0.063": "black_abs",
+      "front_grille_rib_-0.041999999999999996": "black_abs",
+      "front_grille_rib_-0.02099999999999999": "black_abs",
+      "front_grille_rib_0.0": "black_abs",
+      "front_grille_rib_0.02100000000000002": "black_abs",
+      "front_grille_rib_0.04200000000000001": "black_abs",
+      "front_grille_rib_0.063": "black_abs",
+      "front_grille_rib_0.08400000000000002": "black_abs",
+      "front_grille_rib_0.10500000000000001": "black_abs",
+      "front_grille_rib_0.126": "black_abs",
+      "cut_to_edge_side_-1": "black_abs",
+      "cut_to_edge_side_1": "black_abs",
+      "control_panel": "black_abs",
+      "height_adjustment_dial": "worx_orange",
+      "stop_button": "control_red",
+      "display": "optical_black_glass",
+      "side_charging_contact_bar": "control_red",
+      "charging_contact_0.078": "brushed_aluminium",
+      "charging_contact_0.122": "brushed_aluminium",
+      "chassis_adapter": "black_painted_aluminium",
+      "adapter_spacer_-0.16000000000000003_-0.09000000000000001": "black_painted_aluminium",
+      "post_-0.16000000000000003_-0.09000000000000001": "black_painted_aluminium",
+      "adapter_spacer_-0.16000000000000003_0.09000000000000001": "black_painted_aluminium",
+      "post_-0.16000000000000003_0.09000000000000001": "black_painted_aluminium",
+      "adapter_spacer_0.020000000000000004_-0.09000000000000001": "black_painted_aluminium",
+      "post_0.020000000000000004_-0.09000000000000001": "black_painted_aluminium",
+      "adapter_spacer_0.020000000000000004_0.09000000000000001": "black_painted_aluminium",
+      "post_0.020000000000000004_0.09000000000000001": "black_painted_aluminium",
+      "rail_x_0_-1": "black_painted_aluminium",
+      "rail_y_0_-1": "black_painted_aluminium",
+      "rail_x_0_1": "black_painted_aluminium",
+      "rail_y_0_1": "black_painted_aluminium",
+      "polycarbonate_floor_0": "polycarbonate",
+      "rail_x_1_-1": "black_painted_aluminium",
+      "rail_y_1_-1": "black_painted_aluminium",
+      "rail_x_1_1": "black_painted_aluminium",
+      "rail_y_1_1": "black_painted_aluminium",
+      "polycarbonate_floor_1": "polycarbonate",
+      "rail_x_2_-1": "black_painted_aluminium",
+      "rail_y_2_-1": "black_painted_aluminium",
+      "rail_x_2_1": "black_painted_aluminium",
+      "rail_y_2_1": "black_painted_aluminium",
+      "polycarbonate_floor_2": "polycarbonate",
+      "rail_x_3_-1": "black_painted_aluminium",
+      "rail_y_3_-1": "black_painted_aluminium",
+      "rail_x_3_1": "black_painted_aluminium",
+      "rail_y_3_1": "black_painted_aluminium",
+      "polycarbonate_floor_3": "polycarbonate",
+      "front_door_lower": "matte_black_vinyl",
+      "front_door_upper": "matte_black_vinyl",
+      "front_door_left_strip": "matte_black_vinyl",
+      "front_door_right_strip": "matte_black_vinyl",
+      "rear_door_closed": "polycarbonate",
+      "side_-1_lower": "matte_black_vinyl",
+      "side_-1_upper": "matte_black_vinyl",
+      "side_-1_front_strip": "matte_black_vinyl",
+      "side_-1_rear_strip": "matte_black_vinyl",
+      "arm_bridge_-1": "black_painted_aluminium",
+      "arm_flange_-1": "black_painted_aluminium",
+      "bridge_bolt_-1_-0.16000000000000003_0.505": "brushed_aluminium",
+      "bridge_bolt_-1_-0.16000000000000003_0.5850000000000001": "brushed_aluminium",
+      "bridge_bolt_-1_0.020000000000000004_0.505": "brushed_aluminium",
+      "bridge_bolt_-1_0.020000000000000004_0.5850000000000001": "brushed_aluminium",
+      "panel_screw_-1_-0.16000000000000003_0.23700000000000002": "brushed_aluminium",
+      "panel_screw_-1_0.020000000000000004_0.23700000000000002": "brushed_aluminium",
+      "panel_screw_-1_-0.16000000000000003_0.39": "brushed_aluminium",
+      "panel_screw_-1_0.020000000000000004_0.39": "brushed_aluminium",
+      "panel_screw_-1_-0.16000000000000003_0.64": "brushed_aluminium",
+      "panel_screw_-1_0.020000000000000004_0.64": "brushed_aluminium",
+      "panel_screw_-1_-0.16000000000000003_0.673": "brushed_aluminium",
+      "panel_screw_-1_0.020000000000000004_0.673": "brushed_aluminium",
+      "side_1_lower": "matte_black_vinyl",
+      "side_1_upper": "matte_black_vinyl",
+      "side_1_front_strip": "matte_black_vinyl",
+      "side_1_rear_strip": "matte_black_vinyl",
+      "arm_bridge_1": "black_painted_aluminium",
+      "arm_flange_1": "black_painted_aluminium",
+      "bridge_bolt_1_-0.16000000000000003_0.505": "brushed_aluminium",
+      "bridge_bolt_1_-0.16000000000000003_0.5850000000000001": "brushed_aluminium",
+      "bridge_bolt_1_0.020000000000000004_0.505": "brushed_aluminium",
+      "bridge_bolt_1_0.020000000000000004_0.5850000000000001": "brushed_aluminium",
+      "panel_screw_1_-0.16000000000000003_0.23700000000000002": "brushed_aluminium",
+      "panel_screw_1_0.020000000000000004_0.23700000000000002": "brushed_aluminium",
+      "panel_screw_1_-0.16000000000000003_0.39": "brushed_aluminium",
+      "panel_screw_1_0.020000000000000004_0.39": "brushed_aluminium",
+      "panel_screw_1_-0.16000000000000003_0.64": "brushed_aluminium",
+      "panel_screw_1_0.020000000000000004_0.64": "brushed_aluminium",
+      "panel_screw_1_-0.16000000000000003_0.673": "brushed_aluminium",
+      "panel_screw_1_0.020000000000000004_0.673": "brushed_aluminium",
+      "front_hinge_0.305": "brushed_aluminium",
+      "front_hinge_0.525": "brushed_aluminium",
+      "front_latch": "black_abs",
+      "rear_hinge_0.305": "brushed_aluminium",
+      "rear_hinge_0.525": "brushed_aluminium",
+      "rear_latch": "black_abs",
+      "noco_tray": "black_painted_aluminium",
+      "noco_gb70": "black_abs",
+      "noco_label": "matte_black_vinyl",
+      "noco_rear_label": "matte_black_vinyl",
+      "charge_led_0": "status_led_green",
+      "charge_led_1": "status_led_green",
+      "charge_led_2": "status_led_green",
+      "charge_led_3": "status_led_green",
+      "battery_retainer_-1": "black_painted_aluminium",
+      "battery_retainer_1": "black_painted_aluminium",
+      "power_io": "black_abs",
+      "converter": "pcb_green",
+      "compute_board": "pcb_green",
+      "active_cooler": "black_abs",
+      "cooler_fin_0": "black_painted_aluminium",
+      "cooler_fin_1": "black_painted_aluminium",
+      "cooler_fin_2": "black_painted_aluminium",
+      "cooler_fin_3": "black_painted_aluminium",
+      "cooler_fin_4": "black_painted_aluminium",
+      "cooler_fin_5": "black_painted_aluminium",
+      "compute_standoff_-0.094_-0.035": "brushed_aluminium",
+      "compute_standoff_-0.094_0.035": "brushed_aluminium",
+      "compute_standoff_-0.046000000000000006_-0.035": "brushed_aluminium",
+      "compute_standoff_-0.046000000000000006_0.035": "brushed_aluminium",
+      "wiring_distribution": "black_abs",
+      "camera_vertical_bracket_-0.055": "black_painted_aluminium",
+      "camera_vertical_bracket_0.055": "black_painted_aluminium",
+      "camera_shelf": "black_painted_aluminium",
+      "camera_pcb_standoff_-0.025_-0.065": "brushed_aluminium",
+      "camera_pcb_standoff_-0.025_0.065": "brushed_aluminium",
+      "camera_pcb_standoff_0.005_-0.065": "brushed_aluminium",
+      "camera_pcb_standoff_0.005_0.065": "brushed_aluminium",
+      "lidar_pedestal": "black_painted_aluminium"
+    },
+    "left_wheel": {
+      "rubber_tyre": "tire_rubber",
+      "hub": "brushed_aluminium",
+      "hub_bolt_-1_0": "brushed_aluminium",
+      "hub_bolt_-1_1": "brushed_aluminium",
+      "hub_bolt_-1_2": "brushed_aluminium",
+      "hub_bolt_-1_3": "brushed_aluminium",
+      "hub_bolt_-1_4": "brushed_aluminium",
+      "hub_bolt_-1_5": "brushed_aluminium",
+      "hub_bolt_1_0": "brushed_aluminium",
+      "hub_bolt_1_1": "brushed_aluminium",
+      "hub_bolt_1_2": "brushed_aluminium",
+      "hub_bolt_1_3": "brushed_aluminium",
+      "hub_bolt_1_4": "brushed_aluminium",
+      "hub_bolt_1_5": "brushed_aluminium"
+    },
+    "right_wheel": {
+      "rubber_tyre": "tire_rubber",
+      "hub": "brushed_aluminium",
+      "hub_bolt_-1_0": "brushed_aluminium",
+      "hub_bolt_-1_1": "brushed_aluminium",
+      "hub_bolt_-1_2": "brushed_aluminium",
+      "hub_bolt_-1_3": "brushed_aluminium",
+      "hub_bolt_-1_4": "brushed_aluminium",
+      "hub_bolt_-1_5": "brushed_aluminium",
+      "hub_bolt_1_0": "brushed_aluminium",
+      "hub_bolt_1_1": "brushed_aluminium",
+      "hub_bolt_1_2": "brushed_aluminium",
+      "hub_bolt_1_3": "brushed_aluminium",
+      "hub_bolt_1_4": "brushed_aluminium",
+      "hub_bolt_1_5": "brushed_aluminium"
+    },
+    "caster_swivel_link": {
+      "swivel_shaft": "brushed_aluminium",
+      "fork_cheek_-1": "black_painted_aluminium",
+      "fork_cheek_1": "black_painted_aluminium",
+      "caster_axle": "brushed_aluminium"
+    },
+    "caster_link": {
+      "front_wheel": "tire_rubber",
+      "front_hub": "black_abs"
+    },
+    "camera_mount": {
+      "kinect_logic_board_provisional": "pcb_green",
+      "kinect_heatspreader_provisional": "brushed_aluminium",
+      "kinect_optical_carrier_provisional": "black_abs",
+      "rgb_lens": "optical_black_glass",
+      "depth_lens": "optical_black_glass",
+      "infrared_emitter_provisional": "optical_black_glass"
+    },
+    "camera_optical_frame": {},
+    "lidar_mount": {
+      "lidar_head": "black_abs",
+      "lidar_band": "worx_orange"
+    },
+    "lidar_scan_frame": {},
+    "left_arm_base": {
+      "base_rotor": "black_abs",
+      "root_plate": "brushed_aluminium",
+      "shoulder_saddle": "brushed_aluminium"
+    },
+    "left_upper_arm": {
+      "servo_body": "black_abs",
+      "aluminium_cheek_-1": "brushed_aluminium",
+      "pivot_cap_-1": "brushed_aluminium",
+      "bracket_screw_-1_0.015": "brushed_aluminium",
+      "bracket_screw_-1_0.093": "brushed_aluminium",
+      "aluminium_cheek_1": "brushed_aluminium",
+      "pivot_cap_1": "brushed_aluminium",
+      "bracket_screw_1_0.015": "brushed_aluminium",
+      "bracket_screw_1_0.093": "brushed_aluminium"
+    },
+    "left_forearm": {
+      "servo_body": "black_abs",
+      "aluminium_cheek_-1": "brushed_aluminium",
+      "pivot_cap_-1": "brushed_aluminium",
+      "bracket_screw_-1_0.015": "brushed_aluminium",
+      "bracket_screw_-1_0.078": "brushed_aluminium",
+      "aluminium_cheek_1": "brushed_aluminium",
+      "pivot_cap_1": "brushed_aluminium",
+      "bracket_screw_1_0.015": "brushed_aluminium",
+      "bracket_screw_1_0.078": "brushed_aluminium"
+    },
+    "left_wrist": {
+      "servo_body": "black_abs",
+      "aluminium_cheek_-1": "brushed_aluminium",
+      "pivot_cap_-1": "brushed_aluminium",
+      "bracket_screw_-1_0.015": "brushed_aluminium",
+      "bracket_screw_-1_0.033": "brushed_aluminium",
+      "aluminium_cheek_1": "brushed_aluminium",
+      "pivot_cap_1": "brushed_aluminium",
+      "bracket_screw_1_0.015": "brushed_aluminium",
+      "bracket_screw_1_0.033": "brushed_aluminium"
+    },
+    "left_hand": {
+      "gripper_servo": "black_abs",
+      "gripper_bridge": "brushed_aluminium",
+      "wrist_roll_hub": "brushed_aluminium"
+    },
+    "left_gripper_left": {
+      "finger": "brushed_aluminium",
+      "jaw_pivot": "brushed_aluminium"
+    },
+    "left_gripper_right": {
+      "finger": "brushed_aluminium",
+      "jaw_pivot": "brushed_aluminium"
+    },
+    "right_arm_base": {
+      "base_rotor": "black_abs",
+      "root_plate": "brushed_aluminium",
+      "shoulder_saddle": "brushed_aluminium"
+    },
+    "right_upper_arm": {
+      "servo_body": "black_abs",
+      "aluminium_cheek_-1": "brushed_aluminium",
+      "pivot_cap_-1": "brushed_aluminium",
+      "bracket_screw_-1_0.015": "brushed_aluminium",
+      "bracket_screw_-1_0.093": "brushed_aluminium",
+      "aluminium_cheek_1": "brushed_aluminium",
+      "pivot_cap_1": "brushed_aluminium",
+      "bracket_screw_1_0.015": "brushed_aluminium",
+      "bracket_screw_1_0.093": "brushed_aluminium"
+    },
+    "right_forearm": {
+      "servo_body": "black_abs",
+      "aluminium_cheek_-1": "brushed_aluminium",
+      "pivot_cap_-1": "brushed_aluminium",
+      "bracket_screw_-1_0.015": "brushed_aluminium",
+      "bracket_screw_-1_0.078": "brushed_aluminium",
+      "aluminium_cheek_1": "brushed_aluminium",
+      "pivot_cap_1": "brushed_aluminium",
+      "bracket_screw_1_0.015": "brushed_aluminium",
+      "bracket_screw_1_0.078": "brushed_aluminium"
+    },
+    "right_wrist": {
+      "servo_body": "black_abs",
+      "aluminium_cheek_-1": "brushed_aluminium",
+      "pivot_cap_-1": "brushed_aluminium",
+      "bracket_screw_-1_0.015": "brushed_aluminium",
+      "bracket_screw_-1_0.033": "brushed_aluminium",
+      "aluminium_cheek_1": "brushed_aluminium",
+      "pivot_cap_1": "brushed_aluminium",
+      "bracket_screw_1_0.015": "brushed_aluminium",
+      "bracket_screw_1_0.033": "brushed_aluminium"
+    },
+    "right_hand": {
+      "gripper_servo": "black_abs",
+      "gripper_bridge": "brushed_aluminium",
+      "wrist_roll_hub": "brushed_aluminium"
+    },
+    "right_gripper_left": {
+      "finger": "brushed_aluminium",
+      "jaw_pivot": "brushed_aluminium"
+    },
+    "right_gripper_right": {
+      "finger": "brushed_aluminium",
+      "jaw_pivot": "brushed_aluminium"
+    }
+  },
+  "source_texture_license": "Original procedurally generated textures created for this project; no third-party imagery used.",
+  "files": [
+    {
+      "uri": "textures/black_abs_basecolor.png",
+      "bytes": 402157,
+      "sha256": "f266444a2b4afa673639a138409a8e9b0155dcb0959267c6aa69758f3ffd6492"
+    },
+    {
+      "uri": "textures/black_abs_metallicroughness.png",
+      "bytes": 1560761,
+      "sha256": "54d963c1f7f30ae751a3c2f136d8cf084863c875658210c7962b4f64cee7ab8c"
+    },
+    {
+      "uri": "textures/black_abs_normal.png",
+      "bytes": 1574182,
+      "sha256": "f8c9e240458863ed30511af20abbd41b75baed6b6e278d9b5cc2e1d81573078e"
+    },
+    {
+      "uri": "textures/black_abs_roughness.png",
+      "bytes": 1262684,
+      "sha256": "553cfa7b7605e1ecb3a37c87df1a7ff9c5d902c314e12a967cc7242d1bd5c018"
+    },
+    {
+      "uri": "textures/black_painted_aluminium_basecolor.png",
+      "bytes": 291706,
+      "sha256": "cc61bc70bf8fc6fb586d40613b0631cde66e1bfe405aba736448f4e8a7eb3f4f"
+    },
+    {
+      "uri": "textures/black_painted_aluminium_metallicroughness.png",
+      "bytes": 1560660,
+      "sha256": "ec260ec5cf07b015668f588e7e985c2543a3197c97f77722f99482fd3bde7d17"
+    },
+    {
+      "uri": "textures/black_painted_aluminium_normal.png",
+      "bytes": 1521416,
+      "sha256": "863527c57e03886854bcf9f0ac2302856b500718414dca14ded6324fa332fc6b"
+    },
+    {
+      "uri": "textures/black_painted_aluminium_roughness.png",
+      "bytes": 1262469,
+      "sha256": "697fb7eb3c3830612c3a3dc299010281091f1514d3b332903d99d5bc5a1494a5"
+    },
+    {
+      "uri": "textures/brushed_aluminium_basecolor.png",
+      "bytes": 82596,
+      "sha256": "41a089816c2c9d2471db5f5c558d556de2b2c913f3e44219d0ce87e700dffc73"
+    },
+    {
+      "uri": "textures/brushed_aluminium_metallicroughness.png",
+      "bytes": 200148,
+      "sha256": "f8e89c988151557445bc13613b23fc7d17e1aebd4d3766cc73ab7726948eb225"
+    },
+    {
+      "uri": "textures/brushed_aluminium_normal.png",
+      "bytes": 94045,
+      "sha256": "3b1623538782043af105f44dff3b0ff5b228ce5cd83dcefde63939c185d02226"
+    },
+    {
+      "uri": "textures/brushed_aluminium_roughness.png",
+      "bytes": 169804,
+      "sha256": "f9da931f53588fab486c64abea430c88650bf95425c044752ab52cb95b9bb8db"
+    },
+    {
+      "uri": "textures/matte_black_vinyl_basecolor.png",
+      "bytes": 386765,
+      "sha256": "4db373e44bf239b6fb6163eeedc17085e7f4f35da613d53cc1c5932084a9f0ab"
+    },
+    {
+      "uri": "textures/matte_black_vinyl_metallicroughness.png",
+      "bytes": 1560679,
+      "sha256": "6a575ada06343166754cc9ac201a34a2e79185e164d32ddda7d10fa5fdab763f"
+    },
+    {
+      "uri": "textures/matte_black_vinyl_normal.png",
+      "bytes": 1949178,
+      "sha256": "c368abc3d6a034c65ffde0c886956c3ea3b55f962eebc4c33411ea9aaa4fb56a"
+    },
+    {
+      "uri": "textures/matte_black_vinyl_roughness.png",
+      "bytes": 1262267,
+      "sha256": "ebe920f4353df3976dbecd4493f84dbe1e51e9d8fcefd96944438dae04cf2a6b"
+    },
+    {
+      "uri": "textures/pcb_green_basecolor.png",
+      "bytes": 521598,
+      "sha256": "72b865da602d4f4551ee5d61dbcdacd24bc5836123e87e848191fc73fc296505"
+    },
+    {
+      "uri": "textures/pcb_green_metallicroughness.png",
+      "bytes": 1560479,
+      "sha256": "664605245c9033cd7af1505fbbcaffc96f2202d9cf6879c3ea55b100ab049a07"
+    },
+    {
+      "uri": "textures/pcb_green_normal.png",
+      "bytes": 1223391,
+      "sha256": "d273698841b2423d48387a426f25a6dcdd04414793e91654ae12abef4dbf6b13"
+    },
+    {
+      "uri": "textures/pcb_green_roughness.png",
+      "bytes": 1262450,
+      "sha256": "bc80e4172cb0f027e187c24a696febbba820e0f87ee4c63a4dcfb291e75c9ffb"
+    },
+    {
+      "uri": "textures/tire_rubber_basecolor.png",
+      "bytes": 264774,
+      "sha256": "a693b116ad6078b48dd7670ecdc310881ba1da152baafbdc0b319294d81f6d2b"
+    },
+    {
+      "uri": "textures/tire_rubber_metallicroughness.png",
+      "bytes": 1559723,
+      "sha256": "016a208e2558a6a654b1afb2919db7862884f2ed95db2cb7c53aca51efc054a0"
+    },
+    {
+      "uri": "textures/tire_rubber_normal.png",
+      "bytes": 2059004,
+      "sha256": "c7662fcb268c482002a2b0a0d1e4a54abf37279d985b242ab18987b8aa1336d4"
+    },
+    {
+      "uri": "textures/tire_rubber_roughness.png",
+      "bytes": 1261387,
+      "sha256": "0df0cb871fc4f43ec6c6e4e5519f63bd7a1dee7fd72ef1e94d8a69931e2d07cf"
+    }
+  ]
+}

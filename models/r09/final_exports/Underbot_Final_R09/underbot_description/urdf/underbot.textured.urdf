@@ -1,0 +1,1056 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="underbot">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.0598350198234 5.40649302867e-05 0.274770185411" rpy="0 0 0" />
+      <mass value="14.8710078" />
+      <inertia ixx="0.627048766532" ixy="8.172644062e-06" ixz="0.0129279632493" iyy="0.700954782211" iyz="-5.60167709298e-05" izz="0.256652248656" />
+    </inertial>
+    <visual name="base_link_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="base_link_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link_worx_orange.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="base_link_visual_2">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="base_link_visual_3">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link_control_red.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="base_link_visual_4">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="base_link_visual_5">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link_polycarbonate.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="base_link_visual_6">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link_pcb_green.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="base_link_rear_chassis">
+      <origin xyz="-0.0675 0 0.1225" rpy="0 0 0" />
+      <geometry>
+        <box size="0.375 0.296 0.115" />
+      </geometry>
+    </collision>
+    <collision name="base_link_nose_side_-1">
+      <origin xyz="0.2 -0.11 0.115" rpy="0 0 0" />
+      <geometry>
+        <box size="0.15 0.08 0.09" />
+      </geometry>
+    </collision>
+    <collision name="base_link_nose_side_1">
+      <origin xyz="0.2 0.11 0.115" rpy="0 0 0" />
+      <geometry>
+        <box size="0.15 0.08 0.09" />
+      </geometry>
+    </collision>
+    <collision name="base_link_nose_upper">
+      <origin xyz="0.194 0 0.174" rpy="0 0 0" />
+      <geometry>
+        <box size="0.17 0.29 0.028" />
+      </geometry>
+    </collision>
+    <collision name="base_link_front_grille">
+      <origin xyz="0.2775 0 0.12" rpy="0 0 0" />
+      <geometry>
+        <box size="0.003 0.29 0.07" />
+      </geometry>
+    </collision>
+    <collision name="base_link_chassis_adapter">
+      <origin xyz="-0.07 0 0.202" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.2 0.006" />
+      </geometry>
+    </collision>
+    <collision name="base_link_post_-0.16000000000000003_-0.09000000000000001">
+      <origin xyz="-0.16 -0.09 0.455" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.02 0.5" />
+      </geometry>
+    </collision>
+    <collision name="base_link_post_-0.16000000000000003_0.09000000000000001">
+      <origin xyz="-0.16 0.09 0.455" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.02 0.5" />
+      </geometry>
+    </collision>
+    <collision name="base_link_post_0.020000000000000004_-0.09000000000000001">
+      <origin xyz="0.02 -0.09 0.455" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.02 0.5" />
+      </geometry>
+    </collision>
+    <collision name="base_link_post_0.020000000000000004_0.09000000000000001">
+      <origin xyz="0.02 0.09 0.455" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.02 0.5" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_0_-1">
+      <origin xyz="-0.07 -0.09 0.215" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_0_-1">
+      <origin xyz="-0.16 0 0.215" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_0_1">
+      <origin xyz="-0.07 0.09 0.215" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_0_1">
+      <origin xyz="0.02 0 0.215" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_0_center">
+      <origin xyz="-0.07 0 0.2265" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.2 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_0_end_-1">
+      <origin xyz="-0.16 0 0.2265" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_0_end_1">
+      <origin xyz="0.02 0 0.2265" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_1_-1">
+      <origin xyz="-0.07 -0.09 0.49" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_1_-1">
+      <origin xyz="-0.16 0 0.49" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_1_1">
+      <origin xyz="-0.07 0.09 0.49" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_1_1">
+      <origin xyz="0.02 0 0.49" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_1_center">
+      <origin xyz="-0.07 0 0.5015" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.2 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_1_end_-1">
+      <origin xyz="-0.16 0 0.5015" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_1_end_1">
+      <origin xyz="0.02 0 0.5015" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_2_-1">
+      <origin xyz="-0.07 -0.09 0.565" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_2_-1">
+      <origin xyz="-0.16 0 0.565" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_2_1">
+      <origin xyz="-0.07 0.09 0.565" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_2_1">
+      <origin xyz="0.02 0 0.565" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_2_center">
+      <origin xyz="-0.07 0 0.5765" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.2 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_2_end_-1">
+      <origin xyz="-0.16 0 0.5765" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_2_end_1">
+      <origin xyz="0.02 0 0.5765" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_3_-1">
+      <origin xyz="-0.07 -0.09 0.695" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_3_-1">
+      <origin xyz="-0.16 0 0.695" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_x_3_1">
+      <origin xyz="-0.07 0.09 0.695" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.02 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rail_y_3_1">
+      <origin xyz="0.02 0 0.695" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.02" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_3_center">
+      <origin xyz="-0.07 0 0.7065" rpy="0 0 0" />
+      <geometry>
+        <box size="0.16 0.2 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_3_end_-1">
+      <origin xyz="-0.16 0 0.7065" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_floor_3_end_1">
+      <origin xyz="0.02 0 0.7065" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.16 0.003" />
+      </geometry>
+    </collision>
+    <collision name="base_link_front_door_lower">
+      <origin xyz="0.031 0 0.414" rpy="0 0 0" />
+      <geometry>
+        <box size="0.002 0.2 0.378" />
+      </geometry>
+    </collision>
+    <collision name="base_link_front_door_upper">
+      <origin xyz="0.031 0 0.67375" rpy="0 0 0" />
+      <geometry>
+        <box size="0.002 0.2 0.0225" />
+      </geometry>
+    </collision>
+    <collision name="base_link_front_door_left_strip">
+      <origin xyz="0.031 0.089 0.63275" rpy="0 0 0" />
+      <geometry>
+        <box size="0.002 0.022 0.0595" />
+      </geometry>
+    </collision>
+    <collision name="base_link_front_door_right_strip">
+      <origin xyz="0.031 -0.089 0.63275" rpy="0 0 0" />
+      <geometry>
+        <box size="0.002 0.022 0.0595" />
+      </geometry>
+    </collision>
+    <collision name="base_link_rear_door_closed">
+      <origin xyz="-0.171 0 0.455" rpy="0 0 0" />
+      <geometry>
+        <box size="0.002 0.2 0.46" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_-1_lower">
+      <origin xyz="-0.07 -0.101 0.3575" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.002 0.265" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_-1_upper">
+      <origin xyz="-0.07 -0.101 0.6425" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.002 0.085" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_-1_front_strip">
+      <origin xyz="0.0075 -0.101 0.545" rpy="0 0 0" />
+      <geometry>
+        <box size="0.045 0.002 0.11" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_-1_rear_strip">
+      <origin xyz="-0.1475 -0.101 0.545" rpy="0 0 0" />
+      <geometry>
+        <box size="0.045 0.002 0.11" />
+      </geometry>
+    </collision>
+    <collision name="base_link_arm_bridge_-1">
+      <origin xyz="-0.07 -0.106 0.545" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.008 0.12" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_1_lower">
+      <origin xyz="-0.07 0.101 0.3575" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.002 0.265" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_1_upper">
+      <origin xyz="-0.07 0.101 0.6425" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.002 0.085" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_1_front_strip">
+      <origin xyz="0.0075 0.101 0.545" rpy="0 0 0" />
+      <geometry>
+        <box size="0.045 0.002 0.11" />
+      </geometry>
+    </collision>
+    <collision name="base_link_side_1_rear_strip">
+      <origin xyz="-0.1475 0.101 0.545" rpy="0 0 0" />
+      <geometry>
+        <box size="0.045 0.002 0.11" />
+      </geometry>
+    </collision>
+    <collision name="base_link_arm_bridge_1">
+      <origin xyz="-0.07 0.106 0.545" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.008 0.12" />
+      </geometry>
+    </collision>
+    <collision name="base_link_noco_installed_reserve">
+      <origin xyz="-0.07 0 0.343" rpy="0 0 0" />
+      <geometry>
+        <box size="0.07 0.152 0.222" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_wheel">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.75" />
+      <inertia ixx="0.001537859" ixy="0" ixz="0" iyy="0.002768118" iyz="-7.53316373236e-20" izz="0.001537859" />
+    </inertial>
+    <visual name="left_wheel_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_wheel.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="left_wheel_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_wheel_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_wheel_rolling_contact">
+      <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
+      <geometry>
+        <cylinder radius="0.0925" length="0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_wheel">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.75" />
+      <inertia ixx="0.001537859" ixy="0" ixz="0" iyy="0.002768118" iyz="-7.53316373236e-20" izz="0.001537859" />
+    </inertial>
+    <visual name="right_wheel_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_wheel.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="right_wheel_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_wheel_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_wheel_rolling_contact">
+      <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
+      <geometry>
+        <cylinder radius="0.0925" length="0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_swivel_link">
+    <inertial>
+      <origin xyz="-0.006 0 -0.0234" rpy="0 0 0" />
+      <mass value="0.15" />
+      <inertia ixx="0.000162651" ixy="0" ixz="-1.404e-05" iyy="0.000111891" iyz="0" izz="7.389e-05" />
+    </inertial>
+    <visual name="caster_swivel_link_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/caster_swivel_link_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="caster_swivel_link_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/caster_swivel_link.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="caster_swivel_link_fork_cheek_-1">
+      <origin xyz="-0.01 -0.026 -0.039" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.006 0.074" />
+      </geometry>
+    </collision>
+    <collision name="caster_swivel_link_fork_cheek_1">
+      <origin xyz="-0.01 0.026 -0.039" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.006 0.074" />
+      </geometry>
+    </collision>
+    <collision name="caster_swivel_link_swivel_shaft">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.009" length="0.03" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="caster_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.1" />
+      <inertia ixx="4.69133333333e-05" ixy="0" ixz="0" iyy="6.689e-05" iyz="-1.22321804455e-21" izz="4.69133333333e-05" />
+    </inertial>
+    <visual name="caster_link_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/caster_link.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="caster_link_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/caster_link_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="caster_link_rolling_contact">
+      <origin xyz="0 0 0" rpy="1.57079632679 0 0" />
+      <geometry>
+        <cylinder radius="0.04" length="0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="camera_mount">
+    <inertial>
+      <origin xyz="0.00075 0 -0.0066" rpy="0 0 0" />
+      <mass value="0.97" />
+      <inertia ixx="0.00139646696667" ixy="0" ixz="-0.0001037415" iyy="0.000390011133333" iyz="0" izz="0.00146769083333" />
+    </inertial>
+    <visual name="camera_mount_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/camera_mount_pcb_green.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="camera_mount_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/camera_mount_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="camera_mount_visual_2">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/camera_mount.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="camera_mount_visual_3">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/camera_mount_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="camera_mount_kinect_electronics_reserve">
+      <origin xyz="-0.001 0 -0.0035" rpy="0 0 0" />
+      <geometry>
+        <box size="0.07 0.156 0.056" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="camera_optical_frame">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+  <link name="lidar_mount">
+    <inertial>
+      <origin xyz="0 0 0.0225" rpy="0 0 0" />
+      <mass value="0.15" />
+      <inertia ixx="7.125e-05" ixy="0" ixz="0" iyy="7.125e-05" iyz="0" izz="9.1875e-05" />
+    </inertial>
+    <visual name="lidar_mount_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/lidar_mount_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="lidar_mount_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/lidar_mount_worx_orange.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="lidar_mount_head">
+      <origin xyz="0 0 0.0225" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.035" length="0.045" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="lidar_scan_frame">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+  <link name="left_arm_base">
+    <inertial>
+      <origin xyz="0 0 0.02015" rpy="0 0 0" />
+      <mass value="0.2" />
+      <inertia ixx="6.08859166667e-05" ixy="0" ixz="0" iyy="5.79159166667e-05" iyz="0" izz="5.59041666667e-05" />
+    </inertial>
+    <visual name="left_arm_base_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_arm_base_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="left_arm_base_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_arm_base_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_arm_base_root">
+      <origin xyz="0 0 0.022" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.023" length="0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_upper_arm">
+    <inertial>
+      <origin xyz="0.0371547619048 1.29071687201e-19 0" rpy="0 0 0" />
+      <mass value="0.21" />
+      <inertia ixx="4.684125e-05" ixy="8.47032947254e-22" ixz="0" iyy="0.000236634553571" iyz="-2.4390882083e-23" izz="0.000256723303571" />
+    </inertial>
+    <visual name="left_upper_arm_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_upper_arm_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="left_upper_arm_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_upper_arm_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_upper_arm_link_envelope">
+      <origin xyz="0.0485 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.123 0.036 0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_forearm">
+    <inertial>
+      <origin xyz="0.0302222222222 1.50583635067e-19 0" rpy="0 0 0" />
+      <mass value="0.18" />
+      <inertia ixx="3.938875e-05" ixy="0" ixz="0" iyy="0.000147938194444" iyz="-2.4390882083e-23" izz="0.000163699444444" />
+    </inertial>
+    <visual name="left_forearm_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_forearm_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="left_forearm_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_forearm_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_forearm_link_envelope">
+      <origin xyz="0.041 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.108 0.036 0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_wrist">
+    <inertial>
+      <origin xyz="0.0150192307692 2.08500417786e-19 0" rpy="0 0 0" />
+      <mass value="0.13" />
+      <inertia ixx="2.69679166667e-05" ixy="0" ixz="0" iyy="3.40428685897e-05" iyz="-2.4390882083e-23" izz="4.25916185897e-05" />
+    </inertial>
+    <visual name="left_wrist_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_wrist_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="left_wrist_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_wrist_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_wrist_link_envelope">
+      <origin xyz="0.0185 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.063 0.036 0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_hand">
+    <inertial>
+      <origin xyz="0.008078125 0 -0.00421875" rpy="0 0 0" />
+      <mass value="0.16" />
+      <inertia ixx="2.97056770833e-05" ixy="0" ixz="2.984765625e-06" iyy="2.75263671875e-05" iyz="0" izz="2.46473567708e-05" />
+    </inertial>
+    <visual name="left_hand_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_hand_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="left_hand_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_hand_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_hand_hand_body">
+      <origin xyz="0.01 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.04 0.048 0.038" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_gripper_left">
+    <inertial>
+      <origin xyz="0.02 -0.0048 0" rpy="0 0 0" />
+      <mass value="0.025" />
+      <inertia ixx="9.91523953606e-07" ixy="1.57579425113e-06" ixz="0" iyy="7.17914271306e-06" iyz="0" izz="7.24733333333e-06" />
+    </inertial>
+    <visual name="left_gripper_left_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_gripper_left_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_gripper_left_jaw">
+      <origin xyz="0.025 -0.006 0" rpy="0 0 -0.235544980721" />
+      <geometry>
+        <box size="0.0514198405287 0.008 0.014" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_gripper_right">
+    <inertial>
+      <origin xyz="0.02 0.0048 0" rpy="0 0 0" />
+      <mass value="0.025" />
+      <inertia ixx="9.91523953606e-07" ixy="-1.57579425113e-06" ixz="0" iyy="7.17914271306e-06" iyz="0" izz="7.24733333333e-06" />
+    </inertial>
+    <visual name="left_gripper_right_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/left_gripper_right_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="left_gripper_right_jaw">
+      <origin xyz="0.025 0.006 0" rpy="0 0 0.235544980721" />
+      <geometry>
+        <box size="0.0514198405287 0.008 0.014" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_arm_base">
+    <inertial>
+      <origin xyz="0 0 0.02015" rpy="0 0 0" />
+      <mass value="0.2" />
+      <inertia ixx="6.08859166667e-05" ixy="0" ixz="0" iyy="5.79159166667e-05" iyz="0" izz="5.59041666667e-05" />
+    </inertial>
+    <visual name="right_arm_base_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_arm_base_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="right_arm_base_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_arm_base_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_arm_base_root">
+      <origin xyz="0 0 0.022" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.023" length="0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_upper_arm">
+    <inertial>
+      <origin xyz="0.0371547619048 1.29071687201e-19 0" rpy="0 0 0" />
+      <mass value="0.21" />
+      <inertia ixx="4.684125e-05" ixy="8.47032947254e-22" ixz="0" iyy="0.000236634553571" iyz="-2.4390882083e-23" izz="0.000256723303571" />
+    </inertial>
+    <visual name="right_upper_arm_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_upper_arm_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="right_upper_arm_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_upper_arm_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_upper_arm_link_envelope">
+      <origin xyz="0.0485 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.123 0.036 0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_forearm">
+    <inertial>
+      <origin xyz="0.0302222222222 1.50583635067e-19 0" rpy="0 0 0" />
+      <mass value="0.18" />
+      <inertia ixx="3.938875e-05" ixy="0" ixz="0" iyy="0.000147938194444" iyz="-2.4390882083e-23" izz="0.000163699444444" />
+    </inertial>
+    <visual name="right_forearm_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_forearm_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="right_forearm_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_forearm_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_forearm_link_envelope">
+      <origin xyz="0.041 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.108 0.036 0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_wrist">
+    <inertial>
+      <origin xyz="0.0150192307692 2.08500417786e-19 0" rpy="0 0 0" />
+      <mass value="0.13" />
+      <inertia ixx="2.69679166667e-05" ixy="0" ixz="0" iyy="3.40428685897e-05" iyz="-2.4390882083e-23" izz="4.25916185897e-05" />
+    </inertial>
+    <visual name="right_wrist_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_wrist_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="right_wrist_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_wrist_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_wrist_link_envelope">
+      <origin xyz="0.0185 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.063 0.036 0.04" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_hand">
+    <inertial>
+      <origin xyz="0.008078125 0 -0.00421875" rpy="0 0 0" />
+      <mass value="0.16" />
+      <inertia ixx="2.97056770833e-05" ixy="0" ixz="2.984765625e-06" iyy="2.75263671875e-05" iyz="0" izz="2.46473567708e-05" />
+    </inertial>
+    <visual name="right_hand_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_hand_servo_black.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <visual name="right_hand_visual_1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_hand_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_hand_hand_body">
+      <origin xyz="0.01 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.04 0.048 0.038" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_gripper_left">
+    <inertial>
+      <origin xyz="0.02 -0.0048 0" rpy="0 0 0" />
+      <mass value="0.025" />
+      <inertia ixx="9.91523953606e-07" ixy="1.57579425113e-06" ixz="0" iyy="7.17914271306e-06" iyz="0" izz="7.24733333333e-06" />
+    </inertial>
+    <visual name="right_gripper_left_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_gripper_left_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_gripper_left_jaw">
+      <origin xyz="0.025 -0.006 0" rpy="0 0 -0.235544980721" />
+      <geometry>
+        <box size="0.0514198405287 0.008 0.014" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_gripper_right">
+    <inertial>
+      <origin xyz="0.02 0.0048 0" rpy="0 0 0" />
+      <mass value="0.025" />
+      <inertia ixx="9.91523953606e-07" ixy="-1.57579425113e-06" ixz="0" iyy="7.17914271306e-06" iyz="0" izz="7.24733333333e-06" />
+    </inertial>
+    <visual name="right_gripper_right_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/right_gripper_right_aluminium.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision name="right_gripper_right_jaw">
+      <origin xyz="0.025 0.006 0" rpy="0 0 0.235544980721" />
+      <geometry>
+        <box size="0.0514198405287 0.008 0.014" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="left_wheel" />
+    <origin xyz="-0.18 0.177 0.0925" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="2.5" velocity="4" />
+    <dynamics damping=".02" friction=".02" />
+  </joint>
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="right_wheel" />
+    <origin xyz="-0.18 -0.177 0.0925" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="2.5" velocity="4" />
+    <dynamics damping=".02" friction=".02" />
+  </joint>
+  <joint name="caster_swivel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="caster_swivel_link" />
+    <origin xyz="0.215 0 0.11" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="0.05" velocity="20" />
+    <dynamics damping=".001" friction=".0001" />
+  </joint>
+  <joint name="caster_wheel_joint" type="continuous">
+    <parent link="caster_swivel_link" />
+    <child link="caster_link" />
+    <origin xyz="-0.02 0 -0.07" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="0.05" velocity="30" />
+    <dynamics damping=".001" friction=".0001" />
+  </joint>
+  <joint name="camera_mount_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="camera_mount" />
+    <origin xyz="-0.005 0 0.635" rpy="0 0 0" />
+  </joint>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_mount" />
+    <child link="camera_optical_frame" />
+    <origin xyz="0.034 0.06925 0.0065" rpy="-1.57079632679 0 -1.57079632679" />
+  </joint>
+  <joint name="lidar_mount_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="lidar_mount" />
+    <origin xyz="-0.07 0 0.733" rpy="0 0 0" />
+  </joint>
+  <joint name="lidar_scan_joint" type="fixed">
+    <parent link="lidar_mount" />
+    <child link="lidar_scan_frame" />
+    <origin xyz="0 0 0.0225" rpy="0 0 0" />
+  </joint>
+  <joint name="left_arm_base_joint" type="revolute">
+    <parent link="base_link" />
+    <child link="left_arm_base" />
+    <origin xyz="-0.07 0.108 0.545" rpy="0 -1.57079632679 -1.57079632679" />
+    <axis xyz="0 0 1" />
+    <limit effort="1" velocity="1" lower="-0.785398163397" upper="0.785398163397" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="left_shoulder_joint" type="revolute">
+    <parent link="left_arm_base" />
+    <child link="left_upper_arm" />
+    <origin xyz="0 0 0.04" rpy="0 -2.61799387799 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="1" velocity="1" lower="-0.349065850399" upper="0.349065850399" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="left_elbow_joint" type="revolute">
+    <parent link="left_upper_arm" />
+    <child link="left_forearm" />
+    <origin xyz="0.105 0 0" rpy="0 1.0471975512 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="1" velocity="1" lower="-0.349065850399" upper="0.349065850399" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="left_wrist_pitch_joint" type="revolute">
+    <parent link="left_forearm" />
+    <child link="left_wrist" />
+    <origin xyz="0.09 0 0" rpy="0 -1.0471975512 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="1" velocity="1" lower="-0.523598775598" upper="0.523598775598" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="left_wrist_roll_joint" type="revolute">
+    <parent link="left_wrist" />
+    <child link="left_hand" />
+    <origin xyz="0.045 0 0" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="1" velocity="1" lower="-1.57079632679" upper="1.57079632679" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="left_gripper_left_joint" type="revolute">
+    <parent link="left_hand" />
+    <child link="left_gripper_left" />
+    <origin xyz="0.025 0.018 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="0.3" velocity="1" lower="0" upper="0.6" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="left_gripper_right_joint" type="revolute">
+    <parent link="left_hand" />
+    <child link="left_gripper_right" />
+    <origin xyz="0.025 -0.018 0" rpy="0 0 0" />
+    <axis xyz="0 0 -1" />
+    <limit effort="0.3" velocity="1" lower="0" upper="0.6" />
+    <dynamics damping=".1" friction=".02" />
+    <mimic joint="left_gripper_left_joint" multiplier="1" offset="0" />
+  </joint>
+  <joint name="right_arm_base_joint" type="revolute">
+    <parent link="base_link" />
+    <child link="right_arm_base" />
+    <origin xyz="-0.07 -0.108 0.545" rpy="0 -1.57079632679 1.57079632679" />
+    <axis xyz="0 0 -1" />
+    <limit effort="1" velocity="1" lower="-0.785398163397" upper="0.785398163397" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="right_shoulder_joint" type="revolute">
+    <parent link="right_arm_base" />
+    <child link="right_upper_arm" />
+    <origin xyz="0 0 0.04" rpy="0 -2.61799387799 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="1" velocity="1" lower="-0.349065850399" upper="0.349065850399" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="right_elbow_joint" type="revolute">
+    <parent link="right_upper_arm" />
+    <child link="right_forearm" />
+    <origin xyz="0.105 0 0" rpy="0 1.0471975512 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="1" velocity="1" lower="-0.349065850399" upper="0.349065850399" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="right_wrist_pitch_joint" type="revolute">
+    <parent link="right_forearm" />
+    <child link="right_wrist" />
+    <origin xyz="0.09 0 0" rpy="0 -1.0471975512 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="1" velocity="1" lower="-0.523598775598" upper="0.523598775598" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="right_wrist_roll_joint" type="revolute">
+    <parent link="right_wrist" />
+    <child link="right_hand" />
+    <origin xyz="0.045 0 0" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+    <limit effort="1" velocity="1" lower="-1.57079632679" upper="1.57079632679" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="right_gripper_left_joint" type="revolute">
+    <parent link="right_hand" />
+    <child link="right_gripper_left" />
+    <origin xyz="0.025 0.018 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="0.3" velocity="1" lower="0" upper="0.6" />
+    <dynamics damping=".1" friction=".02" />
+  </joint>
+  <joint name="right_gripper_right_joint" type="revolute">
+    <parent link="right_hand" />
+    <child link="right_gripper_right" />
+    <origin xyz="0.025 -0.018 0" rpy="0 0 0" />
+    <axis xyz="0 0 -1" />
+    <limit effort="0.3" velocity="1" lower="0" upper="0.6" />
+    <dynamics damping=".1" friction=".02" />
+    <mimic joint="right_gripper_left_joint" multiplier="1" offset="0" />
+  </joint>
+</robot>

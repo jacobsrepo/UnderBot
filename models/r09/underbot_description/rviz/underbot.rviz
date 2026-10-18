@@ -1,0 +1,66 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 35; 38; 42
+    Fixed Frame: base_link
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Ground grid
+      Enabled: true
+      Alpha: 0.35
+      Cell Size: 0.1
+      Color: 155; 155; 155
+      Plane: XY
+      Plane Cell Count: 20
+      Reference Frame: base_link
+      Value: true
+    - Class: rviz_default_plugins/RobotModel
+      Name: Underbot WR141E R08
+      Enabled: true
+      Alpha: 1
+      Collision Enabled: false
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 5
+      Visual Enabled: true
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+    - Class: rviz_default_plugins/TF
+      Name: Joint frames
+      Enabled: false
+      Frame Timeout: 15
+      Marker Scale: 0.12
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Value: false
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Distance: 2.3
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0.42
+      Pitch: 0.35
+      Yaw: 0.8
+      Target Frame: base_link
+Window Geometry:
+  Width: 1280
+  Height: 850

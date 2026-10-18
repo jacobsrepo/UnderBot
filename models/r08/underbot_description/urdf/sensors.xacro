@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="underbot_sensors">
+    <link name="camera_mount">
+      <inertial>
+        <origin xyz="0.00075 0 -0.0066" rpy="0 0 0" />
+        <mass value="0.97" />
+        <inertia ixx="0.00139646696667" ixy="0" ixz="-0.0001037415" iyy="0.000390011133333" iyz="0" izz="0.00146769083333" />
+      </inertial>
+      <visual name="camera_mount_visual_0">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://underbot_description/meshes/camera_mount_pcb_green.stl" scale="1 1 1" />
+        </geometry>
+        <material name="pcb_green">
+          <color rgba="0.1 0.32 0.23 1" />
+        </material>
+      </visual>
+      <visual name="camera_mount_visual_1">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://underbot_description/meshes/camera_mount_aluminium.stl" scale="1 1 1" />
+        </geometry>
+        <material name="aluminium">
+          <color rgba="0.62 0.68 0.72 1" />
+        </material>
+      </visual>
+      <visual name="camera_mount_visual_2">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://underbot_description/meshes/camera_mount.stl" scale="1 1 1" />
+        </geometry>
+        <material name="matte_black">
+          <color rgba="0.045 0.05 0.055 1" />
+        </material>
+      </visual>
+      <visual name="camera_mount_visual_3">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://underbot_description/meshes/camera_mount_servo_black.stl" scale="1 1 1" />
+        </geometry>
+        <material name="servo_black">
+          <color rgba="0.075 0.085 0.095 1" />
+        </material>
+      </visual>
+      <collision name="camera_mount_kinect_electronics_reserve">
+        <origin xyz="-0.001 0 -0.0035" rpy="0 0 0" />
+        <geometry>
+          <box size="0.07 0.156 0.056" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="camera_optical_frame">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0" />
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+      </inertial>
+    </link>
+    <link name="lidar_mount">
+      <inertial>
+        <origin xyz="0 0 0.0225" rpy="0 0 0" />
+        <mass value="0.15" />
+        <inertia ixx="7.125e-05" ixy="0" ixz="0" iyy="7.125e-05" iyz="0" izz="9.1875e-05" />
+      </inertial>
+      <visual name="lidar_mount_visual_0">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://underbot_description/meshes/lidar_mount_servo_black.stl" scale="1 1 1" />
+        </geometry>
+        <material name="servo_black">
+          <color rgba="0.075 0.085 0.095 1" />
+        </material>
+      </visual>
+      <visual name="lidar_mount_visual_1">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://underbot_description/meshes/lidar_mount_worx_orange.stl" scale="1 1 1" />
+        </geometry>
+        <material name="worx_orange">
+          <color rgba="0.96 0.22 0.015 1" />
+        </material>
+      </visual>
+      <collision name="lidar_mount_head">
+        <origin xyz="0 0 0.0225" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.035" length="0.045" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="lidar_scan_frame">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0" />
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+      </inertial>
+    </link>
+    <joint name="camera_mount_joint" type="fixed">
+      <parent link="base_link" />
+      <child link="camera_mount" />
+      <origin xyz="-0.005 0 0.635" rpy="0 0 0" />
+    </joint>
+    <joint name="camera_optical_joint" type="fixed">
+      <parent link="camera_mount" />
+      <child link="camera_optical_frame" />
+      <origin xyz="0.034 0.06925 0.0065" rpy="-1.57079632679 0 -1.57079632679" />
+    </joint>
+    <joint name="lidar_mount_joint" type="fixed">
+      <parent link="base_link" />
+      <child link="lidar_mount" />
+      <origin xyz="-0.07 0 0.733" rpy="0 0 0" />
+    </joint>
+    <joint name="lidar_scan_joint" type="fixed">
+      <parent link="lidar_mount" />
+      <child link="lidar_scan_frame" />
+      <origin xyz="0 0 0.0225" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+</robot>

@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+install/
+log/
+.DS_Store
+Thumbs.db
+*.FCStd1
