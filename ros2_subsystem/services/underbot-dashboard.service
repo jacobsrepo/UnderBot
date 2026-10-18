@@ -1,0 +1,15 @@
+[Unit]
+Description=Underbot Web Dashboard & Teleoperation Server
+After=network.target
+
+[Service]
+Type=simple
+User=underbot
+WorkingDirectory=/home/underbot
+ExecStart=/usr/bin/python3 /home/underbot/underbot_ws/install/underbot_dashboard/lib/underbot_dashboard/dashboard_server
+Restart=always
+RestartSec=3
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
