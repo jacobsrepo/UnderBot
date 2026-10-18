@@ -1,11 +1,11 @@
-# UnderBot navigation demonstration — 2026-10-06
+# UnderBot navigation demonstration â€” 2026-10-06
 
 Foxglove connection: ws://127.0.0.1:8766. Imported layout:
 underbot-navigation-layout.json. The previous UnderBot EMEET Live layout remains
 available in Foxglove. VS Code/Codex, camera capture, PostgreSQL and Qwen were not
 stopped. Only the station simulation/bridge and Foxglove were refreshed.
 
-The map is a 40 × 40 metre crop from Autoware's public sample point-cloud map.
+The map is a 40 Ã— 40 metre crop from Autoware's public sample point-cloud map.
 Source: https://docs.autoware.org/main/demos/planning-sim/
 Download: https://autoware-files.s3.us-west-2.amazonaws.com/maps/demos/sample-map-planning.zip
 SHA256 matches the upstream published value:
@@ -15,21 +15,21 @@ simulated; this is not a map or localization of the user's actual room.
 
 ## Use in the UnderBot chat panel
 
-- `go to goal_a` — plan and follow a route to the named sample goal.
-- `go to start` — route back to the sample starting location.
-- `go to 2, 3` — use map coordinates in metres; occupied/unknown goals fail.
-- `go forward 1 metre` — request a checked straight segment, maximum 5 m.
-- `go backward 0.5 metre` — checked reverse segment, without turning around.
-- `spin 360 degrees` — full in-place rotation; default direction is left.
-- `turn right 90 degrees` / `turn left` — specified turn / default 90°.
-- `save waypoint desk at 2, 3` / `save waypoint desk here` — save a custom
+- `go to goal_a` â€” plan and follow a route to the named sample goal.
+- `go to start` â€” route back to the sample starting location.
+- `go to 2, 3` â€” use map coordinates in metres; occupied/unknown goals fail.
+- `go forward 1 metre` â€” request a checked straight segment, maximum 5 m.
+- `go backward 0.5 metre` â€” checked reverse segment, without turning around.
+- `spin 360 degrees` â€” full in-place rotation; default direction is left.
+- `turn right 90 degrees` / `turn left` â€” specified turn / default 90Â°.
+- `save waypoint desk at 2, 3` / `save waypoint desk here` â€” save a custom
   destination in known free space. Names use lowercase letters, numbers and
   underscores, beginning with a letter. Built-in goals cannot be replaced.
-- `go to desk` / `list waypoints` — navigate to / inspect saved destinations.
+- `go to desk` / `list waypoints` â€” navigate to / inspect saved destinations.
 - `turn right then go forward 0.5 metre then go backward 0.5 metre then turn left`
-  — ordered sequence, maximum eight steps. Each step is checked before running;
+  â€” ordered sequence, maximum eight steps. Each step is checked before running;
   rejection or cancellation drops all remaining steps.
-- `stop navigation` — stop the simulation. Manual movement requests also cancel
+- `stop navigation` â€” stop the simulation. Manual movement requests also cancel
   its autonomous route.
 
 Explicit phrases use navigation_core.py. Other movement requests use the Pi's
@@ -42,7 +42,7 @@ Polite prefixes such as "can you please" are accepted for these supported skills
 Distances require units and are limited to (0,5] metres per step; rotations are
 limited to (0,360] degrees. A real camera does not rotate with the simulated base.
 
-Foxglove now includes X/Y inputs, Go to coordinates, Save at X/Y, Spin 360° and
+Foxglove now includes X/Y inputs, Go to coordinates, Save at X/Y, Spin 360Â° and
 Cancel navigation controls. The yellow arrow above the cyan robot shows heading;
 status reports heading, accumulated rotation progress and remaining queued steps.
 Custom waypoints persist in the installed navigation-data/custom_waypoints.json.
@@ -52,11 +52,11 @@ the PC; Qwen inference continues on the Pi.
 
 ## Varied wording and execution feedback
 
-- `Make one full clockwise revolution` — Qwen translates to turn right 360°.
-- `Back up fifty centimetres` — Qwen translates to reverse 0.5 m.
-- `Turn around and return to start` — Qwen proposes two ordered actions.
-- `Move forward` — asks for distance; does not execute an invented amount.
-- `Take me to the chair` — asks for a saved destination; no chair position exists.
+- `Make one full clockwise revolution` â€” Qwen translates to turn right 360Â°.
+- `Back up fifty centimetres` â€” Qwen translates to reverse 0.5 m.
+- `Turn around and return to start` â€” Qwen proposes two ordered actions.
+- `Move forward` â€” asks for distance; does not execute an invented amount.
+- `Take me to the chair` â€” asks for a saved destination; no chair position exists.
 
 Chat first displays the interpreted simulation plan. The executor then publishes
 correlated started/completed/rejected/cancelled/timed-out events, which appear
@@ -70,7 +70,7 @@ than only `one`. No conversational pronoun or "there" resolution is implemented.
 Cancel increments the gateway command generation. A model result received after
 manual control, Cancel or Stop is discarded. Stop bypasses a busy AI request.
 The executor enforces 300 seconds per step and 900 seconds per task. Model calls
-have a 90-second network timeout; tested warm-model replies took roughly 7–12 s.
+have a 90-second network timeout; tested warm-model replies took roughly 7â€“12 s.
 No new model was downloaded and no physical LiDAR is required for this demo.
 Structured output reference: https://docs.ollama.com/capabilities/structured-outputs
 
@@ -110,7 +110,7 @@ originally verified a forward displacement greater than 0.75 m and the former
 stopping, rejection of a goal at (999,999), and physical hardware remaining
 disabled. Foxglove's 3D view was visually checked and its chat used to send a
 return-to-start request. Example screenshot: foxglove-navigation.png.
-check_navigation_skills_ros.py additionally verified a complete accumulated 360°
+check_navigation_skills_ros.py additionally verified a complete accumulated 360Â°
 rotation with no translation, a four-step turn/forward/reverse/turn sequence,
 return to a saved custom waypoint, listing destinations, cancellation of the
 whole pending queue, invalid waypoint rejection and hardware staying disabled.
@@ -154,3 +154,13 @@ Foxglove now displays planned route length and remaining goal error in cm.
 References:
 https://docs.nav2.org/jazzy/configuration_and_development/
 https://docs.foxglove.dev/docs/visualization/panels/3d
+
+## Run from the consolidated checkout
+
+From the repository root, use your sourced ROS environment:
+
+```sh
+python robot_station/start.py --demo --navigation-demo --port 8766
+```
+
+The station loads the bundled map from this folder when no installed `robot_station/navigation-data` exists. Existing deployed maps take precedence. Custom waypoints are local runtime state and ignored by Git. Optional AI and memory still require the parameters documented in `robot_station/AI_CHAT.md`. Original deployment diagnostics are preserved in `tools/diagnostics/`; review their machine-specific paths before running them.

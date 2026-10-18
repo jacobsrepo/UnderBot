@@ -12,6 +12,10 @@ Robot models, ROS 2 / Foxglove station, perception and memory, navigation simula
 | `perception/` | EMEET camera/YOLO pipeline, audio transport, Pi communications and PostgreSQL recognition memory |
 | `navigation/` | Sample-map preparation, derived demo map, Foxglove layout and navigation documentation |
 | `hardware/electrical/` | Versioned KiCad schematics, carrier/PCB designs, budgets and review reports |
+| `models/` | Preserved R08/R09 packages, final exports and historical FreeCAD concepts |
+| `desktop/` | Cortex desktop assistant, imported with its complete development history |
+| `ros2_subsystem/` | Alternative ROS 2 workspace, dashboard and VLA node |
+| `website/` | Project website and navigation demonstration video |
 | `tools/windows/` | Preserved Windows launchers, deployment overrides and shared ROS environment manifest |
 
 ## Getting started

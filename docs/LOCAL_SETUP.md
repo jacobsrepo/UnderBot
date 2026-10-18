@@ -7,7 +7,7 @@ This existing path is intentionally retained because live launchers and memory c
 
 | Local path | Purpose |
 | --- | --- |
-| `D:\Robotics\robot-station` | Existing deployed station; core Python sources match the publishing checkout; launch/deploy overrides are preserved in tools/windows/deployed-snapshot |
+| `D:\Robotics\robot-station` | Existing deployed station; core sources are preserved; the source navigation loader additionally supports the bundled repository map; launch/deploy overrides are preserved in tools/windows/deployed-snapshot |
 | `D:\Robotics\rviz2-jazzy` | Shared installed Pixi ROS/RViz environment |
 | `D:\Robotics\underbot-r08` | Existing R08 Foxglove deployment |
 | `D:\Robotics\compact-lab-rover` | Existing original rover deployment; local RViz/view settings retained |

@@ -3,7 +3,9 @@ from types import SimpleNamespace,MethodType
 from unittest.mock import Mock,patch
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
-from navigation_demo import NavigationDemo
+from navigation_demo import NavigationDemo, navigation_data_dir
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 class ExecutionTests(unittest.TestCase):
     def state(self):
@@ -81,3 +83,23 @@ class ExecutionTests(unittest.TestCase):
                 if state.task_id is None:break
         self.assertLess(math.dist((state.x,state.y),goal),.02)
         self.assertEqual(self.events(state)[-1]['event'],'completed')
+
+
+class NavigationDataTests(unittest.TestCase):
+    def test_fresh_checkout_uses_bundled_map(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)/'robot_station'; root.mkdir()
+            bundled=Path(tmp)/'navigation'; bundled.mkdir()
+            for name in ('map_metadata.json','demo_map.npz'):(bundled/name).touch()
+            self.assertEqual(navigation_data_dir(root),bundled)
+
+    def test_existing_deployment_keeps_its_map(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)/'robot_station'; installed=root/'navigation-data'; installed.mkdir(parents=True)
+            for name in ('map_metadata.json','demo_map.npz'):(installed/name).touch()
+            self.assertEqual(navigation_data_dir(root),installed)
+
+    def test_missing_data_reports_setup_problem(self):
+        with TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(FileNotFoundError,'Navigation data missing'):
+                navigation_data_dir(Path(tmp)/'robot_station')

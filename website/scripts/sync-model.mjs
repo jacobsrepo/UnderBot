@@ -1,8 +1,10 @@
 import { readFile, writeFile, mkdir, copyFile } from "node:fs/promises";
 import { resolve, join } from "node:path";
+import { existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 
-const source = resolve(process.argv[2] || "../UnderBot-Personal");
+const bundledSource = resolve("../models/r08");
+const source = resolve(process.argv[2] || (existsSync(bundledSource) ? bundledSource : "../UnderBot-Personal"));
 const destination = resolve("public/model");
 await mkdir(destination, { recursive: true });
 const viewer = await readFile(
@@ -22,9 +24,16 @@ for (const [from, to] of [
   ["downloads/Underbot_WR141E_R08_200mm_description.zip", "Underbot-R08.zip"],
 ])
   await copyFile(join(source, from), join(destination, to));
-const commit = execFileSync("git", ["-C", source, "rev-parse", "HEAD"], {
+let commit = execFileSync("git", ["-C", source, "rev-parse", "HEAD"], {
   encoding: "utf8",
 }).trim();
+// Bundled snapshots are inside the consolidated Git repository: use their
+// recorded upstream commit rather than attributing the model to its HEAD.
+const provenancePath = resolve("../docs/SOURCE_SNAPSHOTS.json");
+if (source === bundledSource && existsSync(provenancePath)) {
+  const provenance = JSON.parse(await readFile(provenancePath, "utf8"));
+  commit = provenance.snapshots.find((entry) => entry.path === "models/r08").source_commit;
+}
 await writeFile(
   join(destination, "source.json"),
   JSON.stringify(

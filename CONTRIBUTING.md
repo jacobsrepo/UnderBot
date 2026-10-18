@@ -1,4 +1,4 @@
-﻿# Working on UnderBot
+ï»¿# Working on UnderBot
 
 ## Branch workflow
 
@@ -39,14 +39,12 @@ commit API keys, passwords, SSH keys, recordings, dependencies or machine caches
 The Pi username/address in the docs are deployment defaults, not credentials;
 change the launcher/deployment parameters for your own machine.
 
-## Suggested next pull requests
+## Next integration work
 
-1. Replace provisional dimensions, axes and geometry with measured CAD exports.
-2. Connect the URDF and real joint states to the station's 3D view.
-3. Implement sensor publishers and consistent TF, timestamps and calibration.
-4. Add the controller adapter, motor-side watchdog and manual/Nav2 arbitration.
-5. Add physics parameters and a separately validated Gazebo simulation.
-6. Integrate SLAM/Nav2, perception, audio and AI backends behind the topic contract.
+1. Select the robot revision and measured physical assumptions for MATLAB/Simulink modelling.
+2. Reconcile `/station/...` and `/underbot/...` topic contracts before connecting alternate stacks.
+3. Integrate measured sensor/controller interfaces, watchdogs and command arbitration.
+4. Validate real localization/navigation independently of the sample-map demonstration.
+5. Decide ownership and update paths for the imported website and model snapshots.
 
-The station demo is a UI/transport test, not validation of robot physics,
-collision avoidance, hardware performance or navigation accuracy.
+Preserve every independent development line until its replacement has been tested and agreed. The simulation and UI demonstrations do not establish physical robot capabilities.

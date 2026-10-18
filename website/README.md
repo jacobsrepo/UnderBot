@@ -1,4 +1,4 @@
-﻿# UnderBot website
+ï»¿# UnderBot website
 
 A React + Vite project site for UnderBot: a general-purpose robot body for experiments with VLA and WAM models.
 
@@ -31,7 +31,7 @@ The browser checks use an installed Chrome by default. Set `PLAYWRIGHT_CHANNEL=m
 ## Content and provenance
 
 - Navigation video: owner-provided Foxglove screen recording, 13 October 2026 (69 seconds). Shows the R08 model and A* navigation simulation in a point-cloud map. The web copy preserves the full recording at 2560 pixels wide, H.264 CRF 24 with fast-start metadata; its entirely silent audio track is omitted. The poster is taken at 60 seconds. Playback is user-initiated, with a visual description and download link at `/#demo`.
-- Project purpose: owner-provided brief, 13 October 2026 — a general-purpose robot body for testing VLA and WAM models, aimed at project followers and collaborators.
+- Project purpose: owner-provided brief, 13 October 2026 â€” a general-purpose robot body for testing VLA and WAM models, aimed at project followers and collaborators.
 - Hardware source: `gautamsajeen/UnderBot-Personal`, revision R08, commit `3f28a652bb34109b23241bd98b33f2c56ea0a87a`.
 - Technical claims are based on the source README, URDF and `underbot_description/docs/accuracy_and_physics.md`.
 - Model validation results are attributed to the source package; no physical payload, autonomy, current hardware capability or native ROS/simulator verification is claimed.
@@ -50,3 +50,7 @@ After a model update, review the accompanying copy, source links and specificati
 ## Before expanding the project story
 
 Confirm physical build progress, measured hardware capabilities, selected VLA/WAM integrations, team credits and any real build photography with the project owners. Keep design intent distinct from measured results.
+
+## Consolidated repository
+
+This folder preserves the published website. The standalone repository and Vercel deployment remain unchanged. Run commands from this folder. `npm run sync:model` defaults to the bundled `../models/r08` and retains the original upstream commit from `../docs/SOURCE_SNAPSHOTS.json`. The website remains an R08 presentation; R09 is separately preserved under `../models/r09`.

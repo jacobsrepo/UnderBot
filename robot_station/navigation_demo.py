@@ -13,9 +13,20 @@ from demo import Demo
 from navigation_core import plan_route,segment_is_free,route_length
 
 ROOT=Path(__file__).resolve().parent
+
+def navigation_data_dir(root=ROOT):
+    """Prefer installed data; allow a fresh repository checkout to use its bundled map."""
+    installed=root/'navigation-data'
+    if all((installed/name).is_file() for name in ('map_metadata.json','demo_map.npz')):
+        return installed
+    bundled=root.parent/'navigation'
+    if all((bundled/name).is_file() for name in ('map_metadata.json','demo_map.npz')):
+        return bundled
+    raise FileNotFoundError('Navigation data missing: expected navigation-data beside the station or the repository navigation folder')
+
 class NavigationDemo(Demo):
     def __init__(self):
-        data=ROOT/'navigation-data'
+        data=navigation_data_dir()
         self.meta=json.loads((data/'map_metadata.json').read_text());arrays=np.load(data/'demo_map.npz')
         self.grid=arrays['grid'];self.cloud=arrays['cloud'];self.route=[];self.route_index=0;self.nav_status='idle';self.goal_xy=None
         self.pending_steps=[];self.turn_target=None;self.turn_start=None;self.reverse=False;self.planned_length=0.

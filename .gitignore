@@ -28,3 +28,6 @@ hardware/electrical/adeept-v4.zip
 *.sqlite3
 *.db
 .history/
+
+# User-created simulation destinations
+custom_waypoints.json
