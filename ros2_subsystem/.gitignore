@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+ENV/
+
+# ROS 2 build & install artifacts
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+build/
+install/
+log/
+COLCON_IGNORE
+*.orig
+
+# Cache & state
+window_state.json
+.DS_Store
+Thumbs.db
+*.swp
+*.bak

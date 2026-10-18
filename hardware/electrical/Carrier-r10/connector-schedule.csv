@@ -1,0 +1,17 @@
+﻿Connector,Purpose,Pin,Net
+J1,Protected12V input + / GND,1,VIN
+J1,Protected12V input + / GND,2,GND
+J2,Stop contact SEND+ / RETURN+ (NO GND),1,VIN
+J2,Stop contact SEND+ / RETURN+ (NO GND),2,ACT
+J3,Short DC cable to mounted EP-0225,1,PI_IN
+J3,Short DC cable to mounted EP-0225,2,GND
+J4,DDR input: +Vin5 / -Vin6,1,KINECT_IN
+J4,DDR input: +Vin5 / -Vin6,2,GND
+J5,DDR output return: +Vo3 / -Vo1,1,DEPTH_12
+J5,DDR output return: +Vo3 / -Vo1,2,GND
+J6,Regulated12V to Kinect v2 adapter,1,DEPTH_12
+J6,Regulated12V to Kinect v2 adapter,2,GND
+J7,Stopped nominal12V to Adeept VIN,1,ARM_IN
+J7,Stopped nominal12V to Adeept VIN,2,GND
+J8,Stopped regulated5V AUX output,1,AUX_5V
+J8,Stopped regulated5V AUX output,2,GND

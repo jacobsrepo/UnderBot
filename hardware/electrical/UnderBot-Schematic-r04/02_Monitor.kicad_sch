@@ -1,0 +1,575 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 0cfc253d-e4d7-5a1b-bca2-fbbf86cfecd1) (paper "A3")
+        (title_block (title "02 - INA228 current / voltage monitor circuit") (date "2026-10-02") (rev "0.4 REVIEW") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "Sensor_Energy:INA228"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "U"
+			(at -6.35 11.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "INA228"
+			(at 3.81 11.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-10_3x3mm_P0.5mm"
+			(at 20.32 -11.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina228.pdf"
+			(at 8.89 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "High-Side or Low-Side Measurement, Bi-Directional Current and Power Monitor (0-85V) with I2C, SMBus-, and PMBus-Compatible Interface, TSSOP-10 (Texas DGS0010A / VSSOP)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "ADC I2C 20-Bit Oversampling Current Shunt"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*TSSOP*3x3mm?P0.5mm*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "INA228_0_1"
+			(rectangle
+				(start 7.62 10.16)
+				(end -7.62 -10.16)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+		)
+		(symbol "INA228_1_1"
+			(pin input line
+				(at 10.16 7.62 180)
+				(length 2.54)
+				(name "A1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 10.16 5.08 180)
+				(length 2.54)
+				(name "A0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin open_collector line
+				(at 10.16 -7.62 180)
+				(length 2.54)
+				(name "~{Alert}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 10.16 0 180)
+				(length 2.54)
+				(name "SDA"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 10.16 -2.54 180)
+				(length 2.54)
+				(name "SCL"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 12.7 270)
+				(length 2.54)
+				(name "VS"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 -12.7 90)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -10.16 7.62 0)
+				(length 2.54)
+				(name "Vbus"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -10.16 -5.08 0)
+				(length 2.54)
+				(name "Vin-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -10.16 -2.54 0)
+				(length 2.54)
+				(name "Vin+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:C"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at 0.635 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "C_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "C_0_1"
+			(polyline
+				(pts
+					(xy -2.032 0.762) (xy 2.032 0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.032 -0.762) (xy 2.032 -0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "C_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "REAL IC PIN CONNECTIONS: INA228 / DGS 10-PIN PACKAGE" (at 20 15 0) (effects (font (size 2 2)) (justify left top)) (uuid d1c61d96-294f-5b35-964b-743229a74e31))(text "Prototype may use an equivalent breakout, but check onboard shunt and pin labels before connecting it." (at 20 23 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 7bfde3b1-d2ab-56ac-8777-1e9d1a5a4926))(symbol (lib_id "Sensor_Energy:INA228") (at 162.56 91.44 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 504a370a-e0e0-50de-ae4c-0f2ce9e8a553) (property "Reference" "U101" (at 162.56 71.11999999999999 0) (effects (font (size 1.27 1.27)) )) (property "Value" "INA228" (at 162.56 73.66 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 162.56 91.44 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 162.56 91.44 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/7ded7016-bfe0-5801-953a-913d62006471" (reference "U101") (unit 1)))))(wire (pts (xy 172.72 83.82) (xy 193.04 83.82)) (stroke (width 0) (type default)) (uuid 4e1e715f-8e01-58ab-bb5f-35a75413b6a6))(global_label "GND_SYS" (shape bidirectional) (at 193.04 83.82 180) (effects (font (size 1 1)) (justify right)) (uuid c11f50eb-e598-5414-8b81-dc6d240e27dd))(wire (pts (xy 172.72 86.36) (xy 187.96 86.36)) (stroke (width 0) (type default)) (uuid 2c01fe49-998d-5f82-b07c-e1b95b73e78f))(global_label "GND_SYS" (shape bidirectional) (at 187.96 86.36 180) (effects (font (size 1 1)) (justify right)) (uuid ac786057-b4f4-5c6c-a26a-36d91e1a3dc5))(wire (pts (xy 172.72 99.06) (xy 193.04 99.06)) (stroke (width 0) (type default)) (uuid e1b1eae0-f237-530a-9484-3b6f58e32c10))(global_label "INA_ALERT" (shape bidirectional) (at 193.04 99.06 180) (effects (font (size 1 1)) (justify right)) (uuid 9dcb7cd5-313a-54ab-a276-e00c3252d285))(wire (pts (xy 172.72 91.44) (xy 208.28 91.44)) (stroke (width 0) (type default)) (uuid acec5e01-1004-5920-95bc-21692130ec9b))(global_label "I2C_SDA" (shape bidirectional) (at 208.28 91.44 180) (effects (font (size 1 1)) (justify right)) (uuid 0856466c-19da-55a4-b345-bec519fd347e))(wire (pts (xy 172.72 93.98) (xy 203.2 93.98)) (stroke (width 0) (type default)) (uuid a69b9051-d207-5511-8c4a-7b36d303d7ef))(global_label "I2C_SCL" (shape bidirectional) (at 203.2 93.98 180) (effects (font (size 1 1)) (justify right)) (uuid 434b79aa-841f-55d6-8ab6-3112e5ad165f))(wire (pts (xy 162.56 78.74) (xy 162.56 66.04)) (stroke (width 0) (type default)) (uuid 6a67d102-8e52-5f0c-91f2-52871a14d1d9))(global_label "LOGIC_3V3" (shape bidirectional) (at 162.56 66.04 0) (effects (font (size 1 1)) (justify left)) (uuid e443a7b5-dcee-5361-89bf-1120dfcb63c7))(wire (pts (xy 162.56 104.14) (xy 162.56 116.84)) (stroke (width 0) (type default)) (uuid 5fde2870-132a-5859-a400-5a59739c3a96))(global_label "GND_SYS" (shape bidirectional) (at 162.56 116.84 0) (effects (font (size 1 1)) (justify left)) (uuid 76d90fdd-7544-5399-8c31-4b401a676441))(wire (pts (xy 152.4 83.82) (xy 121.92 83.82)) (stroke (width 0) (type default)) (uuid 837e068c-c3b1-5ee4-be9c-09e06f3c2682))(global_label "VBAT_SW" (shape bidirectional) (at 121.92 83.82 0) (effects (font (size 1 1)) (justify left)) (uuid 02ac954f-4a73-5413-ba3a-effaf18d09cc))(wire (pts (xy 152.4 96.52) (xy 121.92 96.52)) (stroke (width 0) (type default)) (uuid 1a67f9e3-f2e5-55a0-af9e-573f0fe7af9a))(global_label "SHUNT_LO" (shape bidirectional) (at 121.92 96.52 0) (effects (font (size 1 1)) (justify left)) (uuid 79b845bf-b6c4-5b25-8f31-7b1cf032c416))(wire (pts (xy 152.4 93.98) (xy 116.84 93.98)) (stroke (width 0) (type default)) (uuid 25d95e7f-d219-58a1-a933-3c8abffaf497))(global_label "SHUNT_HI" (shape bidirectional) (at 116.84 93.98 0) (effects (font (size 1 1)) (justify left)) (uuid f9c9bdd4-2dec-5804-8fc5-d5de0b57e16e))(symbol (lib_id "Device:C") (at 63.5 91.44 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e304c9a7-0136-52bb-bd19-dacfe57ac1ae) (property "Reference" "C101" (at 68.58 90.17 0) (effects (font (size 1.27 1.27)) (justify left))) (property "Value" "100nF / 10V" (at 68.58 92.71000000000001 0) (effects (font (size 1.0 1.0)) (justify left))) (property "Footprint" "" (at 63.5 91.44 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 63.5 91.44 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/7ded7016-bfe0-5801-953a-913d62006471" (reference "C101") (unit 1)))))(wire (pts (xy 63.5 87.63) (xy 63.5 82.55)) (stroke (width 0) (type default)) (uuid f792b29e-b2b5-5697-bd7b-dfb5cd8890d1))(global_label "LOGIC_3V3" (shape bidirectional) (at 63.5 82.55 0) (effects (font (size 1 1)) (justify left)) (uuid 61e0c67f-3a2e-59ad-bb43-e788c895083d))(wire (pts (xy 63.5 95.25) (xy 63.5 100.33)) (stroke (width 0) (type default)) (uuid c814723d-07c6-5570-8f54-e27b1938c420))(global_label "GND_SYS" (shape bidirectional) (at 63.5 100.33 0) (effects (font (size 1 1)) (justify left)) (uuid dce1e406-a21d-568b-b244-e2260a641993))(symbol (lib_id "Device:R") (at 259.08 91.44 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 38048871-2f2c-5dc4-85e7-e974189bd2c3) (property "Reference" "R102" (at 264.15999999999997 90.17 0) (effects (font (size 1.27 1.27)) (justify left))) (property "Value" "10k" (at 264.15999999999997 92.71000000000001 0) (effects (font (size 1.0 1.0)) (justify left))) (property "Footprint" "" (at 259.08 91.44 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 259.08 91.44 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/7ded7016-bfe0-5801-953a-913d62006471" (reference "R102") (unit 1)))))(wire (pts (xy 259.08 87.63) (xy 259.08 82.55)) (stroke (width 0) (type default)) (uuid 97186d04-561b-5789-b819-4e5a0f507781))(global_label "LOGIC_3V3" (shape bidirectional) (at 259.08 82.55 0) (effects (font (size 1 1)) (justify left)) (uuid 51179799-a88b-5119-a6dc-a43c6a632d45))(wire (pts (xy 259.08 95.25) (xy 259.08 100.33)) (stroke (width 0) (type default)) (uuid 8910326d-73b3-5d0a-9192-8b6adff61505))(global_label "INA_ALERT" (shape bidirectional) (at 259.08 100.33 0) (effects (font (size 1 1)) (justify left)) (uuid 71553cb2-9ae9-5e13-b662-f6f0e9b702fb))(text "C101 goes directly beside U101 VS/GND. A0=A1=GND selects 0x40; do not put another 0x40 device on the same bus segment." (at 20 144 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 51deb57f-1beb-5eec-84e6-e20f2b8705b6))(text "INA228 VS is 3.3V, NEVER battery voltage. Only VBUS and IN+/IN- connect to the high-voltage measurement path." (at 20 156 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid ab7235ac-9288-5f94-b64d-976db406ff49))(text "Run SHUNT_HI / SHUNT_LO as a matched Kelvin pair from R101 sense terminals. Do not carry load current in those wires." (at 20 168 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 379021f1-cfe6-5ee1-8c7c-f1a5269dd23a))(text "I2C pull-ups are on sheet 04, subject to existing module pull-ups. ALERT is open-drain and pulled up by R102." (at 20 180 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid d1d3ee23-d5e0-5f0e-a01b-bb5d2c98a8df))(text "Candidate shunt needs firmware calibration. Verify measurement range, reset behavior and power sequencing before use." (at 20 192 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 631158cc-a844-5680-be75-466a947b5565))(text "No input filter values are assumed. Evaluate TI input-filter guidance against actual converter / motor noise." (at 20 204 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 622e6f67-03a5-57af-ac68-f88d35086cf4))(text "Reference: TI INA228 datasheet, pin-function table and application circuit. Footprint intentionally awaits package verification." (at 20 220 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 64aecb0f-40ed-5695-bf4e-cee2d3f06e24)) (embedded_fonts no))

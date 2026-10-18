@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="underbot">
+  <xacro:include filename="base.xacro" />
+  <xacro:underbot_base />
+  <xacro:include filename="sensors.xacro" />
+  <xacro:underbot_sensors />
+  <xacro:include filename="arm.xacro" />
+  <xacro:underbot_arm />
+</robot>

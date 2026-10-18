@@ -1,0 +1,12 @@
+﻿Subsystem,Low operating average W,Central estimate W,High operating average W,Power source,Basis and limitations
+Pi 5 board,6,8,12,GB70,"6?12 W operating allowance; manufacturer reports around 12 W intensive peak, not measured ROS consumption."
+USB SSD,1,2,4,GB70,Exact SSD/enclosure unknown; engineering allowance.
+Pi active cooler,0.2,0.5,1,GB70,Fan duty and exact label unknown; allowance.
+Pi Camera Module 3,1,1.5,2,GB70,"Camera streaming allowance, not published maximum."
+Kinect v2 + adapter,10,15,20,GB70,"Provisional active-load assumption, NOT verified Microsoft rating; must measure exact sensor/adapter. Supply capacity is not operating consumption."
+One Adeept arm including controller,2,4,10,GB70,"Light intermittent manipulation allowance; six servos included. 4 W assumes 80% supported/resting at 2 W, 20% moving at 12 W. Holding a load can use much more. Not a stall-current limit."
+Uno + two IMUs + four ToF + small indicator electronics,0.5,1,1.5,GB70,"Combined allowance, arm controller excluded here to avoid double count. Includes future sensors so estimate is broader than funded phase 1."
+USB microphone,0.2,0.5,1,GB70,Optional microphone allowance.
+Audio amplifiers + speakers,0,1,3,GB70,"Quiet/intermittent speech electrical average, not 6 W loudspeaker output rating or full-volume maximum."
+Two camera pan/tilt servos,0,0.5,1,GB70,Intermittent light Pi-camera motion average; not Kinect mount or stalled servo peak.
+T12 base: wheels + LiDAR + OEM electronics,10,15,25,T12 OEM battery,"ROUGH driving estimate with suction, brushes and mop pump OFF; not published no-vacuum data. Includes LiDAR once. 45 W manufacturer nameplate is for original vacuum appliance, not this measured load."

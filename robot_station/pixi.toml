@@ -1,0 +1,23 @@
+[workspace]
+name = "underbot-station"
+version = "0.1.0"
+channels = ["https://prefix.dev/robostack-jazzy", "https://prefix.dev/conda-forge"]
+platforms = ["win-64"]
+
+[dependencies]
+python = "3.12.*"
+ros-jazzy-foxglove-bridge = ">=3.4.3,<4"
+ros-jazzy-foxglove-msgs = ">=3.4.3,<4"
+ros-jazzy-rclpy = "*"
+ros-jazzy-geometry-msgs = "*"
+ros-jazzy-sensor-msgs = "*"
+ros-jazzy-nav-msgs = "*"
+ros-jazzy-tf2-msgs = "*"
+ros-jazzy-std-msgs = "*"
+ros-jazzy-ament-index-python = "*"
+pillow = ">=12,<13"
+
+[tasks]
+demo = "python start.py --demo --port 8766"
+test = "python -m unittest test_gateway -v"
+layout = "python build_layout.py"

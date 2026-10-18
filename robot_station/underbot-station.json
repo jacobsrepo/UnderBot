@@ -1,0 +1,71 @@
+{
+  "configById": {
+    "Image!camera": {
+      "imageMode": {
+        "imageTopic": "/camera/image/compressed"
+      },
+      "title": "Camera - pan/tilt"
+    },
+    "Image!perception": {
+      "imageMode": {
+        "imageTopic": "/perception/annotated/compressed"
+      },
+      "title": "Perception - annotated feed"
+    },
+    "3D!room": {
+      "followTf": "map",
+      "cameraState": {
+        "perspective": false,
+        "distance": 8,
+        "phi": 0,
+        "thetaOffset": 0,
+        "targetOffset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "topics": {
+        "/map": {
+          "visible": true
+        },
+        "/plan": {
+          "visible": true
+        },
+        "/odom": {
+          "visible": true
+        },
+        "/scan": {
+          "visible": true
+        }
+      },
+      "title": "Room map + planned path"
+    },
+    "robot-station-extension.UnderBot Controls!control": {
+      "prefix": "/station",
+      "lateral": false
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "linkedGlobalVariables": [],
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "row",
+    "first": {
+      "direction": "column",
+      "first": {
+        "direction": "row",
+        "first": "Image!camera",
+        "second": "Image!perception",
+        "splitPercentage": 50
+      },
+      "second": "3D!room",
+      "splitPercentage": 42
+    },
+    "second": "robot-station-extension.UnderBot Controls!control",
+    "splitPercentage": 68
+  }
+}

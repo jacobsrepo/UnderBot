@@ -1,0 +1,7 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 28d6ab5c-ba8e-504d-a8f6-662666777702) (paper "A3") (lib_symbols)
+(sheet (at 40 60) (size 180 50) (stroke (width 0.254) (type default)) (fill (color 0 0 0 0)) (uuid 2f285918-8ba4-5887-8290-c64dd70d3c1c)
+(property "Sheetname" "Power distribution PCB circuit" (at 40 58 0) (effects (font (size 1.5 1.5)) (justify left bottom)))
+(property "Sheetfile" "Distribution.kicad_sch" (at 40 112 0) (effects (font (size 1.5 1.5)) (justify left top)))
+(instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702" (page "2")))))
+(text "r08 - POWER DISTRIBUTION PCB / UNROUTED PLACEMENT / NOT FOR FABRICATION" (at 20 25 0) (effects (font (size 2 2)) (justify left top)) (uuid 7f4f5348-12f7-514e-a80f-e425d3bc14f6))
+(sheet_instances (path "/" (page "1"))) (embedded_fonts no))

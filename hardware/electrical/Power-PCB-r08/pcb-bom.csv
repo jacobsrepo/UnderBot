@@ -1,0 +1,6 @@
+﻿Reference,Part,Qty,Status,Source
+J1-J6,"Phoenix Contact1715721 MKDS1,5/2-5,08",6,Selected footprint candidate; drawing/mating/torque verification before release,https://mall.phoenixcontact.com.cn/commodity/detail/MKDS1%2C5-2-5%2C08-1715721
+F1-F4 holder,Keystone3568 MINI blade fuse holder,4,Selected holder candidate; compare manufacturer drawing before fabrication,https://www.keyelco.com/product-pdf.cfm?p=306
+F1-F4 fuse,Littelfuse297 MINI32V series; amperages TBD,4,"Do not select amperages solely from average load. Startup, wire and interruption coordination required.",https://www.littelfuse.com/ja-jp/products/fuses-overcurrent-protection/fuses/automotive-fuses/blade-fuses-shunt/mini/297/0297005-wxmx
+H1-H4,M3 mounting hardware / insulating standoffs,4,Select enclosure height and clearance,
+External,Pololu D24V50F5 #2851 auxiliary5V candidate,1,Typical up to5A subject to thermal derating; compare budget and load before order,https://www.pololu.com/product/2851/specs

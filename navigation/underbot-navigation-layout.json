@@ -1,0 +1,89 @@
+{
+  "configById": {
+    "Image!camera": {
+      "imageMode": {
+        "imageTopic": "/camera/emeet/image/compressed"
+      },
+      "title": "Existing EMEET camera"
+    },
+    "Image!perception": {
+      "imageMode": {
+        "imageTopic": "/perception/emeet/annotated/compressed"
+      },
+      "title": "Existing perception"
+    },
+    "3D!room": {
+      "followTf": "map",
+      "cameraState": {
+        "perspective": true,
+        "distance": 48,
+        "phi": 0.6,
+        "thetaOffset": 0.3,
+        "targetOffset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "topics": {
+        "/navigation/pointcloud": {
+          "visible": true,
+          "pointSize": 2,
+          "colorMode": "colormap",
+          "colorField": "z",
+          "colorMap": "turbo"
+        },
+        "/map": {
+          "visible": false
+        },
+        "/navigation/robot": {
+          "visible": true
+        },
+        "/plan": {
+          "visible": true,
+          "color": "#ffcc22",
+          "lineWidth": 0.1
+        },
+        "/navigation/goal": {
+          "visible": true
+        },
+        "/odom": {
+          "visible": true
+        }
+      },
+      "title": "SIMULATION \u2014 public 3D map + A* route",
+      "publish": {
+        "type": "pose",
+        "poseTopic": "/station/nav/goal",
+        "goalTopic": "/station/nav/goal",
+        "pointTopic": "/clicked_point"
+      }
+    },
+    "robot-station-extension.UnderBot Controls!control": {
+      "prefix": "/station",
+      "lateral": false
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "linkedGlobalVariables": [],
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "row",
+    "first": {
+      "direction": "column",
+      "first": {
+        "direction": "row",
+        "first": "Image!camera",
+        "second": "Image!perception",
+        "splitPercentage": 50
+      },
+      "second": "3D!room",
+      "splitPercentage": 42
+    },
+    "second": "robot-station-extension.UnderBot Controls!control",
+    "splitPercentage": 68
+  }
+}

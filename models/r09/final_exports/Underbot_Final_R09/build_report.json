@@ -1,0 +1,65 @@
+{
+  "status": "built",
+  "component_count": 250,
+  "link_count": 23,
+  "urdf_visual_mesh_count": 45,
+  "assembled_triangles": 223360,
+  "all_components_closed_manifold": true,
+  "exact_dimension_policy": "No global shrink. Bevelled parts restore their exact original local bounds.",
+  "assembly_topology": "Separate intersecting closed components; not a Boolean-unioned printable solid.",
+  "stl_units": "assembled/components/link-local STL in mm; models/meshes URDF visuals in m",
+  "texture_format": "Embedded PBR PNGs in GLB; packed Blender images; STL has no colour or texture",
+  "renders": [
+    {
+      "path": "renders/Underbot_R09_hero.png",
+      "size_px": [
+        2200,
+        2400
+      ],
+      "removed_for_cutaway": [],
+      "sha256": "f159c106ca09816c5d2c1c8fe266a95162bcc59355382be957630dc82aba630e"
+    },
+    {
+      "path": "renders/Underbot_R09_rear.png",
+      "size_px": [
+        2200,
+        2400
+      ],
+      "removed_for_cutaway": [],
+      "sha256": "5814cc17994bcc84efb834b8e49339e0f235df943f7600deadf3c6c020fc8068"
+    },
+    {
+      "path": "renders/Underbot_R09_cutaway.png",
+      "size_px": [
+        2200,
+        2400
+      ],
+      "removed_for_cutaway": [
+        "base_link__front_door_lower",
+        "base_link__front_door_upper",
+        "base_link__front_door_left_strip",
+        "base_link__front_door_right_strip",
+        "base_link__side_-1_lower",
+        "base_link__side_-1_upper",
+        "base_link__side_-1_front_strip",
+        "base_link__side_-1_rear_strip",
+        "base_link__panel_screw_-1_-0.16000000000000003_0.23700000000000",
+        "base_link__panel_screw_-1_0.020000000000000004_0.23700000000000",
+        "base_link__panel_screw_-1_-0.16000000000000003_0.39",
+        "base_link__panel_screw_-1_0.020000000000000004_0.39",
+        "base_link__panel_screw_-1_-0.16000000000000003_0.64",
+        "base_link__panel_screw_-1_0.020000000000000004_0.64",
+        "base_link__panel_screw_-1_-0.16000000000000003_0.673",
+        "base_link__panel_screw_-1_0.020000000000000004_0.673",
+        "base_link__front_hinge_0.305",
+        "base_link__front_hinge_0.525",
+        "base_link__front_latch"
+      ],
+      "sha256": "959bb0a590b56d87d8a3f4558165297bec1f7f05c793847f8782cad11f7fa303"
+    }
+  ],
+  "elapsed_seconds": 417.0976903438568,
+  "blender_version": "4.5.14 LTS",
+  "native_simulator_validation": false,
+  "packed_scene_sha256": "7aa68fd443da78aa5841368fdc1558a06440036f40e02127a5d3359273636073"
+}

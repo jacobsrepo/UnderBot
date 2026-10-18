@@ -1,0 +1,5 @@
+﻿Purpose,Model,Mechanics,Source
+Pi supply,52Pi EP-0225,87x57mm; mounting centres unpublished,https://wiki.52pi.com/index.php?title=EP-0225
+Depth supply,Mean Well DDR-60G-12,52.5x90x54.5mm body;58.4mm max projection;DIN TS35,https://www.meanwell.com/Upload/PDF/DDR-60/DDR-60-SPEC.PDF
+Aux supply,Pololu D24V50F5 #2851,17.8x20.3x8.8mm;2.54mm electrical pitch,https://www.pololu.com/product/2851
+Aux footprint drawing,Pololu drawing0J1436,Top vs bottom view mirrored correctly; dimensions from mil values,https://www.pololu.com/file/0J1436/d24v50f5-step-down-voltage-regulator-dimensions.pdf

@@ -1,0 +1,477 @@
+{
+  "configById": {
+    "map!1ud6rc2": {
+      "customTileUrl": "",
+      "disabledTopics": [],
+      "followTopic": "/station/manual_location",
+      "followFrame": "",
+      "layer": "map",
+      "topicColors": {},
+      "zoomLevel": 18,
+      "maxNativeZoom": 18,
+      "topicConfig": {
+        "/station/manual_location": {
+          "historyMode": "none",
+          "pointSize": 6
+        }
+      },
+      "layers": [
+        {
+          "type": "shaded-relief",
+          "enabled": true,
+          "opacity": 1
+        }
+      ],
+      "foxglovePanelTitle": "Pi location - MANUAL (not GPS)"
+    },
+    "Image!camera": {
+      "imageMode": {
+        "imageTopic": "/camera/emeet/image/compressed"
+      },
+      "title": "LIVE EMEET - raw camera",
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 60,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "synchronize": false
+    },
+    "Image!perception": {
+      "imageMode": {
+        "imageTopic": "/perception/emeet/annotated/compressed"
+      },
+      "title": "LIVE EMEET - objects + human pose",
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 60,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "synchronize": false
+    },
+    "3D!room": {
+      "followTf": "map",
+      "cameraState": {
+        "distance": 1.6198942163471308,
+        "perspective": true,
+        "phi": 54.08991385281105,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          -1.070855455400443,
+          0.2154187367285565,
+          -7.700335985442037e-17
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": -142.02472198192356,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000,
+        "logDepth": false
+      },
+      "topics": {
+        "/map": {
+          "visible": true,
+          "colorMode": "costmap",
+          "drawBehind": true,
+          "frameLocked": false,
+          "alpha": 1
+        },
+        "/plan": {
+          "visible": true,
+          "type": "line",
+          "lineWidth": 0.05
+        },
+        "/odom": {
+          "visible": true
+        },
+        "/scan": {
+          "visible": true
+        },
+        "/camera/image/compressed": {
+          "visible": true,
+          "planarProjectionFactor": 0,
+          "renderMode": "default"
+        },
+        "/perception/annotated/compressed": {
+          "visible": true,
+          "distance": 1,
+          "renderMode": "default",
+          "siblingRgbTopic": "",
+          "explicitAlpha": 1,
+          "colorMode": "colormap"
+        }
+      },
+      "title": "Room map + planned path",
+      "followMode": "follow-pose",
+      "scene": {
+        "ignoreColladaUpAxis": false,
+        "enableStats": true,
+        "syncCamera": false
+      },
+      "transforms": {
+        "frame:camera_link": {
+          "visible": true
+        },
+        "frame:front_left_wheel": {
+          "rpyCoefficient": [
+            0,
+            -4.6000000000000005,
+            0
+          ]
+        },
+        "frame:front_right_wheel": {
+          "rpyCoefficient": [
+            0,
+            1,
+            0
+          ]
+        },
+        "frame:rear_left_wheel": {
+          "rpyCoefficient": [
+            0,
+            1,
+            0
+          ]
+        },
+        "frame:left_upper_arm": {
+          "rpyCoefficient": [
+            0,
+            19.6,
+            0
+          ]
+        },
+        "frame:rear_right_wheel": {
+          "rpyCoefficient": [
+            0,
+            5.5,
+            0
+          ]
+        },
+        "frame:left_forearm": {
+          "rpyCoefficient": [
+            0,
+            5.6,
+            0
+          ]
+        },
+        "frame:left_finger_a": {
+          "xyzOffset": [
+            0,
+            0.01,
+            0
+          ]
+        },
+        "frame:left_gripper": {
+          "rpyCoefficient": [
+            13.999999999999998,
+            0,
+            0
+          ]
+        },
+        "frame:right_upper_arm": {
+          "rpyCoefficient": [
+            0,
+            1,
+            0
+          ]
+        },
+        "frame:left_finger_b": {
+          "xyzOffset": [
+            0,
+            -0.01,
+            0
+          ]
+        },
+        "frame:right_forearm": {
+          "rpyCoefficient": [
+            0,
+            1,
+            0
+          ]
+        },
+        "frame:right_gripper": {
+          "rpyCoefficient": [
+            13.6,
+            0,
+            0
+          ]
+        },
+        "frame:right_finger_a": {
+          "xyzOffset": [
+            0,
+            0.012,
+            0
+          ]
+        },
+        "frame:right_finger_b": {
+          "xyzOffset": [
+            0,
+            -0.01,
+            0
+          ]
+        },
+        "frame:camera_pan_link": {
+          "rpyCoefficient": [
+            0,
+            0,
+            68.49999999999999
+          ]
+        }
+      },
+      "layers": {
+        "4f1d440f-23e5-4894-ba6f-8089b4a96631": {
+          "controlMode": "transforms",
+          "jointStatesTopic": "",
+          "displayMode": "auto",
+          "showAxis": false,
+          "axisScale": 0.2,
+          "showOutlines": true,
+          "opacity": 1,
+          "visible": true,
+          "instanceId": "4f1d440f-23e5-4894-ba6f-8089b4a96631",
+          "layerId": "foxglove.Urdf",
+          "label": "URDF",
+          "sourceType": "filePath",
+          "url": "",
+          "filePath": "__ROVER_URDF__",
+          "parameter": "",
+          "topic": "",
+          "framePrefix": "",
+          "order": 1,
+          "links": {
+            "chassis": {
+              "visible": true
+            },
+            "front_left_wheel": {
+              "visible": true
+            },
+            "right_finger_b": {
+              "visible": true
+            },
+            "left_forearm": {
+              "visible": true
+            },
+            "camera_pan_link": {
+              "visible": true
+            },
+            "camera_link": {
+              "visible": true
+            },
+            "base_link": {
+              "visible": true
+            }
+          }
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "synchronize": false,
+      "imageMode": {}
+    },
+    "Plot!3axgmdz": {
+      "paths": [
+        {
+          "timestampMethod": "customField",
+          "value": "/odom.twist.twist.linear.x",
+          "enabled": true,
+          "color": "#4e98e2",
+          "id": "462185cf-eea2-4ebd-ad29-132f6c8403d0",
+          "timestampPath": "/odom.header.stamp.sec"
+        }
+      ],
+      "showLegend": true,
+      "showPlotValuesInLegend": true
+    },
+    "StateTransitions!381u6tz": {
+      "paths": [
+        {
+          "value": "/station/status.data",
+          "timestampMethod": "receiveTime",
+          "customStates": {
+            "type": "discrete",
+            "states": []
+          },
+          "id": "53e265f0-25fb-4969-833b-00060341c5a0"
+        }
+      ],
+      "isSynced": true,
+      "showLegend": true,
+      "xAxisDisplayMethod": "relative"
+    },
+    "Audio!43ehbv1": {
+      "volume": 1,
+      "slidingViewWidth": 10,
+      "foxglovePanelTitle": "Headset microphone (live)",
+      "muted": true,
+      "topic": "/station/audio"
+    },
+    "Gauge!3edr1iz": {
+      "path": "/odom.twist.twist.linear.x",
+      "style": "dial",
+      "minValue": 0,
+      "maxValue": 0.6,
+      "tickInterval": 0.2,
+      "showTicks": true,
+      "colorMap": "red-yellow-green",
+      "colorMode": "colormap",
+      "gradient": [
+        "#0000ff",
+        "#ff00ff"
+      ],
+      "reverse": true,
+      "reverseDirection": false
+    },
+    "Gauge!4d9y5sw": {
+      "path": "/perception/emeet/latency_ms.data",
+      "style": "dial",
+      "minValue": 0,
+      "maxValue": 2000,
+      "tickInterval": 500,
+      "showTicks": true,
+      "colorMap": "red-yellow-green",
+      "colorMode": "colormap",
+      "gradient": [
+        "#0000ff",
+        "#ff00ff"
+      ],
+      "reverse": true,
+      "reverseDirection": false,
+      "foxglovePanelTitle": "Camera latency (ms)"
+    },
+    "robot-station-extension.UnderBot Controls!control": {
+      "prefix": "/station",
+      "lateral": false
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "linkedGlobalVariables": [],
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "row",
+    "first": {
+      "direction": "column",
+      "first": {
+        "direction": "row",
+        "first": {
+          "first": "map!1ud6rc2",
+          "second": "Image!camera",
+          "direction": "row"
+        },
+        "second": "Image!perception",
+        "splitPercentage": 62.89698318068363
+      },
+      "second": {
+        "first": "3D!room",
+        "second": {
+          "first": "Plot!3axgmdz",
+          "second": "StateTransitions!381u6tz",
+          "direction": "column"
+        },
+        "direction": "column",
+        "splitPercentage": 58.618974349279206
+      },
+      "splitPercentage": 33.10813250407623
+    },
+    "second": {
+      "first": {
+        "first": "Audio!43ehbv1",
+        "second": {
+          "first": "Gauge!3edr1iz",
+          "second": "Gauge!4d9y5sw",
+          "direction": "row"
+        },
+        "direction": "column"
+      },
+      "second": "robot-station-extension.UnderBot Controls!control",
+      "direction": "column",
+      "splitPercentage": 29.010738621894937
+    },
+    "splitPercentage": 79.11690519896037
+  }
+}

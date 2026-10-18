@@ -1,0 +1,133 @@
+{
+  "revision": "R08 WR141E / 200mm tower / stripped Kinect reservation",
+  "units": "m, kg, s, rad, kg*m^2",
+  "base_length": 0.558,
+  "base_width": 0.404,
+  "base_height": 0.205,
+  "stock_base_mass": 9.1,
+  "frame_width": 0.2,
+  "frame_depth": 0.2,
+  "frame_center_x": -0.07,
+  "post_size": 0.02,
+  "post_length": 0.5,
+  "post_bottom": 0.205,
+  "width_rail_length": 0.16,
+  "depth_rail_length": 0.16,
+  "ring_bottoms": [
+    0.205,
+    0.48,
+    0.555,
+    0.685
+  ],
+  "shelf_thickness": 0.003,
+  "panel_thickness": 0.002,
+  "panel_bottom": 0.225,
+  "panel_top": 0.685,
+  "camera_center": [
+    -0.005,
+    0,
+    0.635
+  ],
+  "camera_optical_offset": [
+    0.034,
+    0.06925,
+    0.0065
+  ],
+  "camera_aperture_half_width": 0.078,
+  "camera_aperture_bottom": 0.603,
+  "camera_aperture_top": 0.6625,
+  "arm_root_z": 0.545,
+  "arm_root_y": 0.108,
+  "shoulder_offset": 0.04,
+  "upper_arm_length": 0.105,
+  "forearm_length": 0.09,
+  "wrist_length": 0.045,
+  "hand_length": 0.025,
+  "finger_length": 0.05,
+  "shoulder_zero_pitch": -2.6179938779914944,
+  "elbow_zero_pitch": 1.0471975511965976,
+  "wrist_zero_pitch": -1.0471975511965976,
+  "arm_base_range": 0.7853981633974483,
+  "shoulder_range": 0.3490658503988659,
+  "elbow_range": 0.3490658503988659,
+  "wrist_pitch_range": 0.5235987755982988,
+  "wheel_radius": 0.0925,
+  "wheel_width": 0.05,
+  "wheel_x": -0.18,
+  "wheel_half_separation": 0.177,
+  "wheel_mass": 0.75,
+  "retained_chassis_mass": 7.35,
+  "caster_radius": 0.04,
+  "caster_width": 0.04,
+  "caster_swivel_xyz": [
+    0.215,
+    0,
+    0.11
+  ],
+  "caster_wheel_xyz": [
+    -0.02,
+    0,
+    -0.07
+  ],
+  "caster_mass": 0.1,
+  "caster_fork_mass": 0.15,
+  "noco_mass": 1.9,
+  "kinect_mass": 0.97,
+  "lidar_mass": 0.15,
+  "t_slot_kg_per_m": 0.4,
+  "v_slot_kg_per_m": 0.4627,
+  "plastic_density": 1050.0,
+  "polycarbonate_density": 1200.0,
+  "aluminium_density": 2700.0,
+  "arm_effort": 1.0,
+  "arm_speed": 1.0,
+  "wheel_effort": 2.5,
+  "wheel_speed": 4.0,
+  "jaw_effort": 0.3,
+  "status": {
+    "published_envelopes": [
+      "WR141E558x404x205",
+      "stock base9.1kg with battery baseline",
+      "GB70 body222x99x69; installation222x152x70"
+    ],
+    "user_stock": [
+      "20mm posts500mm x4",
+      "20mm rails200mm x16; cut each to160mm for200mm outside frame"
+    ],
+    "sketch_proposals": [
+      "200x200mm outside frame and floor blanks, 20mm corner reliefs",
+      "2mm external flat covers; 204x204mm covered envelope around 200x200mm frame/floors",
+      "ring bottoms205/480/555/685mm",
+      "GB70 upright222mm high",
+      "bare Kinect components inside tower; layout unmeasured",
+      "mounting datum205mm",
+      "frame centre rearward70mm",
+      "closed doors"
+    ],
+    "unmeasured_estimates": [
+      "wheel and caster geometry/mass",
+      "all arm pivots/lengths/limits/zeros",
+      "installed masses and mass distribution",
+      "actuator torque/speed",
+      "camera optical datum",
+      "plastic grade/thickness",
+      "LiDAR/compute/converter exact models",
+      "stripped Kinect PCB/optics/cooling/wiring layout and installed mass; .97kg allocation retained"
+    ]
+  },
+  "floor_width": 0.2,
+  "floor_depth": 0.2,
+  "camera_packaging": "Bare electronics reservation; not measured Kinect hardware",
+  "camera_module_collision_size": [
+    0.07,
+    0.156,
+    0.056
+  ],
+  "camera_module_collision_xyz": [
+    -0.001,
+    0,
+    -0.0035
+  ],
+  "covered_body_width": 0.204,
+  "covered_body_depth": 0.204
+}

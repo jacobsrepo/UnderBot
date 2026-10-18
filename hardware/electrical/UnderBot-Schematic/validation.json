@@ -1,0 +1,26 @@
+{
+  "connectivity_checks_passed": [
+    "Battery positive feeds main fuse",
+    "Charge joins fused pack before service switch",
+    "Service switch feeds shunt current input",
+    "Shunt output feeds all load branch fuses",
+    "Positive Kelvin sense reaches INA228 IN+",
+    "Negative Kelvin sense reaches INA228 IN-",
+    "Protected return spans pack, charger, IC and controller",
+    "3.3V supplies monitor and sensor bus",
+    "SDA joins controller, monitor and upstream mux",
+    "SCL joins controller, monitor and upstream mux",
+    "NTC divider ADC junction",
+    "Heartbeat crosses control and safety sheets",
+    "PWM disable crosses control and actuator sheets",
+    "Power rails and ground are distinct",
+    "Body/head I2C channels are separate",
+    "Converter harness input is not shorted to output",
+    "External contactor is not bypassed",
+    "Actuator converter input is not shorted to output"
+  ],
+  "net_count": 31,
+  "erc_errors": 0,
+  "erc_warnings": 0,
+  "scope": "Connectivity only. No thermal, current, hardware safety, footprint or external module validation."
+}

@@ -1,0 +1,2 @@
+﻿const { chromium } = require('../Underbot-Website/node_modules/playwright');
+(async()=>{const b=await chromium.connectOverCDP('http://127.0.0.1:9223');const p=b.contexts()[0].pages().find(p=>p.url().includes('/app.html'));await p.getByText('Y-up',{exact:true}).click(); console.log((await p.locator('body').innerText()).slice(-2000)); await p.getByRole('option',{name:'Z-up',exact:true}).click();await p.screenshot({path:__dirname+'/z-up.png'});await b.close()})().catch(e=>{console.error(e);process.exit(1)});

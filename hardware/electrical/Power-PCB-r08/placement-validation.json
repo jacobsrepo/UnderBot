@@ -1,0 +1,11 @@
+{
+  "footprints": 14,
+  "copper_tracks": 0,
+  "outline_mm": [
+    100,
+    90
+  ],
+  "status": "UNROUTED - NOT FOR FABRICATION",
+  "net_count": 7,
+  "drc": "Incomplete: two CLI attempts did not finish promptly and were cancelled. No DRC pass claimed."
+}

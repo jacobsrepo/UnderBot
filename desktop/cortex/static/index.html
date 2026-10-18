@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cortex — Embodied AI Companion</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=5.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- ── Top Companion HUD Bar ───────────────────────────────── -->
+        <header id="top-hud" class="top-hud">
+            <div class="hud-left">
+                <div class="brand">
+                    <div class="robot-avatar-badge">
+                        <span class="eye-mini left"></span>
+                        <span class="eye-mini right"></span>
+                    </div>
+                    <span class="brand-name">CORTEX</span>
+                </div>
+                <div class="hud-status-capsule" id="hud-status-capsule">
+                    <span class="hud-status-dot"></span>
+                    <span class="hud-status-text" id="hud-status-text">STANDING BY</span>
+                </div>
+            </div>
+
+            <div class="hud-right">
+                <button id="cycle-btn" class="btn-hud-subtle" title="Cycle Facial Expressions">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <span>Expressions</span>
+                </button>
+
+                <button id="dev-drawer-btn" class="btn-hud-pill" title="Toggle Developer Diagnostics (Ctrl+D)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2"/>
+                        <rect x="9" y="9" width="6" height="6"/>
+                        <line x1="9" y1="1" x2="9" y2="4"/>
+                        <line x1="15" y1="1" x2="15" y2="4"/>
+                        <line x1="9" y1="20" x2="9" y2="23"/>
+                        <line x1="15" y1="20" x2="15" y2="23"/>
+                        <line x1="20" y1="9" x2="23" y2="9"/>
+                        <line x1="20" y1="14" x2="23" y2="14"/>
+                        <line x1="1" y1="9" x2="4" y2="9"/>
+                        <line x1="1" y1="14" x2="4" y2="14"/>
+                    </svg>
+                    <span>Dev Tools</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ── Slide-Over Developer Drawer Backdrop & Panel ────────── -->
+        <div id="drawer-backdrop" class="drawer-backdrop"></div>
+        <aside id="sidebar" class="developer-drawer">
+            <div class="drawer-header">
+                <div class="drawer-title-group">
+                    <div class="drawer-icon-chip">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <rect x="9" y="9" width="6" height="6"/>
+                            <line x1="9" y1="1" x2="9" y2="4"/>
+                            <line x1="15" y1="1" x2="15" y2="4"/>
+                            <line x1="9" y1="20" x2="9" y2="23"/>
+                            <line x1="15" y1="20" x2="15" y2="23"/>
+                            <line x1="20" y1="9" x2="23" y2="9"/>
+                            <line x1="20" y1="14" x2="23" y2="14"/>
+                            <line x1="1" y1="9" x2="4" y2="9"/>
+                            <line x1="1" y1="14" x2="4" y2="14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="drawer-title">Developer Diagnostics</h3>
+                        <p class="drawer-subtitle">Hardware telemetry & system specs</p>
+                    </div>
+                </div>
+                <button id="sidebar-collapse-btn" class="btn-drawer-close" title="Close Drawer (Esc)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="drawer-body">
+                <!-- Hardware Connection Section -->
+                <div class="drawer-section">
+                    <div class="drawer-section-title">
+                        <span>Physical Hardware</span>
+                        <div class="connection-badge" id="connection-badge">
+                            <span class="badge-dot"></span>
+                            <span class="badge-text">Offline</span>
+                        </div>
+                    </div>
+                    <div id="devices-list" class="devices-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Hardware Actions -->
+                <div class="drawer-section">
+                    <div class="drawer-section-title">Microcontroller Actions</div>
+                    <div class="drawer-actions-grid">
+                        <button id="action-check-hw" class="btn-drawer-action" title="Scan & Verify Hardware Connection">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                            </svg>
+                            <span>Scan USB Ports</span>
+                        </button>
+                        <button id="action-test-pins" class="btn-drawer-action" title="Cycle Digital Pins Test">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                            <span>Cycle High</span>
+                        </button>
+                        <button id="action-clear-pins" class="btn-drawer-action" title="Reset Pins to Low">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                            </svg>
+                            <span>Clear All</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System Profile Section -->
+                <div class="drawer-section">
+                    <div class="drawer-section-title">Compute Environment</div>
+                    <div class="spec-card">
+                        <div class="spec-row">
+                            <span class="spec-label">Model</span>
+                            <span class="spec-val">Qwen 2.5 7B</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">GPU</span>
+                            <span class="spec-val">RTX 3060 Ti (CUDA)</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Engine</span>
+                            <span class="spec-val">Ollama Local</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">OS Core</span>
+                            <span class="spec-val">Windows PowerShell</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Memory</span>
+                            <span class="spec-val">OpenClaw 3-Tier</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden trigger compatibility button -->
+                <button id="sidebar-expand-btn" style="display:none;"></button>
+            </div>
+        </aside>
+
+        <!-- ── Main Stage (Immersive Hero Companion Canvas) ────────── -->
+        <main id="main" class="main-stage">
+            <!-- Center Stage: Dynamic Face & Projection Viewports -->
+            <div id="stage-viewport" class="stage-viewport">
+                <!-- Ambient Background Glow Behind Avatar -->
+                <div class="avatar-ambient-glow"></div>
+
+                <!-- ── Viewports Workspace Wrapper ─────────────────────── -->
+                <div id="workspace-container" class="workspace-container">
+                    <!-- ── 1. Camera Inspection Screen ──────────────────── -->
+                    <div id="camera-screen" class="viewport-screen camera-screen">
+                        <div class="screen-header">
+                            <div class="screen-status-pill">
+                                <span class="live-status-dot red"></span>
+                                <span class="live-status-title">CAMERA VISION</span>
+                            </div>
+                            <div class="screen-header-controls">
+                                <button id="cam-split-btn" class="btn-screen-tool" title="Toggle Dual Split Screen">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="12" y1="12" x2="12" y2="21"/>
+                                    </svg>
+                                </button>
+                                <button id="close-camera-btn" class="btn-close-screen" title="Dismiss Camera View">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="screen-body">
+                            <div class="camera-feed-container">
+                                <video id="camera-video" class="camera-video" autoplay playsinline muted></video>
+                                <canvas id="camera-snapshot-canvas" class="camera-snapshot-canvas" style="display:none;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── 2. Live Web Browser & Research Screen ────────────── -->
+                    <div id="browser-screen" class="viewport-screen browser-screen">
+                        <div class="screen-header browser-header">
+                            <div class="browser-nav-bar">
+                                <div class="browser-nav-buttons">
+                                    <button type="button" id="browser-back-btn" class="btn-browser-nav disabled" title="Back" disabled>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                                    </button>
+                                    <button type="button" id="browser-fwd-btn" class="btn-browser-nav disabled" title="Forward" disabled>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                                    </button>
+                                    <button type="button" id="browser-reload-btn" class="btn-browser-nav" title="Reload View">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                                    </button>
+                                </div>
+                                <div class="browser-omnibar">
+                                    <span class="browser-ssl-badge" title="Secure Encrypted Stream">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                        </svg>
+                                    </span>
+                                    <a id="browser-url-pill" class="browser-url-display" href="https://google.com" target="_blank" rel="noopener noreferrer" title="View Source URL">
+                                        <span class="url-text" id="browser-url-text">https://www.google.com</span>
+                                    </a>
+                                    <div class="browser-context-pill" id="browser-context-pill">
+                                        <span class="context-dot"></span>
+                                        <span class="context-label" id="browser-context-label">LIVE BROWSER</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="screen-header-controls">
+                                <a id="browser-external-link" class="btn-screen-tool" href="#" target="_blank" rel="noopener noreferrer" title="Open in External Window">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                </a>
+                                <button id="browser-split-btn" class="btn-screen-tool" title="Toggle Dual Split Screen">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="12" y1="12" x2="12" y2="21"/>
+                                    </svg>
+                                </button>
+                                <button id="close-browser-btn" class="btn-close-screen" title="Dismiss Browser View">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="screen-body browser-body">
+                            <div class="browser-reader-container">
+                                <div class="browser-scan-laser"></div>
+                                
+                                <!-- Live Radar Searching HUD Overlay -->
+                                <div class="reader-searching-hud" id="reader-searching-hud" style="display: none;">
+                                    <div class="radar-scanner">
+                                        <div class="radar-pulse"></div>
+                                        <div class="radar-sweep"></div>
+                                        <div class="radar-center">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="searching-hud-badge">LIVE INTEL STREAM</div>
+                                    <div class="searching-hud-query" id="searching-hud-query">"Searching open web..."</div>
+                                    <div class="searching-hud-stream" id="searching-hud-stream">
+                                        <span class="stream-line">Intercepting live web channels...</span>
+                                    </div>
+                                    <div class="searching-hud-progress">
+                                        <div class="progress-bar-fill"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Terminal Idle State -->
+                                <div class="reader-empty-card" id="reader-empty-card">
+                                    <div class="reader-empty-icon">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <line x1="2" y1="12" x2="22" y2="12"/>
+                                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="reader-empty-title">Web Intelligence Terminal</h3>
+                                    <p class="reader-empty-desc">Ask Cortex any news query, destination, live topic, or technical question to search and synthesize live intelligence.</p>
+                                    <div class="reader-empty-tags">
+                                        <span class="empty-tag">Live News Wire</span>
+                                        <span class="empty-tag">Interactive Maps</span>
+                                        <span class="empty-tag">Day Blueprints</span>
+                                        <span class="empty-tag">Price Intel</span>
+                                    </div>
+                                </div>
+
+                                <!-- Reader Document Card -->
+                                <div class="reader-document" id="reader-document" style="display: none;">
+                                    <div class="reader-meta-bar">
+                                        <div class="reader-meta-left">
+                                            <span class="reader-badge" id="reader-category-badge">LIVE INTEL</span>
+                                            <span class="reader-source" id="reader-source-badge">NEWS WIRE</span>
+                                            <span class="reader-timestamp" id="reader-timestamp">TODAY</span>
+                                        </div>
+                                        <div class="reader-meta-right">
+                                            <span class="reader-mode-indicator">READER VIEW</span>
+                                        </div>
+                                    </div>
+
+                                    <h2 class="reader-headline" id="reader-headline">Web Intelligence Briefing</h2>
+
+                                    <div id="web-media-container" class="web-media-container" style="display: none;">
+                                        <img id="web-media-img" class="web-media-img" src="" alt="Web media preview">
+                                    </div>
+
+                                    <div class="reader-content-body" id="reader-content-body"></div>
+
+                                    <div class="reader-takeaways-box" id="reader-takeaways-box" style="display: none;">
+                                        <div class="takeaways-header">
+                                            <span class="badge-dot" style="background:var(--theme-accent, #86efac);box-shadow:0 0 6px var(--theme-accent, #86efac);"></span>
+                                            <span>KEY DEVELOPMENTS & HIGHLIGHTS</span>
+                                        </div>
+                                        <div class="takeaways-list" id="reader-takeaways-list"></div>
+                                    </div>
+
+                                    <div class="reader-sources-bar" id="reader-sources-bar" style="display: none;">
+                                        <span class="sources-label">Sources:</span>
+                                        <div class="sources-pill-row" id="reader-sources-pill-row"></div>
+                                    </div>
+                                </div>
+
+                                <!-- ── Map & Places Exploration Mode (Full-Bleed Responsive Layout) ── -->
+                                <div class="browser-map-container" id="browser-map-container" style="display: none;">
+                                    <div class="map-embed-wrapper">
+                                        <iframe id="browser-google-map" class="browser-google-map" src="" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    </div>
+                                    <div class="places-sidebar-overlay">
+                                        <div class="browser-places-header">
+                                            <div class="places-title-wrap">
+                                                <span class="places-badge-dot"></span>
+                                                <span class="places-header-title" id="places-count-label">EXPLORE PLACES</span>
+                                            </div>
+                                            <span class="places-loc-pill" id="places-loc-label">NEARBY</span>
+                                        </div>
+                                        <div class="browser-places-grid" id="browser-places-grid"></div>
+                                    </div>
+                                </div>
+
+                                <!-- ── Day Itinerary & Budget Mode ── -->
+                                <div class="browser-itinerary-container" id="browser-itinerary-container" style="display: none;">
+                                    <div class="itinerary-header-card" id="itinerary-header-card">
+                                        <div class="itin-header-top">
+                                            <span class="itin-budget-pill" id="itin-budget-pill">MODERATE BUDGET</span>
+                                            <span class="itin-duration-pill">1 FULL DAY</span>
+                                        </div>
+                                        <h2 class="itin-title" id="itin-title">1-Day Exploration Blueprint</h2>
+                                        <div class="itin-meta-row">
+                                            <span class="itin-cost-summary" id="itin-cost-summary">Estimated Budget: $80 - $130 / person</span>
+                                        </div>
+                                    </div>
+                                    <div class="itinerary-map-wrapper">
+                                        <iframe id="itinerary-google-map" class="browser-google-map mini" src="" loading="lazy"></iframe>
+                                    </div>
+                                    <div class="itinerary-timeline" id="itinerary-timeline"></div>
+                                    <div class="itinerary-tips-box" id="itinerary-tips-box" style="display: none;">
+                                        <div class="tips-header">TRAVEL TIPS & LOGISTICS</div>
+                                        <div class="tips-list" id="itinerary-tips-list"></div>
+                                    </div>
+                                </div>
+
+                                <!-- ── Price & Deals Comparison Mode ── -->
+                                <div class="browser-prices-container" id="browser-prices-container" style="display: none;">
+                                    <div class="prices-header-card">
+                                        <h2 class="prices-title" id="prices-title">Pricing Intelligence</h2>
+                                        <span class="price-range-badge" id="price-range-badge">Analyzing rates...</span>
+                                    </div>
+                                    <div class="browser-prices-grid" id="browser-prices-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── 3. Live Arduino & Hardware Workbench Screen ─────── -->
+                    <div id="arduino-screen" class="viewport-screen arduino-screen">
+                        <div class="screen-header arduino-header">
+                            <div class="arduino-nav-bar">
+                                <span class="badge-dot" id="arduino-status-dot" style="background: var(--theme-accent, #38bdf8); box-shadow: 0 0 6px var(--theme-accent, #38bdf8);"></span>
+                                <div class="arduino-meta-pill">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;flex-shrink:0;">
+                                        <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                        <rect x="9" y="9" width="6" height="6"/>
+                                        <line x1="9" y1="1" x2="9" y2="4"/>
+                                        <line x1="15" y1="1" x2="15" y2="4"/>
+                                        <line x1="9" y1="20" x2="9" y2="23"/>
+                                        <line x1="15" y1="20" x2="15" y2="23"/>
+                                        <line x1="20" y1="9" x2="23" y2="9"/>
+                                        <line x1="20" y1="14" x2="23" y2="14"/>
+                                        <line x1="1" y1="9" x2="4" y2="9"/>
+                                        <line x1="1" y1="14" x2="4" y2="14"/>
+                                    </svg>
+                                    <span class="arduino-port-text" id="workbench-port-badge">COM4</span>
+                                    <span class="arduino-divider">|</span>
+                                    <span class="arduino-fqbn-text" id="workbench-fqbn-badge">arduino:avr:uno</span>
+                                </div>
+                            </div>
+                            <div class="screen-header-controls">
+                                <button id="close-arduino-btn" class="btn-close-screen" title="Dismiss Arduino Workbench">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="screen-body arduino-body">
+                            <div class="arduino-workbench-container">
+                                <!-- Top Status & Pipeline HUD -->
+                                <div class="workbench-card pipeline-card">
+                                    <div class="workbench-card-header">
+                                        <div class="card-title-group">
+                                            <span class="workbench-card-title">COMPILER & FLASH PIPELINE</span>
+                                            <span class="workbench-sketch-name" id="workbench-sketch-name">active_sketch.ino</span>
+                                        </div>
+                                        <span class="pipeline-status-badge" id="workbench-status-badge">READY</span>
+                                    </div>
+                                    <div class="pipeline-steps-row">
+                                        <div class="pipeline-step" id="pipe-step-1" data-step="1">
+                                            <div class="step-circle">1</div>
+                                            <span class="step-label">Synthesis</span>
+                                        </div>
+                                        <div class="pipeline-connector"></div>
+                                        <div class="pipeline-step" id="pipe-step-2" data-step="2">
+                                            <div class="step-circle">2</div>
+                                            <span class="step-label">Compiling</span>
+                                        </div>
+                                        <div class="pipeline-connector"></div>
+                                        <div class="pipeline-step" id="pipe-step-3" data-step="3">
+                                            <div class="step-circle">3</div>
+                                            <span class="step-label">Upload</span>
+                                        </div>
+                                        <div class="pipeline-connector"></div>
+                                        <div class="pipeline-step" id="pipe-step-4" data-step="4">
+                                            <div class="step-circle">4</div>
+                                            <span class="step-label">Verified</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Middle Split: Pin Matrix & Compiler Terminal -->
+                                <div class="workbench-grid-row">
+                                    <div class="workbench-card pins-card">
+                                        <div class="workbench-card-header">
+                                            <div class="card-title-group">
+                                                <span class="workbench-card-title">GPIO PIN STATE MATRIX</span>
+                                                <span class="pin-click-hint" style="font-size: 8px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: #38bdf8; letter-spacing: 0.5px;">[CLICK TO TOGGLE]</span>
+                                            </div>
+                                        </div>
+                                        <div class="pins-matrix-wrapper">
+                                            <div class="pins-subgroup">
+                                                <div class="pins-subgroup-label">DIGITAL I/O (D2 - D13)</div>
+                                                <div class="pin-grid" id="digital-pin-grid"></div>
+                                            </div>
+                                            <div class="pins-subgroup">
+                                                <div class="pins-subgroup-label">ANALOG / EXPANSION (A0 - A5)</div>
+                                                <div class="pin-grid" id="analog-pin-grid"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="workbench-card log-card">
+                                        <div class="workbench-card-header">
+                                            <span class="workbench-card-title">COMPILER & SYSTEM LOG</span>
+                                            <div class="log-controls">
+                                                <button id="btn-read-serial" class="wb-mini-btn" title="Read live serial COM output">[READ SERIAL]</button>
+                                                <button id="btn-clear-log" class="wb-mini-btn" title="Clear console">[CLEAR]</button>
+                                                <span class="terminal-pulse-badge">LIVE TTY</span>
+                                            </div>
+                                        </div>
+                                        <div class="compiler-console-wrapper">
+                                            <pre class="compiler-log-terminal" id="arduino-compiler-log">[INIT] Hardware Diagnostics Ready.
+[INFO] Monitoring USB Serial Interface.
+[STATUS] Ready for commands.</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── 3. Animated Robot Face (Hero Companion Centerpiece) ─ -->
+                <div id="face-wrapper" class="face-wrapper">
+                    <div id="robot-face-hardware" class="robot-face-hardware">
+                        <div id="robot-screen" class="robot-screen">
+                            <div id="eye-left" class="robot-eye eye-left"></div>
+                            <div id="eye-right" class="robot-eye eye-right"></div>
+                        </div>
+                    </div>
+
+                    <div class="status-header">
+                        <h2 id="status-title" class="status-title">Ready</h2>
+                        <p id="status-subtitle" class="status-subtitle">Standing by</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat & Interaction Console -->
+            <section id="chat-section">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message system">
+                        <div class="message-bubble">Cortex initialized. Ask a question, explore places, or start Live Talk hands-free.</div>
+                    </div>
+                </div>
+
+                <!-- Morphing Bottom Input / Live Waveform Bar -->
+                <form id="chat-form" class="input-bar" onsubmit="event.preventDefault(); window.sendCortexMessage(); return false;">
+                    <button type="button" id="mic-btn" class="btn-tool btn-mic" title="Start Live Talk">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                    </button>
+                    <input
+                        type="text"
+                        id="chat-input"
+                        placeholder="Talk with Cortex or ask anything…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        onkeydown="if ((event.key === 'Enter' || event.keyCode === 13) && !event.shiftKey) { event.preventDefault(); window.sendCortexMessage(); }"
+                    >
+                    <button id="send-btn" type="submit" class="btn-tool btn-send" title="Send" onclick="event.preventDefault(); window.sendCortexMessage();">
+                        <svg style="pointer-events: none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                    </button>
+
+                    <!-- Morphing Live Voice Waveform HUD -->
+                    <div id="waveform-container" class="waveform-container">
+                        <div class="voice-status-badge">
+                            <span class="voice-live-dot"></span>
+                            <span id="voice-status-label" class="voice-status-label">LIVE TALK</span>
+                        </div>
+                        <canvas id="live-audio-canvas" class="live-audio-canvas" width="300" height="28"></canvas>
+                        <div class="voice-controls">
+                            <button type="button" id="voice-mute-btn" class="btn-voice-pill" title="Mute Microphone">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                    <line x1="12" y1="19" x2="12" y2="23"/>
+                                    <line x1="8" y1="23" x2="16" y2="23"/>
+                                </svg>
+                            </button>
+                            <button type="button" id="voice-end-btn" class="btn-voice-pill end" title="End Live Talk">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                <span>End</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        window.sendCortexMessage = function() {
+            if (window.cortex && typeof window.cortex._sendChat === 'function') {
+                window.cortex._sendChat();
+            } else {
+                const el = document.getElementById('chat-input');
+                console.warn('[Cortex] sendCortexMessage called before init, text:', el?.value);
+            }
+        };
+    </script>
+    <script type="module" src="/static/js/app.js?v=5.0"></script>
+</body>
+</html>

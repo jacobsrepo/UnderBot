@@ -1,0 +1,107 @@
+Sheet,Reference,Pin,Net,Purpose,Status
+01_Battery,J101,1,PACK_POS,BMS-protected positive,Confirm actual battery connector
+01_Battery,J101,2,GND_SYS,BMS-protected return P-,Never raw cell B-
+01_Battery,J102,1,VBAT_SW,Switched bus service output,Proposed carrier/harness pin; NOT OEM pin numbering
+01_Battery,J102,2,GND_SYS,Switched bus service output,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J211,1,PI_VIN,TO PI converter VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J211,2,GND_SYS,TO PI converter VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J212,1,PI_PRE_12V,FROM PI VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J212,2,GND_SYS,FROM PI VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J213,1,PI_PRE_12V,PI load output,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J213,2,GND_SYS,PI load output,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J221,1,KINECT_VIN,TO KINECT converter VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J221,2,GND_SYS,TO KINECT converter VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J222,1,KINECT_12V,FROM KINECT VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J222,2,GND_SYS,FROM KINECT VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J223,1,KINECT_12V,KINECT load output,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J223,2,GND_SYS,KINECT load output,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J231,1,AUX_VIN,TO AUX converter VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J231,2,GND_SYS,TO AUX converter VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J232,1,AUX_5V,FROM AUX VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J232,2,GND_SYS,FROM AUX VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J233,1,AUX_5V,AUX load output,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J233,2,GND_SYS,AUX load output,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J241,1,AUX_5V,TO 3.3V regulator VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J241,2,GND_SYS,TO 3.3V regulator VIN/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J242,1,LOGIC_3V3,FROM 3.3V regulator VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+03_Rails,J242,2,GND_SYS,FROM 3.3V regulator VOUT/GND,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,1,GND_SYS,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,2,I2C_SDA,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,3,I2C_SCL,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,4,PWM_OE,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,5,HEARTBEAT,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,6,STOP_STATUS,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,7,INA_ALERT,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J301,8,TEMP_ADC,ESP32 signal harness - see sheet 07,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J302,1,LOGIC_3V3,Adafruit 2717 mux - 0x77,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J302,2,GND_SYS,Adafruit 2717 mux - 0x77,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J302,3,I2C_SDA,Adafruit 2717 mux - 0x77,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J302,4,I2C_SCL,Adafruit 2717 mux - 0x77,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J303,1,LOGIC_3V3,Body: Adafruit 4554 / channel 0,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J303,2,GND_SYS,Body: Adafruit 4554 / channel 0,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J303,3,BODY_SDA,Body: Adafruit 4554 / channel 0,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J303,4,BODY_SCL,Body: Adafruit 4554 / channel 0,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J304,1,LOGIC_3V3,Head: Adafruit 4554 / channel 1,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J304,2,GND_SYS,Head: Adafruit 4554 / channel 1,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J304,3,HEAD_SDA,Head: Adafruit 4554 / channel 1,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J304,4,HEAD_SCL,Head: Adafruit 4554 / channel 1,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J305,1,BODY_SDA,Mux channels 0 / 1 outputs,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J305,2,BODY_SCL,Mux channels 0 / 1 outputs,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J305,3,HEAD_SDA,Mux channels 0 / 1 outputs,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J305,4,HEAD_SCL,Mux channels 0 / 1 outputs,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J306,1,TEMP_ADC,External 10k NTC,Proposed carrier/harness pin; NOT OEM pin numbering
+04_Control,J306,2,GND_SYS,External 10k NTC,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J401,1,ACTUATOR_FEED,TO external NO contactor LINE,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J401,2,GND_SYS,TO external NO contactor LINE,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J402,1,ACTUATOR_SWITCHED,FROM contactor LOAD,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J402,2,GND_SYS,FROM contactor LOAD,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J403,1,ACTUATOR_SWITCHED,TO two fused BEC inputs (sheet 09),Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J403,2,GND_SYS,TO two fused BEC inputs (sheet 09),Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J404,1,SERVO_LEFT_6V,FROM LEFT Hobbywing BEC 6V,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J404,2,GND_SYS,FROM LEFT Hobbywing BEC 6V,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J405,1,SERVO_LEFT_6V,TO LEFT arm + camera pan,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J405,2,GND_SYS,TO LEFT arm + camera pan,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J406,1,GND_SYS,Safety-controller logic interface,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J406,2,HEARTBEAT,Safety-controller logic interface,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J406,3,STOP_STATUS,Safety-controller logic interface,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J407,1,LOGIC_3V3,PCA9685 logic - A0 closed / 0x41,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J407,2,GND_SYS,PCA9685 logic - A0 closed / 0x41,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J407,3,PWM_SDA,PCA9685 logic - A0 closed / 0x41,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J407,4,PWM_SCL,PCA9685 logic - A0 closed / 0x41,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J407,5,PWM_OE,PCA9685 logic - A0 closed / 0x41,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J408,1,PWM_SDA,FROM dedicated mux channel 2,Proposed carrier/harness pin; NOT OEM pin numbering
+05_Actuators,J408,2,PWM_SCL,FROM dedicated mux channel 2,Proposed carrier/harness pin; NOT OEM pin numbering
+06_Charge,J601,1,CHARGER_POS,Selected charger positive,Proposed connector; verify polarity
+06_Charge,J601,2,GND_SYS,Charger return to BMS P-,Common-port BMS assumed
+08_ServoBranches,J801,1,GND_SYS,CH0: Left shoulder,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J801,2,SERVO_0_FUSED,CH0: Left shoulder,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J801,3,SERVO_PWM_0,CH0: Left shoulder,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J802,1,GND_SYS,CH1: Left elbow,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J802,2,SERVO_1_FUSED,CH1: Left elbow,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J802,3,SERVO_PWM_1,CH1: Left elbow,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J803,1,GND_SYS,CH2: Left wrist,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J803,2,SERVO_2_FUSED,CH2: Left wrist,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J803,3,SERVO_PWM_2,CH2: Left wrist,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J804,1,GND_SYS,CH3: Left gripper,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J804,2,SERVO_3_FUSED,CH3: Left gripper,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J804,3,SERVO_PWM_3,CH3: Left gripper,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J805,1,GND_SYS,CH4: Right shoulder,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J805,2,SERVO_4_FUSED,CH4: Right shoulder,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J805,3,SERVO_PWM_4,CH4: Right shoulder,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J806,1,GND_SYS,CH5: Right elbow,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J806,2,SERVO_5_FUSED,CH5: Right elbow,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J806,3,SERVO_PWM_5,CH5: Right elbow,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J807,1,GND_SYS,CH6: Right wrist,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J807,2,SERVO_6_FUSED,CH6: Right wrist,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J807,3,SERVO_PWM_6,CH6: Right wrist,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J808,1,GND_SYS,CH7: Right gripper,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J808,2,SERVO_7_FUSED,CH7: Right gripper,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J808,3,SERVO_PWM_7,CH7: Right gripper,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J809,1,GND_SYS,CH8: Camera pan,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J809,2,SERVO_8_FUSED,CH8: Camera pan,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J809,3,SERVO_PWM_8,CH8: Camera pan,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J810,1,GND_SYS,CH9: Camera tilt,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J810,2,SERVO_9_FUSED,CH9: Camera tilt,Proposed carrier/harness pin; NOT OEM pin numbering
+08_ServoBranches,J810,3,SERVO_PWM_9,CH9: Camera tilt,Proposed carrier/harness pin; NOT OEM pin numbering
+09_SelectedPower,J915,1,SERVO_RIGHT_6V,RIGHT distribution,Proposed carrier/harness pin; NOT OEM pin numbering
+09_SelectedPower,J915,2,GND_SYS,RIGHT distribution,Proposed carrier/harness pin; NOT OEM pin numbering

@@ -1,0 +1,427 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 6ffc587d-aadc-5641-893b-79bf9c8be801) (paper "A3")
+        (title_block (title "NOCO converter carrier r10 - module integration") (date "2026-10-03") (rev "1.0 ROUTED REVIEW") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols(symbol "UnderBot_Modules:Pi_USB_C_Input" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Pi_USB_C_Input" (at 0 7.62 0) (effects (font (size 1 1))))
+      (symbol "Pi_USB_C_Input_0_1" (rectangle (start -25.4 5.08) (end 25.4 -5.08) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Pi_USB_C_Input_1_1" (pin passive line (at -30.48 0.0 0) (length 5.08) (name "USB_C_PD" (effects (font (size 1 1)))) (number "USB_C_PD" (effects (font (size 1 1))))))) (symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:Fuse"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "F"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fuse"
+			(at -1.905 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Fuse*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Fuse_0_1"
+			(rectangle
+				(start -0.762 -2.54)
+				(end 0.762 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 2.54) (xy 0 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Fuse_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "UnderBot_Modules:Aux_Pololu_D24V50F5" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 17.78 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Aux_Pololu_D24V50F5" (at 0 15.239999999999998 0) (effects (font (size 1 1))))
+      (symbol "Aux_Pololu_D24V50F5_0_1" (rectangle (start -25.4 12.7) (end 25.4 -12.7) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Aux_Pololu_D24V50F5_1_1" (pin passive line (at -30.48 7.619999999999999 0) (length 5.08) (name "EN" (effects (font (size 1 1)))) (number "1" (effects (font (size 1 1)))))(pin passive line (at -30.48 2.539999999999999 0) (length 5.08) (name "VIN" (effects (font (size 1 1)))) (number "2" (effects (font (size 1 1)))))(pin passive line (at -30.48 -2.540000000000001 0) (length 5.08) (name "GND1" (effects (font (size 1 1)))) (number "3" (effects (font (size 1 1)))))(pin passive line (at -30.48 -7.620000000000001 0) (length 5.08) (name "GND2" (effects (font (size 1 1)))) (number "4" (effects (font (size 1 1)))))(pin passive line (at 30.48 7.619999999999999 180) (length 5.08) (name "VOUT" (effects (font (size 1 1)))) (number "5" (effects (font (size 1 1)))))))(symbol "UnderBot_Modules:Pi_EP0225" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Pi_EP0225" (at 0 10.16 0) (effects (font (size 1 1))))
+      (symbol "Pi_EP0225_0_1" (rectangle (start -25.4 7.62) (end 25.4 -7.62) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Pi_EP0225_1_1" (pin passive line (at -30.48 2.54 0) (length 5.08) (name "DC_PLUS" (effects (font (size 1 1)))) (number "DC_PLUS" (effects (font (size 1 1)))))(pin passive line (at -30.48 -2.54 0) (length 5.08) (name "DC_MINUS" (effects (font (size 1 1)))) (number "DC_MINUS" (effects (font (size 1 1)))))(pin passive line (at 30.48 2.54 180) (length 5.08) (name "USB_C_PD" (effects (font (size 1 1)))) (number "USB_C_PD" (effects (font (size 1 1)))))))(symbol "UnderBot_Modules:Kinect_DDR60G12" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Kinect_DDR60G12" (at 0 10.16 0) (effects (font (size 1 1))))
+      (symbol "Kinect_DDR60G12_0_1" (rectangle (start -25.4 7.62) (end 25.4 -7.62) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Kinect_DDR60G12_1_1" (pin passive line (at -30.48 2.54 0) (length 5.08) (name "5_VIN_PLUS" (effects (font (size 1 1)))) (number "5_VIN_PLUS" (effects (font (size 1 1)))))(pin passive line (at -30.48 -2.54 0) (length 5.08) (name "6_VIN_MINUS" (effects (font (size 1 1)))) (number "6_VIN_MINUS" (effects (font (size 1 1)))))(pin passive line (at 30.48 2.54 180) (length 5.08) (name "3_VOUT_PLUS" (effects (font (size 1 1)))) (number "3_VOUT_PLUS" (effects (font (size 1 1)))))(pin passive line (at 30.48 -2.54 180) (length 5.08) (name "1_VOUT_MINUS" (effects (font (size 1 1)))) (number "1_VOUT_MINUS" (effects (font (size 1 1)))))))(symbol "Mechanical:MountingHole"
+		(pin_names
+			(offset 1.016)
+		)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "H"
+			(at 0 5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 0 3.175 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "mounting hole"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "MountingHole*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "MountingHole_0_1"
+			(circle
+				(center 0 0)
+				(radius 1.27)
+				(stroke
+					(width 1.27)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "CONVERTER CARRIER r10 | DESIGN REVIEW / ROUTED REVIEW - NOT FOR FABRICATION" (at 12 12 0) (effects (font (size 2 2)) (justify left top)) (uuid 0407f9b0-1a78-5051-9820-b9f9f06098f3))(text "NOCO12V accessory output only. External main protection/disconnect and manual-reset stop still require final design." (at 12 22 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 356a9702-4175-5150-af83-c7289ae93e5d))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 50.8 50.8 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 1620d559-6f5a-5a76-970e-66afdef0304f) (property "Reference" "J1" (at 50.8 43.18 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Protected12V input + / GND" (at 50.8 45.72 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 50.8 50.8 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 50.8 50.8 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J1") (unit 1)))))(wire (pts (xy 45.72 50.8) (xy 35.56 50.8)) (stroke (width 0) (type default)) (uuid bff55d7b-5779-584e-bf6b-b16fd8f5f6bd))(label "VIN"  (at 35.56 50.8 0) (effects (font (size 1 1)) (justify left)) (uuid ff66f361-40fa-5e3e-8c83-8a7128037070))(wire (pts (xy 45.72 53.34) (xy 35.56 53.34)) (stroke (width 0) (type default)) (uuid 31f0a6fc-7e34-57c2-a1dd-0ccde17092c1))(label "GND"  (at 35.56 53.34 0) (effects (font (size 1 1)) (justify left)) (uuid a90ba7ba-a001-5cf1-b6e0-549cba61c1ad))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 182.88 50.8 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid fb39cde6-8cb2-58d5-aa55-f1397a423c63) (property "Reference" "J2" (at 182.88 43.18 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Stop contact SEND+ / RETURN+ (NO GND)" (at 182.88 45.72 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 182.88 50.8 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 182.88 50.8 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J2") (unit 1)))))(wire (pts (xy 177.8 50.8) (xy 167.64 50.8)) (stroke (width 0) (type default)) (uuid 275b5ee6-730e-526b-a8ec-c679720bff23))(label "VIN"  (at 167.64 50.8 0) (effects (font (size 1 1)) (justify left)) (uuid 70d39a88-e8ab-5681-bf25-042083cd7e61))(wire (pts (xy 177.8 53.34) (xy 167.64 53.34)) (stroke (width 0) (type default)) (uuid c66498cf-5793-5914-8b9d-05d708a80a3c))(label "ACT"  (at 167.64 53.34 0) (effects (font (size 1 1)) (justify left)) (uuid 7ab7d1c2-a28c-5ac7-849f-f199ed5fc337))(symbol (lib_id "Device:Fuse") (at 50.8 88.9 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid f3566fbb-27d3-53d8-a40b-a030583da36e) (property "Reference" "F1" (at 50.8 81.28 90) (effects (font (size 1.27 1.27)) )) (property "Value" "MINI current rating HOLD" (at 50.8 83.82000000000001 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "Fuse:Fuseholder_Blade_Mini_Keystone_3568" (at 50.8 88.9 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 50.8 88.9 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "F1") (unit 1)))))(wire (pts (xy 46.99 88.9) (xy 34.29 88.9)) (stroke (width 0) (type default)) (uuid 7bb6a558-6c35-51fc-890f-0d7dd37aa858))(label "VIN"  (at 34.29 88.9 0) (effects (font (size 1 1)) (justify left)) (uuid 3679d189-6f47-5f48-a566-3dd6e097aa9a))(wire (pts (xy 54.61 88.9) (xy 67.31 88.9)) (stroke (width 0) (type default)) (uuid df343e5e-a4e0-5de3-90d5-c0f64e19a48e))(label "PI_IN"  (at 67.31 88.9 180) (effects (font (size 1 1)) (justify right)) (uuid 1dcb6c0d-0084-51d5-a555-c39325fe21f0))(symbol (lib_id "Device:Fuse") (at 50.8 119.38 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e627410b-61bb-5477-8ae5-faaa7ada7cb0) (property "Reference" "F2" (at 50.8 111.75999999999999 90) (effects (font (size 1.27 1.27)) )) (property "Value" "MINI current rating HOLD" (at 50.8 114.3 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "Fuse:Fuseholder_Blade_Mini_Keystone_3568" (at 50.8 119.38 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 50.8 119.38 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "F2") (unit 1)))))(wire (pts (xy 46.99 119.38) (xy 34.29 119.38)) (stroke (width 0) (type default)) (uuid 357e68ac-b816-521c-adef-9d9267ebdbf9))(label "VIN"  (at 34.29 119.38 0) (effects (font (size 1 1)) (justify left)) (uuid 0228c3d7-4d33-547e-93f1-b19b2ddce96c))(wire (pts (xy 54.61 119.38) (xy 67.31 119.38)) (stroke (width 0) (type default)) (uuid 6d22dc9a-5c13-5e34-840d-dbce051e7933))(label "KINECT_IN"  (at 67.31 119.38 180) (effects (font (size 1 1)) (justify right)) (uuid 61d71349-d450-5280-ba9a-7b45f917fea8))(symbol (lib_id "Device:Fuse") (at 50.8 149.86 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 31f29f63-7602-5b8c-942d-31e6978ed12d) (property "Reference" "F3" (at 50.8 142.24 90) (effects (font (size 1.27 1.27)) )) (property "Value" "MINI current rating HOLD" (at 50.8 144.78 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "Fuse:Fuseholder_Blade_Mini_Keystone_3568" (at 50.8 149.86 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 50.8 149.86 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "F3") (unit 1)))))(wire (pts (xy 46.99 149.86) (xy 34.29 149.86)) (stroke (width 0) (type default)) (uuid cee37d38-e7d7-5f18-affe-1e29e7eeb0aa))(label "ACT"  (at 34.29 149.86 0) (effects (font (size 1 1)) (justify left)) (uuid 954046b9-0955-5103-a545-154b191f1996))(wire (pts (xy 54.61 149.86) (xy 67.31 149.86)) (stroke (width 0) (type default)) (uuid dec59421-2aca-5554-996c-973abcbee1cb))(label "ARM_IN"  (at 67.31 149.86 180) (effects (font (size 1 1)) (justify right)) (uuid 866e4e72-991a-5202-a6dd-7f6c55fd1db1))(symbol (lib_id "Device:Fuse") (at 50.8 180.34 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid d88394c5-633c-5966-b777-17e5ae4e4d84) (property "Reference" "F4" (at 50.8 172.72 90) (effects (font (size 1.27 1.27)) )) (property "Value" "MINI current rating HOLD" (at 50.8 175.26 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "Fuse:Fuseholder_Blade_Mini_Keystone_3568" (at 50.8 180.34 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 50.8 180.34 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "F4") (unit 1)))))(wire (pts (xy 46.99 180.34) (xy 34.29 180.34)) (stroke (width 0) (type default)) (uuid be80750d-0334-5e40-8c8b-2cff3d2b6d81))(label "ACT"  (at 34.29 180.34 0) (effects (font (size 1 1)) (justify left)) (uuid c4a18ccc-dd15-5bd4-837f-08d4f41e59df))(wire (pts (xy 54.61 180.34) (xy 67.31 180.34)) (stroke (width 0) (type default)) (uuid f33404f5-88d8-5410-98a9-1d0d7420e311))(label "AUX_IN"  (at 67.31 180.34 180) (effects (font (size 1 1)) (justify right)) (uuid a1234547-78af-5318-82f3-f58d37c2b158))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 132.08 88.9 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 5838aff8-c1ea-5a88-87db-683532949515) (property "Reference" "J3" (at 132.08 81.28 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Short DC cable to mounted EP-0225" (at 132.08 83.82000000000001 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 132.08 88.9 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 132.08 88.9 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J3") (unit 1)))))(wire (pts (xy 127.0 88.9) (xy 116.84 88.9)) (stroke (width 0) (type default)) (uuid c75a2996-04ad-516f-9961-60c0f88f0213))(label "PI_IN"  (at 116.84 88.9 0) (effects (font (size 1 1)) (justify left)) (uuid 518da0e7-f089-5bc8-b085-0e2743da9fe0))(wire (pts (xy 127.0 91.44) (xy 116.84 91.44)) (stroke (width 0) (type default)) (uuid 8711738a-ed95-5c68-82dc-b66ddc721c52))(label "GND"  (at 116.84 91.44 0) (effects (font (size 1 1)) (justify left)) (uuid 14f2af81-2cad-5e93-a3a5-2c3cc54e7389))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 132.08 119.38 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 19577d1c-eb2f-56aa-a2f2-083b23cd00f8) (property "Reference" "J4" (at 132.08 111.75999999999999 0) (effects (font (size 1.27 1.27)) )) (property "Value" "DDR input: +Vin5 / -Vin6" (at 132.08 114.3 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 132.08 119.38 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 132.08 119.38 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J4") (unit 1)))))(wire (pts (xy 127.0 119.38) (xy 116.84 119.38)) (stroke (width 0) (type default)) (uuid 5aac4b20-4773-5fdc-93db-65cc3d37e7f8))(label "KINECT_IN"  (at 116.84 119.38 0) (effects (font (size 1 1)) (justify left)) (uuid 5fdaf50b-91ed-5ce0-a436-d983d1f6bdd8))(wire (pts (xy 127.0 121.92) (xy 116.84 121.92)) (stroke (width 0) (type default)) (uuid b45c7fe3-7e8c-5941-b387-4c4b1a7eba61))(label "GND"  (at 116.84 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid 690aff33-1a8f-5a99-81a5-6d6afb9ecb2c))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 132.08 149.86 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid db33828d-0a86-53ce-b364-93def5dc086a) (property "Reference" "J5" (at 132.08 142.24 0) (effects (font (size 1.27 1.27)) )) (property "Value" "DDR output return: +Vo3 / -Vo1" (at 132.08 144.78 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 132.08 149.86 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 132.08 149.86 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J5") (unit 1)))))(wire (pts (xy 127.0 149.86) (xy 116.84 149.86)) (stroke (width 0) (type default)) (uuid b271642a-8822-55ee-a6d8-020e167eba96))(label "DEPTH_12"  (at 116.84 149.86 0) (effects (font (size 1 1)) (justify left)) (uuid 1068968a-dd0d-58f7-8563-92c0ae27a5d7))(wire (pts (xy 127.0 152.4) (xy 116.84 152.4)) (stroke (width 0) (type default)) (uuid 6f8edf9e-9130-5532-b15b-a8e908d5136d))(label "GND"  (at 116.84 152.4 0) (effects (font (size 1 1)) (justify left)) (uuid 0425b488-a572-5539-a556-181c9b6d5324))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 132.08 180.34 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid f72b1822-61e7-5a5e-bf5b-19d8ddf9faa7) (property "Reference" "J6" (at 132.08 172.72 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Regulated12V to Kinect v2 adapter" (at 132.08 175.26 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 132.08 180.34 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 132.08 180.34 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J6") (unit 1)))))(wire (pts (xy 127.0 180.34) (xy 116.84 180.34)) (stroke (width 0) (type default)) (uuid 541ef893-3761-58f1-bea2-eac566c860ed))(label "DEPTH_12"  (at 116.84 180.34 0) (effects (font (size 1 1)) (justify left)) (uuid e5860af9-10de-5fb9-bf04-0a4bec2424b6))(wire (pts (xy 127.0 182.88) (xy 116.84 182.88)) (stroke (width 0) (type default)) (uuid e95e56a4-dc08-52c6-a991-65dfc7afe1c4))(label "GND"  (at 116.84 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid 74885e4f-6f07-574b-bd5f-07dbf8755ee8))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 132.08 210.82 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 59993525-e596-54cb-b326-9e6eb20f560c) (property "Reference" "J7" (at 132.08 203.2 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Stopped nominal12V to Adeept VIN" (at 132.08 205.73999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 132.08 210.82 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 132.08 210.82 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J7") (unit 1)))))(wire (pts (xy 127.0 210.82) (xy 116.84 210.82)) (stroke (width 0) (type default)) (uuid 213db4d6-2a61-5f7c-9592-45b8e770e840))(label "ARM_IN"  (at 116.84 210.82 0) (effects (font (size 1 1)) (justify left)) (uuid f5f33ff7-f6e8-5955-a1bb-46a3eda8b436))(wire (pts (xy 127.0 213.36) (xy 116.84 213.36)) (stroke (width 0) (type default)) (uuid eefa1231-2e1b-5468-ae67-d881e37c188f))(label "GND"  (at 116.84 213.36 0) (effects (font (size 1 1)) (justify left)) (uuid 317634e9-e028-509c-b9fa-6e42282b43f4))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 132.08 246.38 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid bebef8aa-f3e2-5eb8-bad1-24e77f93d7ac) (property "Reference" "J8" (at 132.08 238.76 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Stopped regulated5V AUX output" (at 132.08 241.29999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 132.08 246.38 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 132.08 246.38 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "J8") (unit 1)))))(wire (pts (xy 127.0 246.38) (xy 116.84 246.38)) (stroke (width 0) (type default)) (uuid 7d0199e0-11e5-5f91-b1ff-90a87203f7cd))(label "AUX_5V"  (at 116.84 246.38 0) (effects (font (size 1 1)) (justify left)) (uuid ad9b2380-508b-5896-911e-9e03e414139e))(wire (pts (xy 127.0 248.92) (xy 116.84 248.92)) (stroke (width 0) (type default)) (uuid fd1f93b3-5d04-5e62-956e-df777785231a))(label "GND"  (at 116.84 248.92 0) (effects (font (size 1 1)) (justify left)) (uuid 1eeca76e-0b0e-52e7-a2b9-d2059b22d2c1))(symbol (lib_id "UnderBot_Modules:Aux_Pololu_D24V50F5") (at 236.22 226.06 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid ba57afbd-7ead-5184-8566-004c649d427d) (property "Reference" "U3" (at 236.22 207.01 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Pololu D24V50F5 #2851" (at 236.22 209.54999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "UnderBotCarrier:D24V50F5" (at 236.22 226.06 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 236.22 226.06 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "U3") (unit 1)))))(no_connect (at 205.74 218.44) (uuid 5cd739e7-1178-57ba-8e35-af06cc1a4337))(wire (pts (xy 205.74 223.52) (xy 195.58 223.52)) (stroke (width 0) (type default)) (uuid 396954f3-d1ba-5421-9fe7-f31c93449c7f))(label "AUX_IN"  (at 195.58 223.52 0) (effects (font (size 1 1)) (justify left)) (uuid c5e2d7b0-d68f-5557-8ff1-87720c336f90))(wire (pts (xy 205.74 228.6) (xy 195.58 228.6)) (stroke (width 0) (type default)) (uuid 7881e712-df92-528c-a630-13c49a44b54c))(label "GND"  (at 195.58 228.6 0) (effects (font (size 1 1)) (justify left)) (uuid aaddbaa2-1857-5ad4-8c7a-d332662121eb))(wire (pts (xy 205.74 233.68) (xy 195.58 233.68)) (stroke (width 0) (type default)) (uuid a0bcee12-1a46-5ce5-a812-4fb6e4351647))(label "GND"  (at 195.58 233.68 0) (effects (font (size 1 1)) (justify left)) (uuid 8bf3cb06-1807-5a7c-88bf-63ed07c724ae))(wire (pts (xy 266.7 218.44) (xy 276.86 218.44)) (stroke (width 0) (type default)) (uuid 46c5d3f6-dfa0-54b6-9184-98578b167024))(label "AUX_5V"  (at 276.86 218.44 180) (effects (font (size 1 1)) (justify right)) (uuid 275fc8f7-05d4-56f4-ae9b-9a228197baf6))(symbol (lib_id "UnderBot_Modules:Pi_EP0225") (at 294.64 71.12 0) (unit 1) (in_bom yes) (on_board no) (dnp no) (uuid 98fb3bf3-d9b5-5993-a329-d43ef02bc54c) (property "Reference" "A1" (at 294.64 57.15 0) (effects (font (size 1.27 1.27)) )) (property "Value" "52Pi EP-0225 mounted on standoffs" (at 294.64 59.69 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 294.64 71.12 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 294.64 71.12 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "A1") (unit 1)))))(wire (pts (xy 264.16 68.58) (xy 254.0 68.58)) (stroke (width 0) (type default)) (uuid c16a965e-b571-5c48-a913-160e59c283ba))(label "PI_IN"  (at 254.0 68.58 0) (effects (font (size 1 1)) (justify left)) (uuid e2104f48-ebc1-5db6-8455-b44c10d69445))(wire (pts (xy 264.16 73.66) (xy 254.0 73.66)) (stroke (width 0) (type default)) (uuid 2d5ba705-a272-552e-9f4f-18bdfc7a920b))(label "GND"  (at 254.0 73.66 0) (effects (font (size 1 1)) (justify left)) (uuid 8109c2ab-1b89-5375-bc56-c81d01615c9f))(wire (pts (xy 325.12 68.58) (xy 335.28 68.58)) (stroke (width 0) (type default)) (uuid f1ad3dec-4cf9-5592-8381-0b8e0af47ea9))(label "USB_C_TO_PI"  (at 335.28 68.58 180) (effects (font (size 1 1)) (justify right)) (uuid 3f17d578-e7c2-5802-bd3d-3c7efebfc742))(symbol (lib_id "UnderBot_Modules:Kinect_DDR60G12") (at 294.64 132.08 0) (unit 1) (in_bom yes) (on_board no) (dnp no) (uuid 350de483-2ca4-530a-bebd-969d5155c919) (property "Reference" "A2" (at 294.64 118.10999999999999 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Mean Well DDR-60G-12 / rail mounting" (at 294.64 120.64999999999999 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 294.64 132.08 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 294.64 132.08 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "A2") (unit 1)))))(wire (pts (xy 264.16 129.54) (xy 254.0 129.54)) (stroke (width 0) (type default)) (uuid 99dfb206-518f-5df3-975a-2cea673f6422))(label "KINECT_IN"  (at 254.0 129.54 0) (effects (font (size 1 1)) (justify left)) (uuid eb85551d-9f6c-5fa6-bcf5-e50da3c04cf1))(wire (pts (xy 264.16 134.62) (xy 254.0 134.62)) (stroke (width 0) (type default)) (uuid ac7f1f19-98e0-5dab-a32f-9798b0d6913a))(label "GND"  (at 254.0 134.62 0) (effects (font (size 1 1)) (justify left)) (uuid 24df086c-f6ed-587d-b1f1-2c45176c96c7))(wire (pts (xy 325.12 129.54) (xy 335.28 129.54)) (stroke (width 0) (type default)) (uuid f547f50b-8768-53a1-9987-2c7268df9dab))(label "DEPTH_12"  (at 335.28 129.54 180) (effects (font (size 1 1)) (justify right)) (uuid e0893c93-b5ec-5757-90ba-10124d472afc))(wire (pts (xy 325.12 134.62) (xy 335.28 134.62)) (stroke (width 0) (type default)) (uuid f753a0cb-3f8f-58fd-9a6c-17f84c9acbf4))(label "GND"  (at 335.28 134.62 180) (effects (font (size 1 1)) (justify right)) (uuid bd2bb272-a0dd-5583-a9fc-aebad238ff8f))(text "DDR terminals2 and4 duplicate output -/+; unused.\nOutput negative intentionally joins system ground here.\nThis assembly does not preserve galvanic isolation.\nSet output12.0V and verify before plugging in Kinect." (at 196 165 0) (effects (font (size 1.2 1.2)) (justify left top)) (uuid 2ec85c9c-c707-50cd-870a-38e234db0411))(text "A1/A2 use short harnesses within the assembly; no invented PCB electrical pin footprint. U3 is a soldered daughterboard." (at 15 273 0) (effects (font (size 1.25 1.25)) (justify left top)) (uuid 0820b922-ec8b-5836-84bb-270668ddd05c))(symbol (lib_id "Mechanical:MountingHole") (at 342.7 232 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid fae743a2-150b-5590-9d42-b941dbf3259a) (property "Reference" "H1" (at 342.7 224.38 0) (effects (font (size 1.27 1.27)) )) (property "Value" "M3" (at 342.7 226.92 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "MountingHole:MountingHole_3.2mm_M3" (at 342.7 232 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 342.7 232 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "H1") (unit 1)))))(symbol (lib_id "Mechanical:MountingHole") (at 355.4 232 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid a3815191-8af8-5a24-abd8-656f6a95fd10) (property "Reference" "H2" (at 355.4 224.38 0) (effects (font (size 1.27 1.27)) )) (property "Value" "M3" (at 355.4 226.92 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "MountingHole:MountingHole_3.2mm_M3" (at 355.4 232 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 355.4 232 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "H2") (unit 1)))))(symbol (lib_id "Mechanical:MountingHole") (at 368.1 232 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid c0a69174-9986-5e1a-b667-2019cbace732) (property "Reference" "H3" (at 368.1 224.38 0) (effects (font (size 1.27 1.27)) )) (property "Value" "M3" (at 368.1 226.92 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "MountingHole:MountingHole_3.2mm_M3" (at 368.1 232 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 368.1 232 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "H3") (unit 1)))))(symbol (lib_id "Mechanical:MountingHole") (at 380.8 232 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 8278b54f-fba4-5b6c-8725-b78d11e42475) (property "Reference" "H4" (at 380.8 224.38 0) (effects (font (size 1.27 1.27)) )) (property "Value" "M3" (at 380.8 226.92 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "MountingHole:MountingHole_3.2mm_M3" (at 380.8 232 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 380.8 232 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "H4") (unit 1))))) (embedded_fonts no)(symbol (lib_id "UnderBot_Modules:Pi_USB_C_Input") (at 375.92 76.2 0) (unit 1) (in_bom yes) (on_board no) (dnp no) (uuid 17e9e557-2a1f-5e35-8ea1-ea8c7498a781) (property "Reference" "A3" (at 375.92 64.77 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Raspberry Pi 5 USB-C input" (at 375.92 67.31 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 375.92 76.2 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 375.92 76.2 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d" (reference "A3") (unit 1)))))(wire (pts (xy 345.44 76.2) (xy 335.28 76.2)) (stroke (width 0) (type default)) (uuid 5c6d52a5-6591-5c1f-bebf-ac6d3e7bbe5d))(label "USB_C_TO_PI"  (at 335.28 76.2 0) (effects (font (size 1 1)) (justify left)) (uuid 6efa84f4-4754-5ddc-a0a3-c11ba22d35a8)))

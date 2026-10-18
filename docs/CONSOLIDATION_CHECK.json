@@ -1,0 +1,45 @@
+{
+  "snapshots": [
+    {
+      "path": "desktop",
+      "files": 83,
+      "source_commit": "bfcace64f65b1ef5feab5b1b63b1a419793ecb7f",
+      "documented_changes": [],
+      "unexpected_changes": []
+    },
+    {
+      "path": "ros2_subsystem",
+      "files": 26,
+      "source_commit": "9f3b462161dd203c19bea42e53c8c0bdd5a6a44c",
+      "documented_changes": [],
+      "unexpected_changes": []
+    },
+    {
+      "path": "models/r08",
+      "files": 107,
+      "source_commit": "3f28a652bb34109b23241bd98b33f2c56ea0a87a",
+      "documented_changes": [],
+      "unexpected_changes": []
+    },
+    {
+      "path": "models/r09",
+      "files": 753,
+      "source_commit": "d508b07d18fb560aed9311522245818f2aa8ae9c",
+      "documented_changes": [],
+      "unexpected_changes": []
+    },
+    {
+      "path": "website",
+      "files": 26,
+      "source_commit": "b2edb67a825279e5bac9a3ca055ff9575bf7f509",
+      "documented_changes": [
+        "README.md",
+        "scripts/sync-model.mjs"
+      ],
+      "unexpected_changes": []
+    }
+  ],
+  "python_files": 182,
+  "errors": [],
+  "passed": true
+}

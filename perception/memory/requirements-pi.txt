@@ -1,0 +1,8 @@
+# Install these only on the Pi; native Windows uses pixi.toml / pixi.lock.
+psycopg[binary]>=3.2,<4
+opencv-python>=4.10,<5
+ultralytics>=8.4,<9
+cv2-enumerate-cameras>=1.1,<2
+
+# ROS generate_parameter_library Python dependency when using an isolated venv.
+typeguard>=4,<5

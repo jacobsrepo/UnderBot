@@ -1,0 +1,94 @@
+{
+  "status": "PASS_WITH_DOCUMENTED_HARDWARE_ASSUMPTIONS",
+  "revision": "R09",
+  "generated_at_utc": "2026-10-17T21:11:36.652057+00:00",
+  "accepted_floor_frame_mm": [
+    200,
+    200
+  ],
+  "accepted_covered_body_mm": [
+    204,
+    204
+  ],
+  "posts_mm": [
+    20,
+    20,
+    500
+  ],
+  "component_count": 250,
+  "triangle_count": 223360,
+  "independent_dimensional_checks": 4730,
+  "independent_dimensional_failures": 0,
+  "texture_audit": "PASS",
+  "materials": 11,
+  "embedded_glb_2k_images": 18,
+  "texture_library_2k_images": 24,
+  "urdf_visual_stl_meshes": 45,
+  "physics": {
+    "links": 23,
+    "joints": 22,
+    "fixed_joints": 4,
+    "commanded_joints": 14,
+    "passive_coordinates": 2,
+    "mimic_followers": 2,
+    "merged_bodies": 19,
+    "estimated_mass_kg": 19.6010078,
+    "configuration": "unchanged tested R08 physics"
+  },
+  "checks": {
+    "authoring_checks": {
+      "status": "PASS_WITH_REVIEW_NOTES",
+      "report": "underbot_description/validation/authoring_checks.json"
+    },
+    "portable_checks": {
+      "status": "PASS_WITH_REVIEW_NOTES",
+      "report": "underbot_description/validation/portable_checks.json"
+    },
+    "xacro_check": {
+      "status": "PASS",
+      "report": "underbot_description/validation/xacro_check.json"
+    },
+    "physics_smoke": {
+      "status": "PASS",
+      "report": "underbot_description/validation/physics_smoke.json"
+    },
+    "pybullet_import_R09": {
+      "status": "PASS",
+      "report": "underbot_description/validation/pybullet_import_R09.json"
+    },
+    "viewer_checks_R09": {
+      "status": "PASS",
+      "report": "underbot_description/validation/viewer_checks_R09.json"
+    },
+    "static_physics": {
+      "status": "Retained valid report: physical model hash unchanged",
+      "report": "underbot_description/validation/static_physics.json"
+    }
+  },
+  "native_ROS_Gazebo_Isaac_FreeCAD_executed": false,
+  "limits": [
+    "Bare Kinect geometry, arm pivots/link sizes, hardware masses and actuator ratings remain unmeasured estimates.",
+    "WR141E and GB70 contours approximate manufacturer envelopes; not factory CAD.",
+    "No fabrication certification or payload rating.",
+    "STL has no textures; use GLB or packed Blender for PBR appearance.",
+    "Assembled STL contains separate closed shells with intentional interfaces; not a Boolean-unioned printing solid."
+  ],
+  "deliverables": {
+    "stl/Underbot_R09_assembled_mm.stl": {
+      "sha256": "55309377e266a8846ecc1d4d99f6608e3a7fc8a562cf6c6fb4a73150debd3a8a",
+      "bytes": 11168084
+    },
+    "models/Underbot_R09_textured.glb": {
+      "sha256": "ad09fdc7719950058ca5b369c6a7fb44c2ef13c3dfb728ec682a57cd37aab64a",
+      "bytes": 25471748
+    },
+    "models/Underbot_R09_studio.blend": {
+      "sha256": "7aa68fd443da78aa5841368fdc1558a06440036f40e02127a5d3359273636073",
+      "bytes": 37323213
+    },
+    "underbot_description/urdf/underbot.portable.urdf": {
+      "sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+      "bytes": 43022
+    }
+  }
+}

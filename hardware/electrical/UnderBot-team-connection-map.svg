@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3260" viewBox="0 0 2400 3260">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Arial,sans-serif;fill:#142b40}.title{font-size:58px;font-weight:700}.section{font-size:33px;font-weight:700}.head{font-size:26px;font-weight:700}.body{font-size:23px}.small{font-size:20px}.tag{font-size:21px;font-weight:700}.muted{fill:#4d6478}</style>
+<rect width="2400" height="3260" fill="#edf2f7"/>
+
+<text x="55" y="82" class="title">UNDERBOT  /  THE WHOLE CONNECTION MAP</text>
+<text x="58" y="128" class="body">Team presentation • Xiaomi T12 + Kinect v1 (assumed) + two IMUs + dual arms • Design proposal 0.2</text>
+<rect x="55" y="153" width="2290" height="55" rx="16" fill="#fff0d6" stroke="none" stroke-width="2"/>
+<text x="72" y="188" class="body">Read top to bottom. This explains the system; connector pin numbers and several hardware choices still need verification.</text>
+<polyline points="65,239 135,239" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="150" y="247" class="small">Orange = power (+ and return)</text>
+<polyline points="590,239 660,239" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="675" y="247" class="small">Blue = data / commands</text>
+<polyline points="1070,239 1140,239" fill="none" stroke="#b73550" stroke-width="4" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#arrow)"/>
+<text x="1155" y="247" class="small">Red = hardware stop</text>
+<polyline points="1540,239 1610,239" fill="none" stroke="#7b6d93" stroke-width="4" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#arrow)"/>
+<text x="1625" y="247" class="small">Dashed purple = unresolved / future</text>
+<rect x="40" y="280" width="2320" height="76" rx="16" fill="#132f46" stroke="none" stroke-width="2"/>
+<text x="63" y="314" class="section" style="fill:#fff">1  WHERE THE ENERGY COMES FROM</text>
+<text x="63" y="341" class="small" style="fill:#d8e6f2">The robot battery and the charging-station battery are separate. Each has its own matching battery protection and charging settings.</text>
+<rect x="60" y="390" width="360" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="425" class="head">Station solar panels</text>
+<text x="80" y="458" class="body">2 × 100 W in series</text>
+<text x="80" y="487" class="body">Outdoor energy source</text>
+<rect x="465" y="390" width="370" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="485" y="425" class="head">Station solar controller</text>
+<text x="485" y="458" class="body">Victron MPPT candidate</text>
+<text x="485" y="487" class="body">PV fuse / DC disconnect</text>
+<rect x="880" y="390" width="430" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="900" y="425" class="head">Station buffer battery</text>
+<text x="900" y="458" class="body">8S LiFePO4 + BMS + fuse</text>
+<text x="900" y="487" class="body">25.6 V / 50 Ah nominal</text>
+<rect x="1355" y="390" width="440" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1375" y="425" class="head">Robot charging unit</text>
+<text x="1375" y="458" class="body">True buck-boost Li-ion charger</text>
+<text x="1375" y="487" class="body">25.2 V / 4 A candidate</text>
+<rect x="1840" y="390" width="500" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1860" y="425" class="head">Protected docking contacts</text>
+<text x="1860" y="458" class="body">Fuse, current limit, polarity check</text>
+<text x="1860" y="487" class="body">Dock detect → prevent motion</text>
+<polyline points="420,453 465,453" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="835,453 880,453" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1310,453 1355,453" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1795,453 1840,453" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="60" y="565" width="360" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="600" class="head">Optional roof panel</text>
+<text x="80" y="633" class="body">5–6 W peak</text>
+<text x="80" y="662" class="body">Supplemental energy only</text>
+<rect x="465" y="565" width="370" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="485" y="600" class="head">Robot solar charger</text>
+<text x="485" y="633" class="body">Boost MPPT for 6S Li-ion</text>
+<text x="485" y="662" class="body">Not a direct panel-to-pack wire</text>
+<polyline points="420,630 465,630" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="880" y="565" width="430" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="900" y="600" class="head">Mains fallback charger</text>
+<text x="900" y="633" class="body">Dedicated 6S Li-ion charger</text>
+<text x="900" y="662" class="body">25.2 V / 4 A candidate</text>
+<rect x="1355" y="565" width="440" height="130" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1375" y="600" class="head">Charge-source manager</text>
+<text x="1375" y="633" class="body">Select / safely manage sources</text>
+<text x="1375" y="662" class="body">No raw parallel charger outputs</text>
+<polyline points="835,677 855,677 855,732 1575,732 1575,695" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1310,630 1355,630" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="2090,520 2090,542 1575,542 1575,565" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1840" y="565" width="500" height="165" rx="16" fill="#e8f4e8" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1860" y="600" class="head">ROBOT PACK: 6S3P + BMS</text>
+<text x="1860" y="633" class="body">18 matched 21700 cells</text>
+<text x="1860" y="662" class="body">25.2 V full; ~266 Wh plan</text>
+<text x="1860" y="691" class="body">Cell sense wires + temperature probe</text>
+<polyline points="1795,630 1840,630" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1845" y="758" class="tag">P0 = protected battery output → section 2</text>
+<text x="62" y="774" class="small">BMS = battery protection, not a charger. All charging returns must use the correct BMS port. T12 charging remains separate below.</text>
+<rect x="40" y="810" width="2320" height="76" rx="16" fill="#132f46" stroke="none" stroke-width="2"/>
+<text x="63" y="844" class="section" style="fill:#fff">2  HOW POWER REACHES EACH PART</text>
+<text x="63" y="871" class="small" style="fill:#d8e6f2">A buck converter reduces voltage. One shared voltage supply can feed several compatible devices; every branch needs appropriate protection.</text>
+<rect x="60" y="930" width="490" height="112" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="965" class="head">P0 → Main battery fuse</text>
+<text x="80" y="998" class="body">Mounted close to the pack; rating TBD</text>
+<rect x="60" y="1090" width="490" height="112" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="1125" class="head">Main isolator / keyed switch</text>
+<text x="80" y="1158" class="body">Manual service power disconnect</text>
+<rect x="60" y="1250" width="490" height="145" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="1285" class="head">Current and voltage monitor</text>
+<text x="80" y="1318" class="small">Rated external shunt + INA228</text>
+<text x="80" y="1347" class="small">Measures robot load → I2C to ESP32</text>
+<text x="80" y="1376" class="small">Bus surge / reverse protection: TBD</text>
+<polyline points="305,1042 305,1090" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="305,1202 305,1250" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="550,1320 660,1320 660,955" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round"/>
+<text x="586" y="921" class="tag">BATTERY BUS</text>
+<rect x="780" y="930" width="735" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="800" y="965" class="head">P1  Fuse → compute buck → USB-C source</text>
+<text x="800" y="998" class="body">5.1 V target; verify power at Pi under load</text>
+<rect x="1600" y="930" width="740" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1620" y="965" class="head">Raspberry Pi 5 + its peripherals</text>
+<text x="1620" y="998" class="body">USB devices / SSD / fan included in budget</text>
+<polyline points="1515,985 1600,985" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="660,985 780,985" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="660" cy="985" r="7" fill="#cb5d20"/>
+<rect x="780" y="1080" width="735" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="800" y="1115" class="head">P2  Fuse → 12 V sensor buck</text>
+<text x="800" y="1148" class="body">Confirm Kinect adapter voltage and polarity</text>
+<rect x="1600" y="1080" width="740" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1620" y="1115" class="head">Kinect v1 power / USB adapter</text>
+<text x="1620" y="1148" class="body">Adapter supplies power; USB carries data to Pi</text>
+<polyline points="1515,1135 1600,1135" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="660,1135 780,1135" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="660" cy="1135" r="7" fill="#cb5d20"/>
+<rect x="780" y="1230" width="735" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="800" y="1265" class="head">P3  Fuse → 5 V auxiliary buck</text>
+<text x="800" y="1298" class="body">Independent of Pi supply; common system return</text>
+<rect x="1600" y="1230" width="740" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1620" y="1265" class="head">Audio / status LEDs / accessories</text>
+<text x="1620" y="1298" class="body">Each module must accept this voltage</text>
+<polyline points="1515,1285 1600,1285" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="660,1285 780,1285" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="660" cy="1285" r="7" fill="#cb5d20"/>
+<rect x="780" y="1380" width="735" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="800" y="1415" class="head">P4  P3 → 3.3 V logic regulator</text>
+<text x="800" y="1448" class="body">Add module decoupling; verify breakout ratings</text>
+<rect x="1600" y="1380" width="740" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1620" y="1415" class="head">Body IMU + head IMU + sensor logic</text>
+<text x="1620" y="1448" class="body">I2C mux / ToF / INA228 logic as selected</text>
+<polyline points="1515,1435 1600,1435" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1140,1340 1140,1380" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="60" y="1440" width="490" height="140" rx="16" fill="#e7eef7" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="1475" class="head">Every power cable needs a return</text>
+<text x="80" y="1508" class="small">GND = protected electrical return.</text>
+<text x="80" y="1537" class="small">Motor current must not flow through</text>
+<text x="80" y="1566" class="small">the Pi or sensor ground wires.</text>
+<rect x="780" y="1540" width="735" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="800" y="1575" class="head">P5  Fuse → actuator buck → power bus</text>
+<text x="800" y="1608" class="body">Voltage and current depend on selected servos</text>
+<rect x="1600" y="1540" width="740" height="110" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1620" y="1575" class="head">Arms + grippers + camera pan/tilt</text>
+<text x="1620" y="1608" class="body">Separate power wires; signals come from section 3</text>
+<polyline points="1515,1595 1600,1595" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="60" y="1620" width="490" height="115" rx="16" fill="#fde8ec" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="1655" class="head">E-stop → reset / watchdog circuit</text>
+<text x="80" y="1688" class="body">Removes the hardware motion permit</text>
+<rect x="780" y="1690" width="735" height="115" rx="16" fill="#fde8ec" stroke="#b9c9d8" stroke-width="2"/>
+<text x="800" y="1725" class="head">Normally-open actuator contactor</text>
+<text x="800" y="1758" class="small">Heavy power switch; opens when permit is lost</text>
+<text x="800" y="1787" class="small">Coil driver + suppression + precharge interlock: design TBD</text>
+<polyline points="660,1320 660,1750 780,1750" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1140,1690 1140,1650" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="550,1677 705,1677 705,1780 780,1780" fill="none" stroke="#b73550" stroke-width="4" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#arrow)"/>
+<text x="1610" y="1732" class="tag">E-stop target: stop motion; keep Pi / Kinect alive.</text>
+<text x="1610" y="1767" class="small">Arm brakes / gravity behavior must be designed too.</text>
+<text x="62" y="1838" class="small">Not shown as ready-to-fit parts: transient protection, precharge/inrush limit, coil suppression, fuse values, cable gauges and connectors.</text>
+<rect x="40" y="1870" width="2320" height="76" rx="16" fill="#132f46" stroke="none" stroke-width="2"/>
+<text x="63" y="1904" class="section" style="fill:#fff">3  HOW THE ROBOT TALKS AND SENSES</text>
+<text x="63" y="1931" class="small" style="fill:#d8e6f2">Power labels P1–P5 refer to section 2. Data connections do not replace a device’s power supply. The ESP32 handles low-level control.</text>
+<rect x="60" y="1980" width="410" height="145" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="2015" class="head">Raspberry Pi 5  [P1]</text>
+<text x="80" y="2048" class="body">ROS / perception / navigation</text>
+<text x="80" y="2077" class="body">Network ↔ team computer</text>
+<text x="80" y="2106" class="body">USB ↔ Kinect v1 [P2]</text>
+<rect x="565" y="1980" width="505" height="145" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="585" y="2015" class="head">ESP32 controller  [Pi USB power]</text>
+<text x="585" y="2048" class="body">Commands + feedback over USB</text>
+<text x="585" y="2077" class="body">No simultaneous external 5 V feed</text>
+<text x="585" y="2106" class="body">Heartbeat → hardware watchdog</text>
+<polyline points="470,2045 565,2045" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<rect x="1170" y="1980" width="405" height="145" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1190" y="2015" class="head">I2C sensor bus / mux [P4]</text>
+<text x="1190" y="2048" class="body">Routes one short bus into</text>
+<text x="1190" y="2077" class="body">separate sensor channels</text>
+<text x="1190" y="2106" class="body">Avoids duplicate addresses</text>
+<polyline points="1070,2045 1170,2045" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<rect x="1680" y="1980" width="660" height="145" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1700" y="2015" class="head">Two separate IMUs + optional ToF x4 [P4]</text>
+<text x="1700" y="2048" class="body">Channel 0: body IMU fixed to chassis</text>
+<text x="1700" y="2077" class="body">Channel 1: head IMU moves with camera</text>
+<text x="1700" y="2106" class="body">Other channels: front / rear / left / right ToF</text>
+<polyline points="1575,2045 1680,2045" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<rect x="60" y="2170" width="410" height="185" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="2205" class="head">Pi accessory connections</text>
+<text x="80" y="2238" class="small">SSD → USB or chosen PCIe HAT</text>
+<text x="80" y="2267" class="small">Mic / audio interface → Pi</text>
+<text x="80" y="2296" class="small">Pi audio → amplifier → speaker</text>
+<text x="80" y="2325" class="small">Fan → correct fan connection</text>
+<text x="80" y="2354" class="small">Optional AI board: verify Pi interface</text>
+<polyline points="265,2125 265,2170" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="565" y="2170" width="505" height="160" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="585" y="2205" class="head">Power / temperature feedback</text>
+<text x="585" y="2238" class="small">INA228 → ESP32 I2C bus</text>
+<text x="585" y="2267" class="small">BMS serial → voltage-safe adapter</text>
+<text x="585" y="2296" class="small">Second NTC → divider / ADC</text>
+<text x="585" y="2325" class="small">Pi has no general analog input</text>
+<polyline points="810,2170 810,2125" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1170" y="2170" width="405" height="160" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1190" y="2205" class="head">Actuator signal interface</text>
+<text x="1190" y="2238" class="small">PWM servos: PCA9685 [P4]</text>
+<text x="1190" y="2267" class="small">Smart servos: matching bus</text>
+<text x="1190" y="2296" class="small">Select one suitable approach</text>
+<text x="1190" y="2325" class="small">Output defaults disabled</text>
+<polyline points="1070,2090 1110,2090 1110,2245 1170,2245" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1680" y="2170" width="660" height="160" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1700" y="2205" class="head">Left arm / right arm / grippers / pan-tilt</text>
+<text x="1700" y="2238" class="small">Signal wires from the selected driver → actuators</text>
+<text x="1700" y="2267" class="small">Motor power from P5 → separate distribution</text>
+<text x="1700" y="2296" class="small">Servo voltage, stall current and pinouts still TBD</text>
+<text x="1700" y="2325" class="small">Camera IMU is a sensor, not a pan/tilt controller</text>
+<polyline points="1575,2245 1680,2245" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="63" y="2371" class="small">I2C = short sensor-data bus. Use correct pull-ups and local capacitors; confirm interrupt/reset wires and cable lengths after module selection.</text>
+<rect x="40" y="2400" width="2320" height="76" rx="16" fill="#132f46" stroke="none" stroke-width="2"/>
+<text x="63" y="2434" class="section" style="fill:#fff">4  THE XIAOMI BASE: KEEP ITS POWER SEPARATE FOR THE FIRST PROTOTYPE</text>
+<text x="63" y="2461" class="small" style="fill:#d8e6f2">This is a differential-drive vacuum base, not mecanum. Do not assume the existing controller exposes an open motor or LiDAR interface.</text>
+<rect x="60" y="2510" width="440" height="145" rx="16" fill="#fff0d6" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="2545" class="head">Original T12 battery / dock</text>
+<text x="80" y="2578" class="body">14.8 V-rated base system</text>
+<text x="80" y="2607" class="body">20 V-rated charging input</text>
+<text x="80" y="2636" class="body">Never parallel with the new 6S pack</text>
+<rect x="595" y="2510" width="505" height="145" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="615" y="2545" class="head">T12 original controller</text>
+<text x="615" y="2578" class="body">Own verified hardware stop required</text>
+<text x="615" y="2607" class="body">Power / commands → wheel motors</text>
+<text x="615" y="2636" class="body">Wheel encoders → feedback</text>
+<polyline points="500,2575 595,2575" fill="none" stroke="#cb5d20" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1195" y="2510" width="520" height="145" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1215" y="2545" class="head">Existing base sensors</text>
+<text x="1215" y="2578" class="body">LiDAR + bump + cliff sensors</text>
+<text x="1215" y="2607" class="body">OEM gyro is an additional sensor</text>
+<text x="1215" y="2636" class="body">Their internal pinouts are unverified</text>
+<polyline points="1100,2575 1195,2575" fill="none" stroke="#1375b1" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<rect x="1810" y="2510" width="530" height="145" rx="16" fill="#f1eafa" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1830" y="2545" class="head">Pi / ESP32 integration — TBD</text>
+<text x="1830" y="2578" class="body">Model-specific data / control adapter</text>
+<text x="1830" y="2607" class="body">Motor commands + odometry + LiDAR</text>
+<text x="1830" y="2636" class="body">Discover protocol before wiring</text>
+<polyline points="1715,2575 1810,2575" fill="none" stroke="#7b6d93" stroke-width="4" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="65" y="2700" class="body">Future single-pack option: 6S → separately fused, validated base supply + motion disconnect → T12. Do not build from voltage alone.</text>
+<text x="65" y="2735" class="small">Check battery-sense pins, peak motor current and braking energy first. Opening the new pack contactor does NOT stop an OEM-battery-powered base.</text>
+<rect x="40" y="2770" width="2320" height="76" rx="16" fill="#132f46" stroke="none" stroke-width="2"/>
+<text x="63" y="2804" class="section" style="fill:#fff">5  WHAT THE TEAM SHOULD UNDERSTAND BEFORE BUILDING</text>
+<text x="63" y="2831" class="small" style="fill:#d8e6f2">A custom PCB is optional for the prototype. Start with protected modules and a labelled wiring harness; consolidate after interfaces are proven.</text>
+<rect x="60" y="2880" width="720" height="220" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="80" y="2915" class="head">The small parts do important jobs</text>
+<text x="80" y="2948" class="small">Fuse: protects a wire branch against excess current.</text>
+<text x="80" y="2977" class="small">Buck: reduces voltage; it does not create extra energy.</text>
+<text x="80" y="3006" class="small">Contactor: electrically operated high-current switch.</text>
+<text x="80" y="3035" class="small">Shunt: small resistor used to measure current.</text>
+<text x="80" y="3064" class="small">BMS: monitors/protects cells and pack temperature.</text>
+<rect x="840" y="2880" width="720" height="220" rx="16" fill="#fff0d6" stroke="#b9c9d8" stroke-width="2"/>
+<text x="860" y="2915" class="head">Important design boundaries</text>
+<text x="860" y="2948" class="small">USB-C source must support the Pi’s power needs.</text>
+<text x="860" y="2977" class="small">Do not power actuators through a sensor board.</text>
+<text x="860" y="3006" class="small">No raw 6S into T12, Pi, ESP32 or ordinary servos.</text>
+<text x="860" y="3035" class="small">Six 2.7 V supercaps are NOT suitable across 6S.</text>
+<text x="860" y="3064" class="small">Standalone emergency beacon needs its own protected</text>
+<text x="860" y="3093" class="small">battery/charger; it is optional, not a shared power rail.</text>
+<rect x="1620" y="2880" width="720" height="220" rx="16" fill="#fff" stroke="#b9c9d8" stroke-width="2"/>
+<text x="1640" y="2915" class="head">Still needed to finish the wiring</text>
+<text x="1640" y="2948" class="small">Exact Kinect / adapter and T12 model labels.</text>
+<text x="1640" y="2977" class="small">Arm / gripper / pan-tilt actuator models and counts.</text>
+<text x="1640" y="3006" class="small">IMU / ToF boards, audio, storage and cooling choices.</text>
+<text x="1640" y="3035" class="small">Peak-current measurements and base API discovery.</text>
+<text x="1640" y="3064" class="small">Then: actual pin numbers, fuses, wires and PCB layout.</text>
+<text x="62" y="3146" class="body">Runtime is a target, not a measurement: 266 Wh × 80% usable × 87% efficiency gives ~6.6 h at 28 W, or ~3.1 h at 60 W.</text>
+<text x="62" y="3190" class="small">Based on the user’s corrected component list and manufacturer references in README.md. Solid lines describe proposed routes, not bench-tested wiring.</text>
+<text x="62" y="3230" class="small">UnderBot • 29 September 2026 • Concept / integration review • No PCB fabrication or pin-level wiring approval implied</text>
+</svg>

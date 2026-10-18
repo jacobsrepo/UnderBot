@@ -1,0 +1,821 @@
+{
+  "revision": "R08",
+  "camera_status": "External case removed; bare Kinect electronics and optical frame are uncalibrated reservations.",
+  "engine": "PyBullet",
+  "engine_version": "3.2.7",
+  "engine_api_version": 202010061,
+  "urdf": "urdf/underbot.portable.urdf",
+  "urdf_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+  "flags": "URDF_USE_INERTIA_FROM_FILE",
+  "use_fixed_base": false,
+  "links": 23,
+  "joints": 22,
+  "actuated_independent_joints": 14,
+  "passive_independent_joints": [
+    "caster_swivel_joint",
+    "caster_wheel_joint"
+  ],
+  "mimic_followers": [
+    "left_gripper_right_joint",
+    "right_gripper_right_joint"
+  ],
+  "mimic_handling": "PyBullet does not enforce URDF mimic constraints here; follower positions were explicitly set from the URDF equations for the nonzero FK check.",
+  "nonzero_independent_pose_radians": {
+    "left_wheel_joint": -0.31,
+    "right_wheel_joint": 0.23,
+    "caster_swivel_joint": -0.31,
+    "caster_wheel_joint": 0.23,
+    "left_arm_base_joint": -0.20420352248322005,
+    "left_shoulder_joint": 0.07679448708777997,
+    "left_elbow_joint": -0.09075712110374001,
+    "left_wrist_pitch_joint": 0.11519173063155996,
+    "left_wrist_roll_joint": -0.40840704496540003,
+    "left_gripper_left_joint": 0.366,
+    "right_arm_base_joint": -0.20420352248322005,
+    "right_shoulder_joint": 0.07679448708777997,
+    "right_elbow_joint": -0.09075712110374001,
+    "right_wrist_pitch_joint": 0.11519173063155996,
+    "right_wrist_roll_joint": -0.40840704496540003,
+    "right_gripper_left_joint": 0.366
+  },
+  "nonzero_pose_world_link_frames": {
+    "base_link": [
+      [
+        0.9999999999999999,
+        2.5302260758099038e-21,
+        -8.072525014353086e-18,
+        -6.938893903907228e-18
+      ],
+      [
+        6.7653908120814055e-21,
+        1.0000000000000002,
+        3.4390207924095625e-21,
+        -6.776263578034403e-21
+      ],
+      [
+        -1.1336311104458579e-18,
+        -5.077108783186566e-20,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_wheel": [
+      [
+        0.9523335714460246,
+        -2.5034237950620928e-20,
+        -0.3050586315724562,
+        -0.18000000715255737
+      ],
+      [
+        2.2159723911296287e-20,
+        1.0,
+        -1.2885355564786374e-20,
+        0.1770000010728836
+      ],
+      [
+        0.3050586315724562,
+        5.5111416319614315e-21,
+        0.9523335714460246,
+        0.0925000011920929
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_wheel": [
+      [
+        0.9736663947762899,
+        -1.0515246189969714e-20,
+        0.2279775245135844,
+        -0.18000000715255737
+      ],
+      [
+        1.1223060937181147e-20,
+        1.0,
+        -1.8083848044656606e-21,
+        -0.1770000010728836
+      ],
+      [
+        -0.2279775245135844,
+        4.319369162855972e-21,
+        0.9736663947762899,
+        0.0925000011920929
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "caster_swivel_link": [
+      [
+        0.952333553481097,
+        0.30505868765545174,
+        7.159536041874554e-09,
+        0.2150000035762787
+      ],
+      [
+        -0.30505868765545174,
+        0.952333553481097,
+        -3.026823447383047e-09,
+        -3.4924596548080444e-10
+      ],
+      [
+        -7.741625188657806e-09,
+        6.984668602500427e-10,
+        1.0,
+        0.10999999940395355
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "caster_link": [
+      [
+        0.9272551661817611,
+        0.30505868967430966,
+        0.21711069214441706,
+        0.19595332443714142
+      ],
+      [
+        -0.29702539277633094,
+        0.9523335528344012,
+        -0.06954653256542073,
+        0.006101172883063555
+      ],
+      [
+        -0.22797757090402757,
+        -6.998822091319745e-09,
+        0.9736663839142743,
+        0.03999999910593033
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "camera_mount": [
+      [
+        1.0,
+        -9.392724712831993e-21,
+        3.3383075976670683e-41,
+        -0.005000000353902578
+      ],
+      [
+        9.392724712831993e-21,
+        1.0,
+        -7.108283697714244e-21,
+        4.06036208579344e-20
+      ],
+      [
+        3.3383075976670683e-41,
+        7.108283697714244e-21,
+        1.0,
+        0.6350000500679016
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "camera_optical_frame": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.028999999165534973
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.06925000250339508
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.6414999961853027
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "lidar_mount": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        -0.07000000029802322
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        4.0657581468206416e-20
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.7330000400543213
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "lidar_scan_frame": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        -0.07000000029802322
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        4.0657581468206416e-20
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.7555000185966492
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_arm_base": [
+      [
+        -0.20278733626680157,
+        0.9792228021496514,
+        0.0,
+        -0.07000000029802322
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.1080000028014183
+      ],
+      [
+        0.9792228021496514,
+        0.2027873362668015,
+        0.0,
+        0.5450000166893005
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_upper_arm": [
+      [
+        0.1673225340954435,
+        0.9792228112892146,
+        0.114568125736291,
+        -0.06999999284744263
+      ],
+      [
+        0.5649670366660201,
+        -1.2096876833567194e-08,
+        -0.8251134755176501,
+        0.14799998700618744
+      ],
+      [
+        -0.8079699357430914,
+        0.20278729213352426,
+        -0.5532286119539169,
+        0.5450000166893005
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_forearm": [
+      [
+        0.0028313613221238043,
+        0.9792228101812965,
+        0.202767530471987,
+        -0.0524311326444149
+      ],
+      [
+        0.9999025239416366,
+        -7.681798530612127e-09,
+        -0.013962185185172796,
+        0.20732153952121735
+      ],
+      [
+        -0.013672088655677261,
+        0.20278729748345814,
+        -0.9791273594232504,
+        0.4601631760597229
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_wrist": [
+      [
+        0.16447342635137663,
+        0.9792228122970461,
+        0.11862198742772029,
+        -0.05217631533741951
+      ],
+      [
+        0.5849576784702233,
+        8.366538017945402e-09,
+        -0.8110638164773021,
+        0.29731276631355286
+      ],
+      [
+        -0.7942121923157344,
+        0.20278728726688922,
+        -0.5728039016102902,
+        0.45893266797065735
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_hand": [
+      [
+        0.16447346934205598,
+        0.8515757808128673,
+        0.4977621594853742,
+        -0.04477500915527344
+      ],
+      [
+        0.5849576483573206,
+        0.322112292694291,
+        -0.7443575891488585,
+        0.32363587617874146
+      ],
+      [
+        -0.7942122055917178,
+        0.41359685737222757,
+        -0.44515683984519017,
+        0.423193097114563
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_gripper_left": [
+      [
+        0.4583446124357651,
+        0.736310392924399,
+        0.49776221383570834,
+        -0.025334810838103294
+      ],
+      [
+        0.6614923046222996,
+        0.09143109977396568,
+        -0.7443576324050166,
+        0.3440578281879425
+      ],
+      [
+        -0.5935892074293357,
+        0.6704381845223616,
+        -0.44515670674243735,
+        0.4107825756072998
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "left_gripper_right": [
+      [
+        -0.15118483564187235,
+        0.8540351129497096,
+        0.4977621634083057,
+        -0.05599153786897659
+      ],
+      [
+        0.43093516301165613,
+        0.5101241291804389,
+        -0.7443576143951347,
+        0.33246177434921265
+      ],
+      [
+        -0.8896280294325586,
+        0.10196763543828818,
+        -0.445156793243759,
+        0.39589306712150574
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_arm_base": [
+      [
+        -0.20278733626680157,
+        -0.9792228021496514,
+        0.0,
+        -0.07000000029802322
+      ],
+      [
+        0.0,
+        0.0,
+        -1.0,
+        -0.1080000028014183
+      ],
+      [
+        0.9792228021496514,
+        -0.2027873362668015,
+        0.0,
+        0.5450000166893005
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_upper_arm": [
+      [
+        0.1673225340954435,
+        -0.9792228112892146,
+        0.114568125736291,
+        -0.06999999284744263
+      ],
+      [
+        -0.5649670366660201,
+        -1.2096876833567194e-08,
+        0.8251134755176501,
+        -0.14799998700618744
+      ],
+      [
+        -0.8079699357430914,
+        -0.20278729213352426,
+        -0.5532286119539169,
+        0.5450000166893005
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_forearm": [
+      [
+        0.0028313613221238043,
+        -0.9792228101812965,
+        0.202767530471987,
+        -0.0524311326444149
+      ],
+      [
+        -0.9999025239416366,
+        -7.681798530612127e-09,
+        0.013962185185172796,
+        -0.20732153952121735
+      ],
+      [
+        -0.013672088655677261,
+        -0.20278729748345814,
+        -0.9791273594232504,
+        0.4601631760597229
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_wrist": [
+      [
+        0.16447342635137663,
+        -0.9792228122970461,
+        0.11862198742772029,
+        -0.05217631533741951
+      ],
+      [
+        -0.5849576784702233,
+        8.366538017945402e-09,
+        0.8110638164773021,
+        -0.29731276631355286
+      ],
+      [
+        -0.7942121923157344,
+        -0.20278728726688922,
+        -0.5728039016102902,
+        0.45893266797065735
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_hand": [
+      [
+        0.16447346934205598,
+        -0.8515757808128673,
+        0.4977621594853742,
+        -0.04477500915527344
+      ],
+      [
+        -0.5849576483573206,
+        0.322112292694291,
+        0.7443575891488585,
+        -0.32363587617874146
+      ],
+      [
+        -0.7942122055917178,
+        -0.41359685737222757,
+        -0.44515683984519017,
+        0.423193097114563
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_gripper_left": [
+      [
+        -0.15118483564187235,
+        -0.8540351129497096,
+        0.4977621634083057,
+        -0.05599153786897659
+      ],
+      [
+        -0.43093516301165613,
+        0.5101241291804389,
+        0.7443576143951347,
+        -0.33246177434921265
+      ],
+      [
+        -0.8896280294325586,
+        -0.10196763543828818,
+        -0.445156793243759,
+        0.39589306712150574
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "right_gripper_right": [
+      [
+        0.4583446124357651,
+        -0.736310392924399,
+        0.49776221383570834,
+        -0.025334810838103294
+      ],
+      [
+        -0.6614923046222996,
+        0.09143109977396568,
+        0.7443576324050166,
+        -0.3440578281879425
+      ],
+      [
+        -0.5935892074293357,
+        -0.6704381845223616,
+        -0.44515670674243735,
+        0.4107825756072998
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "maximum_position_error_m": 5.006915235850473e-08,
+  "maximum_rotation_matrix_error": 1.7421052994626152e-07,
+  "fk_link_comparisons": [
+    {
+      "link": "left_wheel",
+      "position_error_m": 7.330159761807229e-09,
+      "rotation_matrix_max_error": 4.870987280192196e-09
+    },
+    {
+      "link": "right_wheel",
+      "position_error_m": 7.330159761807229e-09,
+      "rotation_matrix_max_error": 9.783960308595852e-10
+    },
+    {
+      "link": "caster_swivel_link",
+      "position_error_m": 3.642391189722888e-09,
+      "rotation_matrix_max_error": 5.121200830071615e-08
+    },
+    {
+      "link": "caster_link",
+      "position_error_m": 4.262811687427895e-09,
+      "rotation_matrix_max_error": 5.3230866214892814e-08
+    },
+    {
+      "link": "camera_mount",
+      "position_error_m": 5.006915235850473e-08,
+      "rotation_matrix_max_error": 2.220446049250313e-16
+    },
+    {
+      "link": "camera_optical_frame",
+      "position_error_m": 4.638451638328415e-09,
+      "rotation_matrix_max_error": 4.896596932671761e-12
+    },
+    {
+      "link": "lidar_mount",
+      "position_error_m": 4.005543000611787e-08,
+      "rotation_matrix_max_error": 2.220446049250313e-16
+    },
+    {
+      "link": "lidar_scan_frame",
+      "position_error_m": 1.859903707373341e-08,
+      "rotation_matrix_max_error": 2.220446049250313e-16
+    },
+    {
+      "link": "left_arm_base",
+      "position_error_m": 1.6925410284234905e-08,
+      "rotation_matrix_max_error": 4.091040320397532e-08
+    },
+    {
+      "link": "left_upper_arm",
+      "position_error_m": 2.232772398647145e-08,
+      "rotation_matrix_max_error": 3.4946307625460804e-08
+    },
+    {
+      "link": "left_forearm",
+      "position_error_m": 2.2168014196790825e-08,
+      "rotation_matrix_max_error": 8.53975814412225e-09
+    },
+    {
+      "link": "left_wrist",
+      "position_error_m": 5.158400733778517e-09,
+      "rotation_matrix_max_error": 1.1859867254937484e-08
+    },
+    {
+      "link": "left_hand",
+      "position_error_m": 2.779007732097049e-08,
+      "rotation_matrix_max_error": 4.110777712673652e-08
+    },
+    {
+      "link": "left_gripper_left",
+      "position_error_m": 2.100873805615663e-08,
+      "rotation_matrix_max_error": 1.7421052994626152e-07
+    },
+    {
+      "link": "left_gripper_right",
+      "position_error_m": 5.637438005467684e-09,
+      "rotation_matrix_max_error": 1.0669238928451286e-07
+    },
+    {
+      "link": "right_arm_base",
+      "position_error_m": 1.6925410284234905e-08,
+      "rotation_matrix_max_error": 4.091040320397532e-08
+    },
+    {
+      "link": "right_upper_arm",
+      "position_error_m": 2.232772398647145e-08,
+      "rotation_matrix_max_error": 3.4946307625460804e-08
+    },
+    {
+      "link": "right_forearm",
+      "position_error_m": 2.2168014196790825e-08,
+      "rotation_matrix_max_error": 8.53975814412225e-09
+    },
+    {
+      "link": "right_wrist",
+      "position_error_m": 5.158400733778517e-09,
+      "rotation_matrix_max_error": 1.1859867254937484e-08
+    },
+    {
+      "link": "right_hand",
+      "position_error_m": 2.779007732097049e-08,
+      "rotation_matrix_max_error": 4.110777712673652e-08
+    },
+    {
+      "link": "right_gripper_left",
+      "position_error_m": 5.637438005467684e-09,
+      "rotation_matrix_max_error": 1.0669238928451286e-07
+    },
+    {
+      "link": "right_gripper_right",
+      "position_error_m": 2.100873805615663e-08,
+      "rotation_matrix_max_error": 1.7421052994626152e-07
+    }
+  ],
+  "urdf_mass_kg": 19.601007799999998,
+  "imported_mass_kg": 19.601007799999998,
+  "zero_pose_visual_aabb_m": {
+    "minimum": [
+      -0.27899798750877375,
+      -0.35702873245459,
+      3.9950013160094944e-07
+    ],
+    "maximum": [
+      0.2789999842643737,
+      0.35702873245459,
+      0.7779997745454311
+    ]
+  },
+  "preview": "outputs/underbot_WR141E_model_preview_R08.png",
+  "preview_pose": "All joints zero; no physics steps.",
+  "preview_rendering_limitations": "TinyRenderer does not reproduce the intended clear polycarbonate transparency reliably; the URDF records panel alpha=0.5 and the WebGL viewer alpha-blends those meshes.",
+  "mesh_sha256": {
+    "meshes/base_link.stl": "cbae37811bc4d84eb606c8edb1a95942d9bd35bc6e1ab69bcc3d37945f110c39",
+    "meshes/base_link_worx_orange.stl": "38c3f17c60e42941c0897925cb442e8d3832032672bdfc358622bada7f99b686",
+    "meshes/base_link_servo_black.stl": "9faebca5343f817eea16e7cfb88d463f9a0bd0987f4770aa4381afcd7e084c62",
+    "meshes/base_link_control_red.stl": "2b456d773ee0739c6a2d1124288ce6e5e79937b37c0ac704c36fb86f63b5c2cd",
+    "meshes/base_link_aluminium.stl": "a615b955c333f29c5dbda7af529a67c5bc3618e262ea6116d476f5f8f3f5858b",
+    "meshes/base_link_polycarbonate.stl": "e3751cbee3607c86aeaf701cd30e54a2eeb539e75ca5c7195bb014d929bd097a",
+    "meshes/base_link_pcb_green.stl": "7151650157408fde23fda499a2884e57e8853347412d3d0d9d8ccedb6ed217dc",
+    "meshes/left_wheel.stl": "c6bbe5a21c396cfbca04250436e3687b8ba19b2a724a171f3981f0fc66b4cb59",
+    "meshes/left_wheel_aluminium.stl": "c63397a734a4bb7f17f5e722c003a57a0831e30928eb8902ad3d8cd14e00544d",
+    "meshes/right_wheel.stl": "c6bbe5a21c396cfbca04250436e3687b8ba19b2a724a171f3981f0fc66b4cb59",
+    "meshes/right_wheel_aluminium.stl": "c63397a734a4bb7f17f5e722c003a57a0831e30928eb8902ad3d8cd14e00544d",
+    "meshes/caster_swivel_link_aluminium.stl": "207a4795c2095b8f7a1faa9ba14c17fee602d0a4fbec91580e1f3eb99ddd1c0a",
+    "meshes/caster_swivel_link.stl": "6eab5bf55ca9eb6af1074d6af0bbe75b5b66ab4525571fe9389cadfe6e5ae120",
+    "meshes/caster_link.stl": "1824ad98ffeaf653280da4b3deba39dfea5454090af0f5559de369f3b3b0739a",
+    "meshes/caster_link_servo_black.stl": "b54c7adfb98a78524d2b11e8c3205f474981ef38fb85850e930036671bae3a26",
+    "meshes/camera_mount_pcb_green.stl": "d8d908fa975caa58f403633d3145033e5a56eafee5a6dabb6092f36621360e3a",
+    "meshes/camera_mount_aluminium.stl": "958ae795551598bfb352df38b8ef67472dda72351d62d8ff97ef68954d05800b",
+    "meshes/camera_mount.stl": "387871fdd2f2e42e0dcca9aba7f1dc3e192fe355d56363a624a35c7a8f241de7",
+    "meshes/camera_mount_servo_black.stl": "a9dbfba7f1c8e0c9530e3cf2d1deee9a8000b4cae83dbe347b23676d2f23b1cd",
+    "meshes/lidar_mount_servo_black.stl": "b680e0eb27182293c325ad72b31a12b7176f355a1f249a0acef171c28b4e3c2b",
+    "meshes/lidar_mount_worx_orange.stl": "d35a22ce957d2ce52dbb65c982f950f73427dc75a058f46b22dc49c1dbae9b46",
+    "meshes/left_arm_base_servo_black.stl": "7abb66dbcdcbf9a0b510f01344e579f2a55d55e8cc534c4dbcf0f45edb62ffe3",
+    "meshes/left_arm_base_aluminium.stl": "86ad1679dc80602fd3e00b40e3f48320f31cb496ac4b2bfd27b6806948043c3e",
+    "meshes/left_upper_arm_servo_black.stl": "04ce725698ea57951c6d1e36be632c8bab220a3200a8e049e9912bd9cb64fd6e",
+    "meshes/left_upper_arm_aluminium.stl": "78963bfde031bcd8894647fc82cdf4300678aa2bb1af64b23e311241b6f10079",
+    "meshes/left_forearm_servo_black.stl": "04ce725698ea57951c6d1e36be632c8bab220a3200a8e049e9912bd9cb64fd6e",
+    "meshes/left_forearm_aluminium.stl": "326a38d8af10d3631774e54283580bdae869919c6b262b70f9a6888bc9e64928",
+    "meshes/left_wrist_servo_black.stl": "04ce725698ea57951c6d1e36be632c8bab220a3200a8e049e9912bd9cb64fd6e",
+    "meshes/left_wrist_aluminium.stl": "7d4866dd857d69fc892658dbb5f9a870d52c9af582b21e7f7b6c48286e9f619f",
+    "meshes/left_hand_servo_black.stl": "69ede2adcd2d7cc15859a9d2378164333fd1188c0ecb45d58b93ca49856d9ed4",
+    "meshes/left_hand_aluminium.stl": "e1556631dd855412c276205374aaffe6077b41992c1f6d160346f9d81655f52d",
+    "meshes/left_gripper_left_aluminium.stl": "6935554ab73d2f7d2b10030f1ff79d4ed75c4de160b824cc502ffeb8f02f6be3",
+    "meshes/left_gripper_right_aluminium.stl": "58326ca67cd890dc00a9150d1d9f812b4d5622ec81bad97b12796c3c8ef7d317",
+    "meshes/right_arm_base_servo_black.stl": "7abb66dbcdcbf9a0b510f01344e579f2a55d55e8cc534c4dbcf0f45edb62ffe3",
+    "meshes/right_arm_base_aluminium.stl": "86ad1679dc80602fd3e00b40e3f48320f31cb496ac4b2bfd27b6806948043c3e",
+    "meshes/right_upper_arm_servo_black.stl": "04ce725698ea57951c6d1e36be632c8bab220a3200a8e049e9912bd9cb64fd6e",
+    "meshes/right_upper_arm_aluminium.stl": "78963bfde031bcd8894647fc82cdf4300678aa2bb1af64b23e311241b6f10079",
+    "meshes/right_forearm_servo_black.stl": "04ce725698ea57951c6d1e36be632c8bab220a3200a8e049e9912bd9cb64fd6e",
+    "meshes/right_forearm_aluminium.stl": "326a38d8af10d3631774e54283580bdae869919c6b262b70f9a6888bc9e64928",
+    "meshes/right_wrist_servo_black.stl": "04ce725698ea57951c6d1e36be632c8bab220a3200a8e049e9912bd9cb64fd6e",
+    "meshes/right_wrist_aluminium.stl": "7d4866dd857d69fc892658dbb5f9a870d52c9af582b21e7f7b6c48286e9f619f",
+    "meshes/right_hand_servo_black.stl": "69ede2adcd2d7cc15859a9d2378164333fd1188c0ecb45d58b93ca49856d9ed4",
+    "meshes/right_hand_aluminium.stl": "e1556631dd855412c276205374aaffe6077b41992c1f6d160346f9d81655f52d",
+    "meshes/right_gripper_left_aluminium.stl": "6935554ab73d2f7d2b10030f1ff79d4ed75c4de160b824cc502ffeb8f02f6be3",
+    "meshes/right_gripper_right_aluminium.stl": "58326ca67cd890dc00a9150d1d9f812b4d5622ec81bad97b12796c3c8ef7d317"
+  },
+  "status": "PASS",
+  "scope": "Actual-file import, floating-root configuration, preserved masses, nonzero forward kinematics, zero-pose mesh preview. This is not a dynamic stability or actuator validation, and does not execute ROS, Gazebo, Isaac Sim, or Isaac Lab."
+}

@@ -1,0 +1,346 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 00d69519-ca27-529d-8b5f-289fcd6c5fb8) (paper "A3")
+        (title_block (title "08 - Ten servo signal and fused power branches") (date "2026-10-02") (rev "0.4 REVIEW") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "UnderBot_Modules:Adafruit_PCA9685_used_ports" (pin_numbers hide) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+      (property "Reference" "A" (at 0 33.02 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Adafruit_PCA9685_used_ports" (at 0 30.48 0) (effects (font (size 1 1))))
+      (symbol "Adafruit_PCA9685_used_ports_0_1" (rectangle (start -25.4 27.94) (end 25.4 -27.94) (stroke (width 0.254) (type default)) (fill (type background))))
+      (symbol "Adafruit_PCA9685_used_ports_1_1" (pin passive line (at -30.48 22.86 0) (length 5.08) (name "VCC" (effects (font (size 1 1)))) (number "VCC" (effects (font (size 1 1)))))(pin passive line (at -30.48 17.78 0) (length 5.08) (name "GND" (effects (font (size 1 1)))) (number "GND" (effects (font (size 1 1)))))(pin passive line (at -30.48 12.7 0) (length 5.08) (name "SDA" (effects (font (size 1 1)))) (number "SDA" (effects (font (size 1 1)))))(pin passive line (at -30.48 7.619999999999999 0) (length 5.08) (name "SCL" (effects (font (size 1 1)))) (number "SCL" (effects (font (size 1 1)))))(pin passive line (at -30.48 2.539999999999999 0) (length 5.08) (name "OE" (effects (font (size 1 1)))) (number "OE" (effects (font (size 1 1)))))(pin passive line (at -30.48 -2.539999999999999 0) (length 5.08) (name "VPLUS" (effects (font (size 1 1)))) (number "VPLUS" (effects (font (size 1 1)))))(pin passive line (at 30.48 22.86 180) (length 5.08) (name "PWM0" (effects (font (size 1 1)))) (number "PWM0" (effects (font (size 1 1)))))(pin passive line (at 30.48 17.78 180) (length 5.08) (name "PWM1" (effects (font (size 1 1)))) (number "PWM1" (effects (font (size 1 1)))))(pin passive line (at 30.48 12.7 180) (length 5.08) (name "PWM2" (effects (font (size 1 1)))) (number "PWM2" (effects (font (size 1 1)))))(pin passive line (at 30.48 7.619999999999999 180) (length 5.08) (name "PWM3" (effects (font (size 1 1)))) (number "PWM3" (effects (font (size 1 1)))))(pin passive line (at 30.48 2.539999999999999 180) (length 5.08) (name "PWM4" (effects (font (size 1 1)))) (number "PWM4" (effects (font (size 1 1)))))(pin passive line (at 30.48 -2.539999999999999 180) (length 5.08) (name "PWM5" (effects (font (size 1 1)))) (number "PWM5" (effects (font (size 1 1)))))(pin passive line (at 30.48 -7.620000000000001 180) (length 5.08) (name "PWM6" (effects (font (size 1 1)))) (number "PWM6" (effects (font (size 1 1)))))(pin passive line (at 30.48 -12.700000000000003 180) (length 5.08) (name "PWM7" (effects (font (size 1 1)))) (number "PWM7" (effects (font (size 1 1)))))(pin passive line (at 30.48 -17.78 180) (length 5.08) (name "PWM8" (effects (font (size 1 1)))) (number "PWM8" (effects (font (size 1 1)))))(pin passive line (at 30.48 -22.86 180) (length 5.08) (name "PWM9" (effects (font (size 1 1)))) (number "PWM9" (effects (font (size 1 1)))))))(symbol "Connector_Generic:Conn_01x03"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x03_1_1"
+			(rectangle
+				(start -1.27 3.81)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:Fuse"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "F"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fuse"
+			(at -1.905 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Fuse*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Fuse_0_1"
+			(rectangle
+				(start -0.762 -2.54)
+				(end 0.762 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 2.54) (xy 0 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Fuse_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "PROVISIONAL: 2 x (3 ARM JOINTS + GRIPPER) + CAMERA PAN/TILT" (at 20 14 0) (effects (font (size 2 2)) (justify left top)) (uuid 3ea57a98-b570-5e9f-b254-5c1e50d4da2a))(symbol (lib_id "UnderBot_Modules:Adafruit_PCA9685_used_ports") (at 81.28 119.38 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid d6451e86-9d94-53d5-b9bb-f76eae631a01) (property "Reference" "A801" (at 81.28 85.08999999999999 0) (effects (font (size 1.27 1.27)) )) (property "Value" "PCA9685 / A0 closed / 0x41" (at 81.28 87.63 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 81.28 119.38 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 81.28 119.38 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "A801") (unit 1)))))(wire (pts (xy 50.8 96.52) (xy 40.64 96.52)) (stroke (width 0) (type default)) (uuid 79fc522c-bf49-56d4-8e68-1f4d0c8bf661))(global_label "LOGIC_3V3" (shape bidirectional) (at 40.64 96.52 0) (effects (font (size 1 1)) (justify left)) (uuid a8fd0f36-c591-54d3-92c8-e1e3d01027f3))(wire (pts (xy 50.8 101.6) (xy 40.64 101.6)) (stroke (width 0) (type default)) (uuid 4a1f1614-b639-58fe-8dc1-2538ed54d05b))(global_label "GND_SYS" (shape bidirectional) (at 40.64 101.6 0) (effects (font (size 1 1)) (justify left)) (uuid 22e377ed-1113-52b1-a90e-323c55c46ec6))(wire (pts (xy 50.8 106.68) (xy 40.64 106.68)) (stroke (width 0) (type default)) (uuid 9193388f-c00a-50bf-9748-b2d28f9d0950))(global_label "PWM_SDA" (shape bidirectional) (at 40.64 106.68 0) (effects (font (size 1 1)) (justify left)) (uuid a0fd1047-e9f0-5d80-a492-5b2b03503d84))(wire (pts (xy 50.8 111.76) (xy 40.64 111.76)) (stroke (width 0) (type default)) (uuid f3eeca1c-c6be-544f-8ff7-9b4cce5757dc))(global_label "PWM_SCL" (shape bidirectional) (at 40.64 111.76 0) (effects (font (size 1 1)) (justify left)) (uuid 05cb8dcb-0bc3-5dc4-9208-3d1a2bb8f544))(wire (pts (xy 50.8 116.84) (xy 40.64 116.84)) (stroke (width 0) (type default)) (uuid ad185d9b-610e-5c21-a5a2-39de9f6d5998))(global_label "PWM_OE" (shape bidirectional) (at 40.64 116.84 0) (effects (font (size 1 1)) (justify left)) (uuid 230b93cc-7b7d-5729-b1a4-c11d78ac627c))(no_connect (at 50.8 121.92) (uuid 17bf1671-3bc7-5985-9b09-9519cdf16c25))(wire (pts (xy 111.76 96.52) (xy 121.92 96.52)) (stroke (width 0) (type default)) (uuid db4e939e-d0f0-57ac-8869-a97f9334af25))(global_label "SERVO_PWM_0" (shape bidirectional) (at 121.92 96.52 180) (effects (font (size 1 1)) (justify right)) (uuid 25019105-b680-5efb-ad71-aa597017b660))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 248.92 48.26 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e02653d5-6bef-5f8e-ae7f-db2f71481181) (property "Reference" "J801" (at 248.92 38.1 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH0: Left shoulder" (at 248.92 40.64 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 248.92 48.26 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 248.92 48.26 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J801") (unit 1)))))(wire (pts (xy 243.84 45.72) (xy 233.68 45.72)) (stroke (width 0) (type default)) (uuid cb462c00-de15-597a-8969-129cfa87ff64))(global_label "GND_SYS" (shape bidirectional) (at 233.68 45.72 0) (effects (font (size 1 1)) (justify left)) (uuid fb1a0b37-5691-5c4a-99ec-c20a8ca802f8))(wire (pts (xy 243.84 48.26) (xy 233.68 48.26)) (stroke (width 0) (type default)) (uuid c7b6898c-9bab-59ac-b942-1f9f8b5c54ba))(label "SERVO_0_FUSED"  (at 233.68 48.26 0) (effects (font (size 1 1)) (justify left)) (uuid a77a5ba2-b250-560a-8fe8-4a9556ff9aba))(wire (pts (xy 243.84 50.8) (xy 233.68 50.8)) (stroke (width 0) (type default)) (uuid 3ad4002a-ec34-5abf-bde1-da5c0e95f8e0))(global_label "SERVO_PWM_0" (shape bidirectional) (at 233.68 50.8 0) (effects (font (size 1 1)) (justify left)) (uuid b84f4c4d-ba24-58ae-8023-16d38261fefd))(symbol (lib_id "Device:Fuse") (at 205.73999999999998 63.5 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 2a689145-1ea5-5770-b1e2-3f175c8e8844) (property "Reference" "F801" (at 205.73999999999998 55.88 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 205.73999999999998 58.42 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 205.73999999999998 63.5 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 205.73999999999998 63.5 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F801") (unit 1)))))(wire (pts (xy 201.93 63.5) (xy 171.45 63.5)) (stroke (width 0) (type default)) (uuid 8b2e7641-e24c-534e-a3e2-87e6f6b3a0ae))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 171.45 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 84b4bda7-bb35-5dcf-9eb6-26d5ea46837e))(wire (pts (xy 209.55 63.5) (xy 226.06 63.5)) (stroke (width 0) (type default)) (uuid cf8521e5-5c4b-5337-9371-6f69f29f2c19))(wire (pts (xy 226.06 63.5) (xy 226.06 48.26)) (stroke (width 0) (type default)) (uuid 7bf20390-e8cf-555e-8b43-e9078e70f9fa))(wire (pts (xy 226.06 48.26) (xy 243.84 48.26)) (stroke (width 0) (type default)) (uuid eefdcfe2-312d-5606-bf51-60e585747e79))(wire (pts (xy 111.76 101.6) (xy 121.92 101.6)) (stroke (width 0) (type default)) (uuid 523ac413-9e39-59f6-a00a-303285c48351))(global_label "SERVO_PWM_1" (shape bidirectional) (at 121.92 101.6 180) (effects (font (size 1 1)) (justify right)) (uuid e81146c6-8a4f-5cab-b2a4-19d91901a73e))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 248.92 88.9 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid d41a8929-f2da-52e4-b9ab-4366c5666b48) (property "Reference" "J802" (at 248.92 78.74 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH1: Left elbow" (at 248.92 81.28 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 248.92 88.9 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 248.92 88.9 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J802") (unit 1)))))(wire (pts (xy 243.84 86.36) (xy 233.68 86.36)) (stroke (width 0) (type default)) (uuid ba6db55b-9099-57f0-bd6a-206eed778cf4))(global_label "GND_SYS" (shape bidirectional) (at 233.68 86.36 0) (effects (font (size 1 1)) (justify left)) (uuid 39713d13-3b87-5b9e-8550-2b2b5308d298))(wire (pts (xy 243.84 88.9) (xy 233.68 88.9)) (stroke (width 0) (type default)) (uuid 2bb0a01b-c894-5f3d-85f6-1ddf3669d644))(label "SERVO_1_FUSED"  (at 233.68 88.9 0) (effects (font (size 1 1)) (justify left)) (uuid 0fdb5723-4d8f-53dd-b250-d971882babda))(wire (pts (xy 243.84 91.44) (xy 233.68 91.44)) (stroke (width 0) (type default)) (uuid 05b50487-14df-5a97-848c-e7c23d89b10b))(global_label "SERVO_PWM_1" (shape bidirectional) (at 233.68 91.44 0) (effects (font (size 1 1)) (justify left)) (uuid c6b16964-536b-533b-b46a-2db4e010d748))(symbol (lib_id "Device:Fuse") (at 205.73999999999998 104.14 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 08245e15-3aca-54bc-98a0-a5594920d6ad) (property "Reference" "F802" (at 205.73999999999998 96.52 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 205.73999999999998 99.06 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 205.73999999999998 104.14 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 205.73999999999998 104.14 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F802") (unit 1)))))(wire (pts (xy 201.93 104.14) (xy 171.45 104.14)) (stroke (width 0) (type default)) (uuid 5f4109e4-f270-5d78-9deb-7ed52d13ba9e))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 171.45 104.14 0) (effects (font (size 1 1)) (justify left)) (uuid 043d9c37-5d80-5d2d-b54b-4721e07da3ce))(wire (pts (xy 209.55 104.14) (xy 226.06 104.14)) (stroke (width 0) (type default)) (uuid cc3c24f4-b359-59db-8d2c-54b48c390115))(wire (pts (xy 226.06 104.14) (xy 226.06 88.9)) (stroke (width 0) (type default)) (uuid 74d61c2f-c540-5a48-ad4e-6567c0fae469))(wire (pts (xy 226.06 88.9) (xy 243.84 88.9)) (stroke (width 0) (type default)) (uuid fbc545d5-d729-58d1-a152-f22904e1af25))(wire (pts (xy 111.76 106.68) (xy 121.92 106.68)) (stroke (width 0) (type default)) (uuid b0a78c77-762e-58fd-a756-9839025eb14a))(global_label "SERVO_PWM_2" (shape bidirectional) (at 121.92 106.68 180) (effects (font (size 1 1)) (justify right)) (uuid 31974f84-d7ba-52b6-a825-4f9cb67c61f7))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 248.92 129.54 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 9691bd8b-4396-517e-8963-7a9be8f3755c) (property "Reference" "J803" (at 248.92 119.38 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH2: Left wrist" (at 248.92 121.92 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 248.92 129.54 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 248.92 129.54 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J803") (unit 1)))))(wire (pts (xy 243.84 127.0) (xy 233.68 127.0)) (stroke (width 0) (type default)) (uuid 1a5a896c-c723-5fba-8e83-513880b5c36e))(global_label "GND_SYS" (shape bidirectional) (at 233.68 127.0 0) (effects (font (size 1 1)) (justify left)) (uuid 249e564a-0a39-5e06-892b-c3c5c8e8b1c5))(wire (pts (xy 243.84 129.54) (xy 233.68 129.54)) (stroke (width 0) (type default)) (uuid 0ec11540-e788-57d8-9211-28ea6e34dc80))(label "SERVO_2_FUSED"  (at 233.68 129.54 0) (effects (font (size 1 1)) (justify left)) (uuid c0dbd0ba-4d3b-5f2a-8420-52bb05c13ed3))(wire (pts (xy 243.84 132.08) (xy 233.68 132.08)) (stroke (width 0) (type default)) (uuid b3bca414-d660-51fd-9097-b4d678dbd2b0))(global_label "SERVO_PWM_2" (shape bidirectional) (at 233.68 132.08 0) (effects (font (size 1 1)) (justify left)) (uuid c35c6248-610b-536a-bd29-1e0683475e70))(symbol (lib_id "Device:Fuse") (at 205.73999999999998 144.78 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 750a70ba-61a3-524d-bdd0-8ed620ac851c) (property "Reference" "F803" (at 205.73999999999998 137.16 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 205.73999999999998 139.7 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 205.73999999999998 144.78 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 205.73999999999998 144.78 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F803") (unit 1)))))(wire (pts (xy 201.93 144.78) (xy 171.45 144.78)) (stroke (width 0) (type default)) (uuid f8e164ec-9050-59a6-9de2-04af834a8a89))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 171.45 144.78 0) (effects (font (size 1 1)) (justify left)) (uuid c3b0d391-3862-5e52-a475-db41ca7d5852))(wire (pts (xy 209.55 144.78) (xy 226.06 144.78)) (stroke (width 0) (type default)) (uuid 0099afdf-10ba-5aee-8bb7-014574eb8524))(wire (pts (xy 226.06 144.78) (xy 226.06 129.54)) (stroke (width 0) (type default)) (uuid e34e7b46-b778-535f-a717-bc929a2728f2))(wire (pts (xy 226.06 129.54) (xy 243.84 129.54)) (stroke (width 0) (type default)) (uuid b4770611-02d4-5b94-a02b-28cb0b6971c5))(wire (pts (xy 111.76 111.76) (xy 121.92 111.76)) (stroke (width 0) (type default)) (uuid 0eac3996-dc06-57e5-96dc-d3cc069cfd52))(global_label "SERVO_PWM_3" (shape bidirectional) (at 121.92 111.76 180) (effects (font (size 1 1)) (justify right)) (uuid 49b7fc80-7adb-5003-b05f-f9e726100e2b))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 248.92 170.18 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 5f1f40ce-d823-5d63-9e76-cf53773c7444) (property "Reference" "J804" (at 248.92 160.01999999999998 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH3: Left gripper" (at 248.92 162.55999999999997 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 248.92 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 248.92 170.18 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J804") (unit 1)))))(wire (pts (xy 243.84 167.64) (xy 233.68 167.64)) (stroke (width 0) (type default)) (uuid 5e270607-64ea-50f4-9d0f-099754c62d09))(global_label "GND_SYS" (shape bidirectional) (at 233.68 167.64 0) (effects (font (size 1 1)) (justify left)) (uuid 4cf477a6-037c-56bf-ad15-5c479ee0874b))(wire (pts (xy 243.84 170.18) (xy 233.68 170.18)) (stroke (width 0) (type default)) (uuid 2e315b59-b4c5-5137-82e9-d8758d5339d6))(label "SERVO_3_FUSED"  (at 233.68 170.18 0) (effects (font (size 1 1)) (justify left)) (uuid 6630f672-cc80-50b5-a559-dc7ab7e89a00))(wire (pts (xy 243.84 172.72) (xy 233.68 172.72)) (stroke (width 0) (type default)) (uuid 5490b8f8-e650-56e7-9a90-eb90cdb1b173))(global_label "SERVO_PWM_3" (shape bidirectional) (at 233.68 172.72 0) (effects (font (size 1 1)) (justify left)) (uuid c7a0506e-f542-59ad-8b21-8a3610c083da))(symbol (lib_id "Device:Fuse") (at 205.73999999999998 185.42000000000002 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 1d866cde-1e05-5027-9656-8bf88f801828) (property "Reference" "F804" (at 205.73999999999998 177.79999999999998 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 205.73999999999998 180.33999999999997 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 205.73999999999998 185.42000000000002 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 205.73999999999998 185.42000000000002 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F804") (unit 1)))))(wire (pts (xy 201.93 185.42) (xy 171.45 185.42)) (stroke (width 0) (type default)) (uuid d90757cb-89c9-5e1c-a470-c3a81e82b30c))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 171.45 185.42 0) (effects (font (size 1 1)) (justify left)) (uuid 20190e8b-302d-5570-913a-c449e3aee83c))(wire (pts (xy 209.55 185.42) (xy 226.06 185.42)) (stroke (width 0) (type default)) (uuid 753ed4de-2768-5a47-862c-10c251360a13))(wire (pts (xy 226.06 185.42) (xy 226.06 170.18)) (stroke (width 0) (type default)) (uuid b2e23b6e-1bdb-5597-b241-f15b6c6bfb04))(wire (pts (xy 226.06 170.18) (xy 243.84 170.18)) (stroke (width 0) (type default)) (uuid e1207fa7-e5d5-562b-b485-90750d925ab3))(wire (pts (xy 111.76 116.84) (xy 121.92 116.84)) (stroke (width 0) (type default)) (uuid 80320648-6588-5017-8fa0-a50867b556c5))(global_label "SERVO_PWM_4" (shape bidirectional) (at 121.92 116.84 180) (effects (font (size 1 1)) (justify right)) (uuid a13e5d23-bfe5-5f2b-a11e-2b5b87b49cf5))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 248.92 210.82 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 63a5c37f-0fd1-5c7b-8847-1dffc2808573) (property "Reference" "J805" (at 248.92 200.66 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH4: Right shoulder" (at 248.92 203.2 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 248.92 210.82 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 248.92 210.82 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J805") (unit 1)))))(wire (pts (xy 243.84 208.28) (xy 233.68 208.28)) (stroke (width 0) (type default)) (uuid d69349de-dcd0-596b-8da2-46ef89c5bf69))(global_label "GND_SYS" (shape bidirectional) (at 233.68 208.28 0) (effects (font (size 1 1)) (justify left)) (uuid 24058548-752b-5692-9fe6-07ad06bb6e19))(wire (pts (xy 243.84 210.82) (xy 233.68 210.82)) (stroke (width 0) (type default)) (uuid fa5e570f-9407-54bf-9e75-b049e342dfce))(label "SERVO_4_FUSED"  (at 233.68 210.82 0) (effects (font (size 1 1)) (justify left)) (uuid 7c90d741-a05c-5e8b-909d-e99a78c0f0f9))(wire (pts (xy 243.84 213.36) (xy 233.68 213.36)) (stroke (width 0) (type default)) (uuid c7b06c4d-cc05-511b-89c4-fb5edf2fef72))(global_label "SERVO_PWM_4" (shape bidirectional) (at 233.68 213.36 0) (effects (font (size 1 1)) (justify left)) (uuid 1bb7f181-b863-5a94-aa2b-45939f9cd906))(symbol (lib_id "Device:Fuse") (at 205.73999999999998 226.06 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid c6e2272c-b113-5866-8d09-e72ec227e28a) (property "Reference" "F805" (at 205.73999999999998 218.44 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 205.73999999999998 220.98 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 205.73999999999998 226.06 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 205.73999999999998 226.06 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F805") (unit 1)))))(wire (pts (xy 201.93 226.06) (xy 171.45 226.06)) (stroke (width 0) (type default)) (uuid 3c4385b5-d23e-51a1-9a44-9ea84156ebb9))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 171.45 226.06 0) (effects (font (size 1 1)) (justify left)) (uuid 9ae28045-fdf4-5b9d-977b-9b4c50b6a904))(wire (pts (xy 209.55 226.06) (xy 226.06 226.06)) (stroke (width 0) (type default)) (uuid 70c37b18-01c6-5f04-99e9-540df3092f8a))(wire (pts (xy 226.06 226.06) (xy 226.06 210.82)) (stroke (width 0) (type default)) (uuid 23153d0a-9af5-53cd-8489-270453ad04de))(wire (pts (xy 226.06 210.82) (xy 243.84 210.82)) (stroke (width 0) (type default)) (uuid 113c3ac6-ac3b-5573-9b6e-aaac1ae1be07))(wire (pts (xy 111.76 121.92) (xy 121.92 121.92)) (stroke (width 0) (type default)) (uuid 1a4011c4-17e6-5882-97bc-7bf89fb063bd))(global_label "SERVO_PWM_5" (shape bidirectional) (at 121.92 121.92 180) (effects (font (size 1 1)) (justify right)) (uuid 6575737a-4efb-5784-9195-226d616ee079))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 375.91999999999996 48.26 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 7c7440b4-3951-54e5-a800-93985171faac) (property "Reference" "J806" (at 375.91999999999996 38.1 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH5: Right elbow" (at 375.91999999999996 40.64 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 375.91999999999996 48.26 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 375.91999999999996 48.26 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J806") (unit 1)))))(wire (pts (xy 370.84 45.72) (xy 360.68 45.72)) (stroke (width 0) (type default)) (uuid 25d51e01-bed9-52cf-b315-9183c1137299))(global_label "GND_SYS" (shape bidirectional) (at 360.68 45.72 0) (effects (font (size 1 1)) (justify left)) (uuid f3b3a4b0-b5a2-5d2d-9ceb-626e1b5ef77b))(wire (pts (xy 370.84 48.26) (xy 360.68 48.26)) (stroke (width 0) (type default)) (uuid 32d44167-39cd-550c-93ba-25f744db80ce))(label "SERVO_5_FUSED"  (at 360.68 48.26 0) (effects (font (size 1 1)) (justify left)) (uuid 7a51cb00-ec8a-5dac-9ff1-26b68d9b3424))(wire (pts (xy 370.84 50.8) (xy 360.68 50.8)) (stroke (width 0) (type default)) (uuid 4c8b1657-11d5-5f62-a1fa-e0196d2cb823))(global_label "SERVO_PWM_5" (shape bidirectional) (at 360.68 50.8 0) (effects (font (size 1 1)) (justify left)) (uuid b098fd37-3f10-5d07-ac40-4f6111c8a275))(symbol (lib_id "Device:Fuse") (at 332.73999999999995 63.5 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid bf7f30ca-be0b-504c-83bf-a337119e6ee3) (property "Reference" "F806" (at 332.73999999999995 55.88 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 332.73999999999995 58.42 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 332.73999999999995 63.5 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 332.73999999999995 63.5 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F806") (unit 1)))))(wire (pts (xy 328.93 63.5) (xy 298.45 63.5)) (stroke (width 0) (type default)) (uuid 7e14d967-23a4-5fd0-8443-f1e85d65e9cc))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 298.45 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 30121969-56f4-59f0-bb17-8f19cfb1e0d6))(wire (pts (xy 336.55 63.5) (xy 353.05999999999995 63.5)) (stroke (width 0) (type default)) (uuid 0ec43c9d-17f4-5a6b-a27e-cc2259a24a55))(wire (pts (xy 353.05999999999995 63.5) (xy 353.05999999999995 48.26)) (stroke (width 0) (type default)) (uuid 2d519c6f-2c33-5a09-bbe1-f1a695b6c0e4))(wire (pts (xy 353.05999999999995 48.26) (xy 370.84 48.26)) (stroke (width 0) (type default)) (uuid 69c403c3-d658-52dc-aa9f-fc536113df6b))(wire (pts (xy 111.76 127.0) (xy 121.92 127.0)) (stroke (width 0) (type default)) (uuid 9f97869a-e4dc-546a-802a-4fd4fdfb4b94))(global_label "SERVO_PWM_6" (shape bidirectional) (at 121.92 127.0 180) (effects (font (size 1 1)) (justify right)) (uuid 4470b274-5f92-5cb4-991e-fd5be577d8c7))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 375.91999999999996 88.9 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 63de0f43-e645-5c38-bbc3-dbd76f7d94c0) (property "Reference" "J807" (at 375.91999999999996 78.74 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH6: Right wrist" (at 375.91999999999996 81.28 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 375.91999999999996 88.9 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 375.91999999999996 88.9 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J807") (unit 1)))))(wire (pts (xy 370.84 86.36) (xy 360.68 86.36)) (stroke (width 0) (type default)) (uuid 1c26f85a-d0fe-5728-908f-5b91ed8b1833))(global_label "GND_SYS" (shape bidirectional) (at 360.68 86.36 0) (effects (font (size 1 1)) (justify left)) (uuid 44ce9549-9e65-5384-b35d-392476b1d946))(wire (pts (xy 370.84 88.9) (xy 360.68 88.9)) (stroke (width 0) (type default)) (uuid 99b017a8-f1c4-529a-8515-8cd43d5feadc))(label "SERVO_6_FUSED"  (at 360.68 88.9 0) (effects (font (size 1 1)) (justify left)) (uuid 30d2626f-267e-5c94-a3c1-572289a49929))(wire (pts (xy 370.84 91.44) (xy 360.68 91.44)) (stroke (width 0) (type default)) (uuid 44458c68-18b1-583a-80a4-d32858f3162c))(global_label "SERVO_PWM_6" (shape bidirectional) (at 360.68 91.44 0) (effects (font (size 1 1)) (justify left)) (uuid 0dc768ba-2c79-5abb-825f-79a9e1ff565b))(symbol (lib_id "Device:Fuse") (at 332.73999999999995 104.14 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 06ce1f04-449f-5b8b-b060-52fd46c4bc82) (property "Reference" "F807" (at 332.73999999999995 96.52 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 332.73999999999995 99.06 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 332.73999999999995 104.14 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 332.73999999999995 104.14 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F807") (unit 1)))))(wire (pts (xy 328.93 104.14) (xy 298.45 104.14)) (stroke (width 0) (type default)) (uuid c9137198-3612-506f-aadb-f69973a5adeb))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 298.45 104.14 0) (effects (font (size 1 1)) (justify left)) (uuid 19716458-9b51-578a-852a-73c70b01594c))(wire (pts (xy 336.55 104.14) (xy 353.05999999999995 104.14)) (stroke (width 0) (type default)) (uuid f75bcddb-545c-5582-954c-1450118de663))(wire (pts (xy 353.05999999999995 104.14) (xy 353.05999999999995 88.9)) (stroke (width 0) (type default)) (uuid 52e743b0-f51b-5a81-bebb-e0561776a8ae))(wire (pts (xy 353.05999999999995 88.9) (xy 370.84 88.9)) (stroke (width 0) (type default)) (uuid 54dad01e-318f-54e8-9e3a-2e3e902ae6bb))(wire (pts (xy 111.76 132.08) (xy 121.92 132.08)) (stroke (width 0) (type default)) (uuid 81235664-86b0-5624-b316-3a7a8f99255a))(global_label "SERVO_PWM_7" (shape bidirectional) (at 121.92 132.08 180) (effects (font (size 1 1)) (justify right)) (uuid f9e677f2-4a50-5dc3-b30d-a932f63e808c))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 375.91999999999996 129.54 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 8cc68e01-43c3-5bb1-8ec8-0bbd4d37534d) (property "Reference" "J808" (at 375.91999999999996 119.38 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH7: Right gripper" (at 375.91999999999996 121.92 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 375.91999999999996 129.54 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 375.91999999999996 129.54 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J808") (unit 1)))))(wire (pts (xy 370.84 127.0) (xy 360.68 127.0)) (stroke (width 0) (type default)) (uuid f1594c34-d941-5039-90ac-8af46c0f6d97))(global_label "GND_SYS" (shape bidirectional) (at 360.68 127.0 0) (effects (font (size 1 1)) (justify left)) (uuid 9a2ef8ca-2318-5782-a05f-03305aaa87c0))(wire (pts (xy 370.84 129.54) (xy 360.68 129.54)) (stroke (width 0) (type default)) (uuid ea39f52e-8340-57dc-ac34-ff90e29620f7))(label "SERVO_7_FUSED"  (at 360.68 129.54 0) (effects (font (size 1 1)) (justify left)) (uuid 9cc453be-d97e-59de-b9b6-3dffc748e559))(wire (pts (xy 370.84 132.08) (xy 360.68 132.08)) (stroke (width 0) (type default)) (uuid 3c5d1b6a-1b2e-543c-8733-c8967839d6ea))(global_label "SERVO_PWM_7" (shape bidirectional) (at 360.68 132.08 0) (effects (font (size 1 1)) (justify left)) (uuid 0b458cc0-dac2-5aa4-9697-24fae4d3da40))(symbol (lib_id "Device:Fuse") (at 332.73999999999995 144.78 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid df7a47e0-25aa-58ef-89fe-9530097729e9) (property "Reference" "F808" (at 332.73999999999995 137.16 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 332.73999999999995 139.7 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 332.73999999999995 144.78 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 332.73999999999995 144.78 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F808") (unit 1)))))(wire (pts (xy 328.93 144.78) (xy 298.45 144.78)) (stroke (width 0) (type default)) (uuid 96ffdabb-e87d-5441-bd69-5b0f6aadf824))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 298.45 144.78 0) (effects (font (size 1 1)) (justify left)) (uuid 31925b11-0048-56ea-abb9-24d732a3785c))(wire (pts (xy 336.55 144.78) (xy 353.05999999999995 144.78)) (stroke (width 0) (type default)) (uuid eedd64ab-c1f1-540e-acfa-de19e9af08df))(wire (pts (xy 353.05999999999995 144.78) (xy 353.05999999999995 129.54)) (stroke (width 0) (type default)) (uuid 7156e068-c779-5435-b0b5-25fd2424359c))(wire (pts (xy 353.05999999999995 129.54) (xy 370.84 129.54)) (stroke (width 0) (type default)) (uuid 59a070d3-2b7b-51e4-a34d-4e21b4f5897c))(wire (pts (xy 111.76 137.16) (xy 121.92 137.16)) (stroke (width 0) (type default)) (uuid 20a9d560-b0cc-5767-8808-7e19dfe64cb9))(global_label "SERVO_PWM_8" (shape bidirectional) (at 121.92 137.16 180) (effects (font (size 1 1)) (justify right)) (uuid 7afea4e6-e6f0-53a2-afcb-5556393a28b8))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 375.91999999999996 170.18 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e27f3bb3-79cf-5b61-9600-ac4206f49384) (property "Reference" "J809" (at 375.91999999999996 160.01999999999998 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH8: Camera pan" (at 375.91999999999996 162.55999999999997 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 375.91999999999996 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 375.91999999999996 170.18 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J809") (unit 1)))))(wire (pts (xy 370.84 167.64) (xy 360.68 167.64)) (stroke (width 0) (type default)) (uuid 5ac4be57-84d2-5108-a2fb-2fdb950a5bea))(global_label "GND_SYS" (shape bidirectional) (at 360.68 167.64 0) (effects (font (size 1 1)) (justify left)) (uuid 6114189e-1491-5293-a5f3-1e131e6e8cd2))(wire (pts (xy 370.84 170.18) (xy 360.68 170.18)) (stroke (width 0) (type default)) (uuid 8bb5c94c-d9bc-5130-b6b1-4153fa20812d))(label "SERVO_8_FUSED"  (at 360.68 170.18 0) (effects (font (size 1 1)) (justify left)) (uuid 2beab0ed-53d3-5dc4-8ff2-a68de658b77c))(wire (pts (xy 370.84 172.72) (xy 360.68 172.72)) (stroke (width 0) (type default)) (uuid 692421c8-b468-5145-9fd2-bd8ef2ecf44c))(global_label "SERVO_PWM_8" (shape bidirectional) (at 360.68 172.72 0) (effects (font (size 1 1)) (justify left)) (uuid daa02572-de6d-5536-ad88-1e738e5c40d4))(symbol (lib_id "Device:Fuse") (at 332.73999999999995 185.42000000000002 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 70da2f9e-76e8-5eeb-a48d-99ffccb9d872) (property "Reference" "F809" (at 332.73999999999995 177.79999999999998 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 332.73999999999995 180.33999999999997 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 332.73999999999995 185.42000000000002 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 332.73999999999995 185.42000000000002 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F809") (unit 1)))))(wire (pts (xy 328.93 185.42) (xy 298.45 185.42)) (stroke (width 0) (type default)) (uuid 0eb3e912-5744-5055-baf8-13f7df34d1a7))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 298.45 185.42 0) (effects (font (size 1 1)) (justify left)) (uuid 50e165a1-79c0-5795-8212-c00018ed276a))(wire (pts (xy 336.55 185.42) (xy 353.05999999999995 185.42)) (stroke (width 0) (type default)) (uuid 3a07836d-8afb-50b6-b9e8-0a89624664d2))(wire (pts (xy 353.05999999999995 185.42) (xy 353.05999999999995 170.18)) (stroke (width 0) (type default)) (uuid 5a9f5917-2a46-5165-9445-4e2f041770cc))(wire (pts (xy 353.05999999999995 170.18) (xy 370.84 170.18)) (stroke (width 0) (type default)) (uuid 2be5bf68-8cf0-5c2e-bb8c-0bd52d52c90c))(wire (pts (xy 111.76 142.24) (xy 121.92 142.24)) (stroke (width 0) (type default)) (uuid 0bbb8923-554f-5ff9-a445-d2513772d005))(global_label "SERVO_PWM_9" (shape bidirectional) (at 121.92 142.24 180) (effects (font (size 1 1)) (justify right)) (uuid 90b7719c-b196-5c1f-84ff-4e5eb4a7e797))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 375.91999999999996 210.82 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 7262b034-b11a-5c8c-946b-7f81b08c0fdc) (property "Reference" "J810" (at 375.91999999999996 200.66 0) (effects (font (size 1.27 1.27)) )) (property "Value" "CH9: Camera tilt" (at 375.91999999999996 203.2 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 375.91999999999996 210.82 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 375.91999999999996 210.82 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "J810") (unit 1)))))(wire (pts (xy 370.84 208.28) (xy 360.68 208.28)) (stroke (width 0) (type default)) (uuid f8c0df6e-ee04-5f53-a9fc-e10887a50168))(global_label "GND_SYS" (shape bidirectional) (at 360.68 208.28 0) (effects (font (size 1 1)) (justify left)) (uuid b79fae45-4805-5f1b-82ec-f2bfd273bb69))(wire (pts (xy 370.84 210.82) (xy 360.68 210.82)) (stroke (width 0) (type default)) (uuid 6ada69c6-d733-5474-99aa-103876cde7fb))(label "SERVO_9_FUSED"  (at 360.68 210.82 0) (effects (font (size 1 1)) (justify left)) (uuid ab2bb141-fad7-5d49-8fcf-cc7a597989e3))(wire (pts (xy 370.84 213.36) (xy 360.68 213.36)) (stroke (width 0) (type default)) (uuid 01fd88aa-ffd7-5fe1-be9e-a9d583a40a4e))(global_label "SERVO_PWM_9" (shape bidirectional) (at 360.68 213.36 0) (effects (font (size 1 1)) (justify left)) (uuid f7e38d23-39ca-5927-a30d-9c92566d2971))(symbol (lib_id "Device:Fuse") (at 332.73999999999995 226.06 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e0edf122-5efa-5c26-a897-474c2e6d440a) (property "Reference" "F810" (at 332.73999999999995 218.44 90) (effects (font (size 1.27 1.27)) )) (property "Value" "TBD" (at 332.73999999999995 220.98 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 332.73999999999995 226.06 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 332.73999999999995 226.06 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/31f98e65-47ee-5ead-9ee8-bc80cce2788f" (reference "F810") (unit 1)))))(wire (pts (xy 328.93 226.06) (xy 298.45 226.06)) (stroke (width 0) (type default)) (uuid 903bb13a-22a7-5539-bc24-1f78b5852d95))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 298.45 226.06 0) (effects (font (size 1 1)) (justify left)) (uuid e567419f-3837-5e9c-b8e6-76a453a750ef))(wire (pts (xy 336.55 226.06) (xy 353.05999999999995 226.06)) (stroke (width 0) (type default)) (uuid eb04087e-0a7c-50b6-ad88-390877795910))(wire (pts (xy 353.05999999999995 226.06) (xy 353.05999999999995 210.82)) (stroke (width 0) (type default)) (uuid edb0e038-5d9a-5945-a511-81b4ac91f38b))(wire (pts (xy 353.05999999999995 210.82) (xy 370.84 210.82)) (stroke (width 0) (type default)) (uuid ed065a40-6b0f-58b0-95e0-6b909f966083))(text "A801 V+ stays unconnected.\nOnly PWM signals come from this board.\nHigh-current power uses separate\nfused distribution and return wiring." (at 20 177 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 2c9764c5-b961-5dea-b666-05dfd53d8360))(text "J801-J810: OUR harness convention\n1=GND, 2=fused power, 3=signal.\nConfirm actual servo plug orientation.\nCH10-15 unused; not represented." (at 20 208 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 7728c0a9-a28d-565f-8823-fd5165290a01))(text "Candidate PWM servos: FT5335M arm joints; FT5121M grippers/pan/tilt. Mechanical sizing is not approved." (at 20 246 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 288f810f-66d2-5509-bfd9-5d8d2f6d2faa))(text "Rail must suit final servos (candidate range 6-7.4V), never raw 6S or 12V. Fuse/cable ratings TBD from measured demand." (at 20 254 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 3f89aac5-5a99-5695-a5a9-3ae8ef6f4e34))(text "Power removal may let arms fall. Complete hardware stop, restraints/braking, startup bias and pulse calibration before operation." (at 20 262 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 2eaf39e0-2edc-5b70-ba78-de9225a79f37)) (embedded_fonts no))

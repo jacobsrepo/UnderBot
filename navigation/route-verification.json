@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "requested_goal": [
+    2.037,
+    3.081
+  ],
+  "actual_pose": [
+    2.026429302020062,
+    3.06463958772908
+  ],
+  "arrival_error_cm": 1.9478263409696561,
+  "published_path_points": 2,
+  "old_cardinal_length_metres": 5.0,
+  "new_direct_length_metres": 3.5550428970688945,
+  "observed_travel_metres": 3.5357172614230032,
+  "improvement_percent": 28.899142058622107,
+  "far_goal_shortcut_points": 3,
+  "hardware_enabled": false
+}

@@ -1,0 +1,416 @@
+{
+  "scope": "URDF-only static, no-load, level-ground model audit; no simulator execution",
+  "urdf_sha256": "805ae58b87af3d3030c201def6d7126b09fd0e907e6bebbdabf9e0db6059e3c7",
+  "gravity_m_s2": 9.80665,
+  "mass_kg": 19.601007799999998,
+  "samples": {
+    "arm_pose_count": 2000,
+    "caster_grid_angles": 720,
+    "arm_sequence": "zero, 28 targeted limit probes, Halton indices 32 onward in 12 prime bases",
+    "caster_coverage": "full [0,2*pi) plus analytic derivative bound between grid angles"
+  },
+  "zero_pose": {
+    "com_m": [
+      -0.06396505523088457,
+      4.1018299069295336e-05,
+      0.29820547138487036
+    ],
+    "independent_holding_Nm": {
+      "left_wheel_joint": 0.0,
+      "right_wheel_joint": 0.0,
+      "caster_swivel_joint": 0.0,
+      "caster_wheel_joint": 0.0,
+      "left_arm_base_joint": -4.2580082220645005e-17,
+      "left_shoulder_joint": 0.7384242418592226,
+      "left_elbow_joint": 0.43244450354329644,
+      "left_wrist_pitch_joint": 0.07901283754333571,
+      "left_wrist_roll_joint": -2.790746070788804e-18,
+      "left_gripper_left_joint": -0.00203827392623792,
+      "right_arm_base_joint": -1.8321792401264535e-17,
+      "right_shoulder_joint": 0.7384242418592226,
+      "right_elbow_joint": 0.43244450354329644,
+      "right_wrist_pitch_joint": 0.07901283754333571,
+      "right_wrist_roll_joint": -2.7755082597732746e-18,
+      "right_gripper_left_joint": -0.00203827392623792
+    }
+  },
+  "com_range_at_zero_caster_m": {
+    "min": [
+      -0.06950583168500549,
+      -0.002870265014887521,
+      0.2956336035283632
+    ],
+    "max": [
+      -0.05708236927288485,
+      0.0029071835278067257,
+      0.30392130908542675
+    ]
+  },
+  "actuators": {
+    "left_wheel_joint": {
+      "urdf_effort_Nm": 2.5,
+      "maximum_absolute_holding_torque_Nm": 0.0,
+      "samples_exceeding_effort": 0,
+      "worst_pose": null
+    },
+    "right_wheel_joint": {
+      "urdf_effort_Nm": 2.5,
+      "maximum_absolute_holding_torque_Nm": 0.0,
+      "samples_exceeding_effort": 0,
+      "worst_pose": null
+    },
+    "left_arm_base_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.6614957153288293,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "limit_probe_0",
+        "joint_positions_rad": {
+          "left_arm_base_joint": -0.785398163397,
+          "left_shoulder_joint": -0.349065850399,
+          "left_elbow_joint": -0.349065850399,
+          "left_wrist_pitch_joint": -0.523598775598,
+          "left_wrist_roll_joint": -1.57079632679,
+          "left_gripper_left_joint": 0.0,
+          "right_arm_base_joint": -0.785398163397,
+          "right_shoulder_joint": -0.349065850399,
+          "right_elbow_joint": -0.349065850399,
+          "right_wrist_pitch_joint": -0.523598775598,
+          "right_wrist_roll_joint": -1.57079632679,
+          "right_gripper_left_joint": 0.0
+        }
+      }
+    },
+    "left_shoulder_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.9426296559942181,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_566",
+        "joint_positions_rad": {
+          "left_arm_base_joint": -0.12118448224289646,
+          "left_shoulder_joint": 0.3423622538206927,
+          "left_elbow_joint": -0.11002555604576478,
+          "left_wrist_pitch_joint": 0.45076162813871956,
+          "left_wrist_roll_joint": 0.04838666371028566,
+          "left_gripper_left_joint": 0.3380974055530269,
+          "right_arm_base_joint": -0.23611501879449803,
+          "right_shoulder_joint": 0.22153136707783166,
+          "right_elbow_joint": 0.07726097929847192,
+          "right_wrist_pitch_joint": 0.041713576652872786,
+          "right_wrist_roll_joint": -0.7012191718968888,
+          "right_gripper_left_joint": 0.18495252008765523
+        }
+      }
+    },
+    "left_elbow_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.4865344646322637,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_1217",
+        "joint_positions_rad": {
+          "left_arm_base_joint": 0.01917475984855954,
+          "left_shoulder_joint": 0.11858981565910243,
+          "left_elbow_joint": 0.03540923986447453,
+          "left_wrist_pitch_joint": 0.4913236324124506,
+          "left_wrist_roll_joint": 0.45200224880583795,
+          "left_gripper_left_joint": 0.3782430587164315,
+          "right_arm_base_joint": 0.15618440985932625,
+          "right_shoulder_joint": -0.29847954695876006,
+          "right_elbow_joint": 0.29639182218065824,
+          "right_wrist_pitch_joint": 0.5024736292128087,
+          "right_wrist_roll_joint": -0.7338045879606738,
+          "right_gripper_left_joint": 0.5491599707815924
+        }
+      }
+    },
+    "left_wrist_pitch_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.14670492108058744,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_1889",
+        "joint_positions_rad": {
+          "left_arm_base_joint": 0.042184471666831036,
+          "left_shoulder_joint": 0.3305511550874846,
+          "left_elbow_joint": 0.26596025273600604,
+          "left_wrist_pitch_joint": 0.449453176387954,
+          "left_wrist_roll_joint": 0.8794356594971404,
+          "left_gripper_left_joint": 0.19472007282658169,
+          "right_arm_base_joint": -0.5497627282561129,
+          "right_shoulder_joint": -0.04687121274493061,
+          "right_elbow_joint": -0.24067670082988502,
+          "right_wrist_pitch_joint": -0.37035558972656113,
+          "right_wrist_roll_joint": 1.4630219086113971,
+          "right_gripper_left_joint": 0.038580143328134565
+        }
+      }
+    },
+    "left_wrist_roll_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.006593647662171242,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_188",
+        "joint_positions_rad": {
+          "left_arm_base_joint": -0.4111068511531172,
+          "left_shoulder_joint": 0.32895506066407815,
+          "left_elbow_joint": 0.13795082407768489,
+          "left_wrist_pitch_joint": 0.49001518066168503,
+          "left_wrist_roll_joint": -1.1270552156907965,
+          "left_gripper_left_joint": 0.28074647246244877,
+          "right_arm_base_joint": -0.6332102839844325,
+          "right_shoulder_joint": 0.2929832483958365,
+          "right_elbow_joint": -0.21709388427461437,
+          "right_wrist_pitch_joint": -0.01058404183729611,
+          "right_wrist_roll_joint": -1.3484984074940167,
+          "right_gripper_left_joint": 0.0508400292184076
+        }
+      }
+    },
+    "left_gripper_left_joint": {
+      "urdf_effort_Nm": 0.3,
+      "maximum_absolute_holding_torque_Nm": 0.003405829972298904,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_337",
+        "joint_positions_rad": {
+          "left_arm_base_joint": 0.06442719309116018,
+          "left_shoulder_joint": -0.009097738213417028,
+          "left_elbow_joint": 0.00502654824574561,
+          "left_wrist_pitch_joint": -0.2274525293414053,
+          "left_wrist_roll_joint": 0.6408282535289032,
+          "left_gripper_left_joint": 0.5967228038233956,
+          "right_arm_base_joint": 0.5193890968607475,
+          "right_shoulder_joint": 0.19822298983876724,
+          "right_elbow_joint": 0.12471350798754444,
+          "right_wrist_pitch_joint": 0.14008290667009515,
+          "right_wrist_roll_joint": 1.1981204032643809,
+          "right_gripper_left_joint": 0.06880934989043097
+        }
+      }
+    },
+    "right_arm_base_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.6614957153288293,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "limit_probe_0",
+        "joint_positions_rad": {
+          "left_arm_base_joint": -0.785398163397,
+          "left_shoulder_joint": -0.349065850399,
+          "left_elbow_joint": -0.349065850399,
+          "left_wrist_pitch_joint": -0.523598775598,
+          "left_wrist_roll_joint": -1.57079632679,
+          "left_gripper_left_joint": 0.0,
+          "right_arm_base_joint": -0.785398163397,
+          "right_shoulder_joint": -0.349065850399,
+          "right_elbow_joint": -0.349065850399,
+          "right_wrist_pitch_joint": -0.523598775598,
+          "right_wrist_roll_joint": -1.57079632679,
+          "right_gripper_left_joint": 0.0
+        }
+      }
+    },
+    "right_shoulder_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.9440585084953886,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_721",
+        "joint_positions_rad": {
+          "left_arm_base_joint": 0.06902913545481448,
+          "left_shoulder_joint": -0.039742751142821664,
+          "left_elbow_joint": -0.08075987514831262,
+          "left_wrist_pitch_joint": -0.4158695814516394,
+          "left_wrist_roll_joint": 0.4142370478612245,
+          "left_gripper_left_joint": 0.2886663632225762,
+          "right_arm_base_joint": -0.09447797976137329,
+          "right_shoulder_joint": 0.3472337508780255,
+          "right_elbow_joint": -0.09562229632447339,
+          "right_wrist_pitch_joint": 0.4090420874766777,
+          "right_wrist_roll_joint": -0.684873736654537,
+          "right_gripper_left_joint": 0.30021913805697586
+        }
+      }
+    },
+    "right_elbow_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.48730942968275986,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_637",
+        "joint_positions_rad": {
+          "left_arm_base_joint": 0.3819612161833066,
+          "left_shoulder_joint": 0.08666792719097255,
+          "left_elbow_joint": -0.013739231871704616,
+          "left_wrist_pitch_joint": -0.5048443005036943,
+          "left_wrist_roll_joint": 1.3489257712403981,
+          "left_gripper_left_joint": 0.03632225762403278,
+          "right_arm_base_joint": -0.029254602870272928,
+          "right_shoulder_joint": 0.045548029757560116,
+          "right_elbow_joint": 0.1419272426994208,
+          "right_wrist_pitch_joint": 0.5136373244570154,
+          "right_wrist_roll_joint": 0.21739428872327782,
+          "right_gripper_left_joint": 0.13718042366691016
+        }
+      }
+    },
+    "right_wrist_pitch_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.14636837338996583,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_1215",
+        "joint_positions_rad": {
+          "left_arm_base_joint": 0.7677573843363252,
+          "left_shoulder_joint": -0.3468313182062309,
+          "left_elbow_joint": -0.24384344045472547,
+          "left_wrist_pitch_joint": 0.19212433207073631,
+          "left_wrist_roll_joint": -0.11919641548143489,
+          "left_gripper_left_joint": 0.2859353664087392,
+          "right_arm_base_joint": -0.028615157998791663,
+          "right_shoulder_joint": 0.3242307235591236,
+          "right_elbow_joint": 0.23568471776344085,
+          "right_wrist_pitch_joint": 0.4302531084406709,
+          "right_wrist_roll_joint": -0.936487984965835,
+          "right_gripper_left_joint": 0.51672753834916
+        }
+      }
+    },
+    "right_wrist_roll_joint": {
+      "urdf_effort_Nm": 1.0,
+      "maximum_absolute_holding_torque_Nm": 0.006615829087804977,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_985",
+        "joint_positions_rad": {
+          "left_arm_base_joint": 0.17027186745520895,
+          "left_shoulder_joint": -0.0116514892908674,
+          "left_elbow_joint": -0.26841767632281505,
+          "left_wrist_pitch_joint": 0.24359010093417988,
+          "left_wrist_roll_joint": 0.18764584219354608,
+          "left_gripper_left_joint": 0.49840691852526176,
+          "right_arm_base_joint": 0.7265692352207134,
+          "right_shoulder_joint": 0.26417857259384875,
+          "right_elbow_joint": 0.25278369424390473,
+          "right_wrist_pitch_joint": 0.49251217807182424,
+          "right_wrist_roll_joint": 0.8615098916928541,
+          "right_gripper_left_joint": 0.38436815193571955
+        }
+      }
+    },
+    "right_gripper_left_joint": {
+      "urdf_effort_Nm": 0.3,
+      "maximum_absolute_holding_torque_Nm": 0.0035663063266760248,
+      "samples_exceeding_effort": 0,
+      "worst_pose": {
+        "label": "halton_1368",
+        "joint_positions_rad": {
+          "left_arm_base_joint": -0.6220292094872725,
+          "left_shoulder_joint": -0.27500706915293877,
+          "left_elbow_joint": 0.17637599288960676,
+          "left_wrist_pitch_joint": 0.07305522275107457,
+          "left_wrist_roll_joint": -0.35029369626182283,
+          "left_gripper_left_joint": 0.14419663177059627,
+          "right_arm_base_joint": 0.020302374669533663,
+          "right_shoulder_joint": -0.31975225806340823,
+          "right_elbow_joint": 0.0020943377232782723,
+          "right_wrist_pitch_joint": -0.32059127131103915,
+          "right_wrist_roll_joint": -1.1228259467286446,
+          "right_gripper_left_joint": 0.5995617238860482
+        }
+      }
+    }
+  },
+  "individual_coordinate_maximum_absolute_holding_Nm": {
+    "left_wheel_joint": 0.0,
+    "right_wheel_joint": 0.0,
+    "caster_swivel_joint": 0.0,
+    "caster_wheel_joint": 0.0,
+    "left_arm_base_joint": 0.6614957153288293,
+    "left_shoulder_joint": 0.9426296559942181,
+    "left_elbow_joint": 0.4865344646322637,
+    "left_wrist_pitch_joint": 0.14670492108058744,
+    "left_wrist_roll_joint": 0.006593647662171242,
+    "left_gripper_left_joint": 0.0050365785895638854,
+    "left_gripper_right_joint": 0.005012809117532837,
+    "right_arm_base_joint": 0.6614957153288293,
+    "right_shoulder_joint": 0.9440585084953886,
+    "right_elbow_joint": 0.48730942968275986,
+    "right_wrist_pitch_joint": 0.14636837338996583,
+    "right_wrist_roll_joint": 0.006615829087804977,
+    "right_gripper_left_joint": 0.005026011869592607,
+    "right_gripper_right_joint": 0.005011104959647028
+  },
+  "effort_status": "WITHIN_PROVISIONAL_LIMITS_IN_SAMPLES",
+  "support": {
+    "status": "POSITIVE_FOR_SAMPLED_ARM_POSES_AT_ALL_CASTER_ANGLES",
+    "minimum_sampled_margin_m": 0.10169386889953784,
+    "minimum_continuous_angle_lower_bound_m": 0.10164750846528418,
+    "arm_poses_without_positive_continuous_angle_bound": 0,
+    "worst_sampled_case": {
+      "sampled_margin_m": 0.10169386889953784,
+      "continuous_angle_lower_bound_m": 0.10164750846528418,
+      "angular_discretization_bound_m": 4.6360434253662695e-05,
+      "caster_angle_rad": 1.0995574287564276,
+      "edge": "caster_to_left_rear",
+      "com_at_sampled_minimum_m": [
+        -0.05960461709642391,
+        0.002304792083958143,
+        0.29955785616427516
+      ],
+      "contacts_at_sampled_minimum_m": [
+        [
+          -0.18,
+          -0.177,
+          0.0
+        ],
+        [
+          0.20592019000520906,
+          -0.017820130483767346,
+          0.0
+        ],
+        [
+          -0.18,
+          0.177,
+          0.0
+        ]
+      ],
+      "arm_pose": {
+        "label": "halton_1292",
+        "joint_positions_rad": {
+          "left_arm_base_joint": -0.48703890015341306,
+          "left_shoulder_joint": 0.2651112837278184,
+          "left_elbow_joint": 0.019994491910854728,
+          "left_wrist_pitch_joint": 0.13411630445346534,
+          "left_wrist_roll_joint": 0.06254861406451573,
+          "left_gripper_left_joint": 0.26108329540282205,
+          "right_arm_base_joint": -0.7406370223933036,
+          "right_shoulder_joint": -0.3274877893741894,
+          "right_elbow_joint": -0.21433968672071413,
+          "right_wrist_pitch_joint": 0.07288604875785021,
+          "right_wrist_roll_joint": 0.5901756666698152,
+          "right_gripper_left_joint": 0.5662527392257122
+        }
+      }
+    }
+  },
+  "validation": {
+    "finite_difference_coordinates_checked": 72,
+    "maximum_gravity_gradient_error_Nm": 1.1733794713641998e-08,
+    "caster_circle_full_fk_checks": 113,
+    "maximum_caster_circle_COM_error_m": 1.4010586580432063e-17,
+    "maximum_caster_circle_contact_error_m": 2.964296775167217e-17
+  },
+  "limitations": [
+    "All mass/COM, arm geometry, motor limits and contact dimensions inherit the model's unmeasured hardware assumptions. Positive numerical results cannot verify actual hardware.",
+    "Arm-space sampling does not prove extrema across every allowed simultaneous pose. Limit probes and Halton points improve coverage but are not a continuous workspace bound.",
+    "No payload, inertial acceleration, slopes, traction, braking, servo friction, gearbox efficiency, cable loads, battery sag, thermal duty, collision validity, or control tracking is included.",
+    "Support uses the centers of three ideal tire contacts on a rigid level plane. No suspension, tire deformation or uneven-ground model is used.",
+    "Holding torque is a static actuator-input requirement. Mimic coupling uses ideal, unit-efficiency virtual work; real linkage transmission is unmeasured.",
+    "Passive caster moments are reported as coordinates and are not interpreted as commanded actuator capacities.",
+    "No Gazebo, Isaac Sim, Isaac Lab, RViz, ros2_control, USD importer, or hardware test is performed by this script."
+  ]
+}

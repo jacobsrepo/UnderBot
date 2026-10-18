@@ -1,0 +1,13 @@
+# Preserve exact package bytes so validation checksums survive any checkout.
+*.md text eol=lf
+*.py text eol=lf
+underbot_description/** -text
+underbot_flat.urdf -text
+underbot_standalone.urdf -text
+*.stl binary
+*.png binary
+*.zip binary
+final_exports/** -text
+*.glb binary
+*.blend binary
+*.obj binary

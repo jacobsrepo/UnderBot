@@ -1,0 +1,4400 @@
+(export
+	(version "E")
+	(design
+		(source "D:\\gitdemo\\Underbot\\.publish-underbot\\hardware\\electrical\\UnderBot-Schematic\\UnderBot.kicad_sch")
+		(date "2026-10-02T08:47:43")
+		(tool "Eeschema 10.0.6")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title "UnderBot - electrical integration schematic")
+				(company)
+				(rev "0.3 REVIEW")
+				(date "2026-10-01")
+				(source "UnderBot.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "2")
+			(name "/01 - Battery input, isolation and Kelvin shunt/")
+			(tstamps "/f083c98a-a7b3-519e-b03a-d847f962bacf/")
+			(title_block
+				(title "01 - Battery input, isolation and Kelvin shunt")
+				(company "UnderBot")
+				(rev "0.3 REVIEW")
+				(date "2026-10-01")
+				(source "01_Battery.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "3")
+			(name "/02 - INA228 current / voltage monitor circuit/")
+			(tstamps "/7ded7016-bfe0-5801-953a-913d62006471/")
+			(title_block
+				(title "02 - INA228 current / voltage monitor circuit")
+				(company "UnderBot")
+				(rev "0.3 REVIEW")
+				(date "2026-10-01")
+				(source "02_Monitor.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "4")
+			(name "/03 - Fused converter harnesses and power outputs/")
+			(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			(title_block
+				(title "03 - Fused converter harnesses and power outputs")
+				(company "UnderBot")
+				(rev "0.3 REVIEW")
+				(date "2026-10-01")
+				(source "03_Rails.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "5")
+			(name "/04 - Controller and sensor harness / temperature circuit/")
+			(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			(title_block
+				(title "04 - Controller and sensor harness / temperature circuit")
+				(company "UnderBot")
+				(rev "0.3 REVIEW")
+				(date "2026-10-01")
+				(source "04_Control.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "6")
+			(name "/05 - Actuator power and external safety interfaces - HOLD/")
+			(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			(title_block
+				(title "05 - Actuator power and external safety interfaces - HOLD")
+				(company "UnderBot")
+				(rev "0.3 REVIEW")
+				(date "2026-10-01")
+				(source "05_Actuators.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "7")
+			(name "/06 - Single-source external charger input - prototype/")
+			(tstamps "/dc7eb8ff-9193-5e3a-af2b-709d6c81bce7/")
+			(title_block
+				(title "06 - Single-source external charger input - prototype")
+				(company "UnderBot")
+				(rev "0.3 REVIEW")
+				(date "2026-10-01")
+				(source "06_Charge.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "F101")
+			(value "25A candidate - verify")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - Battery input, isolation and Kelvin shunt")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Battery.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/01 - Battery input, isolation and Kelvin shunt/")
+				(tstamps "/f083c98a-a7b3-519e-b03a-d847f962bacf/")
+			)
+			(tstamps "d51cd96a-0f75-5608-970d-12b2844d6d2c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J101")
+			(value "BMS protected output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - Battery input, isolation and Kelvin shunt")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Battery.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/01 - Battery input, isolation and Kelvin shunt/")
+				(tstamps "/f083c98a-a7b3-519e-b03a-d847f962bacf/")
+			)
+			(tstamps "e749bd3d-df9e-587e-8ffb-8a02e5208d83")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J102")
+			(value "Switched bus service output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - Battery input, isolation and Kelvin shunt")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Battery.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/01 - Battery input, isolation and Kelvin shunt/")
+				(tstamps "/f083c98a-a7b3-519e-b03a-d847f962bacf/")
+			)
+			(tstamps "b7d40d1c-e39e-5063-b4ed-1ce28aec76d0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R101")
+			(value "1mR Kelvin - rating TBD")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Shunt")
+				(description "Shunt resistor with Kelvin connections")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - Battery input, isolation and Kelvin shunt")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Battery.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res shunt resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*Shunt*")
+			)
+			(sheetpath
+				(names "/01 - Battery input, isolation and Kelvin shunt/")
+				(tstamps "/f083c98a-a7b3-519e-b03a-d847f962bacf/")
+			)
+			(tstamps "fa3fddf5-4607-5121-bba2-bb54e5567785")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "SW101")
+			(value "DC-rated isolator")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Switch")
+				(part "SW_SPST")
+				(description "Single Pole Single Throw (SPST) switch")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - Battery input, isolation and Kelvin shunt")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Battery.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "switch lever")
+			)
+			(sheetpath
+				(names "/01 - Battery input, isolation and Kelvin shunt/")
+				(tstamps "/f083c98a-a7b3-519e-b03a-d847f962bacf/")
+			)
+			(tstamps "e2854d0c-6969-5081-9406-7ae319b8c2e9")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C101")
+			(value "100nF / 10V")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - INA228 current / voltage monitor circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Monitor.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/02 - INA228 current / voltage monitor circuit/")
+				(tstamps "/7ded7016-bfe0-5801-953a-913d62006471/")
+			)
+			(tstamps "e304c9a7-0136-52bb-bd19-dacfe57ac1ae")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R102")
+			(value "10k")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - INA228 current / voltage monitor circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Monitor.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/02 - INA228 current / voltage monitor circuit/")
+				(tstamps "/7ded7016-bfe0-5801-953a-913d62006471/")
+			)
+			(tstamps "38048871-2f2c-5dc4-85e7-e974189bd2c3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U101")
+			(value "INA228")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Sensor_Energy")
+				(part "INA228")
+				(description "High-Side or Low-Side Measurement, Bi-Directional Current and Power Monitor (0-85V) with I2C, SMBus-, and PMBus-Compatible Interface, TSSOP-10 (Texas DGS0010A / VSSOP)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - INA228 current / voltage monitor circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Monitor.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "ADC I2C 20-Bit Oversampling Current Shunt")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*TSSOP*3x3mm?P0.5mm*")
+			)
+			(sheetpath
+				(names "/02 - INA228 current / voltage monitor circuit/")
+				(tstamps "/7ded7016-bfe0-5801-953a-913d62006471/")
+			)
+			(tstamps "504a370a-e0e0-50de-ae4c-0f2ce9e8a553")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F201")
+			(value "Rating TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "e64142cb-37c0-55a4-9156-68f65cb42670")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F202")
+			(value "Rating TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "e65485ba-ec11-5b60-b8c5-6a418275ceb7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F203")
+			(value "Rating TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "72e4cf96-b08c-5fd1-af3b-dbc736d24d0c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J211")
+			(value "TO PI converter VIN/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "f9b24203-c9cd-5933-b8ea-37f8fcc3acf8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J212")
+			(value "FROM PI VOUT/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "169f15a5-28c2-5270-b24e-e67922c9c49e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J213")
+			(value "PI load output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "d6f09b80-fba4-509d-b476-f07e71b8f4f2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J221")
+			(value "TO KINECT converter VIN/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "a7264821-1731-5d0c-81d2-cd1e70a018d1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J222")
+			(value "FROM KINECT VOUT/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "e966ed1a-5f9f-5caf-b8bb-ddeb26f826d8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J223")
+			(value "KINECT load output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "10d016d6-c1f2-59da-9fd9-a2a600d8708c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J231")
+			(value "TO AUX converter VIN/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "4a8d799d-4d1c-5bd8-9a97-4829623ca8ad")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J232")
+			(value "FROM AUX VOUT/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "efb05c75-641a-55ef-8a87-831ed2bb8308")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J233")
+			(value "AUX load output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "081108ff-7d34-510d-b127-1a4ed41c9098")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J241")
+			(value "TO 3.3V regulator VIN/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "dda4fe2a-56bd-542a-acad-39fa30cc1d7c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J242")
+			(value "FROM 3.3V regulator VOUT/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - Fused converter harnesses and power outputs")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_Rails.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/03 - Fused converter harnesses and power outputs/")
+				(tstamps "/db0328c5-0c74-547d-a9b9-46d81ad5cfbb/")
+			)
+			(tstamps "e8988c02-1375-59e6-973b-a6ae8f792ec7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C301")
+			(value "100nF")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "55f508b9-a583-5ff1-a13e-f70494794541")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J301")
+			(value "ESP32 signal harness - GPIO mapping TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x08")
+				(description "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "3f33f32e-0ba6-5f5d-8bf2-96723ac4b933")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J302")
+			(value "Adafruit 2717 mux - 0x77")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x04")
+				(description "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "44176448-d279-5673-b391-f27323ae3f82")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J303")
+			(value "Body: Adafruit 4554 / channel 0")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x04")
+				(description "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "1afb007c-4213-5f69-ba3b-3ec91d3ba4af")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J304")
+			(value "Head: Adafruit 4554 / channel 1")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x04")
+				(description "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "e3397902-13c5-5314-87dc-0c494c3e766a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J305")
+			(value "Mux channels 0 / 1 outputs")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x04")
+				(description "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "568a5b6b-ec84-57df-9da1-499fd63ca3bd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J306")
+			(value "External 10k NTC")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "53cf4238-f66b-578b-934b-050d4b294b15")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R301")
+			(value "4k7 - DNP if already fitted")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "dnp")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "3a68f6fb-193e-5066-af10-299111bd628c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R302")
+			(value "4k7 - DNP if already fitted")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "dnp")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "43f0a0b1-b5c6-524d-ac85-fd42cc5ae09a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R303")
+			(value "10k / 1% candidate")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Controller and sensor harness / temperature circuit")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Control.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/04 - Controller and sensor harness / temperature circuit/")
+				(tstamps "/1eef3790-15e5-5c33-8b76-0d24d3b98896/")
+			)
+			(tstamps "ddf7720b-15ff-5fab-944d-b3db4bdc7f42")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F401")
+			(value "Actuator branch - TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "27125bf6-08da-560d-97a8-890bf0fee05a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J401")
+			(value "TO external NO contactor LINE")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "8ebe465e-37c6-54d8-9b95-d9e50fbc2f30")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J402")
+			(value "FROM contactor LOAD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "e6581519-feb5-52c4-a088-8716af9f0e3b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J403")
+			(value "TO actuator converter VIN/GND")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "370dc349-c354-521b-af29-03a9cc2e3af9")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J404")
+			(value "FROM actuator converter")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "b04d1a4c-ad64-5fcc-acfd-89aba312a2bb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J405")
+			(value "TO fused servo distribution")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "d8f8290f-7e8c-50be-a06f-75c06588017b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J406")
+			(value "Safety-controller logic interface")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x03")
+				(description "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "e3d06217-184d-5ee0-a37d-3e6f7e4fa560")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J407")
+			(value "PCA9685 logic - A0 closed / 0x41")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x05")
+				(description "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "19360acd-52a3-53c7-9626-d122e055fc81")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J408")
+			(value "FROM dedicated mux channel 2")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "fdac57e3-3299-5d01-a932-14ebad19e899")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R401")
+			(value "10k candidate / DNP pending breakout")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "05 - Actuator power and external safety interfaces - HOLD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "05_Actuators.kicad_sch")
+			)
+			(property
+				(name "dnp")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/05 - Actuator power and external safety interfaces - HOLD/")
+				(tstamps "/49f9a71b-45ea-56ec-807e-d35c653f8a32/")
+			)
+			(tstamps "4f18f01a-4c0c-57ea-88c2-317e1fb017e0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F601")
+			(value "Charge cable fuse - TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "06 - Single-source external charger input - prototype")
+			)
+			(property
+				(name "Sheetfile")
+				(value "06_Charge.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/06 - Single-source external charger input - prototype/")
+				(tstamps "/dc7eb8ff-9193-5e3a-af2b-709d6c81bce7/")
+			)
+			(tstamps "494efd30-eaca-532c-b5a1-a1fa952a63ba")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J601")
+			(value "25.2V CC/CV charger input")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "06 - Single-source external charger input - prototype")
+			)
+			(property
+				(name "Sheetfile")
+				(value "06_Charge.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/06 - Single-source external charger input - prototype/")
+				(tstamps "/dc7eb8ff-9193-5e3a-af2b-709d6c81bce7/")
+			)
+			(tstamps "95ba4d76-2cfb-5e8a-bce4-49049cf4b927")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x02")
+			(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x02")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x03")
+			(description "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x03")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "Pin_3")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x04")
+			(description "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x04")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "Pin_3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "Pin_4")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x05")
+			(description "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x05")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "Pin_3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "Pin_4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "Pin_5")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x08")
+			(description "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x08")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "Pin_3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "Pin_4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "Pin_5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "Pin_6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "Pin_7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "Pin_8")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "C")
+			(description "Unpolarized capacitor")
+			(footprints
+				(fp "C_*")
+			)
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "C")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "Fuse")
+			(description "Fuse")
+			(footprints
+				(fp "*Fuse*")
+			)
+			(fields
+				(field
+					(name "Reference") "F")
+				(field
+					(name "Value") "Fuse")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Fuse")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "R")
+			(description "Resistor")
+			(footprints
+				(fp "R_*")
+			)
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "R_Shunt")
+			(description "Shunt resistor with Kelvin connections")
+			(footprints
+				(fp "R_*Shunt*")
+			)
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R_Shunt")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Shunt resistor with Kelvin connections")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Sensor_Energy")
+			(part "INA228")
+			(description "High-Side or Low-Side Measurement, Bi-Directional Current and Power Monitor (0-85V) with I2C, SMBus-, and PMBus-Compatible Interface, TSSOP-10 (Texas DGS0010A / VSSOP)")
+			(docs "https://www.ti.com/lit/ds/symlink/ina228.pdf")
+			(footprints
+				(fp "*TSSOP*3x3mm?P0.5mm*")
+			)
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "INA228")
+				(field
+					(name "Footprint") "Package_SO:TSSOP-10_3x3mm_P0.5mm")
+				(field
+					(name "Datasheet") "https://www.ti.com/lit/ds/symlink/ina228.pdf")
+				(field
+					(name "Description") "High-Side or Low-Side Measurement, Bi-Directional Current and Power Monitor (0-85V) with I2C, SMBus-, and PMBus-Compatible Interface, TSSOP-10 (Texas DGS0010A / VSSOP)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A1")
+					(type "input")
+				)
+				(pin
+					(num "2")
+					(name "A0")
+					(type "input")
+				)
+				(pin
+					(num "3")
+					(name "~{Alert}")
+					(type "open_collector")
+				)
+				(pin
+					(num "4")
+					(name "SDA")
+					(type "bidirectional")
+				)
+				(pin
+					(num "5")
+					(name "SCL")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "VS")
+					(type "power_in")
+				)
+				(pin
+					(num "7")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "8")
+					(name "Vbus")
+					(type "input")
+				)
+				(pin
+					(num "9")
+					(name "Vin-")
+					(type "input")
+				)
+				(pin
+					(num "10")
+					(name "Vin+")
+					(type "input")
+				)
+			)
+		)
+		(libpart
+			(lib "Switch")
+			(part "SW_SPST")
+			(description "Single Pole Single Throw (SPST) switch")
+			(fields
+				(field
+					(name "Reference") "SW")
+				(field
+					(name "Value") "SW_SPST")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Single Pole Single Throw (SPST) switch")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "B")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries
+		(library
+			(logical "Connector_Generic")
+			(uri "${KICAD10_SYMBOL_DIR}/Connector_Generic.kicad_sym")
+		)
+		(library
+			(logical "Device")
+			(uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym")
+		)
+		(library
+			(logical "Sensor_Energy")
+			(uri "${KICAD10_SYMBOL_DIR}/Sensor_Energy.kicad_sym")
+		)
+		(library
+			(logical "Switch")
+			(uri "${KICAD10_SYMBOL_DIR}/Switch.kicad_sym")
+		)
+	)
+	(nets
+		(net
+			(code "1")
+			(name "/03 - Fused converter harnesses and power outputs/AUX_VIN")
+			(class "Default")
+			(node
+				(ref "F203")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J231")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "2")
+			(name "/03 - Fused converter harnesses and power outputs/KINECT_12V")
+			(class "Default")
+			(node
+				(ref "J222")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J223")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "/03 - Fused converter harnesses and power outputs/KINECT_VIN")
+			(class "Default")
+			(node
+				(ref "F202")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J221")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "/03 - Fused converter harnesses and power outputs/PI_5V1")
+			(class "Default")
+			(node
+				(ref "J212")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J213")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/03 - Fused converter harnesses and power outputs/PI_VIN")
+			(class "Default")
+			(node
+				(ref "F201")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J211")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "6")
+			(name "/04 - Controller and sensor harness {slash} temperature circuit/BODY_SCL")
+			(class "Default")
+			(node
+				(ref "J303")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J305")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "7")
+			(name "/04 - Controller and sensor harness {slash} temperature circuit/BODY_SDA")
+			(class "Default")
+			(node
+				(ref "J303")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J305")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "/04 - Controller and sensor harness {slash} temperature circuit/HEAD_SCL")
+			(class "Default")
+			(node
+				(ref "J304")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J305")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "9")
+			(name "/04 - Controller and sensor harness {slash} temperature circuit/HEAD_SDA")
+			(class "Default")
+			(node
+				(ref "J304")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J305")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "/04 - Controller and sensor harness {slash} temperature circuit/TEMP_ADC")
+			(class "Default")
+			(node
+				(ref "C301")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J301")
+				(pin "8")
+				(pinfunction "Pin_8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "J306")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R303")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "/05 - Actuator power and external safety interfaces - HOLD/ACTUATOR_FEED")
+			(class "Default")
+			(node
+				(ref "F401")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J401")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "12")
+			(name "/05 - Actuator power and external safety interfaces - HOLD/ACTUATOR_SWITCHED")
+			(class "Default")
+			(node
+				(ref "J402")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J403")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "13")
+			(name "/05 - Actuator power and external safety interfaces - HOLD/PWM_SCL")
+			(class "Default")
+			(node
+				(ref "J407")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J408")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "14")
+			(name "/05 - Actuator power and external safety interfaces - HOLD/PWM_SDA")
+			(class "Default")
+			(node
+				(ref "J407")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J408")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "15")
+			(name "/05 - Actuator power and external safety interfaces - HOLD/SERVO_POWER_TBD")
+			(class "Default")
+			(node
+				(ref "J404")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J405")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "16")
+			(name "AUX_5V")
+			(class "Default")
+			(node
+				(ref "J232")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J233")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J241")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "17")
+			(name "GND_SYS")
+			(class "Default")
+			(node
+				(ref "C101")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C301")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J101")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J102")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J211")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J212")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J213")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J221")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J222")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J223")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J231")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J232")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J233")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J241")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J242")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J301")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J302")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J303")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J304")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J306")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J401")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J402")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J403")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J404")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J405")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J406")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J407")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J601")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "1")
+				(pinfunction "A1_1")
+				(pintype "input")
+			)
+			(node
+				(ref "U101")
+				(pin "2")
+				(pinfunction "A0_2")
+				(pintype "input")
+			)
+			(node
+				(ref "U101")
+				(pin "7")
+				(pinfunction "GND_7")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "18")
+			(name "HEARTBEAT")
+			(class "Default")
+			(node
+				(ref "J301")
+				(pin "5")
+				(pinfunction "Pin_5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "J406")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "19")
+			(name "I2C_SCL")
+			(class "Default")
+			(node
+				(ref "J301")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J302")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "R302")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "5")
+				(pinfunction "SCL_5")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "20")
+			(name "I2C_SDA")
+			(class "Default")
+			(node
+				(ref "J301")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J302")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R301")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "4")
+				(pinfunction "SDA_4")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "21")
+			(name "INA_ALERT")
+			(class "Default")
+			(node
+				(ref "J301")
+				(pin "7")
+				(pinfunction "Pin_7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "R102")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "3")
+				(pinfunction "~{Alert}_3")
+				(pintype "open_collector")
+			)
+		)
+		(net
+			(code "22")
+			(name "LOGIC_3V3")
+			(class "Default")
+			(node
+				(ref "C101")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J242")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J302")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J303")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J304")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J407")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R102")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R301")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R302")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R303")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R401")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "6")
+				(pinfunction "VS_6")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "23")
+			(name "Net-(J101-Pin_1)")
+			(class "Default")
+			(node
+				(ref "F101")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J101")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "24")
+			(name "Net-(J601-Pin_1)")
+			(class "Default")
+			(node
+				(ref "F601")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J601")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "25")
+			(name "Net-(SW101-B)")
+			(class "Default")
+			(node
+				(ref "R101")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW101")
+				(pin "2")
+				(pinfunction "B_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "26")
+			(name "PWM_OE")
+			(class "Default")
+			(node
+				(ref "J301")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J407")
+				(pin "5")
+				(pinfunction "Pin_5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R401")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "27")
+			(name "SHUNT_HI")
+			(class "Default")
+			(node
+				(ref "R101")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "10")
+				(pinfunction "Vin+_10")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "28")
+			(name "SHUNT_LO")
+			(class "Default")
+			(node
+				(ref "R101")
+				(pin "3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "9")
+				(pinfunction "Vin-_9")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "29")
+			(name "STOP_STATUS")
+			(class "Default")
+			(node
+				(ref "J301")
+				(pin "6")
+				(pinfunction "Pin_6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "J406")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "30")
+			(name "VBAT_FUSED")
+			(class "Default")
+			(node
+				(ref "F101")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "F601")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW101")
+				(pin "1")
+				(pinfunction "A_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "31")
+			(name "VBAT_SW")
+			(class "Default")
+			(node
+				(ref "F201")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F202")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F203")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F401")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J102")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R101")
+				(pin "4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U101")
+				(pin "8")
+				(pinfunction "Vbus_8")
+				(pintype "input")
+			)
+		)
+	)
+)

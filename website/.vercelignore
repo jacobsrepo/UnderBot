@@ -1,0 +1,5 @@
+.env*
+test-results/
+playwright-report/
+tests/
+playwright.config.js

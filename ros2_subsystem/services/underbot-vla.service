@@ -1,0 +1,16 @@
+[Unit]
+Description=Underbot VLA Brain Node
+After=network.target ollama.service
+Wants=ollama.service
+
+[Service]
+Type=simple
+User=underbot
+WorkingDirectory=/home/underbot
+ExecStart=/bin/bash -c "source /opt/ros/jazzy/setup.bash && source /home/underbot/underbot_ws/install/setup.bash && ros2 run underbot_vla vla_node --ros-args -p model_name:=qwen2.5:1.5b"
+Restart=always
+RestartSec=3
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target

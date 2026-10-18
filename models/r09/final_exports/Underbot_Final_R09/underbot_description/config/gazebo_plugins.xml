@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gazebo_profile>
+  <!--Optional Gazebo Harmonic/Ionic systems; estimated PID/contact values; not runtime tested.-->
+  <gazebo>
+    <self_collide>false</self_collide>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>0.354</wheel_separation>
+      <wheel_radius>0.0925</wheel_radius>
+      <topic>/underbot/cmd_vel</topic>
+      <odom_topic>/underbot/odometry</odom_topic>
+      <tf_topic>/underbot/odom_tf</tf_topic>
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_link</child_frame_id>
+      <odom_publish_frequency>50</odom_publish_frequency>
+      <min_linear_velocity>-0.2</min_linear_velocity>
+      <max_linear_velocity>0.2</max_linear_velocity>
+      <min_angular_velocity>-0.8</min_angular_velocity>
+      <max_angular_velocity>0.8</max_angular_velocity>
+      <min_linear_acceleration>-0.25</min_linear_acceleration>
+      <max_linear_acceleration>0.25</max_linear_acceleration>
+      <min_angular_acceleration>-1.0</min_angular_acceleration>
+      <max_angular_acceleration>1.0</max_angular_acceleration>
+    </plugin>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>/underbot/joint_states</topic>
+      <update_rate>50</update_rate>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>left_arm_base_joint</joint_name>
+      <topic>/underbot/left_arm_base_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>1</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>left_shoulder_joint</joint_name>
+      <topic>/underbot/left_shoulder_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>1</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>left_elbow_joint</joint_name>
+      <topic>/underbot/left_elbow_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>1</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>left_wrist_pitch_joint</joint_name>
+      <topic>/underbot/left_wrist_pitch_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.05</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>left_wrist_roll_joint</joint_name>
+      <topic>/underbot/left_wrist_roll_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>12</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>left_gripper_left_joint</joint_name>
+      <topic>/underbot/left_gripper_left_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>8</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.03</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>0.3</cmd_max>
+      <cmd_min>-0.3</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>right_arm_base_joint</joint_name>
+      <topic>/underbot/right_arm_base_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>1</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>right_shoulder_joint</joint_name>
+      <topic>/underbot/right_shoulder_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>1</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>right_elbow_joint</joint_name>
+      <topic>/underbot/right_elbow_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>1</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>right_wrist_pitch_joint</joint_name>
+      <topic>/underbot/right_wrist_pitch_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>30</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.05</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>right_wrist_roll_joint</joint_name>
+      <topic>/underbot/right_wrist_roll_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>12</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>1</cmd_max>
+      <cmd_min>-1</cmd_min>
+    </plugin>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>right_gripper_left_joint</joint_name>
+      <topic>/underbot/right_gripper_left_joint/cmd_pos</topic>
+      <initial_position>0</initial_position>
+      <p_gain>8</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.03</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>0.3</cmd_max>
+      <cmd_min>-0.3</cmd_min>
+    </plugin>
+  </gazebo>
+  <gazebo reference="left_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+  </gazebo>
+  <gazebo reference="caster_link">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+  </gazebo>
+</gazebo_profile>

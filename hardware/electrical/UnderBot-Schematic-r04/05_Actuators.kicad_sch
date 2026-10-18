@@ -1,0 +1,882 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 7223c398-ed67-5d6c-a5f9-1c13da42853e) (paper "A3")
+        (title_block (title "05 - Actuator power and external safety interfaces - HOLD") (date "2026-10-02") (rev "0.4 REVIEW") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "Device:Fuse"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "F"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fuse"
+			(at -1.905 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Fuse*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Fuse_0_1"
+			(rectangle
+				(start -0.762 -2.54)
+				(end 0.762 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 2.54) (xy 0 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Fuse_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Connector_Generic:Conn_01x03"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x03_1_1"
+			(rectangle
+				(start -1.27 3.81)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Connector_Generic:Conn_01x05"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 7.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05"
+			(at 0 -7.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x05_1_1"
+			(rectangle
+				(start -1.27 6.35)
+				(end 1.27 -6.35)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 5.207)
+				(end 0 4.953)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -4.953)
+				(end 0 -5.207)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 5.08 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -5.08 0)
+				(length 3.81)
+				(name "Pin_5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "ACTUATOR / SAFETY INTERFACES ONLY: HARDWARE STILL TO BE SELECTED" (at 20 15 0) (effects (font (size 2 2)) (justify left top)) (uuid 43015f55-13c4-5f39-8ca1-bf1773689d61))(symbol (lib_id "Device:Fuse") (at 68.58 60.96 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 27125bf6-08da-560d-97a8-890bf0fee05a) (property "Reference" "F401" (at 68.58 53.34 90) (effects (font (size 1.27 1.27)) )) (property "Value" "Actuator branch - TBD" (at 68.58 55.88 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 68.58 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 68.58 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "F401") (unit 1)))))(wire (pts (xy 64.77 60.96) (xy 44.45 60.96)) (stroke (width 0) (type default)) (uuid 7f987cce-abef-5866-854a-10f12702afd8))(global_label "VBAT_SW" (shape bidirectional) (at 44.45 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid c2ac0293-97d9-509f-a34b-3eea3204205a))(wire (pts (xy 72.39 60.96) (xy 87.63 60.96)) (stroke (width 0) (type default)) (uuid 178d2d54-7dd4-5f25-9abf-5a2e4e18c401))(label "ACTUATOR_FEED"  (at 87.63 60.96 180) (effects (font (size 1 1)) (justify right)) (uuid 61121fd6-c715-5b82-901f-b26da5ab84db))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 152.4 60.96 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 8ebe465e-37c6-54d8-9b95-d9e50fbc2f30) (property "Reference" "J401" (at 152.4 53.34 0) (effects (font (size 1.27 1.27)) )) (property "Value" "TO external NO contactor LINE" (at 152.4 55.88 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 152.4 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 152.4 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J401") (unit 1)))))(wire (pts (xy 147.32 60.96) (xy 137.16 60.96)) (stroke (width 0) (type default)) (uuid c5e930bd-4429-55e7-ada4-a3be75218e23))(label "ACTUATOR_FEED"  (at 137.16 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid 5b316e88-8bf6-58c0-9960-71b325b53422))(wire (pts (xy 147.32 63.5) (xy 137.16 63.5)) (stroke (width 0) (type default)) (uuid ebecfc3a-e9a1-55d4-8008-e71898ff2088))(global_label "GND_SYS" (shape bidirectional) (at 137.16 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid bf40709b-cd98-5234-b887-c949ae6978a7))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 281.94 60.96 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e6581519-feb5-52c4-a088-8716af9f0e3b) (property "Reference" "J402" (at 281.94 53.34 0) (effects (font (size 1.27 1.27)) )) (property "Value" "FROM contactor LOAD" (at 281.94 55.88 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 281.94 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 281.94 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J402") (unit 1)))))(wire (pts (xy 276.86 60.96) (xy 266.7 60.96)) (stroke (width 0) (type default)) (uuid a8617818-cea8-5960-958c-823c0de479b5))(label "ACTUATOR_SWITCHED"  (at 266.7 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid 95d4a0f1-0e39-5a50-aeec-529334938377))(wire (pts (xy 276.86 63.5) (xy 266.7 63.5)) (stroke (width 0) (type default)) (uuid fb8f7a1b-f280-58d5-93f8-74ae61da45d5))(global_label "GND_SYS" (shape bidirectional) (at 266.7 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 641c536b-a010-5f1e-9c51-c5f9a2458aad))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 378.46 60.96 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 370dc349-c354-521b-af29-03a9cc2e3af9) (property "Reference" "J403" (at 378.46 53.34 0) (effects (font (size 1.27 1.27)) )) (property "Value" "TO actuator converter VIN/GND" (at 378.46 55.88 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 378.46 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 378.46 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J403") (unit 1)))))(wire (pts (xy 373.38 60.96) (xy 363.22 60.96)) (stroke (width 0) (type default)) (uuid a9b62c17-85bc-513f-9c40-a1c656e169aa))(label "ACTUATOR_SWITCHED"  (at 363.22 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid 5e4dddee-a5f2-5090-b28a-63b9b9e88444))(wire (pts (xy 373.38 63.5) (xy 363.22 63.5)) (stroke (width 0) (type default)) (uuid 3c4dc116-4317-50d6-b091-6f2421d63697))(global_label "GND_SYS" (shape bidirectional) (at 363.22 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid b805f8b9-bd47-568e-8870-3f8256dfe8eb))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 152.4 121.92 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid b04d1a4c-ad64-5fcc-acfd-89aba312a2bb) (property "Reference" "J404" (at 152.4 114.3 0) (effects (font (size 1.27 1.27)) )) (property "Value" "FROM actuator converter" (at 152.4 116.84 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 152.4 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 152.4 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J404") (unit 1)))))(wire (pts (xy 147.32 121.92) (xy 137.16 121.92)) (stroke (width 0) (type default)) (uuid 2d0fcf8f-7d28-545e-a5aa-c9bec8dcf24d))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 137.16 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid 234785c7-4c7b-5581-b472-c597d499c876))(wire (pts (xy 147.32 124.46) (xy 137.16 124.46)) (stroke (width 0) (type default)) (uuid d44c3c5a-b8b4-561b-a59a-c4ce0f995e40))(global_label "GND_SYS" (shape bidirectional) (at 137.16 124.46 0) (effects (font (size 1 1)) (justify left)) (uuid 2368a5cf-53fe-54e1-8fdd-d55a3db56e5c))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 281.94 121.92 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid d8f8290f-7e8c-50be-a06f-75c06588017b) (property "Reference" "J405" (at 281.94 114.3 0) (effects (font (size 1.27 1.27)) )) (property "Value" "TO fused servo distribution" (at 281.94 116.84 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 281.94 121.92 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 281.94 121.92 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J405") (unit 1)))))(wire (pts (xy 276.86 121.92) (xy 266.7 121.92)) (stroke (width 0) (type default)) (uuid a3b1ed03-39c8-54f0-9add-5ba9e627a58d))(global_label "SERVO_POWER_TBD" (shape bidirectional) (at 266.7 121.92 0) (effects (font (size 1 1)) (justify left)) (uuid fc67f23b-e0ff-5c39-bcc9-01d56b8e52a8))(wire (pts (xy 276.86 124.46) (xy 266.7 124.46)) (stroke (width 0) (type default)) (uuid 6e45a650-2fd8-5ebe-8da9-e536b4bb4176))(global_label "GND_SYS" (shape bidirectional) (at 266.7 124.46 0) (effects (font (size 1 1)) (justify left)) (uuid 9b198fc5-8e58-5cfb-8e9f-2a3294a7834c))(symbol (lib_id "Connector_Generic:Conn_01x03") (at 91.44 185.42 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e3d06217-184d-5ee0-a37d-3e6f7e4fa560) (property "Reference" "J406" (at 91.44 175.26 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Safety-controller logic interface" (at 91.44 177.79999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 91.44 185.42 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 91.44 185.42 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J406") (unit 1)))))(wire (pts (xy 86.36 182.88) (xy 76.2 182.88)) (stroke (width 0) (type default)) (uuid 9f448b22-b307-5371-ad10-48e80c1d6ebb))(global_label "GND_SYS" (shape bidirectional) (at 76.2 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid a9c20a82-01be-53e0-b137-f8d4552ba49e))(wire (pts (xy 86.36 185.42) (xy 76.2 185.42)) (stroke (width 0) (type default)) (uuid a0cace5d-4398-5087-b287-28b5e8ae924a))(global_label "HEARTBEAT" (shape bidirectional) (at 76.2 185.42 0) (effects (font (size 1 1)) (justify left)) (uuid 5b1f7025-2699-52a8-86e5-e0648903e2f0))(wire (pts (xy 86.36 187.96) (xy 76.2 187.96)) (stroke (width 0) (type default)) (uuid c57762d7-e3d0-5ec3-ab60-1bfb097662db))(global_label "STOP_STATUS" (shape bidirectional) (at 76.2 187.96 0) (effects (font (size 1 1)) (justify left)) (uuid 0fe391b6-6aed-5e01-bc67-9ae9283d0161))(symbol (lib_id "Connector_Generic:Conn_01x05") (at 223.52 185.42 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 19360acd-52a3-53c7-9626-d122e055fc81) (property "Reference" "J407" (at 223.52 172.72 0) (effects (font (size 1.27 1.27)) )) (property "Value" "PCA9685 logic - A0 closed / 0x41" (at 223.52 175.26 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 223.52 185.42 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 223.52 185.42 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J407") (unit 1)))))(wire (pts (xy 218.44 180.34) (xy 208.28 180.34)) (stroke (width 0) (type default)) (uuid 2070b16d-7094-56cf-9823-192b92c39fbc))(global_label "LOGIC_3V3" (shape bidirectional) (at 208.28 180.34 0) (effects (font (size 1 1)) (justify left)) (uuid 41dacc47-26c9-5208-84a8-9897c68d1c9b))(wire (pts (xy 218.44 182.88) (xy 208.28 182.88)) (stroke (width 0) (type default)) (uuid 8b933e36-6fd6-541f-8046-77e1c102b889))(global_label "GND_SYS" (shape bidirectional) (at 208.28 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid cce97bd3-c980-547a-811d-cfd513c59eea))(wire (pts (xy 218.44 185.42) (xy 208.28 185.42)) (stroke (width 0) (type default)) (uuid 524e6982-cc24-519e-a852-bf8d65221a27))(global_label "PWM_SDA" (shape bidirectional) (at 208.28 185.42 0) (effects (font (size 1 1)) (justify left)) (uuid 4b253cce-8ebd-560f-a18a-7ef968358f54))(wire (pts (xy 218.44 187.96) (xy 208.28 187.96)) (stroke (width 0) (type default)) (uuid ac8b8484-162e-56da-ba24-cc1e4b35962c))(global_label "PWM_SCL" (shape bidirectional) (at 208.28 187.96 0) (effects (font (size 1 1)) (justify left)) (uuid 0dd84d32-e51c-5b6d-bb0f-9de318b0a18a))(wire (pts (xy 218.44 190.5) (xy 208.28 190.5)) (stroke (width 0) (type default)) (uuid b3375605-981e-500f-8982-81e97176e2f3))(global_label "PWM_OE" (shape bidirectional) (at 208.28 190.5 0) (effects (font (size 1 1)) (justify left)) (uuid 956b6066-72bb-513f-97e8-dfcb98954047))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 365.76 175.26 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid fdac57e3-3299-5d01-a932-14ebad19e899) (property "Reference" "J408" (at 365.76 167.64 0) (effects (font (size 1.27 1.27)) )) (property "Value" "FROM dedicated mux channel 2" (at 365.76 170.17999999999998 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 365.76 175.26 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 365.76 175.26 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "J408") (unit 1)))))(wire (pts (xy 360.68 175.26) (xy 350.52 175.26)) (stroke (width 0) (type default)) (uuid d96d4842-0113-52df-bd69-8577dfe081e3))(global_label "PWM_SDA" (shape bidirectional) (at 350.52 175.26 0) (effects (font (size 1 1)) (justify left)) (uuid 502619ef-c431-57c0-8291-90b3f4ebf676))(wire (pts (xy 360.68 177.8) (xy 350.52 177.8)) (stroke (width 0) (type default)) (uuid 8fa2264b-041d-5fa3-ad29-4ef6182043a5))(global_label "PWM_SCL" (shape bidirectional) (at 350.52 177.8 0) (effects (font (size 1 1)) (justify left)) (uuid 8b297966-431c-5a02-83f8-3902b5ad4e3b))(symbol (lib_id "Device:R") (at 335.28 223.52 0) (unit 1) (in_bom yes) (on_board yes) (dnp yes) (uuid 4f18f01a-4c0c-57ea-88c2-317e1fb017e0) (property "Reference" "R401" (at 340.35999999999996 222.25 0) (effects (font (size 1.27 1.27)) (justify left))) (property "Value" "10k candidate / DNP pending breakout" (at 340.35999999999996 224.79 0) (effects (font (size 1.0 1.0)) (justify left))) (property "Footprint" "" (at 335.28 223.52 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 335.28 223.52 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/49f9a71b-45ea-56ec-807e-d35c653f8a32" (reference "R401") (unit 1)))))(wire (pts (xy 335.28 219.71) (xy 335.28 214.63)) (stroke (width 0) (type default)) (uuid 50fff425-44bb-51b9-8f64-ace084a2590a))(global_label "LOGIC_3V3" (shape bidirectional) (at 335.28 214.63 0) (effects (font (size 1 1)) (justify left)) (uuid be6300cb-e8c5-524f-a4e9-6160cd232150))(wire (pts (xy 335.28 227.33) (xy 335.28 232.41)) (stroke (width 0) (type default)) (uuid 653dd295-46fc-5fcc-8f3e-a608642b6bfc))(global_label "PWM_OE" (shape bidirectional) (at 335.28 232.41 0) (effects (font (size 1 1)) (justify left)) (uuid 1f1cfe21-5d5f-5ff2-a1e8-eb2081719c21))(text "Safety controller, two NC E-stop channels, reset, watchdog hardware, coil driver and suppression are NOT DESIGNED here." (at 20 243 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 1efdfb45-9d4f-54c8-bfe0-c291e37e1d83))(text "J401/J402 are external contactor power terminals, not a PCB jumper. Do not bypass the missing contactor or safety circuit." (at 20 251 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid f8452af2-6e50-5dd8-9963-5302731a76e6))(text "PWM_OE HIGH should disable output; resolve breakout pull-downs before fitting R401. Signal disable is not an E-stop." (at 20 259 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 5e1dd723-a3e0-5528-9963-726857c194b0))(text "T12 battery/control wiring remains completely separate. Smart servos may replace J407/PCA9685; voltage and stall currents TBD." (at 20 267 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid afe27da4-1421-507a-8ae6-32f7d4f6a39c)) (embedded_fonts no))

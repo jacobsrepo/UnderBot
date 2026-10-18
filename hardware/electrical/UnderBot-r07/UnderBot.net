@@ -1,0 +1,2843 @@
+(export
+	(version "E")
+	(design
+		(source "D:\\gitdemo\\Underbot\\.publish-underbot\\hardware\\electrical\\UnderBot-r07\\UnderBot.kicad_sch")
+		(date "2026-10-02T14:25:55")
+		(tool "Eeschema 10.0.6")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "UnderBot.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "2")
+			(name "/01 - NOCO input and distribution PCB boundary/")
+			(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			(title_block
+				(title "01 - NOCO input and distribution PCB boundary")
+				(company "UnderBot")
+				(rev "0.7 NOCO REVIEW")
+				(date "2026-10-02")
+				(source "01_Power.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "3")
+			(name "/02 - Converters, stop interfaces and power cables/")
+			(tstamps "/d19ce641-de88-5e5a-8010-70cd68962307/")
+			(title_block
+				(title "02 - Converters, stop interfaces and power cables")
+				(company "UnderBot")
+				(rev "0.7 NOCO REVIEW")
+				(date "2026-10-02")
+				(source "02_Conversion.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "4")
+			(name "/03 - System interfaces and sensor harnesses/")
+			(tstamps "/234ddb7d-bab1-522c-9e7e-130d3270f062/")
+			(title_block
+				(title "03 - System interfaces and sensor harnesses")
+				(company "UnderBot")
+				(rev "0.7 NOCO REVIEW")
+				(date "2026-10-02")
+				(source "03_System.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "5")
+			(name "/04 - Independent T12 base and integration holds/")
+			(tstamps "/57655d3a-10d3-5d0d-9919-45346288399f/")
+			(title_block
+				(title "04 - Independent T12 base and integration holds")
+				(company "UnderBot")
+				(rev "0.7 NOCO REVIEW")
+				(date "2026-10-02")
+				(source "04_Base.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "F101")
+			(value "Main fuse TBD - harness coordination")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "85a8ba1e-5297-5aef-9b1a-f43a6c4fc797")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F102")
+			(value "PI branch / rating TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "e471d004-c363-5a32-97cb-72083fb216d2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F103")
+			(value "KINECT branch / rating TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "cdf5c20b-61ba-5cbe-8eeb-2db9df299509")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F104")
+			(value "ACTUATOR branch / rating TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "db33995d-03ad-5cfc-a6a9-8bf59810356a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F105")
+			(value "AUXILIARY branch / rating TBD")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "4683e025-76d8-5d4b-879a-d50667f4b001")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J101")
+			(value "GB70 accessory harness IN")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "d3ab64ee-7f36-5972-a180-638d74c0033b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J102")
+			(value "PI branch output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "bc902044-e17f-5a9a-b952-c1097c14b8ab")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J103")
+			(value "KINECT branch output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "3a3c9986-18d9-5d81-ad81-e4d16da22856")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J104")
+			(value "ACTUATOR branch output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "d16c1255-f44c-587a-a00b-cd1d2fdd11d2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J105")
+			(value "AUXILIARY branch output")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "05ff3066-031a-5fd9-92d2-987222c7cd32")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "SW101")
+			(value "Service disconnect / DC rated")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Switch")
+				(part "SW_SPST")
+				(description "Single Pole Single Throw (SPST) switch")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "01 - NOCO input and distribution PCB boundary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "01_Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "switch lever")
+			)
+			(sheetpath
+				(names "/01 - NOCO input and distribution PCB boundary/")
+				(tstamps "/fbe7b6f4-2aee-588b-a17a-d9839e37c901/")
+			)
+			(tstamps "201aeb3a-f86d-5d78-85ec-344d212e7607")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A201")
+			(value "52Pi EP-0225 / DC input ONLY")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Pi_PD")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - Converters, stop interfaces and power cables")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Conversion.kicad_sch")
+			)
+			(sheetpath
+				(names "/02 - Converters, stop interfaces and power cables/")
+				(tstamps "/d19ce641-de88-5e5a-8010-70cd68962307/")
+			)
+			(tstamps "b88792aa-dd39-59e5-ab3f-55dadac5cbc0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "DC_PLUS")
+						)
+						(pin
+							(num "DC_MINUS")
+						)
+						(pin
+							(num "USB_C_PD")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A202")
+			(value "12V conditioning / qualification HOLD")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Depth_supply")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - Converters, stop interfaces and power cables")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Conversion.kicad_sch")
+			)
+			(sheetpath
+				(names "/02 - Converters, stop interfaces and power cables/")
+				(tstamps "/d19ce641-de88-5e5a-8010-70cd68962307/")
+			)
+			(tstamps "abe92df4-2360-59a6-bc57-0183c97137e2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "IN_PLUS")
+						)
+						(pin
+							(num "IN_MINUS")
+						)
+						(pin
+							(num "OUT_PLUS")
+						)
+						(pin
+							(num "OUT_MINUS")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A203")
+			(value "Hardwired stop + reset / HOLD")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Stop_assembly")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - Converters, stop interfaces and power cables")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Conversion.kicad_sch")
+			)
+			(sheetpath
+				(names "/02 - Converters, stop interfaces and power cables/")
+				(tstamps "/d19ce641-de88-5e5a-8010-70cd68962307/")
+			)
+			(tstamps "e34c44dd-5a16-52e3-8250-22acdb3fdaa8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "IN_PLUS")
+						)
+						(pin
+							(num "IN_MINUS")
+						)
+						(pin
+							(num "SWITCHED_PLUS")
+						)
+						(pin
+							(num "RETURN")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A204")
+			(value "VIN feed / verify documented 6-24V board")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Arm_feed")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - Converters, stop interfaces and power cables")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Conversion.kicad_sch")
+			)
+			(sheetpath
+				(names "/02 - Converters, stop interfaces and power cables/")
+				(tstamps "/d19ce641-de88-5e5a-8010-70cd68962307/")
+			)
+			(tstamps "38b62b7a-1fdb-53a7-894b-4ea908ebbf65")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "IN_PLUS")
+						)
+						(pin
+							(num "IN_MINUS")
+						)
+						(pin
+							(num "OUT_PLUS")
+						)
+						(pin
+							(num "OUT_MINUS")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A205")
+			(value "5V auxiliary / current selection HOLD")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Aux_regulator")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "02 - Converters, stop interfaces and power cables")
+			)
+			(property
+				(name "Sheetfile")
+				(value "02_Conversion.kicad_sch")
+			)
+			(sheetpath
+				(names "/02 - Converters, stop interfaces and power cables/")
+				(tstamps "/d19ce641-de88-5e5a-8010-70cd68962307/")
+			)
+			(tstamps "ab01fe6f-5df7-5c74-b759-db4a6f77c6cf")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "IN_PLUS")
+						)
+						(pin
+							(num "IN_MINUS")
+						)
+						(pin
+							(num "OUT_PLUS")
+						)
+						(pin
+							(num "OUT_MINUS")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A301")
+			(value "Existing Raspberry Pi 5")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Pi_ports")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - System interfaces and sensor harnesses")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_System.kicad_sch")
+			)
+			(sheetpath
+				(names "/03 - System interfaces and sensor harnesses/")
+				(tstamps "/234ddb7d-bab1-522c-9e7e-130d3270f062/")
+			)
+			(tstamps "5bb50c14-2341-5208-85e7-0d0aa7ff9efb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "USB_C_POWER")
+						)
+						(pin
+							(num "3V3")
+						)
+						(pin
+							(num "GND")
+						)
+						(pin
+							(num "USB_ARM")
+						)
+						(pin
+							(num "USB_DEPTH")
+						)
+						(pin
+							(num "USB_SSD")
+						)
+						(pin
+							(num "USB_MIC")
+						)
+						(pin
+							(num "CSI")
+						)
+						(pin
+							(num "I2C_SDA")
+						)
+						(pin
+							(num "I2C_SCL")
+						)
+						(pin
+							(num "I2S")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A302")
+			(value "Adeept ADA031 kit incl. 6 servos")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Arm_kit")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - System interfaces and sensor harnesses")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_System.kicad_sch")
+			)
+			(sheetpath
+				(names "/03 - System interfaces and sensor harnesses/")
+				(tstamps "/234ddb7d-bab1-522c-9e7e-130d3270f062/")
+			)
+			(tstamps "fa4c0f65-0ab8-53ff-8cc5-f5a747d30b6a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "POWER_PLUS")
+						)
+						(pin
+							(num "POWER_MINUS")
+						)
+						(pin
+							(num "USB")
+						)
+						(pin
+							(num "SERVO_LOOM")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A303")
+			(value "Kinect v2 + matching PC adapter")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Depth_camera")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - System interfaces and sensor harnesses")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_System.kicad_sch")
+			)
+			(sheetpath
+				(names "/03 - System interfaces and sensor harnesses/")
+				(tstamps "/234ddb7d-bab1-522c-9e7e-130d3270f062/")
+			)
+			(tstamps "edc43853-2531-5b71-8b85-2e0f9ee0cdbc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "POWER_PLUS")
+						)
+						(pin
+							(num "POWER_MINUS")
+						)
+						(pin
+							(num "USB3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A304")
+			(value "BODY ICM20948 #4554")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "A304_ports")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - System interfaces and sensor harnesses")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_System.kicad_sch")
+			)
+			(sheetpath
+				(names "/03 - System interfaces and sensor harnesses/")
+				(tstamps "/234ddb7d-bab1-522c-9e7e-130d3270f062/")
+			)
+			(tstamps "53d7bf21-bc60-5780-86cb-287695372a1f")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "VIN")
+						)
+						(pin
+							(num "GND")
+						)
+						(pin
+							(num "SDA")
+						)
+						(pin
+							(num "SCL")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A305")
+			(value "CAMERA ICM20948 #4554")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "A305_ports")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - System interfaces and sensor harnesses")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_System.kicad_sch")
+			)
+			(sheetpath
+				(names "/03 - System interfaces and sensor harnesses/")
+				(tstamps "/234ddb7d-bab1-522c-9e7e-130d3270f062/")
+			)
+			(tstamps "a1232d62-c4f5-53c6-9f11-cedd815e14b8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "VIN")
+						)
+						(pin
+							(num "GND")
+						)
+						(pin
+							(num "SDA")
+						)
+						(pin
+							(num "SCL")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A306")
+			(value "USB VBUS BLOCK / data preserved / HOLD")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "USB_block")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "03 - System interfaces and sensor harnesses")
+			)
+			(property
+				(name "Sheetfile")
+				(value "03_System.kicad_sch")
+			)
+			(sheetpath
+				(names "/03 - System interfaces and sensor harnesses/")
+				(tstamps "/234ddb7d-bab1-522c-9e7e-130d3270f062/")
+			)
+			(tstamps "b83a0b4f-124f-53fc-b71e-98948a3a0ef5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "PI_USB")
+						)
+						(pin
+							(num "ARM_USB")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A401")
+			(value "Xiaomi T12 OEM system")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "T12_OEM")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "04 - Independent T12 base and integration holds")
+			)
+			(property
+				(name "Sheetfile")
+				(value "04_Base.kicad_sch")
+			)
+			(sheetpath
+				(names "/04 - Independent T12 base and integration holds/")
+				(tstamps "/57655d3a-10d3-5d0d-9919-45346288399f/")
+			)
+			(tstamps "fa5e1409-4652-5c57-93e0-f9b562548b10")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "OEM_BATTERY")
+						)
+						(pin
+							(num "OEM_DOCK")
+						)
+						(pin
+							(num "WHEELS_ENCODERS")
+						)
+						(pin
+							(num "LIDAR")
+						)
+						(pin
+							(num "BUMPER_CLIFF")
+						)
+						(pin
+							(num "CONTROL_LINK")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x02")
+			(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x02")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "Fuse")
+			(description "Fuse")
+			(footprints
+				(fp "*Fuse*")
+			)
+			(fields
+				(field
+					(name "Reference") "F")
+				(field
+					(name "Value") "Fuse")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Fuse")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Switch")
+			(part "SW_SPST")
+			(description "Single Pole Single Throw (SPST) switch")
+			(fields
+				(field
+					(name "Reference") "SW")
+				(field
+					(name "Value") "SW_SPST")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Single Pole Single Throw (SPST) switch")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "B")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "A304_ports")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "A304_ports")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "GND")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "SCL")
+					(name "SCL")
+					(type "passive")
+				)
+				(pin
+					(num "SDA")
+					(name "SDA")
+					(type "passive")
+				)
+				(pin
+					(num "VIN")
+					(name "VIN")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "A305_ports")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "A305_ports")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "GND")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "SCL")
+					(name "SCL")
+					(type "passive")
+				)
+				(pin
+					(num "SDA")
+					(name "SDA")
+					(type "passive")
+				)
+				(pin
+					(num "VIN")
+					(name "VIN")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Arm_feed")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Arm_feed")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "IN_MINUS")
+					(name "IN_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "IN_PLUS")
+					(name "IN_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "OUT_MINUS")
+					(name "OUT_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "OUT_PLUS")
+					(name "OUT_PLUS")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Arm_kit")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Arm_kit")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "POWER_MINUS")
+					(name "POWER_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "POWER_PLUS")
+					(name "POWER_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "SERVO_LOOM")
+					(name "SERVO_LOOM")
+					(type "passive")
+				)
+				(pin
+					(num "USB")
+					(name "USB")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Aux_regulator")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Aux_regulator")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "IN_MINUS")
+					(name "IN_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "IN_PLUS")
+					(name "IN_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "OUT_MINUS")
+					(name "OUT_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "OUT_PLUS")
+					(name "OUT_PLUS")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Depth_camera")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Depth_camera")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "POWER_MINUS")
+					(name "POWER_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "POWER_PLUS")
+					(name "POWER_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "USB3")
+					(name "USB3")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Depth_supply")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Depth_supply")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "IN_MINUS")
+					(name "IN_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "IN_PLUS")
+					(name "IN_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "OUT_MINUS")
+					(name "OUT_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "OUT_PLUS")
+					(name "OUT_PLUS")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Pi_PD")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Pi_PD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "DC_MINUS")
+					(name "DC_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "DC_PLUS")
+					(name "DC_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "USB_C_PD")
+					(name "USB_C_PD")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Pi_ports")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Pi_ports")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "3V3")
+					(name "3V3")
+					(type "passive")
+				)
+				(pin
+					(num "CSI")
+					(name "CSI")
+					(type "passive")
+				)
+				(pin
+					(num "GND")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "I2C_SCL")
+					(name "I2C_SCL")
+					(type "passive")
+				)
+				(pin
+					(num "I2C_SDA")
+					(name "I2C_SDA")
+					(type "passive")
+				)
+				(pin
+					(num "I2S")
+					(name "I2S")
+					(type "passive")
+				)
+				(pin
+					(num "USB_ARM")
+					(name "USB_ARM")
+					(type "passive")
+				)
+				(pin
+					(num "USB_C_POWER")
+					(name "USB_C_POWER")
+					(type "passive")
+				)
+				(pin
+					(num "USB_DEPTH")
+					(name "USB_DEPTH")
+					(type "passive")
+				)
+				(pin
+					(num "USB_MIC")
+					(name "USB_MIC")
+					(type "passive")
+				)
+				(pin
+					(num "USB_SSD")
+					(name "USB_SSD")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Stop_assembly")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Stop_assembly")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "IN_MINUS")
+					(name "IN_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "IN_PLUS")
+					(name "IN_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "RETURN")
+					(name "RETURN")
+					(type "passive")
+				)
+				(pin
+					(num "SWITCHED_PLUS")
+					(name "SWITCHED_PLUS")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "T12_OEM")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "T12_OEM")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "BUMPER_CLIFF")
+					(name "BUMPER_CLIFF")
+					(type "passive")
+				)
+				(pin
+					(num "CONTROL_LINK")
+					(name "CONTROL_LINK")
+					(type "passive")
+				)
+				(pin
+					(num "LIDAR")
+					(name "LIDAR")
+					(type "passive")
+				)
+				(pin
+					(num "OEM_BATTERY")
+					(name "OEM_BATTERY")
+					(type "passive")
+				)
+				(pin
+					(num "OEM_DOCK")
+					(name "OEM_DOCK")
+					(type "passive")
+				)
+				(pin
+					(num "WHEELS_ENCODERS")
+					(name "WHEELS_ENCODERS")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "USB_block")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "USB_block")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "ARM_USB")
+					(name "ARM_USB")
+					(type "passive")
+				)
+				(pin
+					(num "PI_USB")
+					(name "PI_USB")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries
+		(library
+			(logical "Connector_Generic")
+			(uri "${KICAD10_SYMBOL_DIR}/Connector_Generic.kicad_sym")
+		)
+		(library
+			(logical "Device")
+			(uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym")
+		)
+		(library
+			(logical "Switch")
+			(uri "${KICAD10_SYMBOL_DIR}/Switch.kicad_sym")
+		)
+	)
+	(nets
+		(net
+			(code "1")
+			(name "/01 - NOCO input and distribution PCB boundary/NOCO_RAW")
+			(class "Default")
+			(node
+				(ref "F101")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J101")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "2")
+			(name "/02 - Converters, stop interfaces and power cables/ACT_STOPPED")
+			(class "Default")
+			(node
+				(ref "A203")
+				(pin "SWITCHED_PLUS")
+				(pinfunction "SWITCHED_PLUS_SWITCHED_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A204")
+				(pin "IN_PLUS")
+				(pinfunction "IN_PLUS_IN_PLUS")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "/03 - System interfaces and sensor harnesses/CSI_CAMERA")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "CSI")
+				(pinfunction "CSI_CSI")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "/03 - System interfaces and sensor harnesses/I2S_AUDIO")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "I2S")
+				(pinfunction "I2S_I2S")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/03 - System interfaces and sensor harnesses/KIT_INTERNAL_SERVO_LOOM")
+			(class "Default")
+			(node
+				(ref "A302")
+				(pin "SERVO_LOOM")
+				(pinfunction "SERVO_LOOM_SERVO_LOOM")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "6")
+			(name "/03 - System interfaces and sensor harnesses/USB_ARM_BLOCKED")
+			(class "Default")
+			(node
+				(ref "A302")
+				(pin "USB")
+				(pinfunction "USB_USB")
+				(pintype "passive")
+			)
+			(node
+				(ref "A306")
+				(pin "ARM_USB")
+				(pinfunction "ARM_USB_ARM_USB")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "7")
+			(name "/03 - System interfaces and sensor harnesses/USB_ARM_DATA")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "USB_ARM")
+				(pinfunction "USB_ARM_USB_ARM")
+				(pintype "passive")
+			)
+			(node
+				(ref "A306")
+				(pin "PI_USB")
+				(pinfunction "PI_USB_PI_USB")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "/03 - System interfaces and sensor harnesses/USB_KINECT3")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "USB_DEPTH")
+				(pinfunction "USB_DEPTH_USB_DEPTH")
+				(pintype "passive")
+			)
+			(node
+				(ref "A303")
+				(pin "USB3")
+				(pinfunction "USB3_USB3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "9")
+			(name "/03 - System interfaces and sensor harnesses/USB_MIC")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "USB_MIC")
+				(pinfunction "USB_MIC_USB_MIC")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "/03 - System interfaces and sensor harnesses/USB_SSD")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "USB_SSD")
+				(pinfunction "USB_SSD_USB_SSD")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "/04 - Independent T12 base and integration holds/OEM_LIDAR_LOOM")
+			(class "Default")
+			(node
+				(ref "A401")
+				(pin "LIDAR")
+				(pinfunction "LIDAR_LIDAR")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "12")
+			(name "/04 - Independent T12 base and integration holds/OEM_SENSOR_LOOMS")
+			(class "Default")
+			(node
+				(ref "A401")
+				(pin "BUMPER_CLIFF")
+				(pinfunction "BUMPER_CLIFF_BUMPER_CLIFF")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "13")
+			(name "/04 - Independent T12 base and integration holds/OEM_WHEEL_LOOMS")
+			(class "Default")
+			(node
+				(ref "A401")
+				(pin "WHEELS_ENCODERS")
+				(pinfunction "WHEELS_ENCODERS_WHEELS_ENCODERS")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "14")
+			(name "/04 - Independent T12 base and integration holds/T12_CONTROL_TBD")
+			(class "Default")
+			(node
+				(ref "A401")
+				(pin "CONTROL_LINK")
+				(pinfunction "CONTROL_LINK_CONTROL_LINK")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "15")
+			(name "/04 - Independent T12 base and integration holds/T12_ORIGINAL_DOCK")
+			(class "Default")
+			(node
+				(ref "A401")
+				(pin "OEM_DOCK")
+				(pinfunction "OEM_DOCK_OEM_DOCK")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "16")
+			(name "/04 - Independent T12 base and integration holds/T12_ORIGINAL_PACK")
+			(class "Default")
+			(node
+				(ref "A401")
+				(pin "OEM_BATTERY")
+				(pinfunction "OEM_BATTERY_OEM_BATTERY")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "17")
+			(name "ACT_INPUT")
+			(class "Default")
+			(node
+				(ref "A203")
+				(pin "IN_PLUS")
+				(pinfunction "IN_PLUS_IN_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "F104")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J104")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "18")
+			(name "ARM_FEED_TBD")
+			(class "Default")
+			(node
+				(ref "A204")
+				(pin "OUT_PLUS")
+				(pinfunction "OUT_PLUS_OUT_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A302")
+				(pin "POWER_PLUS")
+				(pinfunction "POWER_PLUS_POWER_PLUS")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "19")
+			(name "AUX_5V")
+			(class "Default")
+			(node
+				(ref "A205")
+				(pin "OUT_PLUS")
+				(pinfunction "OUT_PLUS_OUT_PLUS")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "20")
+			(name "AUX_INPUT")
+			(class "Default")
+			(node
+				(ref "A205")
+				(pin "IN_PLUS")
+				(pinfunction "IN_PLUS_IN_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "F105")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J105")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "21")
+			(name "DEPTH_INPUT")
+			(class "Default")
+			(node
+				(ref "A202")
+				(pin "IN_PLUS")
+				(pinfunction "IN_PLUS_IN_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "F103")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J103")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "22")
+			(name "GND_SYS")
+			(class "Default")
+			(node
+				(ref "A201")
+				(pin "DC_MINUS")
+				(pinfunction "DC_MINUS_DC_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A202")
+				(pin "IN_MINUS")
+				(pinfunction "IN_MINUS_IN_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A202")
+				(pin "OUT_MINUS")
+				(pinfunction "OUT_MINUS_OUT_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A203")
+				(pin "IN_MINUS")
+				(pinfunction "IN_MINUS_IN_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A203")
+				(pin "RETURN")
+				(pinfunction "RETURN_RETURN")
+				(pintype "passive")
+			)
+			(node
+				(ref "A204")
+				(pin "IN_MINUS")
+				(pinfunction "IN_MINUS_IN_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A204")
+				(pin "OUT_MINUS")
+				(pinfunction "OUT_MINUS_OUT_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A205")
+				(pin "IN_MINUS")
+				(pinfunction "IN_MINUS_IN_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A205")
+				(pin "OUT_MINUS")
+				(pinfunction "OUT_MINUS_OUT_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A301")
+				(pin "GND")
+				(pinfunction "GND_GND")
+				(pintype "passive")
+			)
+			(node
+				(ref "A302")
+				(pin "POWER_MINUS")
+				(pinfunction "POWER_MINUS_POWER_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A303")
+				(pin "POWER_MINUS")
+				(pinfunction "POWER_MINUS_POWER_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A304")
+				(pin "GND")
+				(pinfunction "GND_GND")
+				(pintype "passive")
+			)
+			(node
+				(ref "A305")
+				(pin "GND")
+				(pinfunction "GND_GND")
+				(pintype "passive")
+			)
+			(node
+				(ref "J101")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J102")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J103")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J104")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J105")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "23")
+			(name "KINECT_12_TBD")
+			(class "Default")
+			(node
+				(ref "A202")
+				(pin "OUT_PLUS")
+				(pinfunction "OUT_PLUS_OUT_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A303")
+				(pin "POWER_PLUS")
+				(pinfunction "POWER_PLUS_POWER_PLUS")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "24")
+			(name "NOCO_FUSED")
+			(class "Default")
+			(node
+				(ref "F101")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW101")
+				(pin "1")
+				(pinfunction "A_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "25")
+			(name "PI_3V3")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "3V3")
+				(pinfunction "3V3_3V3")
+				(pintype "passive")
+			)
+			(node
+				(ref "A304")
+				(pin "VIN")
+				(pinfunction "VIN_VIN")
+				(pintype "passive")
+			)
+			(node
+				(ref "A305")
+				(pin "VIN")
+				(pinfunction "VIN_VIN")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "26")
+			(name "PI_INPUT")
+			(class "Default")
+			(node
+				(ref "A201")
+				(pin "DC_PLUS")
+				(pinfunction "DC_PLUS_DC_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "F102")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J102")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "27")
+			(name "PI_POWER_CABLE")
+			(class "Default")
+			(node
+				(ref "A201")
+				(pin "USB_C_PD")
+				(pinfunction "USB_C_PD_USB_C_PD")
+				(pintype "passive")
+			)
+			(node
+				(ref "A301")
+				(pin "USB_C_POWER")
+				(pinfunction "USB_C_POWER_USB_C_POWER")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "28")
+			(name "PI_SCL")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "I2C_SCL")
+				(pinfunction "I2C_SCL_I2C_SCL")
+				(pintype "passive")
+			)
+			(node
+				(ref "A304")
+				(pin "SCL")
+				(pinfunction "SCL_SCL")
+				(pintype "passive")
+			)
+			(node
+				(ref "A305")
+				(pin "SCL")
+				(pinfunction "SCL_SCL")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "29")
+			(name "PI_SDA")
+			(class "Default")
+			(node
+				(ref "A301")
+				(pin "I2C_SDA")
+				(pinfunction "I2C_SDA_I2C_SDA")
+				(pintype "passive")
+			)
+			(node
+				(ref "A304")
+				(pin "SDA")
+				(pinfunction "SDA_SDA")
+				(pintype "passive")
+			)
+			(node
+				(ref "A305")
+				(pin "SDA")
+				(pinfunction "SDA_SDA")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "30")
+			(name "SYS_12")
+			(class "Default")
+			(node
+				(ref "F102")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F103")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F104")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F105")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW101")
+				(pin "2")
+				(pinfunction "B_2")
+				(pintype "passive")
+			)
+		)
+	)
+)

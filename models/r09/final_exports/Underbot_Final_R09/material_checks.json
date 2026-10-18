@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "resolution": [
+    2048,
+    2048
+  ],
+  "map_count": 24,
+  "normal_convention": "OpenGL +Y",
+  "seam_boundary_to_interior_ratios": {
+    "matte_black_vinyl": 0.9862785935401917,
+    "black_painted_aluminium": 0.998369574546814,
+    "tire_rubber": 0.9765049815177917,
+    "brushed_aluminium": 1.136999487876892,
+    "black_abs": 1.017948031425476,
+    "pcb_green": 1.035337209701538
+  },
+  "normal_checks": {
+    "matte_black_vinyl": {
+      "maximum_unit_length_error": 0.0007532835006713867,
+      "minimum_normal_z": 1.0
+    },
+    "black_painted_aluminium": {
+      "maximum_unit_length_error": 0.0002614259719848633,
+      "minimum_normal_z": 1.0
+    },
+    "tire_rubber": {
+      "maximum_unit_length_error": 0.0009990930557250977,
+      "minimum_normal_z": 1.0
+    },
+    "brushed_aluminium": {
+      "maximum_unit_length_error": 0.00019991397857666016,
+      "minimum_normal_z": 1.0
+    },
+    "black_abs": {
+      "maximum_unit_length_error": 0.0002614259719848633,
+      "minimum_normal_z": 1.0
+    },
+    "pcb_green": {
+      "maximum_unit_length_error": 1.537799835205078e-05,
+      "minimum_normal_z": 1.0
+    }
+  },
+  "checks": [
+    "All texture files decode at 2048 x 2048 and match recorded SHA-256",
+    "All material factors are finite and in range 0..1",
+    "Quantized normal vectors have positive Z and unit error below 0.012",
+    "All texture assignments reference defined materials",
+    "Periodic map construction; boundary statistics match interior",
+    "Packed metallic/roughness G equals standalone roughness; B matches material metallic factor"
+  ]
+}

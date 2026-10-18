@@ -1,0 +1,158 @@
+[
+  {
+    "ref": "J1",
+    "value": "Phoenix 1715721 INPUT",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "VIN_PROTECTED",
+      "2": "GND_SYS"
+    },
+    "x": 58,
+    "y": 65,
+    "angle": 0
+  },
+  {
+    "ref": "J2",
+    "value": "Phoenix 1715721 STOP LOOP",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "VIN_PROTECTED",
+      "2": "ACT_SWITCHED"
+    },
+    "x": 58,
+    "y": 100,
+    "angle": 0
+  },
+  {
+    "ref": "F1",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "VIN_PROTECTED",
+      "2": "PI_12"
+    },
+    "x": 104,
+    "y": 60,
+    "angle": 0
+  },
+  {
+    "ref": "J3",
+    "value": "Phoenix1715721 PI MODULE",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "PI_12",
+      "2": "GND_SYS"
+    },
+    "x": 132,
+    "y": 60,
+    "angle": 0
+  },
+  {
+    "ref": "F2",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "VIN_PROTECTED",
+      "2": "DEPTH_12"
+    },
+    "x": 104,
+    "y": 80,
+    "angle": 0
+  },
+  {
+    "ref": "J4",
+    "value": "Phoenix1715721 KINECT CONDITIONER",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "DEPTH_12",
+      "2": "GND_SYS"
+    },
+    "x": 132,
+    "y": 80,
+    "angle": 0
+  },
+  {
+    "ref": "F3",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "ACT_SWITCHED",
+      "2": "ARM_12"
+    },
+    "x": 104,
+    "y": 105,
+    "angle": 0
+  },
+  {
+    "ref": "J5",
+    "value": "Phoenix1715721 ARM VIN",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "ARM_12",
+      "2": "GND_SYS"
+    },
+    "x": 132,
+    "y": 105,
+    "angle": 0
+  },
+  {
+    "ref": "F4",
+    "value": "Keystone3568 / fuse TBD",
+    "footprint": "Fuse:Fuseholder_Blade_Mini_Keystone_3568",
+    "nets": {
+      "1": "ACT_SWITCHED",
+      "2": "AUX_12"
+    },
+    "x": 104,
+    "y": 125,
+    "angle": 0
+  },
+  {
+    "ref": "J6",
+    "value": "Phoenix1715721 AUX CONVERTER",
+    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+    "nets": {
+      "1": "AUX_12",
+      "2": "GND_SYS"
+    },
+    "x": 132,
+    "y": 125,
+    "angle": 0
+  },
+  {
+    "ref": "H1",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 55,
+    "y": 55,
+    "angle": 0
+  },
+  {
+    "ref": "H2",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 145,
+    "y": 55,
+    "angle": 0
+  },
+  {
+    "ref": "H3",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 55,
+    "y": 135,
+    "angle": 0
+  },
+  {
+    "ref": "H4",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "nets": {},
+    "x": 145,
+    "y": 135,
+    "angle": 0
+  }
+]

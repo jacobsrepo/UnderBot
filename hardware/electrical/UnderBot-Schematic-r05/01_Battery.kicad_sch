@@ -1,0 +1,659 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 49c52c85-44b3-5d7b-9693-54bf63e53130) (paper "A3")
+        (title_block (title "01 - Battery input, isolation and Kelvin shunt") (date "2026-10-02") (rev "0.5 PROCUREMENT") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:Fuse"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "F"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fuse"
+			(at -1.905 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "fuse"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*Fuse*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Fuse_0_1"
+			(rectangle
+				(start -0.762 -2.54)
+				(end 0.762 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 2.54) (xy 0 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Fuse_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Switch:SW_SPST"
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "SW"
+			(at 0 3.175 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_SPST"
+			(at 0 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Single Pole Single Throw (SPST) switch"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "switch lever"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "SW_SPST_0_0"
+			(circle
+				(center -2.032 0)
+				(radius 0.508)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -1.524 0.254) (xy 1.524 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 2.032 0)
+				(radius 0.508)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "SW_SPST_1_1"
+			(pin passive line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "A"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 5.08 0 180)
+				(length 2.54)
+				(name "B"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:R_Shunt"
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "R"
+			(at -2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R_Shunt"
+			(at 0 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Shunt resistor with Kelvin connections"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res shunt resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*Shunt*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "R_Shunt_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 -2.54) (xy 1.27 -2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 1.27 2.54) (xy 0 2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_Shunt_1_1"
+			(pin passive line
+				(at 0 5.08 270)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 2.54 180)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -2.54 180)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -5.08 90)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "BATTERY -> MAIN FUSE -> SERVICE SWITCH -> SHUNT -> LOAD BUS" (at 20 15 0) (effects (font (size 2 2)) (justify left top)) (uuid 634fc2bf-3c68-5937-8139-61a4b3b0a258))(text "Protected 6S pack only. Charge connection branches BEFORE service switch; see sheet 06." (at 20 23 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 72a4694f-d014-5195-939e-89e89b02a50a))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 45.72 60.96 180) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e749bd3d-df9e-587e-8ffb-8a02e5208d83) (property "Reference" "J101" (at 45.72 50.800000000000004 0) (effects (font (size 1.27 1.27)) )) (property "Value" "BMS protected output" (at 45.72 53.34 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 45.72 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 45.72 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/f083c98a-a7b3-519e-b03a-d847f962bacf" (reference "J101") (unit 1)))))(symbol (lib_id "Device:Fuse") (at 91.44 60.96 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid d51cd96a-0f75-5608-970d-12b2844d6d2c) (property "Reference" "F101" (at 91.44 53.34 90) (effects (font (size 1.27 1.27)) )) (property "Value" "25A candidate - verify" (at 91.44 55.88 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 91.44 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 91.44 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/f083c98a-a7b3-519e-b03a-d847f962bacf" (reference "F101") (unit 1)))))(symbol (lib_id "Switch:SW_SPST") (at 147.32 60.96 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e2854d0c-6969-5081-9406-7ae319b8c2e9) (property "Reference" "SW101" (at 147.32 53.34 0) (effects (font (size 1.27 1.27)) )) (property "Value" "DC-rated isolator" (at 147.32 55.88 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 147.32 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 147.32 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/f083c98a-a7b3-519e-b03a-d847f962bacf" (reference "SW101") (unit 1)))))(symbol (lib_id "Device:R_Shunt") (at 213.36 60.96 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid fa3fddf5-4607-5121-bba2-bb54e5567785) (property "Reference" "R101" (at 213.36 50.800000000000004 90) (effects (font (size 1.27 1.27)) )) (property "Value" "1mR Kelvin - rating TBD" (at 213.36 53.34 90) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 213.36 60.96 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "OFF-BOARD" (at 213.36 60.96 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/f083c98a-a7b3-519e-b03a-d847f962bacf" (reference "R101") (unit 1)))))(wire (pts (xy 50.8 60.96) (xy 87.63 60.96)) (stroke (width 0) (type default)) (uuid 3576a3f9-53e6-5db6-a937-ca08a03a625a))(wire (pts (xy 95.25 60.96) (xy 119.38 60.96)) (stroke (width 0) (type default)) (uuid 0df58085-26ea-50ae-bfdc-0a9f28ece334))(wire (pts (xy 119.38 60.96) (xy 142.24 60.96)) (stroke (width 0) (type default)) (uuid 6298c7ce-95ae-535f-a5ea-cd3220646872))(global_label "VBAT_FUSED" (shape bidirectional) (at 119.38 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid f8edd522-de3b-53af-9695-8f68c6dcd3ce))(junction (at 119.38 60.96) (diameter 0) (color 0 0 0 0) (uuid 0506be2f-216e-5a36-9d28-ab61248567b2))(wire (pts (xy 152.4 60.96) (xy 208.28 60.96)) (stroke (width 0) (type default)) (uuid 772c6463-c7ec-56ff-aef2-3af7e8781e83))(wire (pts (xy 218.44 60.96) (xy 254.0 60.96)) (stroke (width 0) (type default)) (uuid 178535a9-2942-5b4a-abd0-e9fe91561ee3))(global_label "VBAT_SW" (shape bidirectional) (at 254.0 60.96 180) (effects (font (size 1 1)) (justify right)) (uuid 5783b9ce-e674-5e83-ad78-36937b84b6a8))(wire (pts (xy 210.82 58.42) (xy 210.82 78.74)) (stroke (width 0) (type default)) (uuid a172bf2f-2e2a-58c2-9f69-c1ac726d8182))(global_label "SHUNT_HI" (shape bidirectional) (at 210.82 78.74 0) (effects (font (size 1 1)) (justify left)) (uuid 4aa740ee-ad33-51b5-a528-2b561411726c))(wire (pts (xy 215.9 58.42) (xy 215.9 83.82)) (stroke (width 0) (type default)) (uuid ba77d365-56b1-5b26-93ea-0e2f54562f8f))(wire (pts (xy 215.9 83.82) (xy 231.14 83.82)) (stroke (width 0) (type default)) (uuid 290f6bd9-1402-5718-9a05-a85758a68d2d))(global_label "SHUNT_LO" (shape bidirectional) (at 231.14 83.82 180) (effects (font (size 1 1)) (justify right)) (uuid e8d3dedb-ab20-523e-ad29-a796043a6cfb))(wire (pts (xy 50.8 58.42) (xy 71.12 58.42)) (stroke (width 0) (type default)) (uuid 2875468f-c82a-562d-9ca1-ad497f0ce00f))(global_label "GND_SYS" (shape bidirectional) (at 71.12 58.42 180) (effects (font (size 1 1)) (justify right)) (uuid 1fe1212c-39e9-5d12-b83e-1ce2d70f30ae))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 340.36 63.5 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid b7d40d1c-e39e-5063-b4ed-1ce28aec76d0) (property "Reference" "J102" (at 340.36 55.88 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Switched bus service output" (at 340.36 58.42 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 340.36 63.5 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 340.36 63.5 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/f083c98a-a7b3-519e-b03a-d847f962bacf" (reference "J102") (unit 1)))))(wire (pts (xy 335.28 63.5) (xy 325.12 63.5)) (stroke (width 0) (type default)) (uuid 843b7fe2-57b9-5800-9e1d-981fe5426e43))(global_label "VBAT_SW" (shape bidirectional) (at 325.12 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 42efae75-f26f-5521-a549-09552891b2ae))(wire (pts (xy 335.28 66.04) (xy 325.12 66.04)) (stroke (width 0) (type default)) (uuid 7b3aa625-46c4-58f2-98bb-12f010d96fc7))(global_label "GND_SYS" (shape bidirectional) (at 325.12 66.04 0) (effects (font (size 1 1)) (justify left)) (uuid 120da3ec-d1fd-513b-8e9b-16dd5ae5f0cf))(text "R101 is a FOUR-terminal shunt: pins 1/4 carry current; pins 2/3 are Kelvin sense connections to U101 (sheet 02)." (at 20 124 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid e54f364b-7e84-5568-bea8-9305b8b7f842))(text "1 milliohm: 25A -> 25mV and 0.625W; 40A -> 1.6W. Select pulse rating, thermal margin and terminal geometry." (at 20 132 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 01c9a46a-e3a3-527f-81f7-647703a21485))(text "OFF-BOARD / NOT RELEASED: cell pack, BMS, pack fuse, isolator and high-current shunt. No DIY cell assembly drawing." (at 20 148 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid bb9d6b5a-b7d1-5ca2-8eb7-cf58832f2b3e))(text "GND_SYS is the BMS protected return. Do not bypass the BMS with USB grounds, charger returns or chassis bonds." (at 20 156 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 6bceb2d2-6dce-5b3c-b98b-a54d8076037b))(text "F101 protects the battery lead. Branch fuses are on sheets 03/05/06. No fuse, cable or contactor rating is final." (at 20 172 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 9b55880f-a768-5547-b9b7-d4222970b79f))(text "UNRESOLVED: whole-system reverse-polarity / surge protection and converter inrush. No placeholder is claimed as protection." (at 20 188 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 6da9a1b3-d8c8-50c4-b804-0021a2d7bf74))(text "SW101 OFF isolates loads, not the charging connector. Disconnect the pack and charger before service." (at 20 204 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 280ff3e7-1524-53b9-92b9-bdfd00eb0aec))(text "This shunt measures load discharge only. Charging bypasses it; BMS must supply total pack charge accounting." (at 20 220 0) (effects (font (size 1.5 1.5)) (justify left top)) (uuid 12c47aa4-72b5-5711-8f54-3624614af987)) (embedded_fonts no))

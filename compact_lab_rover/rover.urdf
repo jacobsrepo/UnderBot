@@ -1,0 +1,914 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="compact_lab_rover">
+  <material name="silver">
+    <color rgba="0.72 0.76 0.79 1" />
+  </material>
+  <material name="dark">
+    <color rgba="0.055 0.07 0.085 1" />
+  </material>
+  <material name="blue">
+    <color rgba="0.025 0.32 0.49 1" />
+  </material>
+  <material name="rubber">
+    <color rgba="0.025 0.03 0.035 1" />
+  </material>
+  <material name="glass">
+    <color rgba="0.03 0.12 0.17 1" />
+  </material>
+  <material name="red">
+    <color rgba="0.85 0.035 0.02 1" />
+  </material>
+  <material name="green">
+    <color rgba="0.12 0.95 0.22 1" />
+  </material>
+  <material name="yellow">
+    <color rgba="0.98 0.7 0.02 1" />
+  </material>
+  <link name="base_link">
+    <visual name="base_link_visual_0">
+      <origin xyz="0 0 0.055" rpy="0 0 0" />
+      <geometry>
+        <box size="0.20 0.20 0.055" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_1">
+      <origin xyz="-0.102 -0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.022" length="0.005" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_2">
+      <origin xyz="-0.10454999999999999 -0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.007" length="0.007" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_3">
+      <origin xyz="-0.102 0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.022" length="0.005" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_4">
+      <origin xyz="-0.10454999999999999 0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.007" length="0.007" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_5">
+      <origin xyz="0.102 -0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.022" length="0.005" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_6">
+      <origin xyz="0.10454999999999999 -0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.007" length="0.007" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_7">
+      <origin xyz="0.102 0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.022" length="0.005" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="base_link_visual_8">
+      <origin xyz="0.10454999999999999 0.066 0.055" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.007" length="0.007" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="chassis">
+    <visual name="chassis_visual_0">
+      <origin xyz="0 0 0.12" rpy="0 0 0" />
+      <geometry>
+        <box size="0.18 0.18 0.24" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_1">
+      <origin xyz="-0.09 -0.09 0.12" rpy="0 0 0" />
+      <geometry>
+        <box size="0.014 0.014 0.245" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_2">
+      <origin xyz="-0.09 0.09 0.12" rpy="0 0 0" />
+      <geometry>
+        <box size="0.014 0.014 0.245" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_3">
+      <origin xyz="0.09 -0.09 0.12" rpy="0 0 0" />
+      <geometry>
+        <box size="0.014 0.014 0.245" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_4">
+      <origin xyz="0.09 0.09 0.12" rpy="0 0 0" />
+      <geometry>
+        <box size="0.014 0.014 0.245" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_5">
+      <origin xyz="0 0 0.245" rpy="0 0 0" />
+      <geometry>
+        <box size="0.184 0.184 0.007" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_6">
+      <origin xyz="0.092 0 0.11" rpy="0 0 0" />
+      <geometry>
+        <box size="0.004 0.125 0.12" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0.025 0.32 0.49 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_7">
+      <origin xyz="0.096 -0.035 0.11" rpy="0 0 0" />
+      <geometry>
+        <box size="0.006 0.012 0.042" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_8">
+      <origin xyz="0.092 0 0.204" rpy="0 0 0" />
+      <geometry>
+        <box size="0.004 0.07 0.022" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_9">
+      <origin xyz="0.095 -0.022 0.204" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.006" length="0.003" />
+      </geometry>
+      <material name="glass">
+        <color rgba="0.03 0.12 0.17 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_10">
+      <origin xyz="0.095 0 0.204" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.006" length="0.003" />
+      </geometry>
+      <material name="glass">
+        <color rgba="0.03 0.12 0.17 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_11">
+      <origin xyz="0.095 0.022 0.204" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.006" length="0.003" />
+      </geometry>
+      <material name="glass">
+        <color rgba="0.03 0.12 0.17 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_12">
+      <origin xyz="0.094 -0.021 0.231" rpy="0 0 0" />
+      <geometry>
+        <box size="0.004 0.019 0.006" />
+      </geometry>
+      <material name="red">
+        <color rgba="0.85 0.035 0.02 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_13">
+      <origin xyz="0.094 0 0.231" rpy="0 0 0" />
+      <geometry>
+        <box size="0.004 0.019 0.006" />
+      </geometry>
+      <material name="yellow">
+        <color rgba="0.98 0.7 0.02 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_14">
+      <origin xyz="0.094 0.021 0.231" rpy="0 0 0" />
+      <geometry>
+        <box size="0.004 0.019 0.006" />
+      </geometry>
+      <material name="green">
+        <color rgba="0.12 0.95 0.22 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_15">
+      <origin xyz="-0.092 0 0.10" rpy="0 0 0" />
+      <geometry>
+        <box size="0.004 0.12 0.14" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0.025 0.32 0.49 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_16">
+      <origin xyz="-0.095 -0.059 0.204" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.014" length="0.006" />
+      </geometry>
+      <material name="yellow">
+        <color rgba="0.98 0.7 0.02 1" />
+      </material>
+    </visual>
+    <visual name="chassis_visual_17">
+      <origin xyz="-0.101 -0.059 0.204" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.012" />
+      </geometry>
+      <material name="red">
+        <color rgba="0.85 0.035 0.02 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="chassis_mount" type="fixed">
+    <parent link="base_link" />
+    <child link="chassis" />
+    <origin xyz="0 0 0.0825" />
+  </joint>
+  <link name="front_left_wheel">
+    <visual name="front_left_wheel_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.032" length="0.02" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_1">
+      <origin xyz="0.028 0 0.0" rpy="1.570796 0.0 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_2">
+      <origin xyz="0.019798989873223333 0 0.019798989873223333" rpy="1.570796 0.7853981633974483 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_3">
+      <origin xyz="1.7145055188062945e-18 0 0.028" rpy="1.570796 1.5707963267948966 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_4">
+      <origin xyz="-0.01979898987322333 0 0.019798989873223333" rpy="1.570796 2.356194490192345 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_5">
+      <origin xyz="-0.028 0 3.429011037612589e-18" rpy="1.570796 3.141592653589793 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_6">
+      <origin xyz="-0.019798989873223337 0 -0.01979898987322333" rpy="1.570796 3.9269908169872414 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_7">
+      <origin xyz="-5.143516556418883e-18 0 -0.028" rpy="1.570796 4.71238898038469 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_left_wheel_visual_8">
+      <origin xyz="0.019798989873223326 0 -0.019798989873223337" rpy="1.570796 5.497787143782138 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="front_left_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="front_left_wheel" />
+    <origin xyz="0.065 0.091 0.035" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="front_right_wheel">
+    <visual name="front_right_wheel_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.032" length="0.02" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_1">
+      <origin xyz="0.028 0 0.0" rpy="1.570796 0.0 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_2">
+      <origin xyz="0.019798989873223333 0 0.019798989873223333" rpy="1.570796 0.7853981633974483 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_3">
+      <origin xyz="1.7145055188062945e-18 0 0.028" rpy="1.570796 1.5707963267948966 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_4">
+      <origin xyz="-0.01979898987322333 0 0.019798989873223333" rpy="1.570796 2.356194490192345 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_5">
+      <origin xyz="-0.028 0 3.429011037612589e-18" rpy="1.570796 3.141592653589793 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_6">
+      <origin xyz="-0.019798989873223337 0 -0.01979898987322333" rpy="1.570796 3.9269908169872414 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_7">
+      <origin xyz="-5.143516556418883e-18 0 -0.028" rpy="1.570796 4.71238898038469 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="front_right_wheel_visual_8">
+      <origin xyz="0.019798989873223326 0 -0.019798989873223337" rpy="1.570796 5.497787143782138 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="front_right_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="front_right_wheel" />
+    <origin xyz="0.065 -0.091 0.035" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="rear_left_wheel">
+    <visual name="rear_left_wheel_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.032" length="0.02" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_1">
+      <origin xyz="0.028 0 0.0" rpy="1.570796 0.0 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_2">
+      <origin xyz="0.019798989873223333 0 0.019798989873223333" rpy="1.570796 0.7853981633974483 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_3">
+      <origin xyz="1.7145055188062945e-18 0 0.028" rpy="1.570796 1.5707963267948966 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_4">
+      <origin xyz="-0.01979898987322333 0 0.019798989873223333" rpy="1.570796 2.356194490192345 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_5">
+      <origin xyz="-0.028 0 3.429011037612589e-18" rpy="1.570796 3.141592653589793 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_6">
+      <origin xyz="-0.019798989873223337 0 -0.01979898987322333" rpy="1.570796 3.9269908169872414 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_7">
+      <origin xyz="-5.143516556418883e-18 0 -0.028" rpy="1.570796 4.71238898038469 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_left_wheel_visual_8">
+      <origin xyz="0.019798989873223326 0 -0.019798989873223337" rpy="1.570796 5.497787143782138 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="rear_left_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="rear_left_wheel" />
+    <origin xyz="-0.065 0.091 0.035" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="rear_right_wheel">
+    <visual name="rear_right_wheel_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.032" length="0.02" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_1">
+      <origin xyz="0.028 0 0.0" rpy="1.570796 0.0 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_2">
+      <origin xyz="0.019798989873223333 0 0.019798989873223333" rpy="1.570796 0.7853981633974483 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_3">
+      <origin xyz="1.7145055188062945e-18 0 0.028" rpy="1.570796 1.5707963267948966 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_4">
+      <origin xyz="-0.01979898987322333 0 0.019798989873223333" rpy="1.570796 2.356194490192345 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_5">
+      <origin xyz="-0.028 0 3.429011037612589e-18" rpy="1.570796 3.141592653589793 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_6">
+      <origin xyz="-0.019798989873223337 0 -0.01979898987322333" rpy="1.570796 3.9269908169872414 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_7">
+      <origin xyz="-5.143516556418883e-18 0 -0.028" rpy="1.570796 4.71238898038469 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+    <visual name="rear_right_wheel_visual_8">
+      <origin xyz="0.019798989873223326 0 -0.019798989873223337" rpy="1.570796 5.497787143782138 0.65" />
+      <geometry>
+        <cylinder radius="0.006" length="0.026" />
+      </geometry>
+      <material name="rubber">
+        <color rgba="0.025 0.03 0.035 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="rear_right_wheel_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="rear_right_wheel" />
+    <origin xyz="-0.065 -0.091 0.035" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="left_upper_arm">
+    <visual name="left_upper_arm_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.022" length="0.036" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="left_upper_arm_visual_1">
+      <origin xyz="0.013 0 -0.045" rpy="0 0 0" />
+      <geometry>
+        <box size="0.025 0.024 0.075" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="left_shoulder" type="revolute">
+    <parent link="chassis" />
+    <child link="left_upper_arm" />
+    <origin xyz="0 0.116 0.16" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.3" upper="1.3" effort="1" velocity="1" />
+  </joint>
+  <link name="left_forearm">
+    <visual name="left_forearm_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.016" length="0.029" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="left_forearm_visual_1">
+      <origin xyz="0.035 0 -0.008" rpy="0 0 0" />
+      <geometry>
+        <box size="0.063 0.022 0.019" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="left_elbow" type="revolute">
+    <parent link="left_upper_arm" />
+    <child link="left_forearm" />
+    <origin xyz="0.026 0 -0.086" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.6" upper="1.6" effort="1" velocity="1" />
+  </joint>
+  <link name="left_gripper">
+    <visual name="left_gripper_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.021 0.05 0.019" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="left_wrist" type="revolute">
+    <parent link="left_forearm" />
+    <child link="left_gripper" />
+    <origin xyz="0.073 0 -0.008" />
+    <axis xyz="1 0 0" />
+    <limit lower="-1.57" upper="1.57" effort="1" velocity="1" />
+  </joint>
+  <link name="left_finger_a">
+    <visual name="left_finger_a_visual_0">
+      <origin xyz="0.01 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.033 0.006 0.011" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="left_finger_a_slide" type="prismatic">
+    <parent link="left_gripper" />
+    <child link="left_finger_a" />
+    <origin xyz="0.02 0.014 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="0" upper="0.012" effort="1" velocity="1" />
+  </joint>
+  <link name="left_finger_b">
+    <visual name="left_finger_b_visual_0">
+      <origin xyz="0.01 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.033 0.006 0.011" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="left_finger_b_slide" type="prismatic">
+    <parent link="left_gripper" />
+    <child link="left_finger_b" />
+    <origin xyz="0.02 -0.014 0" />
+    <axis xyz="0 -1 0" />
+    <limit lower="0" upper="0.012" effort="1" velocity="1" />
+  </joint>
+  <link name="right_upper_arm">
+    <visual name="right_upper_arm_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.022" length="0.036" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="right_upper_arm_visual_1">
+      <origin xyz="0.013 0 -0.045" rpy="0 0 0" />
+      <geometry>
+        <box size="0.025 0.024 0.075" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="right_shoulder" type="revolute">
+    <parent link="chassis" />
+    <child link="right_upper_arm" />
+    <origin xyz="0 -0.116 0.16" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.3" upper="1.3" effort="1" velocity="1" />
+  </joint>
+  <link name="right_forearm">
+    <visual name="right_forearm_visual_0">
+      <origin xyz="0 0 0" rpy="1.570796 0 0" />
+      <geometry>
+        <cylinder radius="0.016" length="0.029" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="right_forearm_visual_1">
+      <origin xyz="0.035 0 -0.008" rpy="0 0 0" />
+      <geometry>
+        <box size="0.063 0.022 0.019" />
+      </geometry>
+      <material name="silver">
+        <color rgba="0.72 0.76 0.79 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="right_elbow" type="revolute">
+    <parent link="right_upper_arm" />
+    <child link="right_forearm" />
+    <origin xyz="0.026 0 -0.086" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.6" upper="1.6" effort="1" velocity="1" />
+  </joint>
+  <link name="right_gripper">
+    <visual name="right_gripper_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.021 0.05 0.019" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="right_wrist" type="revolute">
+    <parent link="right_forearm" />
+    <child link="right_gripper" />
+    <origin xyz="0.073 0 -0.008" />
+    <axis xyz="1 0 0" />
+    <limit lower="-1.57" upper="1.57" effort="1" velocity="1" />
+  </joint>
+  <link name="right_finger_a">
+    <visual name="right_finger_a_visual_0">
+      <origin xyz="0.01 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.033 0.006 0.011" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="right_finger_a_slide" type="prismatic">
+    <parent link="right_gripper" />
+    <child link="right_finger_a" />
+    <origin xyz="0.02 0.014 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="0" upper="0.012" effort="1" velocity="1" />
+  </joint>
+  <link name="right_finger_b">
+    <visual name="right_finger_b_visual_0">
+      <origin xyz="0.01 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.033 0.006 0.011" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="right_finger_b_slide" type="prismatic">
+    <parent link="right_gripper" />
+    <child link="right_finger_b" />
+    <origin xyz="0.02 -0.014 0" />
+    <axis xyz="0 -1 0" />
+    <limit lower="0" upper="0.012" effort="1" velocity="1" />
+  </joint>
+  <link name="camera_pan_link">
+    <visual name="camera_pan_link_visual_0">
+      <origin xyz="0 0 0.008" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.017" length="0.016" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="camera_pan_link_visual_1">
+      <origin xyz="0 0 0.025" rpy="0 0 0" />
+      <geometry>
+        <box size="0.016 0.019 0.022" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="camera_pan" type="revolute">
+    <parent link="chassis" />
+    <child link="camera_pan_link" />
+    <origin xyz="0 0 0.253" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="1" velocity="1" />
+  </joint>
+  <link name="camera_link">
+    <visual name="camera_link_visual_0">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.029 0.069 0.034" />
+      </geometry>
+      <material name="dark">
+        <color rgba="0.055 0.07 0.085 1" />
+      </material>
+    </visual>
+    <visual name="camera_link_visual_1">
+      <origin xyz="0.017 -0.021 0" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.005" />
+      </geometry>
+      <material name="glass">
+        <color rgba="0.03 0.12 0.17 1" />
+      </material>
+    </visual>
+    <visual name="camera_link_visual_2">
+      <origin xyz="0.017 0.021 0" rpy="0 1.570796 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.005" />
+      </geometry>
+      <material name="glass">
+        <color rgba="0.03 0.12 0.17 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="camera_tilt" type="revolute">
+    <parent link="camera_pan_link" />
+    <child link="camera_link" />
+    <origin xyz="0 0 0.042" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.8" upper="0.8" effort="1" velocity="1" />
+  </joint>
+</robot>

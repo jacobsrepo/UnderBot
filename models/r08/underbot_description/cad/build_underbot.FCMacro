@@ -1,0 +1,191 @@
+"""Rebuild native FreeCAD solids from the delivered R08_WR141E geometry manifest.
+
+Run in FreeCAD through Macro > Macros, or FreeCAD's Python console. No URDF
+workbench is needed. This macro source was syntax-checked but not executed here:
+FreeCAD is not installed in the authoring environment.
+
+Manifest units are metres; all native CAD geometry and placements are converted
+to millimetres exactly once. Link containers use zero-pose world placements;
+component placements remain link-local. Existing URDF STL assets are unaffected.
+
+Environment overrides:
+  UNDERBOT_PACKAGE_ROOT = extracted underbot_description directory
+  UNDERBOT_EXPORT_STEP = 1 to additionally export a world-pose STEP assembly
+"""
+import json
+import math
+import os
+from pathlib import Path
+
+import FreeCAD as App
+import Part
+
+
+MM_PER_M = 1000.0
+# This is the same explicitly simplified concave 2020 profile as the generator,
+# not an undocumented claim about a particular supplier's T/V-slot cross-section.
+PROFILE_M = [(-.010, -.010), (-.003, -.010), (-.003, -.007), (.003, -.007),
+             (.003, -.010), (.010, -.010), (.010, -.003), (.007, -.003),
+             (.007, .003), (.010, .003), (.010, .010), (.003, .010),
+             (.003, .007), (-.003, .007), (-.003, .010), (-.010, .010),
+             (-.010, .003), (-.007, .003), (-.007, -.003), (-.010, -.003)]
+
+
+def package_path():
+    override = os.environ.get("UNDERBOT_PACKAGE_ROOT")
+    if override:
+        return Path(override).expanduser().resolve()
+    filename = globals().get("__file__")
+    if filename:
+        return Path(filename).resolve().parents[1]
+    raise RuntimeError("Run the saved macro file, or set UNDERBOT_PACKAGE_ROOT before executing it.")
+
+
+def placement(xyz_m, rpy_rad):
+    """URDF Rz(yaw)*Ry(pitch)*Rx(roll), with translation converted to mm."""
+    roll, pitch, yaw = rpy_rad
+    cr, sr = math.cos(roll), math.sin(roll)
+    cp, sp = math.cos(pitch), math.sin(pitch)
+    cy, sy = math.cos(yaw), math.sin(yaw)
+    rows = [[cy*cp, cy*sp*sr-sy*cr, cy*sp*cr+sy*sr],
+            [sy*cp, sy*sp*sr+cy*cr, sy*sp*cr-cy*sr],
+            [-sp, cp*sr, cp*cr]]
+    matrix = App.Matrix()
+    for row in range(3):
+        for column in range(3):
+            setattr(matrix, f"A{row+1}{column+1}", rows[row][column])
+        setattr(matrix, f"A{row+1}4", xyz_m[row] * MM_PER_M)
+    return App.Placement(matrix)
+
+
+def primitive(part):
+    size = [float(value) * MM_PER_M for value in part["size"]]
+    kind = part["kind"]
+    if kind == "box":
+        x, y, z = size
+        return Part.makeBox(x, y, z, App.Vector(-x/2, -y/2, -z/2))
+    if kind == "cylinder":
+        radius, length = size
+        return Part.makeCylinder(radius, length, App.Vector(0, 0, -length/2))
+    if kind == "sphere":
+        return Part.makeSphere(size[0])
+    if kind == "prism":
+        height = size[2]
+        points = [App.Vector(x*MM_PER_M, y*MM_PER_M, -height/2) for x,y in part["polygon"]]
+        points.append(points[0])
+        return Part.Face(Part.makePolygon(points)).extrude(App.Vector(0,0,height))
+    if kind == "extrusion":
+        length = size[0]
+        points = [App.Vector(x*MM_PER_M, y*MM_PER_M, -length/2) for x, y in PROFILE_M]
+        points.append(points[0])
+        wire = Part.makePolygon(points)
+        return Part.Face(wire).extrude(App.Vector(0, 0, length))
+    raise ValueError(f"Unsupported manifest geometry: {kind}")
+
+
+def zero_placements(manifest):
+    names = set(manifest["links"])
+    children = {joint["child"] for joint in manifest["joints"]}
+    roots = names - children
+    if roots != {"base_link"}:
+        raise ValueError(f"Expected sole base_link root, got {sorted(roots)}")
+    transforms = {"base_link": App.Placement()}
+    pending = list(manifest["joints"])
+    while pending:
+        completed = []
+        for joint in pending:
+            if joint["parent"] in transforms:
+                local = placement(joint["xyz"], joint["rpy"])
+                transforms[joint["child"]] = transforms[joint["parent"]].multiply(local)
+                completed.append(joint)
+        if not completed:
+            raise ValueError("Unresolved or cyclic link tree")
+        pending = [joint for joint in pending if joint not in completed]
+    if set(transforms) != names:
+        raise ValueError("Manifest has unreachable links")
+    return transforms
+
+
+def metadata(obj, link_name, part, collision=False):
+    obj.addProperty("App::PropertyString", "URDFLink", "Source").URDFLink = link_name
+    obj.addProperty("App::PropertyString", "SourceName", "Source").SourceName = part["name"]
+    obj.addProperty("App::PropertyString", "GeometryKind", "Source").GeometryKind = part["kind"]
+    obj.addProperty("App::PropertyString", "DimensionsMetres", "Source").DimensionsMetres = json.dumps(part["size"])
+    obj.addProperty("App::PropertyFloat", "EstimatedMassKg", "Source").EstimatedMassKg = 0 if collision else part.get("mass", 0)
+    obj.addProperty("App::PropertyString", "MassNote", "Source").MassNote = (
+        "Collision proxy only; no additional mass" if collision else
+        "Assigned estimate; visual volume is not the material mass calibration")
+
+
+def main():
+    package = package_path()
+    source = package / "config" / "geometry_manifest.json"
+    manifest = json.loads(source.read_text(encoding="utf-8"))
+    worlds = zero_placements(manifest)
+    document = App.newDocument("Underbot_R08_WR141E")
+    document.Label = "Underbot R08_WR141E — native CAD, proposed hardware dimensions"
+    world_shapes = []
+    feature_count = 0
+    for link_name, link in manifest["links"].items():
+        container = document.addObject("App::Part", link_name + "_Link")
+        container.Label = link_name
+        container.Placement = worlds[link_name]
+        container.addProperty("App::PropertyString", "URDFLink", "Source").URDFLink = link_name
+        container.addProperty("App::PropertyString", "Pose", "Source").Pose = "URDF joint command zero; fixed bracket offsets included"
+        container.addProperty("App::PropertyString", "Units", "Source").Units = "Native CAD mm; manifest SI metres"
+        for index, component in enumerate(link.get("parts", [])):
+            local = placement(component["xyz"], component["rpy"])
+            feature = document.addObject("Part::Feature", link_name + "_visual_" + str(index))
+            container.addObject(feature)
+            feature.Label = component["name"]
+            shape = primitive(component)
+            if not shape.isValid():
+                raise ValueError(f"FreeCAD produced an invalid solid: {link_name}/{component['name']}")
+            feature.Shape = shape
+            feature.Placement = local
+            metadata(feature, link_name, component)
+            if App.GuiUp:
+                rgba = component.get("rgba", [0.6, 0.6, 0.6, 1])
+                feature.ViewObject.ShapeColor = tuple(rgba[:3])
+                feature.ViewObject.Transparency = int(round(100 * (1-rgba[3])))
+            world_shape = feature.Shape.copy()
+            world_shape.Placement = worlds[link_name].multiply(local)
+            world_shapes.append(world_shape)
+            feature_count += 1
+        # Hidden native collision proxies allow inspection without replacing the
+        # detailed visuals. They do not contribute extra component mass. In a
+        # headless document ViewObjects are absent, so omit proxies instead of
+        # saving unexpected visible duplicates when the document is later opened.
+        if not App.GuiUp:
+            continue
+        for index, collision in enumerate(link.get("collisions", [])):
+            feature = document.addObject("Part::Feature", link_name + "_collision_" + str(index))
+            container.addObject(feature)
+            feature.Label = "COLLISION " + collision["name"]
+            feature.Shape = primitive(collision)
+            feature.Placement = placement(collision["xyz"], collision["rpy"])
+            metadata(feature, link_name, collision, collision=True)
+            if App.GuiUp:
+                feature.ViewObject.ShapeColor = (0.9, 0.15, 0.1)
+                feature.ViewObject.Transparency = 75
+                feature.ViewObject.Visibility = False
+    document.recompute()
+    destination = package / "cad"
+    destination.mkdir(parents=True, exist_ok=True)
+    native_path = destination / "underbot_R08_WR141E.FCStd"
+    document.saveAs(str(native_path))
+    App.Console.PrintMessage(f"Saved {native_path}; {len(manifest['links'])} link containers, {feature_count} visual solids.\n")
+    if os.environ.get("UNDERBOT_EXPORT_STEP", "0") == "1":
+        # STEP is an assembled-world CAD export in mm. It is deliberately not
+        # substituted for the link-local metric STL assets referenced by URDF.
+        step_path = destination / "underbot_R08_WR141E.step"
+        Part.makeCompound(world_shapes).exportStep(str(step_path))
+        App.Console.PrintMessage(f"Saved assembled STEP: {step_path}\n")
+    if App.GuiUp:
+        import FreeCADGui as Gui
+        Gui.activeDocument().activeView().viewAxonometric()
+        Gui.activeDocument().activeView().fitAll()
+    return document
+
+
+main()

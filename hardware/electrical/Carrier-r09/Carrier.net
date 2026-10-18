@@ -1,0 +1,1708 @@
+(export
+	(version "E")
+	(design
+		(source "D:\\gitdemo\\Underbot\\.publish-underbot\\hardware\\electrical\\Carrier-r09\\UnderBot.kicad_sch")
+		(date "2026-10-02T16:05:21")
+		(tool "Eeschema 10.0.6")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "UnderBot.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "2")
+			(name "/Converter carrier circuit r09/")
+			(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			(title_block
+				(title "NOCO converter carrier r09 - module integration")
+				(company "UnderBot")
+				(rev "0.9 CARRIER")
+				(date "2026-10-02")
+				(source "Carrier.kicad_sch")
+				(comment
+					(number "1")
+					(value "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+				)
+				(comment
+					(number "2")
+					(value "J pin numbers are proposed harness assignments, not OEM connector pinouts")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "A1")
+			(value "52Pi EP-0225 mounted on standoffs")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Pi_EP0225")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "98fb3bf3-d9b5-5993-a329-d43ef02bc54c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "DC_PLUS")
+						)
+						(pin
+							(num "DC_MINUS")
+						)
+						(pin
+							(num "USB_C_PD")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "A2")
+			(value "Mean Well DDR-60G-12 / rail mounting")
+			(fields
+				(field
+					(name "Assembly") "OFF-BOARD")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Kinect_DDR60G12")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "OFF-BOARD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "350de483-2ca4-530a-bebd-969d5155c919")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "5_VIN_PLUS")
+						)
+						(pin
+							(num "6_VIN_MINUS")
+						)
+						(pin
+							(num "3_VOUT_PLUS")
+						)
+						(pin
+							(num "1_VOUT_MINUS")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F1")
+			(value "MINI current rating HOLD")
+			(footprint "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "f3566fbb-27d3-53d8-a40b-a030583da36e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F2")
+			(value "MINI current rating HOLD")
+			(footprint "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "e627410b-61bb-5477-8ae5-faaa7ada7cb0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F3")
+			(value "MINI current rating HOLD")
+			(footprint "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "31f29f63-7602-5b8c-942d-31e6978ed12d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F4")
+			(value "MINI current rating HOLD")
+			(footprint "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "Fuse:Fuseholder_Blade_Mini_Keystone_3568")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "Fuse")
+				(description "Fuse")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "fuse")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*Fuse*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "d88394c5-633c-5966-b777-17e5ae4e4d84")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "H1")
+			(value "M3")
+			(footprint "MountingHole:MountingHole_3.2mm_M3")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Mechanical")
+				(part "MountingHole")
+				(description "Mounting Hole without connection")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "mounting hole")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "MountingHole*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "fae743a2-150b-5590-9d42-b941dbf3259a")
+			(units
+				(unit
+					(name "A")
+					(pins)
+				)
+			)
+		)
+		(comp
+			(ref "H2")
+			(value "M3")
+			(footprint "MountingHole:MountingHole_3.2mm_M3")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Mechanical")
+				(part "MountingHole")
+				(description "Mounting Hole without connection")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "mounting hole")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "MountingHole*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "a3815191-8af8-5a24-abd8-656f6a95fd10")
+			(units
+				(unit
+					(name "A")
+					(pins)
+				)
+			)
+		)
+		(comp
+			(ref "H3")
+			(value "M3")
+			(footprint "MountingHole:MountingHole_3.2mm_M3")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Mechanical")
+				(part "MountingHole")
+				(description "Mounting Hole without connection")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "mounting hole")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "MountingHole*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "c0a69174-9986-5e1a-b667-2019cbace732")
+			(units
+				(unit
+					(name "A")
+					(pins)
+				)
+			)
+		)
+		(comp
+			(ref "H4")
+			(value "M3")
+			(footprint "MountingHole:MountingHole_3.2mm_M3")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Mechanical")
+				(part "MountingHole")
+				(description "Mounting Hole without connection")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "mounting hole")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "MountingHole*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "8278b54f-fba4-5b6c-8725-b78d11e42475")
+			(units
+				(unit
+					(name "A")
+					(pins)
+				)
+			)
+		)
+		(comp
+			(ref "J1")
+			(value "Protected12V input + / GND")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "1620d559-6f5a-5a76-970e-66afdef0304f")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J2")
+			(value "Stop contact SEND+ / RETURN+ (NO GND)")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "fb39cde6-8cb2-58d5-aa55-f1397a423c63")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J3")
+			(value "Short DC cable to mounted EP-0225")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "5838aff8-c1ea-5a88-87db-683532949515")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J4")
+			(value "DDR input: +Vin5 / -Vin6")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "19577d1c-eb2f-56aa-a2f2-083b23cd00f8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J5")
+			(value "DDR output return: +Vo3 / -Vo1")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "db33828d-0a86-53ce-b364-93def5dc086a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J6")
+			(value "Regulated12V to Kinect v2 adapter")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "f72b1822-61e7-5a5e-bf5b-19d8ddf9faa7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J7")
+			(value "Stopped nominal12V to Adeept VIN")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "59993525-e596-54cb-b326-9e6eb20f560c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J8")
+			(value "Stopped regulated5V AUX output")
+			(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x02")
+				(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "bebef8aa-f3e2-5eb8-bad1-24e77f93d7ac")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U3")
+			(value "Pololu D24V50F5 #2851")
+			(footprint "UnderBotCarrier:D24V50F5")
+			(fields
+				(field
+					(name "Assembly") "PCB/harness TBD")
+				(field
+					(name "Footprint") "UnderBotCarrier:D24V50F5")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "UnderBot_Modules")
+				(part "Aux_Pololu_D24V50F5")
+				(description "")
+			)
+			(property
+				(name "Assembly")
+				(value "PCB/harness TBD")
+			)
+			(property
+				(name "Sheetname")
+				(value "Converter carrier circuit r09")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Carrier.kicad_sch")
+			)
+			(sheetpath
+				(names "/Converter carrier circuit r09/")
+				(tstamps "/0e5ed83d-a0ad-5fc3-bea7-e1ad56e3b29d/")
+			)
+			(tstamps "ba57afbd-7ead-5184-8566-004c649d427d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x02")
+			(description "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x02")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "Fuse")
+			(description "Fuse")
+			(footprints
+				(fp "*Fuse*")
+			)
+			(fields
+				(field
+					(name "Reference") "F")
+				(field
+					(name "Value") "Fuse")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Fuse")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Mechanical")
+			(part "MountingHole")
+			(description "Mounting Hole without connection")
+			(footprints
+				(fp "MountingHole*")
+			)
+			(fields
+				(field
+					(name "Reference") "H")
+				(field
+					(name "Value") "MountingHole")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Mounting Hole without connection")
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Aux_Pololu_D24V50F5")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Aux_Pololu_D24V50F5")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "EN")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "VIN")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "GND1")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "GND2")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "VOUT")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Kinect_DDR60G12")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Kinect_DDR60G12")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1_VOUT_MINUS")
+					(name "1_VOUT_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "3_VOUT_PLUS")
+					(name "3_VOUT_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "5_VIN_PLUS")
+					(name "5_VIN_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "6_VIN_MINUS")
+					(name "6_VIN_MINUS")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "UnderBot_Modules")
+			(part "Pi_EP0225")
+			(fields
+				(field
+					(name "Reference") "A")
+				(field
+					(name "Value") "Pi_EP0225")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "DC_MINUS")
+					(name "DC_MINUS")
+					(type "passive")
+				)
+				(pin
+					(num "DC_PLUS")
+					(name "DC_PLUS")
+					(type "passive")
+				)
+				(pin
+					(num "USB_C_PD")
+					(name "USB_C_PD")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries
+		(library
+			(logical "Connector_Generic")
+			(uri "${KICAD10_SYMBOL_DIR}/Connector_Generic.kicad_sym")
+		)
+		(library
+			(logical "Device")
+			(uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym")
+		)
+		(library
+			(logical "Mechanical")
+			(uri "${KICAD10_SYMBOL_DIR}/Mechanical.kicad_sym")
+		)
+	)
+	(nets
+		(net
+			(code "1")
+			(name "/Converter carrier circuit r09/ACT")
+			(class "Default")
+			(node
+				(ref "F3")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F4")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "2")
+			(name "/Converter carrier circuit r09/ARM_IN")
+			(class "Default")
+			(node
+				(ref "F3")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J7")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "/Converter carrier circuit r09/AUX_5V")
+			(class "Default")
+			(node
+				(ref "J8")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "5")
+				(pinfunction "VOUT_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "/Converter carrier circuit r09/AUX_IN")
+			(class "Default")
+			(node
+				(ref "F4")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "2")
+				(pinfunction "VIN_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/Converter carrier circuit r09/DEPTH_12")
+			(class "Default")
+			(node
+				(ref "A2")
+				(pin "3_VOUT_PLUS")
+				(pinfunction "3_VOUT_PLUS_3_VOUT_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "6")
+			(name "/Converter carrier circuit r09/GND")
+			(class "Default")
+			(node
+				(ref "A1")
+				(pin "DC_MINUS")
+				(pinfunction "DC_MINUS_DC_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A2")
+				(pin "1_VOUT_MINUS")
+				(pinfunction "1_VOUT_MINUS_1_VOUT_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "A2")
+				(pin "6_VIN_MINUS")
+				(pinfunction "6_VIN_MINUS_6_VIN_MINUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J7")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J8")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "3")
+				(pinfunction "GND1_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "4")
+				(pinfunction "GND2_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "7")
+			(name "/Converter carrier circuit r09/KINECT_IN")
+			(class "Default")
+			(node
+				(ref "A2")
+				(pin "5_VIN_PLUS")
+				(pinfunction "5_VIN_PLUS_5_VIN_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "F2")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "/Converter carrier circuit r09/PI_IN")
+			(class "Default")
+			(node
+				(ref "A1")
+				(pin "DC_PLUS")
+				(pinfunction "DC_PLUS_DC_PLUS")
+				(pintype "passive")
+			)
+			(node
+				(ref "F1")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "9")
+			(name "/Converter carrier circuit r09/USB_C_TO_PI")
+			(class "Default")
+			(node
+				(ref "A1")
+				(pin "USB_C_PD")
+				(pinfunction "USB_C_PD_USB_C_PD")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "/Converter carrier circuit r09/VIN")
+			(class "Default")
+			(node
+				(ref "F1")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F2")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "unconnected-(U3-EN-Pad1)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "1")
+				(pinfunction "EN_1")
+				(pintype "passive+no_connect")
+			)
+		)
+	)
+)

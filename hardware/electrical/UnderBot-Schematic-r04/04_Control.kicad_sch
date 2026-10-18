@@ -1,0 +1,1001 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid 778facfd-0084-590f-8cad-a8d928f3361f) (paper "A3")
+        (title_block (title "04 - Controller and sensor harness / temperature circuit") (date "2026-10-02") (rev "0.4 REVIEW") (company "UnderBot")
+        (comment 1 "PROVISIONAL CIRCUIT / HARNESS DESIGN - NOT FOR FABRICATION")
+        (comment 2 "J pin numbers are proposed harness assignments, not OEM connector pinouts"))
+        (lib_symbols (symbol "Connector_Generic:Conn_01x08"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 10.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x08"
+			(at 0 -12.7 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x08_1_1"
+			(rectangle
+				(start -1.27 8.89)
+				(end 1.27 -11.43)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 7.747)
+				(end 0 7.493)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 5.207)
+				(end 0 4.953)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -4.953)
+				(end 0 -5.207)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -7.493)
+				(end 0 -7.747)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -10.033)
+				(end 0 -10.287)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 7.62 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 5.08 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -5.08 0)
+				(length 3.81)
+				(name "Pin_6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -7.62 0)
+				(length 3.81)
+				(name "Pin_7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -10.16 0)
+				(length 3.81)
+				(name "Pin_8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Connector_Generic:Conn_01x04"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x04"
+			(at 0 -7.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x04_1_1"
+			(rectangle
+				(start -1.27 3.81)
+				(end 1.27 -6.35)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 2.667)
+				(end 0 2.413)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -4.953)
+				(end 0 -5.207)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -5.08 0)
+				(length 3.81)
+				(name "Pin_4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Connector_Generic:Conn_01x02"
+		(pin_names
+			(offset 1.016)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 0 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 0 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "Conn_01x02_1_1"
+			(rectangle
+				(start -1.27 1.27)
+				(end 1.27 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -1.27 0.127)
+				(end 0 -0.127)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -1.27 -2.413)
+				(end 0 -2.667)
+				(stroke
+					(width 0.1524)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 3.81)
+				(name "Pin_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 3.81)
+				(name "Pin_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)(symbol "Device:C"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at 0.635 -2.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "C_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "C_0_1"
+			(polyline
+				(pts
+					(xy -2.032 0.762) (xy 2.032 0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.032 -0.762) (xy 2.032 -0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "C_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)) (text "ESP32 IS USB-POWERED FROM THE PI. ALL SIGNAL LEVELS HERE ARE 3.3V." (at 20 15 0) (effects (font (size 2 2)) (justify left top)) (uuid 8ce0c074-edfd-58f7-bf41-1185ac99f990))(symbol (lib_id "Connector_Generic:Conn_01x08") (at 86.36 66.04 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 3f33f32e-0ba6-5f5d-8bf2-96723ac4b933) (property "Reference" "J301" (at 86.36 50.800000000000004 0) (effects (font (size 1.27 1.27)) )) (property "Value" "ESP32 signal harness - see sheet 07" (at 86.36 53.34 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 86.36 66.04 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 86.36 66.04 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "J301") (unit 1)))))(wire (pts (xy 81.28 58.42) (xy 71.12 58.42)) (stroke (width 0) (type default)) (uuid f36bee7c-1769-5472-a9c9-3d386393526d))(global_label "GND_SYS" (shape bidirectional) (at 71.12 58.42 0) (effects (font (size 1 1)) (justify left)) (uuid 4df2572a-af12-5921-8868-edca8e62cff0))(wire (pts (xy 81.28 60.96) (xy 71.12 60.96)) (stroke (width 0) (type default)) (uuid a225ba25-f1c3-5d1a-80cc-3990496cd459))(global_label "I2C_SDA" (shape bidirectional) (at 71.12 60.96 0) (effects (font (size 1 1)) (justify left)) (uuid 951d05b9-6e75-5614-9622-7af13c31b7a7))(wire (pts (xy 81.28 63.5) (xy 71.12 63.5)) (stroke (width 0) (type default)) (uuid 2f7bc461-1b71-5336-9b2d-0f8ac84ec38d))(global_label "I2C_SCL" (shape bidirectional) (at 71.12 63.5 0) (effects (font (size 1 1)) (justify left)) (uuid 7d38f074-20af-5165-a366-3a552d1e9736))(wire (pts (xy 81.28 66.04) (xy 71.12 66.04)) (stroke (width 0) (type default)) (uuid e8c703bf-d24b-565a-a49b-5536ad490912))(global_label "PWM_OE" (shape bidirectional) (at 71.12 66.04 0) (effects (font (size 1 1)) (justify left)) (uuid 505efda2-6405-559f-86bb-9dbfbf178b28))(wire (pts (xy 81.28 68.58) (xy 71.12 68.58)) (stroke (width 0) (type default)) (uuid 0302008f-ea60-56be-8117-e3e0a31296eb))(global_label "HEARTBEAT" (shape bidirectional) (at 71.12 68.58 0) (effects (font (size 1 1)) (justify left)) (uuid ce950bf8-b86f-5fd4-ad46-cb21adf34620))(wire (pts (xy 81.28 71.12) (xy 71.12 71.12)) (stroke (width 0) (type default)) (uuid 8aafae49-d5a9-59a8-8f11-e532f2481ff4))(global_label "STOP_STATUS" (shape bidirectional) (at 71.12 71.12 0) (effects (font (size 1 1)) (justify left)) (uuid a9cced78-7bcf-5af0-a54c-e1b381dae772))(wire (pts (xy 81.28 73.66) (xy 71.12 73.66)) (stroke (width 0) (type default)) (uuid c4e732e8-c2ed-58a9-a899-99d955b661b2))(global_label "INA_ALERT" (shape bidirectional) (at 71.12 73.66 0) (effects (font (size 1 1)) (justify left)) (uuid 4ada740f-9ab7-55cb-a6b0-7256589cd9d3))(wire (pts (xy 81.28 76.2) (xy 71.12 76.2)) (stroke (width 0) (type default)) (uuid 8d268b8a-0659-5b8a-90d6-0fe8c6010ec4))(global_label "TEMP_ADC" (shape bidirectional) (at 71.12 76.2 0) (effects (font (size 1 1)) (justify left)) (uuid f3c44df7-5c22-52f3-9a69-4059981e68f3))(symbol (lib_id "Connector_Generic:Conn_01x04") (at 213.36 53.34 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 44176448-d279-5673-b391-f27323ae3f82) (property "Reference" "J302" (at 213.36 43.18 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Adafruit 2717 mux - 0x77" (at 213.36 45.72 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 213.36 53.34 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 213.36 53.34 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "J302") (unit 1)))))(wire (pts (xy 208.28 50.8) (xy 198.12 50.8)) (stroke (width 0) (type default)) (uuid b21e0267-df11-5e72-a2b4-72214f3681a7))(global_label "LOGIC_3V3" (shape bidirectional) (at 198.12 50.8 0) (effects (font (size 1 1)) (justify left)) (uuid fa26a179-b537-5f5d-8578-58638cca8b87))(wire (pts (xy 208.28 53.34) (xy 198.12 53.34)) (stroke (width 0) (type default)) (uuid d946305e-1d37-585e-87c1-3570ff00f1b5))(global_label "GND_SYS" (shape bidirectional) (at 198.12 53.34 0) (effects (font (size 1 1)) (justify left)) (uuid 2f3eeeac-c9b0-52a3-829f-1605f6bf5edd))(wire (pts (xy 208.28 55.88) (xy 198.12 55.88)) (stroke (width 0) (type default)) (uuid af826de7-d319-5a74-8510-bf9b9b00c6c3))(global_label "I2C_SDA" (shape bidirectional) (at 198.12 55.88 0) (effects (font (size 1 1)) (justify left)) (uuid dd31ca5c-25d3-58a6-9dcb-5e4079d82219))(wire (pts (xy 208.28 58.42) (xy 198.12 58.42)) (stroke (width 0) (type default)) (uuid 29d9a9f3-ac9d-5dcd-aa14-a8436f0aa0d8))(global_label "I2C_SCL" (shape bidirectional) (at 198.12 58.42 0) (effects (font (size 1 1)) (justify left)) (uuid 7270432c-cd37-5896-8fcc-aa778cbdbd19))(symbol (lib_id "Connector_Generic:Conn_01x04") (at 358.14 53.34 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 1afb007c-4213-5f69-ba3b-3ec91d3ba4af) (property "Reference" "J303" (at 358.14 43.18 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Body: Adafruit 4554 / channel 0" (at 358.14 45.72 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 358.14 53.34 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 358.14 53.34 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "J303") (unit 1)))))(wire (pts (xy 353.06 50.8) (xy 342.9 50.8)) (stroke (width 0) (type default)) (uuid 0935d9aa-73fe-5d6a-9149-3f7bdb921bb2))(global_label "LOGIC_3V3" (shape bidirectional) (at 342.9 50.8 0) (effects (font (size 1 1)) (justify left)) (uuid eebaf5fa-b2f0-5aa8-accf-70f419befbef))(wire (pts (xy 353.06 53.34) (xy 342.9 53.34)) (stroke (width 0) (type default)) (uuid c171d79a-b8ac-5197-bed4-0b42c9b51b6a))(global_label "GND_SYS" (shape bidirectional) (at 342.9 53.34 0) (effects (font (size 1 1)) (justify left)) (uuid 889a4ae1-ee5a-5582-894f-90d11f3783e1))(wire (pts (xy 353.06 55.88) (xy 342.9 55.88)) (stroke (width 0) (type default)) (uuid 79a7a987-ea30-55dd-b138-228b9931f7e1))(global_label "BODY_SDA" (shape bidirectional) (at 342.9 55.88 0) (effects (font (size 1 1)) (justify left)) (uuid 56b506a9-d0eb-56f2-9b53-73d99346ae3c))(wire (pts (xy 353.06 58.42) (xy 342.9 58.42)) (stroke (width 0) (type default)) (uuid 1072e99a-8b21-5f30-964d-7ae28dbaa865))(global_label "BODY_SCL" (shape bidirectional) (at 342.9 58.42 0) (effects (font (size 1 1)) (justify left)) (uuid 3c495005-d8b5-5b07-a08b-9a75a67c2256))(symbol (lib_id "Connector_Generic:Conn_01x04") (at 358.14 106.68 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid e3397902-13c5-5314-87dc-0c494c3e766a) (property "Reference" "J304" (at 358.14 96.52 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Head: Adafruit 4554 / channel 1" (at 358.14 99.06 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 358.14 106.68 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 358.14 106.68 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "J304") (unit 1)))))(wire (pts (xy 353.06 104.14) (xy 342.9 104.14)) (stroke (width 0) (type default)) (uuid f9d187dd-8acc-5683-bcb1-0dfcd539b2e6))(global_label "LOGIC_3V3" (shape bidirectional) (at 342.9 104.14 0) (effects (font (size 1 1)) (justify left)) (uuid d7d2af2f-463f-58d6-9de9-749a9a45cb61))(wire (pts (xy 353.06 106.68) (xy 342.9 106.68)) (stroke (width 0) (type default)) (uuid 3aa1a665-c40b-5d4f-a680-65afe7d91c9b))(global_label "GND_SYS" (shape bidirectional) (at 342.9 106.68 0) (effects (font (size 1 1)) (justify left)) (uuid b2bbfc9f-9321-5742-969a-bfd71abaccac))(wire (pts (xy 353.06 109.22) (xy 342.9 109.22)) (stroke (width 0) (type default)) (uuid c7baf1b8-7eb1-53df-8e30-36e798b7ec6a))(global_label "HEAD_SDA" (shape bidirectional) (at 342.9 109.22 0) (effects (font (size 1 1)) (justify left)) (uuid 44acb41a-babe-59fa-ab1c-61bbc2e9d8b4))(wire (pts (xy 353.06 111.76) (xy 342.9 111.76)) (stroke (width 0) (type default)) (uuid f7098283-796a-5c98-9cf1-b96e86c2ac28))(global_label "HEAD_SCL" (shape bidirectional) (at 342.9 111.76 0) (effects (font (size 1 1)) (justify left)) (uuid 7b49281e-fbd3-57a2-8dcd-d47a153582db))(symbol (lib_id "Connector_Generic:Conn_01x04") (at 213.36 106.68 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 568a5b6b-ec84-57df-9da1-499fd63ca3bd) (property "Reference" "J305" (at 213.36 96.52 0) (effects (font (size 1.27 1.27)) )) (property "Value" "Mux channels 0 / 1 outputs" (at 213.36 99.06 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 213.36 106.68 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 213.36 106.68 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "J305") (unit 1)))))(wire (pts (xy 208.28 104.14) (xy 198.12 104.14)) (stroke (width 0) (type default)) (uuid 0ba75cd8-734d-5abe-b1c8-97b7c82f62eb))(global_label "BODY_SDA" (shape bidirectional) (at 198.12 104.14 0) (effects (font (size 1 1)) (justify left)) (uuid 1fe6d650-09c8-5f14-a58e-53f2aa02128f))(wire (pts (xy 208.28 106.68) (xy 198.12 106.68)) (stroke (width 0) (type default)) (uuid 9776da22-85dc-55ad-9945-816b0b66a43c))(global_label "BODY_SCL" (shape bidirectional) (at 198.12 106.68 0) (effects (font (size 1 1)) (justify left)) (uuid 1020a42a-ff79-5b18-94e9-14ccdf79d70c))(wire (pts (xy 208.28 109.22) (xy 198.12 109.22)) (stroke (width 0) (type default)) (uuid aba33797-6eb5-57e3-9c47-f35b06208bd2))(global_label "HEAD_SDA" (shape bidirectional) (at 198.12 109.22 0) (effects (font (size 1 1)) (justify left)) (uuid a81c1d36-1c0a-5391-868a-81c9256086c1))(wire (pts (xy 208.28 111.76) (xy 198.12 111.76)) (stroke (width 0) (type default)) (uuid 68a0322b-2a57-5e23-819e-84f348ee863a))(global_label "HEAD_SCL" (shape bidirectional) (at 198.12 111.76 0) (effects (font (size 1 1)) (justify left)) (uuid 973fe4de-93ad-52df-9842-521ffb25f3c1))(symbol (lib_id "Device:R") (at 43.18 137.16 0) (unit 1) (in_bom yes) (on_board yes) (dnp yes) (uuid 3a68f6fb-193e-5066-af10-299111bd628c) (property "Reference" "R301" (at 48.26 135.89 0) (effects (font (size 1.27 1.27)) (justify left))) (property "Value" "4k7 - DNP if already fitted" (at 48.26 138.42999999999998 0) (effects (font (size 1.0 1.0)) (justify left))) (property "Footprint" "" (at 43.18 137.16 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 43.18 137.16 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "R301") (unit 1)))))(wire (pts (xy 43.18 133.35) (xy 43.18 128.27)) (stroke (width 0) (type default)) (uuid 3e57f19e-fc6f-5ef0-921a-fcc4948c95a4))(global_label "LOGIC_3V3" (shape bidirectional) (at 43.18 128.27 0) (effects (font (size 1 1)) (justify left)) (uuid e65bea32-b9c7-573d-808e-7085dfbf964c))(wire (pts (xy 43.18 140.97) (xy 43.18 146.05)) (stroke (width 0) (type default)) (uuid 640ec8ec-d7c3-5f21-b809-83c2b9b7fd4e))(global_label "I2C_SDA" (shape bidirectional) (at 43.18 146.05 0) (effects (font (size 1 1)) (justify left)) (uuid dca0ceee-e6ab-589e-b813-0a4878137f14))(symbol (lib_id "Device:R") (at 111.76 137.16 0) (unit 1) (in_bom yes) (on_board yes) (dnp yes) (uuid 43f0a0b1-b5c6-524d-ac85-fd42cc5ae09a) (property "Reference" "R302" (at 116.84 135.89 0) (effects (font (size 1.27 1.27)) (justify left))) (property "Value" "4k7 - DNP if already fitted" (at 116.84 138.42999999999998 0) (effects (font (size 1.0 1.0)) (justify left))) (property "Footprint" "" (at 111.76 137.16 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 111.76 137.16 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "R302") (unit 1)))))(wire (pts (xy 111.76 133.35) (xy 111.76 128.27)) (stroke (width 0) (type default)) (uuid 5d022d64-7d03-5e9f-ba34-151c9aa9ef7c))(global_label "LOGIC_3V3" (shape bidirectional) (at 111.76 128.27 0) (effects (font (size 1 1)) (justify left)) (uuid cc405f47-a4d8-57d8-9375-94243eee66dd))(wire (pts (xy 111.76 140.97) (xy 111.76 146.05)) (stroke (width 0) (type default)) (uuid 84a2076f-2e22-500d-a057-3dea52ac042a))(global_label "I2C_SCL" (shape bidirectional) (at 111.76 146.05 0) (effects (font (size 1 1)) (justify left)) (uuid 56f9841f-848a-50fc-b1cc-d36c49eba96d))(symbol (lib_id "Device:R") (at 187.96 172.72 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid ddf7720b-15ff-5fab-944d-b3db4bdc7f42) (property "Reference" "R303" (at 193.04000000000002 171.45 0) (effects (font (size 1.27 1.27)) (justify left))) (property "Value" "10k / 1% candidate" (at 193.04000000000002 173.98999999999998 0) (effects (font (size 1.0 1.0)) (justify left))) (property "Footprint" "" (at 187.96 172.72 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 187.96 172.72 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "R303") (unit 1)))))(wire (pts (xy 187.96 168.91) (xy 187.96 163.83)) (stroke (width 0) (type default)) (uuid a9367f62-898f-5350-8f50-293fa92ae872))(global_label "LOGIC_3V3" (shape bidirectional) (at 187.96 163.83 0) (effects (font (size 1 1)) (justify left)) (uuid 852451cb-b633-56f5-90a3-14215607e0d3))(wire (pts (xy 187.96 176.53) (xy 187.96 181.61)) (stroke (width 0) (type default)) (uuid 81cd45c2-3bc0-5a13-b6ed-f7d02be9a06a))(global_label "TEMP_ADC" (shape bidirectional) (at 187.96 181.61 0) (effects (font (size 1 1)) (justify left)) (uuid 1405ec63-4e36-56cf-9d29-260ef623d781))(symbol (lib_id "Connector_Generic:Conn_01x02") (at 269.24 180.34 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 53cf4238-f66b-578b-934b-050d4b294b15) (property "Reference" "J306" (at 269.24 172.72 0) (effects (font (size 1.27 1.27)) )) (property "Value" "External 10k NTC" (at 269.24 175.26 0) (effects (font (size 1.0 1.0)) )) (property "Footprint" "" (at 269.24 180.34 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 269.24 180.34 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "J306") (unit 1)))))(wire (pts (xy 264.16 180.34) (xy 254.0 180.34)) (stroke (width 0) (type default)) (uuid 326ad4cb-1dbf-554d-b522-85b98ba48e4e))(global_label "TEMP_ADC" (shape bidirectional) (at 254.0 180.34 0) (effects (font (size 1 1)) (justify left)) (uuid d30d6809-a4e0-5e33-9573-91eebd239135))(wire (pts (xy 264.16 182.88) (xy 254.0 182.88)) (stroke (width 0) (type default)) (uuid b9674341-a944-5210-9a57-035e3c2e7a46))(global_label "GND_SYS" (shape bidirectional) (at 254.0 182.88 0) (effects (font (size 1 1)) (justify left)) (uuid cf6ac574-060d-58ca-b69c-59039a2b274b))(symbol (lib_id "Device:C") (at 337.82 172.72 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid 55f508b9-a583-5ff1-a13e-f70494794541) (property "Reference" "C301" (at 342.9 171.45 0) (effects (font (size 1.27 1.27)) (justify left))) (property "Value" "100nF" (at 342.9 173.98999999999998 0) (effects (font (size 1.0 1.0)) (justify left))) (property "Footprint" "" (at 337.82 172.72 0) (effects (font (size 1.27 1.27)) hide))(property "Assembly" "PCB/harness TBD" (at 337.82 172.72 0) (effects (font (size 1 1)) hide)) (instances (project "UnderBot" (path "/28d6ab5c-ba8e-504d-a8f6-662666777702/1eef3790-15e5-5c33-8b76-0d24d3b98896" (reference "C301") (unit 1)))))(wire (pts (xy 337.82 168.91) (xy 337.82 163.83)) (stroke (width 0) (type default)) (uuid c088de09-542d-5eab-9747-b65bb121da7a))(global_label "TEMP_ADC" (shape bidirectional) (at 337.82 163.83 0) (effects (font (size 1 1)) (justify left)) (uuid 33fae2b8-e00c-5e5e-8433-83561acdadf6))(wire (pts (xy 337.82 176.53) (xy 337.82 181.61)) (stroke (width 0) (type default)) (uuid 00be057d-8a2b-58f7-802b-a9a02317ce8f))(global_label "GND_SYS" (shape bidirectional) (at 337.82 181.61 0) (effects (font (size 1 1)) (justify left)) (uuid 9245eeca-3e32-549b-977c-f4bc790d57c1))(text "J306 NTC + R303 form an ADC divider; C301 filters noise. Confirm thermistor curve and ESP32 ADC range/calibration." (at 20 211 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 32560a83-7853-5ea3-9392-e78d2f8c1f1d))(text "IMUs: ICM-20948 breakouts, polled I2C. J303/J304 pins 1/2/3/4 -> VIN/GND/SDA/SCL. Software fusion required." (at 20 220 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid ee608760-8f6f-55f4-9344-2fe5348a8c74))(text "The mux is OFF-BOARD. Its channel ports are J305; it is not replaced by shorting the SDA/SCL lines together." (at 20 229 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid c03fd94e-55c1-5f3d-bcab-2c10a7598c99))(text "Mux A0/A1/A2 -> 3.3V: 0x77 avoids PCA9685 ALLCALL 0x70. Select ONE channel at a time. Not Qwiic pin numbering." (at 20 238 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid ca8450ce-d424-5f6e-af43-d6d1fe329514))(text "Set PCA9685 A0 jumper CLOSED: 0x41. A mux channel alone does NOT avoid upstream INA228 address 0x40." (at 20 247 0) (effects (font (size 1.27 1.27)) (justify left top)) (uuid e49b40f3-935f-5584-8971-5d947f0dea03)) (embedded_fonts no))

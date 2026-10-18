@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-18",
+  "snapshots": [
+    {
+      "path": "desktop",
+      "source_commit": "bfcace64f65b1ef5feab5b1b63b1a419793ecb7f",
+      "source_tree": "220ab1348142d025cc226a4830e3a72325ca84cf",
+      "intentional_changes": []
+    },
+    {
+      "path": "ros2_subsystem",
+      "source_commit": "9f3b462161dd203c19bea42e53c8c0bdd5a6a44c",
+      "source_tree": "6f53060def1f29bbad923fc9cfa9b159e777cef9",
+      "intentional_changes": []
+    },
+    {
+      "path": "models/r08",
+      "source_commit": "3f28a652bb34109b23241bd98b33f2c56ea0a87a",
+      "source_tree": "6daa0f483d457c4c17808dd3ca75c4d8c9378414",
+      "intentional_changes": []
+    },
+    {
+      "path": "models/r09",
+      "source_commit": "d508b07d18fb560aed9311522245818f2aa8ae9c",
+      "source_tree": "370750af2843936b91b2079d1b0e1c1197b47086",
+      "intentional_changes": []
+    },
+    {
+      "path": "website",
+      "source_commit": "b2edb67a825279e5bac9a3ca055ff9575bf7f509",
+      "source_tree": "324edfd9131e6c4845058f1f4ae54109f262017c",
+      "intentional_changes": [
+        "scripts/sync-model.mjs",
+        "README.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+# OPTIONAL ROS 2 Jazzy controller integration template; NOT loaded by display.launch.py.
+# Requires a hardware/simulator ros2_control interface, absent from the portable core.
+# Do not enable together with the standalone Gazebo controller profile.
+# Wheel dimensions and joint names below are generated from the core URDF.
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    base_controller:
+      type: diff_drive_controller/DiffDriveController
+    left_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    right_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+base_controller:
+  ros__parameters:
+    left_wheel_names: [left_wheel_joint]
+    right_wheel_names: [right_wheel_joint]
+    wheel_separation: 0.354
+    wheel_radius: 0.0925
+    base_frame_id: base_link
+    odom_frame_id: odom
+    enable_odom_tf: true
+    position_feedback: true
+    open_loop: false
+    publish_rate: 50.0
+    cmd_vel_timeout: 0.5
+left_arm_controller:
+  ros__parameters:
+    joints:
+      - left_arm_base_joint
+      - left_shoulder_joint
+      - left_elbow_joint
+      - left_wrist_pitch_joint
+      - left_wrist_roll_joint
+      - left_gripper_left_joint
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    allow_partial_joints_goal: false
+    action_monitor_rate: 20.0
+right_arm_controller:
+  ros__parameters:
+    joints:
+      - right_arm_base_joint
+      - right_shoulder_joint
+      - right_elbow_joint
+      - right_wrist_pitch_joint
+      - right_wrist_roll_joint
+      - right_gripper_left_joint
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    allow_partial_joints_goal: false
+    action_monitor_rate: 20.0
