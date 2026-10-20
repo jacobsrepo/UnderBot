@@ -1,0 +1,7 @@
+generated/cache/
+generated/codegen/
+generated/*.slxc
+generated/*.slx.autosave
+generated/*.slx.r*
+generated/underbot_r09_import.urdf
+*.log

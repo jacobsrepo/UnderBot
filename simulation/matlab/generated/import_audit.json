@@ -1,0 +1,16 @@
+{
+  "source_sha256": "589055d459d67174ca98c76689f6f99c45dc8ab15cf91992ec5ae4d87fbd9b97",
+  "imported_mass_kg": 19.60100779999999,
+  "mass_inertia_and_com_match_source": true,
+  "visual_mesh_count": 45,
+  "visual_meshes_resolve_in_metres_and_add_no_mass": true,
+  "all_22_joint_types_match_source": true,
+  "all_revolute_limits_match_source": true,
+  "all_rotational_joints_passive": true,
+  "mimic_coupling_imported": false,
+  "uncoupled_followers": [
+    "left_gripper_right_joint",
+    "right_gripper_right_joint"
+  ],
+  "scope": "Raw fixed-base import. Gripper coupling, ground contact and actuators are not implemented."
+}
