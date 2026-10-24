@@ -15,6 +15,7 @@ Consolidated on 2026-10-18. This is a source and history consolidation, not a cl
 | Cortex desktop assistant | `desktop/` | Complete Local-VLA-Setup snapshot at bfcace6; run from this folder using its README |
 | Alternate ROS subsystem | `ros2_subsystem/` | Complete Ros2-subsystem snapshot at 9f3b462; colcon workspace and Linux services remain independent |
 | Project website | `website/` | Underbot-Website main snapshot; existing website repository/deployments remain independent |
+| MATLAB simulation | `simulation/matlab/` | R09 fixed-base Simscape import, parameter audit, and passive smoke-test workflow |
 | Windows integration | `tools/windows/` | Preserved working launchers, environment manifests and deployed overrides |
 
 ## Integration boundaries

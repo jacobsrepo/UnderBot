@@ -1,0 +1,169 @@
+{
+  "matlab": "26.2.0.3386108 (R2026b)",
+  "source": "models/r09/underbot_description/urdf/underbot.portable.urdf",
+  "base": "fixed to world",
+  "links": 23,
+  "joints": 22,
+  "mass_kg": 19.601007799999991,
+  "inertia_checks_passed": true,
+  "joint_inventory": [
+    {
+      "name": "left_wheel_joint",
+      "type": "continuous",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "right_wheel_joint",
+      "type": "continuous",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "caster_swivel_joint",
+      "type": "continuous",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "caster_wheel_joint",
+      "type": "continuous",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "camera_mount_joint",
+      "type": "fixed",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "camera_optical_joint",
+      "type": "fixed",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "lidar_mount_joint",
+      "type": "fixed",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "lidar_scan_joint",
+      "type": "fixed",
+      "mimic": "",
+      "lower": [],
+      "upper": []
+    },
+    {
+      "name": "left_arm_base_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.785398163397,
+      "upper": 0.785398163397
+    },
+    {
+      "name": "left_shoulder_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.349065850399,
+      "upper": 0.349065850399
+    },
+    {
+      "name": "left_elbow_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.349065850399,
+      "upper": 0.349065850399
+    },
+    {
+      "name": "left_wrist_pitch_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.523598775598,
+      "upper": 0.523598775598
+    },
+    {
+      "name": "left_wrist_roll_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -1.57079632679,
+      "upper": 1.57079632679
+    },
+    {
+      "name": "left_gripper_left_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": 0,
+      "upper": 0.6
+    },
+    {
+      "name": "left_gripper_right_joint",
+      "type": "revolute",
+      "mimic": "left_gripper_left_joint",
+      "lower": 0,
+      "upper": 0.6
+    },
+    {
+      "name": "right_arm_base_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.785398163397,
+      "upper": 0.785398163397
+    },
+    {
+      "name": "right_shoulder_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.349065850399,
+      "upper": 0.349065850399
+    },
+    {
+      "name": "right_elbow_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.349065850399,
+      "upper": 0.349065850399
+    },
+    {
+      "name": "right_wrist_pitch_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -0.523598775598,
+      "upper": 0.523598775598
+    },
+    {
+      "name": "right_wrist_roll_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": -1.57079632679,
+      "upper": 1.57079632679
+    },
+    {
+      "name": "right_gripper_left_joint",
+      "type": "revolute",
+      "mimic": "",
+      "lower": 0,
+      "upper": 0.6
+    },
+    {
+      "name": "right_gripper_right_joint",
+      "type": "revolute",
+      "mimic": "right_gripper_left_joint",
+      "lower": 0,
+      "upper": 0.6
+    }
+  ],
+  "update_passed": true,
+  "simulation_end_s": 0.05,
+  "simulation_passed": true,
+  "scope": "Fixed-base passive gravity smoke test; no ground contact, motors or control. Hardware properties remain estimates."
+}
