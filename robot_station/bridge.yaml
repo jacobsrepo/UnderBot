@@ -4,4 +4,4 @@ foxglove_bridge:
     port: 8765
     capabilities: [clientPublish, connectionGraph]
     topic_whitelist: ['^/station/.*$', '^/navigation/.*$', '^/camera/.*$', '^/perception/.*$', '^/imu/data$', '^/odom$', '^/map$', '^/plan$', '^/local_plan$', '^/scan$', '^/tf$', '^/tf_static$', '^/robot_description$']
-    client_topic_whitelist: ['^/station/cmd_vel$', '^/station/camera_cmd$', '^/station/comms/request$', '^/station/ai/request$', '^/station/nav/goal$']
+    client_topic_whitelist: ['^/station/cmd_vel$', '^/station/camera_cmd$', '^/station/comms/request$', '^/station/ai/request$', '^/station/nav/goal$', '^/station/nav/robot_[12]/goal$']

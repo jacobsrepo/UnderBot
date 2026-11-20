@@ -19,5 +19,6 @@ pillow = ">=12,<13"
 
 [tasks]
 demo = "python start.py --demo --port 8766"
+fleet = "python start.py --demo --fleet-demo --port 8767"
 test = "python -m unittest test_gateway -v"
 layout = "python build_layout.py"

@@ -127,8 +127,8 @@ def main():
     parser.add_argument('--domain', default=74, type=int)
     parser.add_argument('--device-name', default='Plantronics')
     args = parser.parse_args()
-    os.environ['ROS_DOMAIN_ID'] = str(args.domain)
-    os.environ['ROS_AUTOMATIC_DISCOVERY_RANGE'] = 'LOCALHOST'
+    from common import configure_ros
+    configure_ros(args.domain)
     import rclpy
     from std_msgs.msg import String
     from foxglove_msgs.msg import RawAudio

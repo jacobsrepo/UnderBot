@@ -99,6 +99,9 @@ def interpret(url,model,prompt,landmarks,timeout=90):
     return result
 
 def describe_intent(intent):
+    if intent['action'] == 'team_mission':
+        from fleet_missions import MISSION_NAMES
+        return 'team mission: '+MISSION_NAMES[intent['mission']]
     steps=intent['steps'] if intent['action']=='sequence' else [intent]
     descriptions=[]
     for step in steps:

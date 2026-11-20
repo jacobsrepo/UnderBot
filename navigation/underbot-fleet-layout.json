@@ -1,0 +1,144 @@
+{
+  "configById": {
+    "Image!camera": {
+      "imageMode": {
+        "imageTopic": "/camera/emeet/image/compressed"
+      },
+      "title": "Existing EMEET camera"
+    },
+    "Image!perception": {
+      "imageMode": {
+        "imageTopic": "/perception/emeet/annotated/compressed"
+      },
+      "title": "Existing perception"
+    },
+    "3D!room": {
+      "followTf": "map",
+      "cameraState": {
+        "perspective": true,
+        "distance": 7,
+        "phi": 0.6,
+        "thetaOffset": 0.3,
+        "targetOffset": [
+          0,
+          0,
+          0
+        ]
+      },
+      "topics": {
+        "/navigation/pointcloud": {
+          "visible": true,
+          "pointSize": 2,
+          "colorMode": "colormap",
+          "colorField": "z",
+          "colorMap": "turbo"
+        },
+        "/map": {
+          "visible": false
+        },
+        "/navigation/robot": {
+          "visible": false
+        },
+        "/plan": {
+          "visible": false
+        },
+        "/navigation/goal": {
+          "visible": false
+        },
+        "/odom": {
+          "visible": false
+        },
+        "/navigation/team/labels": {
+          "visible": true
+        },
+        "/navigation/robot_1/plan": {
+          "visible": true,
+          "color": "#22ccee",
+          "lineWidth": 0.06
+        },
+        "/navigation/robot_2/plan": {
+          "visible": true,
+          "color": "#ff9933",
+          "lineWidth": 0.06
+        }
+      },
+      "title": "Two robots - coordinated navigation simulation",
+      "publish": {
+        "type": "pose",
+        "poseTopic": "/station/nav/robot_1/goal",
+        "goalTopic": "/station/nav/robot_1/goal",
+        "pointTopic": "/clicked_point"
+      },
+      "scene": {
+        "transforms": {
+          "showLabel": false
+        },
+        "meshUpAxis": "z_up"
+      },
+      "layers": {
+        "robot_1": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Robot 1",
+          "instanceId": "robot_1",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "topic",
+          "topic": "/navigation/robot_1/robot_description",
+          "framePrefix": "",
+          "controlMode": "transforms",
+          "displayMode": "visual",
+          "fallbackColor": "#22ccee",
+          "order": 1,
+          "opacity": 1,
+          "showAxis": false,
+          "showOutlines": false,
+          "links": {}
+        },
+        "robot_2": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Robot 2",
+          "instanceId": "robot_2",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "topic",
+          "topic": "/navigation/robot_2/robot_description",
+          "framePrefix": "",
+          "controlMode": "transforms",
+          "displayMode": "visual",
+          "fallbackColor": "#ff9933",
+          "order": 2,
+          "opacity": 1,
+          "showAxis": false,
+          "showOutlines": false,
+          "links": {}
+        }
+      }
+    },
+    "robot-station-extension.UnderBot Controls!control": {
+      "prefix": "/station",
+      "lateral": false
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "linkedGlobalVariables": [],
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "row",
+    "first": {
+      "direction": "column",
+      "first": {
+        "direction": "row",
+        "first": "Image!camera",
+        "second": "Image!perception",
+        "splitPercentage": 50
+      },
+      "second": "3D!room",
+      "splitPercentage": 42
+    },
+    "second": "robot-station-extension.UnderBot Controls!control",
+    "splitPercentage": 68
+  }
+}

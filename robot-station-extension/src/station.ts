@@ -23,7 +23,10 @@ export function initStation(context: PanelExtensionContext): () => void {
   let disposed = false;
   let pendingChat: string | undefined;
   let chatSentAt = 0;
+  let fleetMode = false;
   const root = context.panelElement;
+  root.style.height = "100%";
+  root.style.overflow = "hidden";
   root.innerHTML = `<style>
     .ub{font:13px system-ui;color:#e4edf4;background:#101921;height:100%;overflow:auto;padding:16px;box-sizing:border-box}
     .ub *{box-sizing:border-box}.ub h2{font-size:18px;margin:0}.ub h3{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#8da5b8;margin:18px 0 10px}
@@ -42,6 +45,11 @@ export function initStation(context: PanelExtensionContext): () => void {
     <p class="note" data-id="connection">Waiting for the station heartbeat.</p>
     <div class="telemetry"><div class="card"><div class="note">Measured planar speed</div><div class="speed" data-id="speed">—</div><div class="note">m/s · from odometry</div></div>
     <div class="card"><div class="horizon"><div class="attitude" data-id="attitude"></div><div class="cross"></div></div><div class="angles" data-id="angles">IMU: no data</div></div></div>
+    <section data-id="teamPanel" hidden><h3>Team mission</h3>
+      <div class="row"><select data-id="teamMission"><option value="run team demo">Cross, swap, meet, home</option><option value="swap places">Swap places</option><option value="rendezvous">Rendezvous</option><option value="both robots return home">Return home</option></select><button class="accent" data-id="runTeam">Run mission</button><button class="stop" data-id="stopTeam">Stop both</button></div>
+      <p class="note" data-id="missionState">Ready for a team mission.</p>
+      <p class="note">Both robots finish each stage before the next begins. A new mission replaces the current one. An individual goal cancels the mission and parks the teammate.</p>
+    </section>
     <h3>Robot movement</h3><div class="row"><button class="accent" data-id="arm">Enable controls</button><label>Speed <select data-id="speedSet"><option value="0.05">0.05 m/s</option><option value="0.1" selected>0.10 m/s</option><option value="0.2">0.20 m/s</option></select></label></div>
     <div class="pad"><span></span><button data-drive="F">F ↑</button><span></span><button data-drive="L">L ↶</button><button class="stop" data-id="stop">STOP</button><button data-drive="R">R ↷</button><span></span><button data-drive="B">B ↓</button><span></span></div>
     <p class="note">Hold to move. Release to stop. Left/right turn by default. STOP sends a zero velocity request; it is not a hardware emergency stop.</p>
@@ -49,6 +57,8 @@ export function initStation(context: PanelExtensionContext): () => void {
     <p class="note">Pan/tilt velocity requests · requires a camera actuator adapter.</p>
     <h3>Communications</h3><button data-id="comms">Request comms ON</button><button data-id="commsOff">Request comms OFF</button><p class="note" data-id="commsState">Audio backend: not connected</p>
     <h3>Navigation simulation</h3><p class="note" data-id="navState">Navigation: no recent status.</p>
+    <label data-id="fleetSelect" hidden>Robot <select data-id="robotId"><option value="robot 1">Robot 1</option><option value="robot 2">Robot 2</option></select></label>
+    <p class="note" data-id="fleetState" hidden></p>
     <div class="row"><label>X (m)<input data-id="goalX" type="number" step="0.2" value="2" style="width:80px"></label><label>Y (m)<input data-id="goalY" type="number" step="0.2" value="3" style="width:80px"></label><button data-id="goXY">Go to coordinates</button></div>
     <div class="row"><input data-id="waypointName" type="text" placeholder="Waypoint name: desk" maxlength="32"><button data-id="saveXY">Save at X/Y</button></div>
     <p class="note" data-id="waypoints">Saved waypoints: waiting for map.</p><button data-id="spin360">Spin 360°</button><button data-id="navStop" class="stop">Cancel navigation</button>
@@ -90,7 +100,9 @@ export function initStation(context: PanelExtensionContext): () => void {
     text("arm", armed ? "Disable controls" : "Enable controls");
     root.querySelectorAll<HTMLButtonElement>("[data-drive], [data-pan]").forEach((b) => { b.disabled = !canMove(); });
     el<HTMLButtonElement>("comms").disabled = !canPublish(); el<HTMLButtonElement>("commsOff").disabled = !canPublish();
-    for (const id of ["send","goXY","saveXY","spin360"]) { el<HTMLButtonElement>(id).disabled = !canPublish() || !!pendingChat; }
+    for (const id of ["send","goXY","saveXY","spin360","runTeam"]) { el<HTMLButtonElement>(id).disabled = !canPublish() || !!pendingChat; }
+    el<HTMLButtonElement>("stopTeam").disabled = !canPublish();
+    if (fleetMode) { for (const id of ["saveXY", "spin360"]) { el<HTMLButtonElement>(id).disabled = true; } }
     el<HTMLButtonElement>("navStop").disabled = !canPublish();
     if (Date.now() - imuAt > 1800) { text("angles", "IMU: no recent valid orientation"); el("attitude").style.opacity = "0.25"; }
     if (Date.now() - odomAt > 1800) { text("speed", "—"); }
@@ -130,13 +142,15 @@ export function initStation(context: PanelExtensionContext): () => void {
     if (!Number.isFinite(x) || !Number.isFinite(y)) { text("error","Enter finite X and Y coordinates in map metres."); return; }
     return `${x}, ${y}`;
   }
-  el("goXY").onclick = () => { const xy=coordinates(); if (xy) { sendChat(`go to ${xy}`); } };
+  el("goXY").onclick = () => { const xy=coordinates(); if (xy) { sendChat(`${fleetMode ? el<HTMLSelectElement>("robotId").value+" " : ""}go to ${xy}`); } };
   el("saveXY").onclick = () => {
     const name=el<HTMLInputElement>("waypointName").value.trim().toLowerCase(), xy=coordinates();
     if (!/^[a-z][a-z0-9_]{0,31}$/.test(name)) { text("error","Use a waypoint name such as desk or charging_dock."); return; }
     if (xy) { sendChat(`save waypoint ${name} at ${xy}`); }
   };
   el("spin360").onclick = () => sendChat("spin 360 degrees");
+  el("runTeam").onclick = () => sendChat(el<HTMLSelectElement>("teamMission").value);
+  el("stopTeam").onclick = () => { publish("cmd_vel",zero()); text("chatState","Team mission cancelled; both robots stopped."); };
   el("navStop").onclick = () => { publish("cmd_vel",zero()); text("chatState","Simulation motion and remaining steps cancelled."); };
   el("apply").onclick = () => {
     const prefix = el<HTMLInputElement>("prefix").value.trim().replace(/\/$/, "");
@@ -145,7 +159,7 @@ export function initStation(context: PanelExtensionContext): () => void {
     for (const suffix of ["cmd_vel", "camera_cmd", "comms/request", "ai/request"]) { context.unadvertise?.(`${config.prefix}/${suffix}`); }
     config = { prefix, lateral: el<HTMLInputElement>("lateral").checked }; advertised = false; statusAt = 0; context.saveState(config); subscribe(); refresh();
   };
-  const loseFocus = () => { stop(); armed = false; refresh(); };
+  const loseFocus = () => { if (armed || held || panHeld) { stop(); } armed = false; refresh(); };
   window.addEventListener("blur", loseFocus); document.addEventListener("visibilitychange", loseFocus);
   const timer = window.setInterval(() => { if (disposed) { return; } refresh(); if (canMove()) { if (held) { publish("cmd_vel", command); } if (panHeld) { publish("camera_cmd", pan); } } }, 100);
   context.onRender = (state, done) => {
@@ -153,6 +167,19 @@ export function initStation(context: PanelExtensionContext): () => void {
       if (state.didSeek) { loseFocus(); statusAt = 0; imuAt = 0; odomAt = 0; }
       for (const event of state.currentFrame ?? []) {
         const m = event.message as Record<string, any>;
+        if (event.topic === `${config.prefix}/nav/status`) {
+          const nav = JSON.parse(m.data);
+          fleetMode = nav.fleet === true;
+          el("teamPanel").hidden = !fleetMode;
+          el("fleetSelect").hidden = !fleetMode;
+          el("fleetState").hidden = !fleetMode;
+          if (fleetMode) {
+            const robots = nav.robots as Record<string, {pose: number[]; goal?: number[]; state?: string}>;
+            text("fleetState", Object.entries(robots).map(([name, robot]) => `${name}: ${robot.pose.slice(0,2).map(v => v.toFixed(2)).join(", ")} m; ${robot.state ?? (robot.goal ? "moving" : "idle")}`).join(" | ") + " · Chat: robot 2 go to 2, 3. Cancel stops both robots.");
+            const mission = nav.mission;
+            text("missionState", mission ? `${mission.name}: ${mission.state} · ${mission.completed_stages}/${mission.total_stages} stages completed · ${mission.stage}${mission.message ? " · "+mission.message : ""}` : "Ready. Chat: run team demo, swap places, rendezvous, or both robots return home.");
+          }
+        }
         if (event.topic === `${config.prefix}/status`) { status = JSON.parse(m.data) as Status; statusAt = Date.now(); }
         else if (event.topic === `${config.prefix}/nav/status`) { const nav=JSON.parse(m.data); text("navState", `SIMULATION: ${String(nav.state)} · pose ${nav.pose?.slice(0,2).map((v:number)=>v.toFixed(2)).join(", ")} m · heading ${(nav.heading_degrees ?? 0).toFixed(1)}° · ${nav.queued_steps ?? 0} queued steps${nav.turn_progress_degrees != null ? ` · turned ${nav.turn_progress_degrees.toFixed(1)}°` : ""}${nav.goal_error_metres != null ? ` · goal error ${(nav.goal_error_metres*100).toFixed(1)} cm` : ""}${nav.planned_length_metres != null ? ` · planned ${nav.planned_length_metres.toFixed(2)} m` : ""}`); text("waypoints", `Saved waypoints: ${Object.entries(nav.landmarks ?? {}).map(([name,xy])=>`${name} (${(xy as number[]).map(v=>v.toFixed(1)).join(", ")})`).join(" · ")}`); }
         else if (event.topic === "/imu/data") {

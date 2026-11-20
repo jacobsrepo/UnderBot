@@ -23,6 +23,8 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--demo',action='store_true')
     parser.add_argument('--navigation-demo',action='store_true')
+    parser.add_argument('--fleet-demo',action='store_true',help='Two coordinated simulated URDF robots')
+    parser.add_argument('--urdf',nargs=2,help='Two primitive-geometry URDF paths for fleet mode')
     parser.add_argument('--address',default='127.0.0.1')
     parser.add_argument('--port',type=int,default=8765)
     parser.add_argument('--ai-url', default='')
@@ -32,12 +34,18 @@ def main():
     args=parser.parse_args()
     if args.navigation_demo and not args.demo:
         parser.error('--navigation-demo requires --demo')
+    if args.fleet_demo and not args.demo:
+        parser.error('--fleet-demo requires --demo')
+    if args.fleet_demo and args.navigation_demo:
+        parser.error('Choose --fleet-demo or --navigation-demo')
+    if args.urdf and not args.fleet_demo:
+        parser.error('--urdf requires --fleet-demo')
     if os.name == 'nt':
         # RoboStack ships the Foxglove SDK DLLs in Library/lib rather than bin.
         bridge_prefix = Path(get_package_prefix('foxglove_bridge'))
         os.environ['PATH'] = str(bridge_prefix/'lib') + os.pathsep + os.environ.get('PATH','')
     if args.demo:
-        os.environ['ROS_DOMAIN_ID']='74'
+        os.environ['ROS_DOMAIN_ID']='75' if args.fleet_demo else '74'
         os.environ['ROS_AUTOMATIC_DISCOVERY_RANGE']='LOCALHOST'
         if os.name == 'nt':
             os.environ.setdefault('RMW_IMPLEMENTATION','rmw_cyclonedds_cpp')
@@ -47,7 +55,9 @@ def main():
         [sys.executable,str(ROOT/'gateway.py'),'--ros-args','-p',f'mode:={"demo" if args.demo else "live"}'],
     ]
     if args.demo:
-        commands.append([sys.executable,str(ROOT/('navigation_demo.py' if args.navigation_demo else 'demo.py'))])
+        commands.append([sys.executable,str(ROOT/('fleet_demo.py' if args.fleet_demo else 'navigation_demo.py' if args.navigation_demo else 'demo.py'))])
+        if args.urdf:
+            commands[-1].extend(['--urdf',*args.urdf])
     if args.ai_url:
         commands[1].extend(['-p', f'ai_url:={args.ai_url}', '-p', f'ai_model:={args.ai_model}'])
     if args.memory_python and args.memory_config:

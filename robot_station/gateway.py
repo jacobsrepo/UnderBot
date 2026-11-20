@@ -8,6 +8,7 @@ from ai_backend import chat
 from robot_brain import memory_snapshot, identity_answer, fetch_plan
 from world_state import WorldState, visibility_answer
 from navigation_core import navigation_intent
+from fleet_core import fleet_intent
 from navigation_language import candidate_request, interpret, describe_intent
 import rclpy
 from rclpy.node import Node
@@ -163,10 +164,12 @@ class StationGateway(Node):
             nav=self.navigation if time.monotonic()-self.navigation_at<3 else None
             parser_error=None
             try:
-                intent=navigation_intent(prompt,nav.get('landmarks',{}) if nav else {})
+                intent=fleet_intent(prompt,nav.get('landmarks',{})) if nav and nav.get('fleet') else None
+                if intent is None:
+                    intent=navigation_intent(prompt,nav.get('landmarks',{}) if nav else {})
             except ValueError as exc:
                 intent=None;parser_error=str(exc)
-                if any(marker in parser_error for marker in ('at most','cannot be replaced','one turn direction')):
+                if (nav and nav.get('fleet')) or any(marker in parser_error for marker in ('at most','cannot be replaced','one turn direction')):
                     self.ai_results.put((request_id,True,parser_error,None));return
             if not intent and candidate_request(prompt) and self.mode=='demo' and nav:
                 try:
@@ -190,7 +193,8 @@ class StationGateway(Node):
                     answer='Saved simulation waypoints (map metres):\n'+'\n'.join(f'{name}: {xy[0]:.2f}, {xy[1]:.2f}' for name,xy in nav.get('landmarks',{}).items())
                     self.ai_results.put((request_id,True,answer,None));return
                 plan={'type':'navigation_simulation','request':intent,'hardware_executable':False,'epoch':epoch}
-                self.ai_results.put((request_id,True,'Simulation plan: '+describe_intent(intent)+'. Sending it for map validation and execution.',plan));return
+                robot_label=(intent.get('robot_id','robot_1')+': ') if nav.get('fleet') and intent['action'] != 'team_mission' else ''
+                self.ai_results.put((request_id,True,'Simulation plan: '+robot_label+describe_intent(intent)+'. Sending it for map validation and execution.',plan));return
             memory = memory_snapshot(self.memory_python, self.memory_config)
             if not memory.get('available'):
                 self.get_logger().warning('Memory lookup unavailable: ' + memory.get('error_code', 'not_configured_or_stale'))

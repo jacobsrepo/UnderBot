@@ -133,6 +133,13 @@ Euclidean routes, thin obstacles, unknown space, corner-cut rejection, boundary
 endpoints and controller execution of diagonal and obstacle-detour routes.
 Foxglove now displays planned route length and remaining goal error in cm.
 
+## Two-robot navigation
+
+The separate [fleet demo](FLEET.md) loads two copies of the rover URDF and
+coordinates their paths with space-time reservations and continuous collision
+checks. Run `python robot_station/start.py --demo --fleet-demo --port 8767`
+and import `underbot-fleet-layout.json`.
+
 ## Next development milestones
 
 1. Extend the bounded language interface with short-lived clarification context,

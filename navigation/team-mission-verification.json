@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-05",
+  "mode": "simulation",
+  "hardware_enabled": false,
+  "command": "run team demo",
+  "result": "passed",
+  "stages": ["Get into position", "Cross paths", "Swap places", "Rendezvous", "Return home"],
+  "minimum_observed_separation_metres": 0.6239723219570731,
+  "required_separation_metres": 0.6003571393522692,
+  "measurement": "Sampled from live fleet status; continuous swept checks are enforced by the planner/controller and exercised in ROS-node tests.",
+  "robots_home": true,
+  "station_tests_passed": 80,
+  "extension_build": "passed",
+  "typescript_check": "passed",
+  "foxglove": "Team controls and progress verified; Problems panel clear; live camera panels retained."
+}

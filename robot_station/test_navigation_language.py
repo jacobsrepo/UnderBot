@@ -48,3 +48,33 @@ class LanguageTests(unittest.TestCase):
         StationGateway.drain_chat(state)
         state.nav_request.publish.assert_not_called()
         self.assertIn('cancelled',state.reply.call_args.args[2])
+
+    def test_fleet_chat_preserves_robot_identity(self):
+        from gateway import StationGateway
+        state=SimpleNamespace(ai_results=queue.Queue(),command_epoch=1,navigation_at=time.monotonic(),
+            navigation={'fleet':True,'landmarks':{'start':[0.1,0.1]}},mode='demo')
+        StationGateway.run_chat(state,'fleet-chat','robot 2 go to 2, 3')
+        result=state.ai_results.get_nowait()
+        self.assertTrue(result[1])
+        self.assertEqual(result[3]['request']['robot_id'],'robot_2')
+        self.assertEqual(result[3]['request']['xy'],[2.,3.])
+        self.assertIn('robot_2',result[2])
+
+    def test_team_command_routes_without_model_inference(self):
+        from gateway import StationGateway
+        state=SimpleNamespace(ai_results=queue.Queue(),command_epoch=1,navigation_at=time.monotonic(),
+            navigation={'fleet':True,'landmarks':{}},mode='demo')
+        for text, kind in [('run team demo','demo'),('swap places','swap'),('rendezvous','rendezvous'),('both robots return home','home')]:
+            StationGateway.run_chat(state,'team',text)
+            result=state.ai_results.get_nowait()
+            self.assertEqual(result[3]['request'], {'action':'team_mission','mission':kind})
+            self.assertIn('team mission',result[2])
+
+    def test_fleet_chat_unknown_robot_cannot_execute(self):
+        from gateway import StationGateway
+        state=SimpleNamespace(ai_results=queue.Queue(),command_epoch=1,navigation_at=time.monotonic(),
+            navigation={'fleet':True,'landmarks':{}},mode='demo')
+        StationGateway.run_chat(state,'fleet-chat','robot 3 go to 2, 3')
+        result=state.ai_results.get_nowait()
+        self.assertIsNone(result[3])
+        self.assertIn('robot 1 or robot 2',result[2])
