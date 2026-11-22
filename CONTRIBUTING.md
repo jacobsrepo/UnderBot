@@ -41,7 +41,7 @@ change the launcher/deployment parameters for your own machine.
 
 ## Next integration work
 
-1. Select the robot revision and measured physical assumptions for MATLAB/Simulink modelling.
+1. Validate measured R09 physical parameters for the Python/PyBullet simulation.
 2. Reconcile `/station/...` and `/underbot/...` topic contracts before connecting alternate stacks.
 3. Integrate measured sensor/controller interfaces, watchdogs and command arbitration.
 4. Validate real localization/navigation independently of the sample-map demonstration.

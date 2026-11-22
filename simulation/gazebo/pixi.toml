@@ -1,0 +1,8 @@
+[workspace]
+name = "underbot-gazebo"
+version = "0.1.0"
+channels = ["https://prefix.dev/conda-forge"]
+platforms = ["win-64"]
+
+[dependencies]
+gz-sim = "8.*"

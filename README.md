@@ -12,6 +12,7 @@ Robot models, ROS 2 / Foxglove station, perception and memory, navigation simula
 | `perception/` | EMEET camera/YOLO pipeline, audio transport, Pi communications and PostgreSQL recognition memory |
 | `navigation/` | Sample-map preparation, derived demo map, Foxglove layout and navigation documentation |
 | `hardware/electrical/` | Versioned KiCad schematics, carrier/PCB designs, budgets and review reports |
+| `simulation/python/` | R09 fixed-base dynamics, joint controls and import validation |
 | `models/` | Preserved R08/R09 packages, final exports and historical FreeCAD concepts |
 | `desktop/` | Cortex desktop assistant, imported with its complete development history |
 | `ros2_subsystem/` | Alternative ROS 2 workspace, dashboard and VLA node |
@@ -34,4 +35,4 @@ Camera and audio pipelines can use real devices. Navigation demonstrations use s
 
 The repository contains alternative robot models and implementation lines, not a single fully integrated autonomous robot. Electrical review reports and CAD checks do not establish hardware ratings or readiness to energize. Existing documentation records historical tests; see [current validation](docs/VALIDATION.md) for checks performed during consolidation.
 
-Dependencies, credentials, personal memory databases, recordings and local tool installations are excluded from Git. Original source revisions and development branches remain available. MATLAB/Simulink modelling is the next task and has not been started here.
+Dependencies, credentials, personal memory databases, recordings and local tool installations are excluded from Git. Original source revisions and development branches remain available. R09 fixed-base dynamics and interactive joint controls use Python/PyBullet; see [simulation setup](simulation/python/README.md).

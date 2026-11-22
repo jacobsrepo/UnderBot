@@ -18,7 +18,7 @@ This existing path is intentionally retained because live launchers and memory c
 | `D:\gitdemo\temp\Underbot_URDF\UnderBot-Personal` | Original R08 checkout; newer R09 imported from its remote into the consolidated repository |
 | `D:\gitdemo\Underbot-Website` and `D:\gitdemo\temp\Underbot_URDF\Underbot-Website` | Existing website checkouts, unchanged |
 | `D:\gitdemo\RoboticsProject` | Original FreeCAD files, retained and copied into models/historical-cad |
-| `D:\MATLAB\R2026b` | Existing MATLAB installation; activation/toolboxes are a separate next task |
+| `.publish-underbot\simulation\python\.venv` | Isolated Python/PyBullet simulation environment |
 
 ## Backup
 

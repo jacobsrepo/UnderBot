@@ -15,14 +15,14 @@ Consolidated on 2026-10-18. This is a source and history consolidation, not a cl
 | Cortex desktop assistant | `desktop/` | Complete Local-VLA-Setup snapshot at bfcace6; run from this folder using its README |
 | Alternate ROS subsystem | `ros2_subsystem/` | Complete Ros2-subsystem snapshot at 9f3b462; colcon workspace and Linux services remain independent |
 | Project website | `website/` | Underbot-Website main snapshot; existing website repository/deployments remain independent |
-| MATLAB simulation | `simulation/matlab/` | R09 fixed-base Simscape import, parameter audit, and passive smoke-test workflow |
+| Python simulation | `simulation/python/` | R09 fixed-base PyBullet dynamics, coupled grippers, joint controls and import audit |
 | Windows integration | `tools/windows/` | Preserved working launchers, environment manifests and deployed overrides |
 
 ## Integration boundaries
 
 - The Foxglove stack uses `/station/...`; the alternate ROS stack uses `/underbot/...` and publishes proposed plans. They are not interchangeable without topic/behavior adapters.
 - Cortex, station Qwen chat and the ROS VLA node are distinct applications. No one has been replaced by another.
-- Original rover, R08 and R09 models are alternatives. Model selection and mass/inertia/hardware assumptions must be reviewed before MATLAB/Simulink work.
+- Original rover, R08 and R09 models are alternatives. Model selection and mass/inertia/hardware assumptions must be reviewed before interpreting Python simulation results as hardware predictions.
 - Existing branches remain available. Imported branch histories are retained as merge parents; full source trees are placed in their own directories so root-level files do not overwrite one another.
 - Historical READMEs and validation reports retain their original scope and dates. Current checks are recorded in VALIDATION.md.
 
