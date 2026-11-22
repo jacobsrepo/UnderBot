@@ -66,7 +66,7 @@ class FleetTests(unittest.TestCase):
             fleet_intent('robot 1 go forward 1 metre', {})
 
     def test_urdf_instances_have_disjoint_frames(self):
-        path = Path(__file__).resolve().parent.parent/'compact_lab_rover/rover.urdf'
+        path = Path(__file__).resolve().parent.parent/'models/r09/underbot_description/urdf/underbot.portable.urdf'
         models = [load_robot(path, n) for n in ROBOTS]
         frames = [{e.get('name') for e in ET.fromstring(m[0]).findall('link')} for m in models]
         self.assertFalse(frames[0] & frames[1])

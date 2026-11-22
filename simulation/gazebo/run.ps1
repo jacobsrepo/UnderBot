@@ -9,7 +9,7 @@ $env:TMP = $env:TEMP
 $env:GZ_PARTITION = 'underbot-r09-native'
 $env:GZ_FUEL_CACHE_PATH = 'D:\Robotics\gazebo-harmonic\fuel-cache'
 New-Item -ItemType Directory -Force -Path $env:GZ_FUEL_CACHE_PATH | Out-Null
-$python = Join-Path $PSScriptRoot '..\python\.venv\Scripts\python.exe'
+$python = Join-Path $PSScriptRoot '..\pybullet\.venv\Scripts\python.exe'
 $prepareArgs = @()
 if ($PickPlace) { $prepareArgs += '--pick-place' }
 & $python (Join-Path $PSScriptRoot 'prepare.py') @prepareArgs
@@ -28,7 +28,7 @@ if ($Headless) {
 }
 # Harmonic on Windows requires separate server and GUI processes.
 $server = Start-Process -WindowStyle Hidden -FilePath $pixi -ArgumentList @('run','--manifest-path',$manifest,'gz','sim','-s','-v','3',$world) -PassThru -RedirectStandardOutput (Join-Path $PSScriptRoot 'generated\server.log') -RedirectStandardError (Join-Path $PSScriptRoot 'generated\server-errors.log')
-$controls = Start-Process -WindowStyle Hidden -FilePath (Join-Path $PSScriptRoot '..\python\.venv\Scripts\pythonw.exe') -ArgumentList ('"{0}"' -f (Join-Path $PSScriptRoot 'controls.py')) -PassThru -RedirectStandardOutput (Join-Path $PSScriptRoot 'generated\controls.log') -RedirectStandardError (Join-Path $PSScriptRoot 'generated\controls-errors.log')
+$controls = Start-Process -WindowStyle Hidden -FilePath (Join-Path $PSScriptRoot '..\pybullet\.venv\Scripts\pythonw.exe') -ArgumentList ('"{0}"' -f (Join-Path $PSScriptRoot 'controls.py')) -PassThru -RedirectStandardOutput (Join-Path $PSScriptRoot 'generated\controls.log') -RedirectStandardError (Join-Path $PSScriptRoot 'generated\controls-errors.log')
 try {
     & $pixi run --manifest-path $manifest gz sim -g -v 3 --gui-config $gui
 } finally {

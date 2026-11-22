@@ -9,7 +9,7 @@ if ($Live) {
     if (-not $listener) {
         $env:PIXI_CACHE_DIR='D:\Robotics\cache'
         $env:PIXI_HOME='D:\Robotics\tools\pixi-home'
-        Start-Process -WindowStyle Hidden -FilePath 'D:\Robotics\tools\pixi.exe' -ArgumentList @('run','--manifest-path','D:\Robotics\rviz2-jazzy\pixi.toml','python','D:\Robotics\robot-station\start.py','--demo','--navigation-demo','--port','8766','--ai-url','http://127.0.0.1:11435','--memory-python','D:\gitdemo\Underbot\.publish-underbot\perception\.pixi\envs\default\python.exe','--memory-config','D:\gitdemo\Underbot\.publish-underbot\perception\.private\base.json') -RedirectStandardOutput 'D:\Robotics\robot-station\demo.log' -RedirectStandardError 'D:\Robotics\robot-station\demo-errors.log'
+        Start-Process -WindowStyle Hidden -FilePath 'D:\Robotics\tools\pixi.exe' -ArgumentList @('run','--manifest-path','D:\Robotics\rviz2-jazzy\pixi.toml','python','D:\Robotics\robot-station\start.py','--demo','--navigation-demo','--port','8766','--ai-url','http://127.0.0.1:11435','--memory-python','D:\gitdemo\Underbot\perception\.pixi\envs\default\python.exe','--memory-config','D:\gitdemo\Underbot\perception\.private\base.json') -RedirectStandardOutput 'D:\Robotics\robot-station\demo.log' -RedirectStandardError 'D:\Robotics\robot-station\demo-errors.log'
         Start-Sleep -Seconds 4
     }
 }

@@ -19,7 +19,8 @@ def build():
         layers = config.get('layers', {})
         for layer in (layers.values() if isinstance(layers, dict) else layers):
             if layer.get('filePath') == '__ROVER_URDF__':
-                layer['filePath'] = str(ROOT.parent/'compact_lab_rover/rover.urdf')
+                layer['filePath'] = str(
+                    ROOT.parent/'models/r09/underbot_description/urdf/underbot.portable.urdf')
     output = ROOT/'UnderBot EMEET Live.json'
     output.write_text(json.dumps(layout, indent=2), encoding='utf-8')
     print(f'Import {output} in Foxglove. Original layout is preserved.')

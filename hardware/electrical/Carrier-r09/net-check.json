@@ -1,5 +1,0 @@
-{
-  "exported_net_checks": 4,
-  "result": "PASS",
-  "limits": "Connectivity only; no physical hardware or DRC qualification."
-}

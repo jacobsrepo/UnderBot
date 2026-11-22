@@ -21,7 +21,7 @@ class FleetExecutionTests(unittest.TestCase):
         rclpy.try_shutdown()
 
     def setUp(self):
-        model = Path(__file__).resolve().parent.parent/'compact_lab_rover/rover.urdf'
+        model = Path(__file__).resolve().parent.parent/'models/r09/underbot_description/urdf/underbot.portable.urdf'
         self.node = FleetDemo([model, model])
         self.node.events = Mock()
 

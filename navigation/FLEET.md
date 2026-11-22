@@ -1,6 +1,7 @@
 # Two-robot Foxglove simulation
 
-The fleet demo loads two independent instances of `compact_lab_rover/rover.urdf`,
+The fleet demo loads two independent instances of the active
+`models/r09/underbot_description/urdf/underbot.portable.urdf`,
 with `robot_1/` and `robot_2/` link and joint names. Both move in the same `map`.
 The existing single-robot demo remains available.
 

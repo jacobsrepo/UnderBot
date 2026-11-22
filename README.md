@@ -1,38 +1,36 @@
 # UnderBot
 
-Robot models, ROS 2 / Foxglove station, perception and memory, navigation simulation, and electrical design sources. Existing development lines are preserved; see [the project map](docs/PROJECT_MAP.md) for their roles and [local setup](docs/LOCAL_SETUP.md) for this PC's working installations.
+UnderBot is an R09 mobile-manipulator project with a ROS 2 / Foxglove station,
+camera and audio perception, navigation experiments, and Python-based simulation.
+The repository describes work in progress; simulated behavior is not evidence of
+physical robot performance.
 
-## Components
+## Repository map
 
 | Folder | Purpose |
 | --- | --- |
-| `compact_lab_rover/` | Original parametric rover URDF, RViz configuration and model generator |
-| `robot_station/` | ROS gateway, telemetry demo, Qwen chat, bounded world state, memory integration and navigation executor |
-| `robot-station-extension/` | Foxglove controls, chat, simulation navigation and telemetry UI |
-| `perception/` | EMEET camera/YOLO pipeline, audio transport, Pi communications and PostgreSQL recognition memory |
-| `navigation/` | Sample-map preparation, derived demo map, Foxglove layout and navigation documentation |
-| `hardware/electrical/` | Versioned KiCad schematics, carrier/PCB designs, budgets and review reports |
-| `simulation/python/` | R09 fixed-base dynamics, joint controls and import validation |
-| `models/` | Preserved R08/R09 packages, final exports and historical FreeCAD concepts |
-| `desktop/` | Cortex desktop assistant, imported with its complete development history |
-| `ros2_subsystem/` | Alternative ROS 2 workspace, dashboard and VLA node |
-| `website/` | Project website and navigation demonstration video |
-| `tools/windows/` | Preserved Windows launchers, deployment overrides and shared ROS environment manifest |
+| `models/r09/underbot_description/` | Active robot URDF, meshes, limits, inertial data, and simulator configuration |
+| `simulation/pybullet/` | Fast fixed-base dynamics and model-import checks |
+| `simulation/gazebo/` | Native Windows Gazebo world, coordinated arm controls, and demonstration recording |
+| `robot_station/` | ROS gateway, telemetry, AI chat, world state, and navigation execution |
+| `robot-station-extension/` | Foxglove station controls and panels |
+| `perception/` | Camera, audio, Pi communication, and recognition memory |
+| `navigation/` | Sample-map planning and fleet demonstrations using R09 |
+| `tools/windows/` | Current Windows launchers and the reproducible ROS environment |
+| `docs/` | Architecture, hardware boundaries, setup, validation, and cleanup record |
 
-## Getting started
+## Start here
 
-- [Station setup and topic contract](robot_station/README.md)
-- [Qwen chat and memory behavior](robot_station/AI_CHAT.md)
-- [Navigation simulation and supported commands](navigation/README.md)
-- [Camera, audio and perception](perception/README.md)
-- [Recognition memory](perception/memory/README.md)
-- [Electrical design and revision history](hardware/electrical/README.md)
-- [Team workflow](CONTRIBUTING.md)
+- [Architecture and component boundaries](docs/ARCHITECTURE.md)
+- [Local Windows and Pi setup](docs/LOCAL_SETUP.md)
+- [Hardware interfaces and unresolved decisions](docs/HARDWARE_INTERFACES.md)
+- [Validation status](docs/VALIDATION.md)
+- [PyBullet simulation](simulation/pybullet/README.md)
+- [Gazebo simulation](simulation/gazebo/README.md)
+- [ROS/Foxglove station](robot_station/README.md)
+- [Perception](perception/README.md)
 
-## Implementation boundaries
-
-Camera and audio pipelines can use real devices. Navigation demonstrations use simulated robot pose and motion on a sample map; they are not physical navigation, SLAM or validated robot dynamics. General chat uses Ollama when configured. Recognition memory requires private database configuration and enrollment. Hardware forwarding remains disabled by default.
-
-The repository contains alternative robot models and implementation lines, not a single fully integrated autonomous robot. Electrical review reports and CAD checks do not establish hardware ratings or readiness to energize. Existing documentation records historical tests; see [current validation](docs/VALIDATION.md) for checks performed during consolidation.
-
-Dependencies, credentials, personal memory databases, recordings and local tool installations are excluded from Git. Original source revisions and development branches remain available. R09 fixed-base dynamics and interactive joint controls use Python/PyBullet; see [simulation setup](simulation/python/README.md).
+Dependencies, credentials, recordings, local databases, generated simulation
+data, and installed applications are excluded from Git. Hardware forwarding is
+disabled by default. The current Gazebo controls use Gazebo Transport rather than
+ROS 2; integration with the physical motor controllers remains future work.

@@ -1,35 +1,22 @@
-# Local setup and preservation
+# Local setup
 
-## Where to work
-
-Primary consolidated Git checkout: `D:\gitdemo\Underbot\.publish-underbot`.
-This existing path is intentionally retained because live launchers and memory configuration reference it.
+The Git checkout should live at `D:\gitdemo\Underbot`. Large applications and
+environments stay on D: under `D:\Robotics`.
 
 | Local path | Purpose |
 | --- | --- |
-| `D:\Robotics\robot-station` | Existing deployed station; core sources are preserved; the source navigation loader additionally supports the bundled repository map; launch/deploy overrides are preserved in tools/windows/deployed-snapshot |
-| `D:\Robotics\rviz2-jazzy` | Shared installed Pixi ROS/RViz environment |
-| `D:\Robotics\underbot-r08` | Existing R08 Foxglove deployment |
-| `D:\Robotics\compact-lab-rover` | Existing original rover deployment; local RViz/view settings retained |
-| `D:\Robotics\*.cmd` | Existing launch shortcuts, unchanged |
-| `.publish-underbot\perception\.private` | Local credentials/configuration; deliberately excluded from Git |
-| `D:\gitdemo\Underbot` | Historical setup/diagnostic/migration scripts and original concept sources, retained locally |
-| `D:\gitdemo\temp\Underbot_URDF\foxglove-r08` | Original Foxglove layout metadata, backups and review images |
-| `D:\gitdemo\temp\Underbot_URDF\UnderBot-Personal` | Original R08 checkout; newer R09 imported from its remote into the consolidated repository |
-| `D:\gitdemo\Underbot-Website` and `D:\gitdemo\temp\Underbot_URDF\Underbot-Website` | Existing website checkouts, unchanged |
-| `D:\gitdemo\RoboticsProject` | Original FreeCAD files, retained and copied into models/historical-cad |
-| `.publish-underbot\simulation\python\.venv` | Isolated Python/PyBullet simulation environment |
+| `D:\Robotics\gazebo-harmonic` | Native Windows Gazebo Harmonic Pixi environment |
+| `D:\Robotics\rviz2-jazzy` | Shared ROS 2 Jazzy / RViz Pixi environment |
+| `D:\Robotics\robot-station` | Deployed station copy used by existing shortcuts |
+| `D:\Robotics\*.cmd` | Local launch shortcuts; update when source paths move |
+| `perception\.private` | Ignored credentials and local recognition-memory configuration |
+| `simulation\pybullet\.venv` | Shared Python environment for PyBullet and Gazebo control tools |
 
-## Backup
+The workstation remains Windows. Gazebo is installed natively; no Linux
+distribution or WSL environment is required by this project. The robot's
+Raspberry Pi runs Linux independently.
 
-`D:\gitdemo\archive\UnderBot-before-consolidation-2026-10-18` contains a full Git bundle of the original UnderBot branch histories and a ZIP of the initial unpublished files. Original active installations were not moved or deleted.
-
-## What stays local
-
-Dependency environments, downloaded model weights, PDF tools, KiCad session settings, personal identity databases, credentials, camera recordings and machine caches do not belong in source control. No personal database contents are published. Historical one-off setup/authentication/migration scripts remain in the original local folder; current runtime source is in the component directories.
-
-The original `navigation/sample-map-planning.zip` and extracted upstream map stay local. Derived `demo_map.npz`, metadata and preparation code are published. Use the documented source URL and SHA-256 in navigation/README.md to retrieve the upstream map for regeneration. The third-party `hardware/electrical/adeept-v4.zip` remains local and in the backup; generated project designs are published.
-
-## Starting existing work
-
-Continue using the existing D:/Robotics shortcuts. No robot services were restarted or hardware commands issued by consolidation. For portable setup, use the component README and configure local paths, licensed applications and private settings separately.
+The pre-cleanup backup is
+`D:\gitdemo\archive\UnderBot-before-consolidation-2026-10-18`. It includes a Git
+bundle and unpublished-source archive. Installed dependencies, private data,
+model weights, and generated recordings are not source-controlled.

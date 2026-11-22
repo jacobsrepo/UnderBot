@@ -63,6 +63,7 @@ try:
     assert travelled<straight*1.03,(travelled,straight)
     result={'passed':True,'requested_goal':goal,'actual_pose':states[-1]['pose'][:2],'arrival_error_cm':states[-1]['goal_error_metres']*100,'published_path_points':len(active),'old_cardinal_length_metres':old_length,'new_direct_length_metres':new_length,'observed_travel_metres':travelled,'improvement_percent':100*(1-new_length/old_length),'far_goal_shortcut_points':len(far),'hardware_enabled':False}
     assert heartbeats and all(h['hardware_enabled'] is False for h in heartbeats)
-    Path('D:/gitdemo/Underbot/.publish-underbot/navigation/route-verification.json').write_text(json.dumps(result,indent=2))
+    output = Path(__file__).resolve().parents[2] / 'navigation' / 'route-verification.json'
+    output.write_text(json.dumps(result,indent=2))
     print(json.dumps(result),flush=True)
 finally:node.destroy_node();rclpy.try_shutdown()

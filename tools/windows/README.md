@@ -1,9 +1,12 @@
-# Existing Windows deployment
+# Windows tools
 
-These files preserve the working PC launchers and installed station overrides as of 2026-10-18. They intentionally reference this PC's D: paths and are not a portable installer.
+This directory records the Windows launchers and ROS 2 environment used for the
+active UnderBot stack. The launchers assume the checkout is
+`D:\gitdemo\Underbot` and shared tools are under `D:\Robotics`.
 
-- `launchers/`: copies of the existing D:/Robotics shortcuts. Original shortcuts remain in place.
-- `deployed-snapshot/`: installed station launch/deployment overrides and its original README. The portable source remains in `robot_station/`.
-- `ros-environment/`: manifest and lockfile for the installed shared ROS/RViz environment.
+- `launchers/`: shortcuts for the station, perception, ROS 2, and RViz.
+- `deployed-snapshot/`: station deployment helpers retained for reference.
+- `ros-environment/`: Pixi manifest and lockfile for ROS 2 Jazzy and RViz.
 
-Runtime configuration, database credentials, enrolled identities, downloaded models and environments remain local. Do not run deployment scripts merely to inspect this archive. See ../../docs/LOCAL_SETUP.md for the path map.
+Private configuration, credentials, downloaded models, and environments remain
+outside Git. See `../../docs/LOCAL_SETUP.md` for the workstation path map.

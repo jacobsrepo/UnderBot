@@ -264,7 +264,8 @@ class FleetDemo(NavigationDemo):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--urdf', nargs=2, default=[str(Path(__file__).resolve().parent.parent/'compact_lab_rover/rover.urdf')]*2)
+    r09 = Path(__file__).resolve().parent.parent / 'models/r09/underbot_description/urdf/underbot.portable.urdf'
+    parser.add_argument('--urdf', nargs=2, default=[str(r09)] * 2)
     args = parser.parse_args()
     rclpy.init(); node = FleetDemo(args.urdf)
     try:

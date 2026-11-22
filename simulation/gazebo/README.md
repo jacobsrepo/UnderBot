@@ -86,7 +86,7 @@ For imitation learning, the next steps are choosing a task, adding the task's
 observations, collecting varied demonstrations, and building a training/evaluation
 pipeline. These recordings alone do not teach grasping or validate real hardware.
 
-Tests: `..\python\.venv\Scripts\python.exe -m unittest test_demonstrations -v`.
+Tests: `..\pybullet\.venv\Scripts\python.exe -m unittest test_demonstrations -v`.
 With Gazebo running, `verify_demonstrations.py` checks actual record/replay of a
 small elbow movement, writes `generated/demonstration-verification.json`, and
 leaves physics paused. It moves both arms to neutral before the test.
@@ -134,4 +134,4 @@ expert demonstration. Training requires a validated task and varied successful
 demonstrations first.
 
 Run all local checks with:
-`..\python\.venv\Scripts\python.exe -m unittest discover -p "test_*.py" -v`.
+`..\pybullet\.venv\Scripts\python.exe -m unittest discover -p "test_*.py" -v`.

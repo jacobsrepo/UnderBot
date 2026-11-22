@@ -45,8 +45,15 @@ def load_robot(path, prefix):
             raise ValueError('URDF joint tree is disconnected or cyclic.')
     radius = .01
     for name, link in links.items():
-        for visual in list(link.findall('visual')) + list(link.findall('collision')):
-            geometry = visual.find('geometry')
+        # Prefer primitive collision geometry for the navigation footprint.
+        # Detailed packages such as R09 use mesh visuals and primitive
+        # collisions; parsing visuals would add mesh-format dependencies and
+        # count the same body twice.
+        shapes = list(link.findall('collision'))
+        if not shapes:
+            shapes = list(link.findall('visual'))
+        for element in shapes:
+            geometry = element.find('geometry')
             if geometry is None or len(geometry) != 1:
                 raise ValueError('URDF geometry is missing.')
             shape = geometry[0]
@@ -57,8 +64,8 @@ def load_robot(path, prefix):
             elif shape.tag == 'cylinder':
                 bound = math.hypot(float(shape.get('radius')), float(shape.get('length'))/2)
             else:
-                raise ValueError('Fleet demo currently requires primitive URDF geometry (box, sphere, cylinder).')
-            centre = (poses[name] @ pose(visual)[0])[:2, 3]
+                raise ValueError('Fleet footprint requires primitive collision geometry (box, sphere, cylinder).')
+            centre = (poses[name] @ pose(element)[0])[:2, 3]
             radius = max(radius, float(np.linalg.norm(centre))+bound)
     for link in robot.findall('link'):
         link.set('name', prefix+'/'+link.get('name'))
