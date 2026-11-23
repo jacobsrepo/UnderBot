@@ -124,14 +124,28 @@ the arm catches up. This enables coordinated demonstrations but is still a slow,
 discrete control interface. Do not describe its output as smooth teleoperation.
 
 Open `Start UnderBot Pick Place.cmd` (or run `run.ps1 -PickPlace`) to load a
-side table, a 25 x 25 x 40 mm / 20 g physical block, and
-a green placement marker. Close an existing Gazebo viewer before launching
-another world, since both use the same isolated partition. `verify_pick_place.py`
-checks actual finger motion and attempts a physical lift/place with feedback
-correction. It does not attach objects or train a model, and writes its outcome
-to `generated/pick-place-verification.json`. A failed attempt is not a successful
-expert demonstration. Training requires a validated task and varied successful
-demonstrations first.
+side table, a 25 x 25 x 56 mm / 20 g physical block, and a green placement
+marker. This contact-only world is for gripper/contact validation. Close an
+existing Gazebo viewer before launching another world, since both use the same
+isolated partition. `verify_pick_place.py` checks measured finger and block
+motion and writes `generated/pick-place-verification.json`.
+
+`Start UnderBot Assisted Pick Place.cmd` (or `run.ps1 -PickPlace -GraspAssist`)
+adds an explicitly labelled detachable grasp constraint. The verifier only
+attaches after the measured grasp centre is within 25 mm of the block, then it
+lifts, transfers laterally, releases 20 mm above the marker, and judges the
+settled block pose. This mode makes task/trajectory data repeatable while the
+provisional finger contact model is still unreliable. It is not evidence of a
+physical grasp, so reports keep `physical_pick_place_passed` false.
+
+With the assisted world running, collect one successful training episode with:
+`..\pybullet\.venv\Scripts\python.exe verify_pick_place.py --grasp-assist --record-demo`.
+The timestamped JSONL under `demonstrations/` contains measured joints, full
+targets, and model poses. Its header marks it as grasp-assisted, training-only,
+and non-replayable because attach/detach task events are not joint actions. A
+failed verification is closed with `verification failed` and must not be used.
+This exports an expert episode; it does not train a policy. Useful training will
+require many successful demonstrations with varied block and target positions.
 
 Run all local checks with:
 `..\pybullet\.venv\Scripts\python.exe -m unittest discover -p "test_*.py" -v`.

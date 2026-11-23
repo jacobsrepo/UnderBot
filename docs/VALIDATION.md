@@ -19,8 +19,9 @@
 - Gazebo-to-ROS integration for the current native Windows world.
 - Payload, torque, balance, grasp robustness, self-collision, friction, backlash,
   or sim-to-real accuracy.
-- A successful physical pick-and-place in Gazebo after the latest task-scene
-  clearance adjustment. No imitation-learning policy has been trained.
+- A repeatable contact-only pick-and-place. The assisted Gazebo task completes,
+  but its detachable grasp constraint is deliberately reported as nonphysical.
+  No imitation-learning policy has been trained.
 
 Passing software tests means the interfaces behave as specified; it does not
 establish real-robot safety or performance.

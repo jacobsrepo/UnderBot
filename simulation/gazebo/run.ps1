@@ -1,4 +1,4 @@
-param([switch]$Headless, [switch]$PickPlace, [int]$Iterations = 1000)
+param([switch]$Headless, [switch]$PickPlace, [switch]$GraspAssist, [int]$Iterations = 1000)
 $ErrorActionPreference = 'Stop'
 $pixi = 'D:\Robotics\tools\pixi.exe'
 $manifest = 'D:\Robotics\gazebo-harmonic\pixi.toml'
@@ -12,6 +12,10 @@ New-Item -ItemType Directory -Force -Path $env:GZ_FUEL_CACHE_PATH | Out-Null
 $python = Join-Path $PSScriptRoot '..\pybullet\.venv\Scripts\python.exe'
 $prepareArgs = @()
 if ($PickPlace) { $prepareArgs += '--pick-place' }
+if ($GraspAssist) {
+    if (-not $PickPlace) { throw '-GraspAssist requires -PickPlace' }
+    $prepareArgs += '--grasp-assist'
+}
 & $python (Join-Path $PSScriptRoot 'prepare.py') @prepareArgs
 if ($LASTEXITCODE -ne 0) { throw 'Model preparation failed' }
 $world = Join-Path $PSScriptRoot 'generated\underbot_world.sdf'

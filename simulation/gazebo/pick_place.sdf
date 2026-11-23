@@ -12,20 +12,20 @@
     </link>
   </model>
   <model name="pick_block">
-    <pose>-0.07 0.34 0.3755 0 0 0</pose>
+    <pose>-0.07 0.35 0.3835 0 0 0</pose>
     <link name="block">
-      <inertial><mass>0.02</mass><inertia><ixx>0.000003708333</ixx><iyy>0.000003708333</iyy><izz>0.000002083333</izz></inertia></inertial>
-      <collision name="block"><geometry><box><size>0.025 0.025 0.04</size></box></geometry>
-        <surface><friction><ode><mu>0.8</mu><mu2>0.8</mu2></ode></friction></surface>
+      <inertial><mass>0.02</mass><inertia><ixx>0.000006268333</ixx><iyy>0.000006268333</iyy><izz>0.000002083333</izz></inertia></inertial>
+      <collision name="block"><geometry><box><size>0.025 0.025 0.056</size></box></geometry>
+        <surface><friction><ode><mu>2.0</mu><mu2>2.0</mu2></ode></friction></surface>
       </collision>
-      <visual name="block"><geometry><box><size>0.025 0.025 0.04</size></box></geometry>
+      <visual name="block"><geometry><box><size>0.025 0.025 0.056</size></box></geometry>
         <material><ambient>0.9 0.18 0.08 1</ambient><diffuse>0.9 0.18 0.08 1</diffuse></material>
       </visual>
     </link>
   </model>
   <model name="place_target">
     <static>true</static>
-    <pose>-0.13 0.35 0.3555 0 0 0</pose>
+    <pose>-0.02 0.38 0.3555 0 0 0</pose>
     <link name="marker">
       <visual name="marker"><geometry><box><size>0.045 0.045 0.001</size></box></geometry>
         <material><ambient>0.1 0.8 0.25 1</ambient><diffuse>0.1 0.8 0.25 1</diffuse></material>

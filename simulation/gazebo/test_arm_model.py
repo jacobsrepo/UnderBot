@@ -36,6 +36,20 @@ class ArmTests(unittest.TestCase):
             self.assertEqual(controllers[f'{side}_gripper_left_joint'].findtext('actuator_number'),
                              controllers[f'{side}_gripper_right_joint'].findtext('actuator_number'))
 
+    def test_grasp_assist_is_only_generated_when_explicit(self):
+        prepare(True, False)
+        root = ET.parse(ROOT / 'generated/underbot.urdf')
+        self.assertFalse(root.findall(".//plugin[@filename='gz-sim-detachable-joint-system']"))
+        prepare(True, True)
+        root = ET.parse(ROOT / 'generated/underbot.urdf')
+        plugins = root.findall(".//plugin[@filename='gz-sim-detachable-joint-system']")
+        self.assertEqual(len(plugins), 1)
+        self.assertEqual(plugins[0].findtext('child_model'), 'pick_block')
+
+    def test_grasp_assist_requires_pick_place_world(self):
+        with self.assertRaisesRegex(ValueError, 'requires'):
+            prepare(False, True)
+
 
 if __name__ == '__main__':
     unittest.main()

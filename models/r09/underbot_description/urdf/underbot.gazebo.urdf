@@ -1371,4 +1371,22 @@
     <mu1>0.8</mu1>
     <mu2>0.8</mu2>
   </gazebo>
+  <!-- Provisional rubber gripper pads for contact-task simulation. Measure the
+       real pad/object pair before using this value for sim-to-real work. -->
+  <gazebo reference="left_gripper_left">
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
+  </gazebo>
+  <gazebo reference="left_gripper_right">
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
+  </gazebo>
+  <gazebo reference="right_gripper_left">
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
+  </gazebo>
+  <gazebo reference="right_gripper_right">
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
+  </gazebo>
 </robot>

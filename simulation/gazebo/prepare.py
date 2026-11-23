@@ -9,7 +9,9 @@ ROOT = Path(__file__).resolve().parent
 MODEL = ROOT.parents[1] / 'models/r09/underbot_description'
 
 
-def prepare(pick_place=False):
+def prepare(pick_place=False, grasp_assist=False):
+    if grasp_assist and not pick_place:
+        raise ValueError('Grasp assist requires the pick-and-place world')
     output = ROOT / 'generated'
     output.mkdir(exist_ok=True)
     source = MODEL / 'urdf/underbot.gazebo.urdf'
@@ -50,6 +52,20 @@ def prepare(pick_place=False):
         if not asset.is_file():
             raise FileNotFoundError(asset)
         mesh.set('filename', asset.as_posix())
+    if grasp_assist:
+        # Gazebo-only grasp assist for repeatable task demonstrations. It is
+        # activated explicitly by the verifier after a proximity check and is
+        # never present in the normal robot world.
+        gazebo = ET.SubElement(robot.getroot(), 'gazebo')
+        plugin = ET.SubElement(gazebo, 'plugin', {
+            'filename': 'gz-sim-detachable-joint-system',
+            'name': 'gz::sim::systems::DetachableJoint'})
+        ET.SubElement(plugin, 'parent_link').text = 'left_hand'
+        ET.SubElement(plugin, 'child_model').text = 'pick_block'
+        ET.SubElement(plugin, 'child_link').text = 'block'
+        ET.SubElement(plugin, 'detach_topic').text = '/underbot/grasp/detach'
+        ET.SubElement(plugin, 'attach_topic').text = '/underbot/grasp/attach'
+        ET.SubElement(plugin, 'output_topic').text = '/underbot/grasp/state'
     robot.write(output / 'underbot.urdf', encoding='utf-8', xml_declaration=True)
     world = ET.parse(MODEL / 'config/underbot_empty.sdf')
     # Start paused: inspect import before enabling gravity and controllers.
@@ -70,4 +86,6 @@ def prepare(pick_place=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--pick-place', action='store_true')
-    prepare(parser.parse_args().pick_place)
+    parser.add_argument('--grasp-assist', action='store_true')
+    args = parser.parse_args()
+    prepare(args.pick_place, args.grasp_assist)

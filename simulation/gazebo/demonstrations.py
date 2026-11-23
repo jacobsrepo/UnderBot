@@ -13,7 +13,7 @@ def sim_seconds(stats):
 
 
 class Recorder:
-    def __init__(self, folder, limits, positions, start):
+    def __init__(self, folder, limits, positions, start, metadata=None):
         folder = Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
         self.path = folder / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ') + '.jsonl')
@@ -22,10 +22,13 @@ class Recorder:
         self.start = start
         self.last = start
         self.count = 0
-        self.write({'type': 'header', 'version': 2, 'units': 'radians',
-                    'environment': 'underbot-r09-native', 'joint_limits': limits,
-                    'initial_positions': positions,
-                    'timing': 'simulation time from latest world stats; command time is local publish completion'})
+        header = {'type': 'header', 'version': 2, 'units': 'radians',
+                  'environment': 'underbot-r09-native', 'joint_limits': limits,
+                  'initial_positions': positions,
+                  'timing': 'simulation time from latest world stats; command time is local publish completion'}
+        if metadata is not None:
+            header['metadata'] = metadata
+        self.write(header)
 
     def write(self, value):
         self.file.write(json.dumps(value, allow_nan=False) + '\n')
@@ -60,6 +63,8 @@ def load_demo(path, limits):
     header = rows[0]
     if header.get('units') != 'radians' or header.get('environment') != 'underbot-r09-native':
         raise ValueError('Demonstration units or environment do not match')
+    if header.get('metadata', {}).get('replayable') is False:
+        raise ValueError('This task demonstration is training data and cannot be replayed without its task events')
     if rows[-1].get('type') != 'end' or rows[-1].get('reason') != 'saved':
         raise ValueError('Session was interrupted; record a complete demonstration for replay')
     def validate_pose(pose, complete=False):

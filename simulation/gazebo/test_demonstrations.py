@@ -36,6 +36,16 @@ class DemonstrationTests(unittest.TestCase):
         self.assertEqual(commands[0]['targets'], {'elbow': 0.2})
         self.assertEqual(commands[0]['positions'], {'elbow': 0.01})
 
+    def test_task_metadata_is_saved_and_blocks_incomplete_replay(self):
+        metadata = {'task': 'pick_place', 'replayable': False, 'grasp_assist': True}
+        recorder = Recorder(self.temp.name, self.limits, {'elbow': 0}, 10, metadata)
+        recorder.add('action', 10.1, targets={'elbow': 0.2})
+        recorder.finish()
+        header = json.loads(recorder.path.read_text().splitlines()[0])
+        self.assertEqual(header['metadata'], metadata)
+        with self.assertRaisesRegex(ValueError, 'training data'):
+            load_demo(recorder.path, self.limits)
+
     def test_limits_and_nonfinite_rejected_before_replay(self):
         for target in (2, float('nan')):
             path = self.record()
